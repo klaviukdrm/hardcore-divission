@@ -2,8 +2,9 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HARDCORE DIVISION | Official Store</title>
+
     <style>
         body {
             background-color: #0a0a0a;
@@ -13,49 +14,53 @@
             padding: 0;
             text-transform: uppercase;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         header {
-            padding: 50px 20px;
+            padding: 40px 15px;
             text-align: center;
             border-bottom: 2px solid #1a1a1a;
+            background: #0d0d0d;
         }
 
         h1 {
             color: #8b0000;
-            font-size: 3rem;
-            letter-spacing: 8px;
+            font-size: clamp(1.5rem, 8vw, 3rem);
+            letter-spacing: clamp(4px, 2vw, 10px);
             margin: 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
         }
 
         .container {
             max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
+            margin: 20px auto;
+            padding: 0 15px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
         }
 
+        /* --- ВЕРНУЛ СВЕЧЕНИЕ ПРИ НАВЕДЕНИИ --- */
         .product-card {
             background: #111;
             border: 1px solid #222;
             cursor: pointer;
-            transition: transform 0.3s, border-color 0.3s;
+            transition: 0.3s;
         }
 
         .product-card:hover {
             border-color: #8b0000;
-            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.4); /* Свечение */
         }
 
         .product-card img {
             width: 100%;
-            height: 450px;
+            height: auto;
+            aspect-ratio: 3/4;
             object-fit: cover;
             display: block;
         }
@@ -63,17 +68,17 @@
         .product-info {
             padding: 20px;
             background: #0d0d0d;
-            border-top: 1px solid #222;
+            text-align: center;
         }
 
-        .product-title { color: #fff; font-size: 1.2rem; margin-bottom: 10px; }
+        .product-title { color: #fff; font-size: 1.1rem; margin-bottom: 8px; }
         .product-price { color: #8b0000; font-weight: bold; }
 
-        /* MODAL SLIDER */
+        /* MODAL */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 2000;
             left: 0;
             top: 0;
             width: 100%;
@@ -83,89 +88,126 @@
 
         .modal-content {
             position: relative;
-            margin: auto;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 90%;
-            max-width: 1100px;
+            width: 100%;
+            height: 100%;
             display: flex;
+            flex-direction: column;
+            overflow-y: auto;
             background: #0a0a0a;
-            border: 1px solid #333;
-            min-height: 500px;
         }
 
         .slider-container {
             position: relative;
-            flex: 1.2;
-            overflow: hidden;
+            width: 100%;
+            min-height: 400px;
             background: #000;
-            display: flex;
-            align-items: center;
+            flex-shrink: 0;
         }
 
-        .slides {
-            display: none;
-            width: 100%;
-            height: 100%;
-        }
-
-        .slides img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+        .slides { width: 100%; height: 100%; display: none; }
+        .slides img { width: 100%; height: 100%; object-fit: contain; }
 
         .prev, .next {
-            cursor: pointer;
+            padding: 15px;
+            font-size: 20px;
+            background: rgba(139, 0, 0, 0.4);
+            color: #fff;
+            border: none;
             position: absolute;
             top: 50%;
-            width: auto;
-            padding: 16px;
-            margin-top: -22px;
-            color: white;
-            font-weight: bold;
-            font-size: 24px;
-            transition: 0.3s;
-            background: rgba(139, 0, 0, 0.3);
-            user-select: none;
-            border: none;
+            transform: translateY(-50%);
+            z-index: 10;
         }
-
         .next { right: 0; }
-        .prev:hover, .next:hover { background: rgba(139, 0, 0, 0.8); }
+        .prev { left: 0; }
 
         .modal-details {
-            flex: 0.8;
-            padding: 40px;
-            border-left: 1px solid #222;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            gap: 20px;
+            text-align: center;
         }
 
         .close-modal {
-            position: absolute;
+            position: fixed;
             right: 20px;
-            top: 10px;
+            top: 15px;
             color: #fff;
             font-size: 40px;
-            cursor: pointer;
-            z-index: 1001;
+            z-index: 2100;
         }
 
-        .desc-text { line-height: 1.6; text-transform: none; color: #bbb; white-space: pre-line; margin: 20px 0; }
-        .buy-btn { background: #8b0000; color: #fff; padding: 18px; text-decoration: none; font-weight: bold; text-align: center; }
+        .desc-text { 
+            line-height: 1.6; 
+            text-transform: none; 
+            color: #bbb; 
+            white-space: pre-line;
+            font-size: 1rem;
+        }
+        
+        .buy-btn { 
+            background: #8b0000; 
+            color: #fff; 
+            padding: 18px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            text-align: center;
+        }
 
-        /* ABOUT SECTION */
-        .about-section { margin-top: 80px; padding: 40px 20px; border-top: 2px solid #1a1a1a; text-align: center; }
-        .social-grid { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
-        .social-link { color: #fff; text-decoration: none; border: 1px solid #333; padding: 10px 15px; font-size: 0.8rem; }
-        .social-link:hover { background: #8b0000; }
+        /* --- ИСПРАВИЛ ABOUT SECTION (ЧТОБЫ ВСЁ ВЛЕЗАЛО) --- */
+        .about-section { 
+            margin-top: 80px; 
+            padding: 60px 20px; 
+            border-top: 2px solid #1a1a1a; 
+            text-align: center;
+        }
 
-        @media (max-width: 850px) {
-            .modal-content { flex-direction: column; top: 0; transform: none; height: 100%; width: 100%; overflow-y: auto; }
-            .slider-container { height: 400px; flex: none; }
-            .modal-details { border-left: none; flex: none; }
+        .about-section p {
+            text-transform: none; 
+            max-width: 700px; 
+            margin: 20px auto; 
+            color: #888;
+            line-height: 1.6;
+        }
+
+        .social-grid { 
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Уменьшил зазор для мобилок */
+            flex-wrap: wrap; /* Кнопки переносятся, если нет места */
+            margin-top: 30px;
+        }
+
+        .social-link { 
+            color: #fff; 
+            text-decoration: none; 
+            border: 1px solid #333; 
+            padding: 12px 15px; 
+            font-size: 0.75rem; /* Чуть меньше шрифт для компактности */
+            min-width: 100px;
+            transition: 0.3s;
+        }
+
+        .social-link:hover {
+            background: #8b0000;
+            border-color: #8b0000;
+        }
+
+        /* DESKTOP FIX */
+        @media (min-width: 850px) {
+            .modal-content {
+                flex-direction: row;
+                max-width: 1100px;
+                height: 80vh;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border: 1px solid #333;
+            }
+            .slider-container { height: 100%; flex: 1.2; }
+            .modal-details { flex: 0.8; border-left: 1px solid #222; text-align: left; }
+            .social-link { font-size: 0.8rem; padding: 12px 20px; }
         }
     </style>
 </head>
@@ -194,7 +236,7 @@
 
     <section class="about-section">
         <h2 style="color: #8b0000;">ABOUT DIVISION</h2>
-        <p style="text-transform: none; max-width: 700px; margin: 0 auto; color: #888;">HARDCORE DIVISION — маніфест сили. Ми створюємо речі для тих, хто йде до кінця.</p>
+        <p>HARDCORE DIVISION — маніфест сили. Ми створюємо речі для тих, хто йде до кінця.</p>
         <div class="social-grid">
             <a href="https://t.me/hardcore_divis1on" class="social-link">TELEGRAM</a>
             <a href="https://www.instagram.com/hardcore_division_brand" class="social-link">INSTAGRAM</a>
@@ -205,8 +247,8 @@
 </div>
 
 <div id="modal1" class="modal">
+    <span class="close-modal" onclick="closeSlider('modal1')">&times;</span>
     <div class="modal-content">
-        <span class="close-modal" onclick="closeSlider('modal1')">&times;</span>
         <div class="slider-container">
             <div class="slides modal1-slides"><img src="images/photo_2025-12-31_17-17-16.jpg"></div>
             <div class="slides modal1-slides"><img src="images/photo_2025-12-31_17-17-18.jpg"></div>
@@ -224,8 +266,8 @@
 </div>
 
 <div id="modal2" class="modal">
+    <span class="close-modal" onclick="closeSlider('modal2')">&times;</span>
     <div class="modal-content">
-        <span class="close-modal" onclick="closeSlider('modal2')">&times;</span>
         <div class="slider-container">
             <div class="slides modal2-slides"><img src="images/photo_2026-01-02_15-43-43.jpg"></div>
             <div class="slides modal2-slides"><img src="images/photo_2026-01-03_10-19-49.jpg"></div>
@@ -248,7 +290,7 @@
     function openSlider(id) {
         document.getElementById(id).style.display = "block";
         document.body.style.overflow = "hidden";
-        showSlides(slideIndex = 1, id + "-slides");
+        showSlides(1, id + "-slides");
     }
 
     function closeSlider(id) {
