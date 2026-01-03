@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HARDCORE DIVISION | Official Store</title>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            text-transform: uppercase;
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 50px 20px;
+            text-align: center;
+            border-bottom: 2px solid #1a1a1a;
+        }
+
+        h1 {
+            color: #8b0000;
+            font-size: 3rem;
+            letter-spacing: 8px;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .product-card {
+            background: #111;
+            border: 1px solid #222;
+            cursor: pointer;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .product-card:hover {
+            border-color: #8b0000;
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-info {
+            padding: 20px;
+            background: #0d0d0d;
+            border-top: 1px solid #222;
+        }
+
+        .product-title { color: #fff; font-size: 1.2rem; margin-bottom: 10px; }
+        .product-price { color: #8b0000; font-weight: bold; }
+
+        /* MODAL SLIDER */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.98);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 90%;
+            max-width: 1100px;
+            display: flex;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            min-height: 500px;
+        }
+
+        .slider-container {
+            position: relative;
+            flex: 1.2;
+            overflow: hidden;
+            background: #000;
+            display: flex;
+            align-items: center;
+        }
+
+        .slides {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slides img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            transition: 0.3s;
+            background: rgba(139, 0, 0, 0.3);
+            user-select: none;
+            border: none;
+        }
+
+        .next { right: 0; }
+        .prev:hover, .next:hover { background: rgba(139, 0, 0, 0.8); }
+
+        .modal-details {
+            flex: 0.8;
+            padding: 40px;
+            border-left: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            color: #fff;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .desc-text { line-height: 1.6; text-transform: none; color: #bbb; white-space: pre-line; margin: 20px 0; }
+        .buy-btn { background: #8b0000; color: #fff; padding: 18px; text-decoration: none; font-weight: bold; text-align: center; }
+
+        /* ABOUT SECTION */
+        .about-section { margin-top: 80px; padding: 40px 20px; border-top: 2px solid #1a1a1a; text-align: center; }
+        .social-grid { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        .social-link { color: #fff; text-decoration: none; border: 1px solid #333; padding: 10px 15px; font-size: 0.8rem; }
+        .social-link:hover { background: #8b0000; }
+
+        @media (max-width: 850px) {
+            .modal-content { flex-direction: column; top: 0; transform: none; height: 100%; width: 100%; overflow-y: auto; }
+            .slider-container { height: 400px; flex: none; }
+            .modal-details { border-left: none; flex: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header><h1>HARDCORE DIVISION</h1></header>
+
+<div class="container">
+    <div class="grid">
+        <div class="product-card" onclick="openSlider('modal1')">
+            <img src="images/photo_2025-12-31_17-17-16.jpg" alt="ON MY KNIFE">
+            <div class="product-info">
+                <div class="product-title">ON MY KNIFE</div>
+                <div class="product-price">2100₴ / 50$</div>
+            </div>
+        </div>
+
+        <div class="product-card" onclick="openSlider('modal2')">
+            <img src="images/photo_2026-01-02_15-43-43.jpg" alt="HARDCORE BLOOD">
+            <div class="product-info">
+                <div class="product-title">HARDCORE BLOOD</div>
+                <div class="product-price">2100₴ / 50$</div>
+            </div>
+        </div>
+    </div>
+
+    <section class="about-section">
+        <h2 style="color: #8b0000;">ABOUT DIVISION</h2>
+        <p style="text-transform: none; max-width: 700px; margin: 0 auto; color: #888;">HARDCORE DIVISION — маніфест сили. Ми створюємо речі для тих, хто йде до кінця.</p>
+        <div class="social-grid">
+            <a href="https://t.me/hardcore_divis1on" class="social-link">TELEGRAM</a>
+            <a href="https://www.instagram.com/hardcore_division_brand" class="social-link">INSTAGRAM</a>
+            <a href="https://www.tiktok.com/@hardcore.division" class="social-link">TIK-TOK</a>
+            <a href="https://t.me/Hardcore_Division_bot" class="social-link" style="color: #8b0000; border-color: #8b0000;">ORDER BOT</a>
+        </div>
+    </section>
+</div>
+
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeSlider('modal1')">&times;</span>
+        <div class="slider-container">
+            <div class="slides modal1-slides"><img src="images/photo_2025-12-31_17-17-16.jpg"></div>
+            <div class="slides modal1-slides"><img src="images/photo_2025-12-31_17-17-18.jpg"></div>
+            <button class="prev" onclick="plusSlides(-1, 'modal1-slides')">&#10094;</button>
+            <button class="next" onclick="plusSlides(1, 'modal1-slides')">&#10095;</button>
+        </div>
+        <div class="modal-details">
+            <h2 style="color: #8b0000;">ONLY BLOOD. 🩸</h2>
+            <div class="desc-text">Худі «ON MY KNIFE» - вибір для тих, хто йде до цілі.
+            PRICE: 2100₴ / 50$
+            SIZE: S, M, L, XL, 2XL, 3XL</div>
+            <a href="https://t.me/Hardcore_Division_bot" class="buy-btn">ЗАМОВИТИ ЧЕРЕЗ БОТА</a>
+        </div>
+    </div>
+</div>
+
+<div id="modal2" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeSlider('modal2')">&times;</span>
+        <div class="slider-container">
+            <div class="slides modal2-slides"><img src="images/photo_2026-01-02_15-43-43.jpg"></div>
+            <div class="slides modal2-slides"><img src="images/photo_2026-01-03_10-19-49.jpg"></div>
+            <button class="prev" onclick="plusSlides(-1, 'modal2-slides')">&#10094;</button>
+            <button class="next" onclick="plusSlides(1, 'modal2-slides')">&#10095;</button>
+        </div>
+        <div class="modal-details">
+            <h2 style="color: #8b0000;">HARDCORE BLOOD 🩸</h2>
+            <div class="desc-text">Худі «Hardcore Blood» — для тих, у кого кров кипить.
+            PRICE: 2100₴ / 50$
+            SIZE: S, M, L, XL, 2XL, 3XL</div>
+            <a href="https://t.me/Hardcore_Division_bot" class="buy-btn">ЗАМОВИТИ ЧЕРЕЗ БОТА</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    let slideIndex = 1;
+
+    function openSlider(id) {
+        document.getElementById(id).style.display = "block";
+        document.body.style.overflow = "hidden";
+        showSlides(slideIndex = 1, id + "-slides");
+    }
+
+    function closeSlider(id) {
+        document.getElementById(id).style.display = "none";
+        document.body.style.overflow = "auto";
+    }
+
+    function plusSlides(n, className) {
+        showSlides(slideIndex += n, className);
+    }
+
+    function showSlides(n, className) {
+        let slides = document.getElementsByClassName(className);
+        if (n > slides.length) {slideIndex = 1}
+        if (n < 1) {slideIndex = slides.length}
+        for (let i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slides[slideIndex-1].style.display = "block";
+    }
+</script>
+
+</body>
+</html>
