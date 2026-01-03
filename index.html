@@ -73,7 +73,7 @@
         .product-title { color: #fff; font-size: 1.1rem; margin-bottom: 8px; }
         .product-price { color: #8b0000; font-weight: bold; }
 
-        /* MODAL */
+        /* MODAL CORE */
         .modal {
             display: none;
             position: fixed;
@@ -82,8 +82,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.98);
-            overflow: hidden; /* Убрал прокрутку всей страницы */
+            background-color: rgba(0, 0, 0, 0.95);
         }
 
         .modal-content {
@@ -93,127 +92,133 @@
             display: flex;
             flex-direction: column;
             background: #0a0a0a;
+            overflow-y: auto;
         }
 
         .slider-container {
             position: relative;
             width: 100%;
-            height: 60vh; /* Ограничил высоту фото, чтобы описание влезало */
+            height: 60vh; /* Висота для мобілок */
             background: #000;
             flex-shrink: 0;
         }
 
         .slides { width: 100%; height: 100%; display: none; }
-        .slides img { width: 100%; height: 100%; object-fit: contain; }
+        .slides img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+        }
 
         .prev, .next {
-            padding: 15px;
-            font-size: 20px;
-            background: rgba(139, 0, 0, 0.4);
-            color: #fff;
+            padding: 20px;
+            font-size: 24px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #8b0000;
             border: none;
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
             z-index: 10;
+            cursor: pointer;
+            font-weight: bold;
         }
         .next { right: 0; }
         .prev { left: 0; }
 
         .modal-details {
-            padding: 20px;
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
             text-align: center;
-            justify-content: center;
-            flex-grow: 1; /* Описание занимает остаток места */
+            background: #0a0a0a;
         }
 
-        /* КРАСНЫЙ КРЕСТИК */
         .close-modal {
             position: fixed;
             right: 20px;
             top: 15px;
-            color: #ff0000; /* Чисто красный */
+            color: #ff0000;
             font-size: 50px;
             z-index: 2100;
             cursor: pointer;
             font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            line-height: 1;
+            text-shadow: 0 0 10px rgba(0,0,0,1);
         }
 
-        /* УВЕЛИЧЕННОЕ ОПИСАНИЕ */
         .desc-text { 
-            line-height: 1.4; 
+            line-height: 1.5; 
             text-transform: none; 
             color: #fff; 
             white-space: pre-line;
-            font-size: 1.6rem; 
+            font-size: 1.3rem; 
             font-weight: bold;
         }
         
         .buy-btn { 
             background: #8b0000; 
             color: #fff; 
-            padding: 15px; 
+            padding: 18px; 
             text-decoration: none; 
             font-weight: bold; 
-            text-align: center;
             font-size: 1.1rem;
+            transition: 0.3s;
         }
 
+        /* --- DESKTOP OPTIMIZATION (УБИРАЕМ ПОЛОСЫ) --- */
+        @media (min-width: 850px) {
+            .modal {
+                display: none; /* Flex за замовчуванням при відкритті JS */
+                align-items: center;
+                justify-content: center;
+            }
+            .modal-content {
+                flex-direction: row;
+                width: 90vw;
+                height: 85vh;
+                max-width: 1200px;
+                overflow: hidden;
+                border: 1px solid #333;
+            }
+            .slider-container { 
+                height: 100%; 
+                flex: 1.2; 
+            }
+            .slides img {
+                object-fit: cover; /* Заповнює блок повністю, прибираючи порожнечі */
+            }
+            .modal-details { 
+                flex: 0.8; 
+                height: 100%;
+                border-left: 1px solid #222; 
+                text-align: left; 
+                justify-content: center;
+                padding: 50px;
+            }
+            .close-modal {
+                position: absolute; /* Всередині модалки або в кутку екрана */
+            }
+        }
+
+        /* ABOUT */
         .about-section { 
             margin-top: 80px; 
             padding: 60px 20px; 
             border-top: 2px solid #1a1a1a; 
             text-align: center;
         }
-
         .about-section p {
-            text-transform: none; 
-            max-width: 700px; 
-            margin: 20px auto; 
-            color: #888;
-            line-height: 1.6;
+            text-transform: none; max-width: 700px; margin: 20px auto; 
+            color: #888; line-height: 1.6;
         }
-
-        .social-grid { 
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-
+        .social-grid { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 30px; }
         .social-link { 
-            color: #fff; 
-            text-decoration: none; 
-            border: 1px solid #333; 
-            padding: 12px 15px; 
-            font-size: 0.75rem;
-            min-width: 100px;
-            transition: 0.3s;
+            color: #fff; text-decoration: none; border: 1px solid #333; 
+            padding: 12px 15px; font-size: 0.75rem; min-width: 100px; transition: 0.3s;
         }
-
-        .social-link:hover {
-            background: #8b0000;
-            border-color: #8b0000;
-        }
-
-        @media (min-width: 850px) {
-            .modal-content {
-                flex-direction: row;
-                max-width: 1100px;
-                height: 80vh;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                border: 1px solid #333;
-            }
-            .slider-container { height: 100%; flex: 1.2; }
-            .modal-details { flex: 0.8; border-left: 1px solid #222; text-align: left; }
-        }
+        .social-link:hover { background: #8b0000; border-color: #8b0000; }
     </style>
 </head>
 <body>
@@ -261,10 +266,10 @@
             <button class="next" onclick="plusSlides(1, 'modal1-slides')">&#10095;</button>
         </div>
         <div class="modal-details">
-            <h2 style="color: #8b0000; margin: 0;">ONLY BLOOD. 🩸</h2>
+            <h2 style="color: #8b0000; margin: 0; font-size: 2rem;">ONLY BLOOD. 🩸</h2>
             <div class="desc-text">Худі «ON MY KNIFE»
             2100₴ / 50$
-            S, M, L, XL, 2XL, 3XL</div>
+            Розміри: S, M, L, XL, 2XL, 3XL</div>
             <a href="https://t.me/Hardcore_Division_bot" class="buy-btn">ЗАМОВИТИ ЧЕРЕЗ БОТА</a>
         </div>
     </div>
@@ -280,10 +285,10 @@
             <button class="next" onclick="plusSlides(1, 'modal2-slides')">&#10095;</button>
         </div>
         <div class="modal-details">
-            <h2 style="color: #8b0000; margin: 0;">HARDCORE BLOOD 🩸</h2>
+            <h2 style="color: #8b0000; margin: 0; font-size: 2rem;">HARDCORE BLOOD 🩸</h2>
             <div class="desc-text">Худі «Hardcore Blood»
             2100₴ / 50$
-            S, M, L, XL, 2XL, 3XL</div>
+            Розміри: S, M, L, XL, 2XL, 3XL</div>
             <a href="https://t.me/Hardcore_Division_bot" class="buy-btn">ЗАМОВИТИ ЧЕРЕЗ БОТА</a>
         </div>
     </div>
@@ -293,7 +298,8 @@
     let slideIndex = 1;
 
     function openSlider(id) {
-        document.getElementById(id).style.display = "block";
+        let modal = document.getElementById(id);
+        modal.style.display = (window.innerWidth > 850) ? "flex" : "block";
         document.body.style.overflow = "hidden";
         showSlides(1, id + "-slides");
     }
