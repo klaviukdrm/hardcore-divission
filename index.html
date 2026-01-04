@@ -38,14 +38,22 @@
             z-index: -1;
         }
 
+        /* ХЕДЕР С КАПЛЯМИ */
         header {
             padding: 20px;
             text-align: center;
             border-bottom: 2px solid var(--blood);
             background: rgba(0,0,0,0.9);
-            position: sticky;
+            /* На ПК оставляем липким */
+            position: sticky; 
             top: 0;
             z-index: 100;
+            overflow: visible;
+        }
+
+        .logo-container {
+            position: relative;
+            display: inline-block;
         }
 
         .logo {
@@ -54,50 +62,46 @@
             color: var(--blood);
             text-shadow: 0 0 10px rgba(136, 8, 8, 0.8);
             letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
+        .blood-drop {
+            position: absolute;
+            background-color: var(--blood);
+            width: 2px;
+            border-radius: 0 0 4px 4px;
+            z-index: 1;
+            pointer-events: none;
+            top: 70%;
+            animation: fall linear forwards;
         }
 
-        .hero-text {
-            text-align: center;
-            margin-bottom: 60px;
-            text-transform: uppercase;
+        @keyframes fall {
+            0% { transform: translateY(0) scaleY(1); opacity: 1; }
+            70% { opacity: 1; }
+            100% { transform: translateY(120px) scaleY(1.5); opacity: 0; }
         }
 
+        /* Остальные стили без изменений */
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .hero-text { text-align: center; margin-bottom: 60px; text-transform: uppercase; }
         .hero-text h2 { font-size: 3rem; color: #fff; }
         .hero-text span { color: var(--blood); }
 
-        /* Кнопка Размерная сетка */
         .size-btn {
-            position: fixed;
-            top: 50%;
-            right: 0;
+            position: fixed; top: 50%; right: 0;
             transform: translateY(-50%) rotate(-90deg) translateX(50%);
             transform-origin: right bottom;
-            background: var(--blood);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            z-index: 1001;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            background: var(--blood); color: white; padding: 10px 20px;
+            border: none; cursor: pointer; z-index: 1001;
+            font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* Панели */
         .side-panel, .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: none;
+            justify-content: center; align-items: center; z-index: 2000;
         }
 
         .side-panel {
@@ -108,61 +112,36 @@
         .side-panel.active { right: 0; }
 
         .modal-content {
-            background: var(--gray);
-            width: 90%;
-            max-width: 500px;
-            padding: 30px;
-            border: 2px solid var(--blood);
-            position: relative;
+            background: var(--gray); width: 90%; max-width: 500px;
+            padding: 30px; border: 2px solid var(--blood); position: relative;
         }
 
         .close-btn { color: var(--blood); cursor: pointer; font-size: 1.5rem; position: absolute; top: 15px; right: 20px; z-index: 10; }
 
         .order-form input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: #000;
-            border: 1px solid #444;
-            color: #fff;
-            font-family: 'Oswald', sans-serif;
-            font-size: 16px; /* Предотвращает зум на iOS */
+            width: 100%; padding: 12px; margin: 10px 0;
+            background: #000; border: 1px solid #444; color: #fff;
+            font-family: 'Oswald', sans-serif; font-size: 16px;
         }
 
-        /* Галерея */
         .gallery-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 3000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); display: none;
+            justify-content: center; align-items: center; z-index: 3000;
         }
         .gallery-overlay img { max-width: 90%; max-height: 80%; border: 2px solid var(--blood); object-fit: contain; }
         .gallery-nav {
-            position: absolute;
-            top: 50%; transform: translateY(-50%);
-            background: rgba(136, 8, 8, 0.5);
-            color: white; border: none; padding: 15px; cursor: pointer; font-size: 1.5rem;
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(136, 8, 8, 0.5); color: white; border: none; padding: 15px; cursor: pointer; font-size: 1.5rem;
             z-index: 3001;
         }
         .prev { left: 10px; } .next { right: 10px; }
 
-        /* Сетка товаров */
-        .shop-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
-        }
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
 
         .product-card {
-            background: var(--gray);
-            border: 1px solid #333;
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 1s ease forwards;
+            background: var(--gray); border: 1px solid #333; transition: 0.3s;
+            position: relative; overflow: hidden; animation: fadeIn 1s ease forwards;
         }
         .product-card:hover { border-color: var(--blood); box-shadow: 0 0 20px rgba(136, 8, 8, 0.4); }
 
@@ -170,7 +149,6 @@
         .product-img, .product-img-alt { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         .product-img-alt { position: absolute; top: 0; left: 0; opacity: 0; }
         
-        /* Ховер только для устройств с мышкой */
         @media (hover: hover) {
             .product-card:hover { transform: translateY(-5px); }
             .product-card:hover .product-img { opacity: 0; }
@@ -209,18 +187,16 @@
 
         /* --- МОБИЛЬНАЯ ОПТИМИЗАЦИЯ --- */
         @media (max-width: 768px) {
+            header {
+                position: relative; /* На мобилке хедер уходит при скролле */
+            }
             .logo { font-size: 1.8rem; }
             .hero-text h2 { font-size: 2.2rem; }
             .hero-text p { font-size: 0.9rem; padding: 0 10px; }
-            
             .shop-grid { grid-template-columns: 1fr; gap: 25px; }
             .product-img-container { height: 380px; }
-            
             .modal-content { width: 95%; padding: 20px; }
-            
             .size-btn { font-size: 0.8rem; padding: 8px 15px; }
-
-            /* На телефонах показываем второе фото при тапе или убираем эффект, если мешает */
             .product-img-alt { display: none; } 
             .product-card:active .product-img { opacity: 0.8; }
         }
@@ -270,7 +246,9 @@
 </div>
 
 <header>
-    <h1 class="logo">HARDCORE DIVISION</h1>
+    <div class="logo-container" id="logoArea">
+        <h1 class="logo">HARDCORE DIVISION</h1>
+    </div>
 </header>
 
 <div class="container">
@@ -342,8 +320,25 @@
     let currentGalleryImages = [];
     let currentImgIndex = 0;
 
-    function toggleSizePanel() { document.getElementById('sizePanel').classList.toggle('active'); }
+    // СИСТЕМА КАПЕЛЬ КРОВИ
+    function createDrop() {
+        const logo = document.getElementById('logoArea');
+        if(!logo) return;
+        const drop = document.createElement('div');
+        drop.classList.add('blood-drop');
+        const left = Math.random() * logo.offsetWidth;
+        drop.style.left = left + 'px';
+        const height = Math.random() * 15 + 5;
+        const duration = Math.random() * 2 + 1.5;
+        drop.style.height = height + 'px';
+        drop.style.animationDuration = duration + 's';
+        logo.appendChild(drop);
+        setTimeout(() => drop.remove(), duration * 1000);
+    }
+    setInterval(createDrop, 200);
 
+    // Весь остальной JS без изменений
+    function toggleSizePanel() { document.getElementById('sizePanel').classList.toggle('active'); }
     function openGallery(images) {
         currentGalleryImages = images;
         currentImgIndex = 0;
@@ -355,26 +350,22 @@
         currentImgIndex = (currentImgIndex + dir + currentGalleryImages.length) % currentGalleryImages.length;
         document.getElementById('galleryImg').src = currentGalleryImages[currentImgIndex];
     }
-
     function toggleCart() {
         const modal = document.getElementById('cartModal');
         modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
         renderCart();
     }
-
     function addToCart(name, price, sizeId) {
         const size = document.getElementById(sizeId).value;
         cart.push({name, price, size});
         document.getElementById('cart-count').innerText = cart.length;
         alert('Додано!');
     }
-
     function removeFromCart(index) {
         cart.splice(index, 1);
         document.getElementById('cart-count').innerText = cart.length;
         renderCart();
     }
-
     function renderCart() {
         const list = document.getElementById('cartItemsList');
         let total = 0;
@@ -384,22 +375,17 @@
         }).join('');
         document.getElementById('cartTotal').innerText = `Всього: ${total}₴`;
     }
-
     function openOrderForm() {
         if (cart.length === 0) return alert('Кошик порожній!');
         document.getElementById('cartModal').style.display = 'none';
         document.getElementById('orderModal').style.display = 'flex';
     }
-
     function closeOrderForm() { document.getElementById('orderModal').style.display = 'none'; }
-
     function finalizeOrder() {
         const fio = document.getElementById('orderFIO').value;
         const phone = document.getElementById('orderPhone').value;
         const np = document.getElementById('orderNP').value;
-
-        if (!fio || !phone || !np) return alert('Заповни всі дані!');
-
+        if (!fio || !phone || !np) return alert('Заповни всі данные!');
         let message = "💀 ЗАМОВЛЕННЯ 💀%0A%0A";
         message += `👤 ПІБ: ${fio}%0A📞 Тел: ${phone}%0A📦 НП: ${np}%0A%0A`;
         let total = 0;
@@ -408,7 +394,6 @@
             total += item.price;
         });
         message += `%0A💰 СУМА: ${total}₴`;
-
         window.open(`https://t.me/Hardcore_Division_bot?text=${message}`, '_blank');
         cart = [];
         document.getElementById('cart-count').innerText = '0';
