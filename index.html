@@ -44,7 +44,6 @@
             text-align: center;
             border-bottom: 2px solid var(--blood);
             background: rgba(0,0,0,0.9);
-            /* На ПК оставляем липким */
             position: sticky; 
             top: 0;
             z-index: 100;
@@ -83,7 +82,6 @@
             100% { transform: translateY(120px) scaleY(1.5); opacity: 0; }
         }
 
-        /* Остальные стили без изменений */
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         .hero-text { text-align: center; margin-bottom: 60px; text-transform: uppercase; }
         .hero-text h2 { font-size: 3rem; color: #fff; }
@@ -185,11 +183,44 @@
 
         footer { text-align: center; padding: 20px; font-size: 0.7rem; border-top: 1px solid #333; color: #555; }
 
+        /* --- НОВЫЙ СТИЛЬ УВЕДОМЛЕНИЙ --- */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--blood);
+            color: white;
+            padding: 15px 30px;
+            border: 2px solid white;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            animation: slideDown 0.4s ease forwards, fadeOut 0.4s ease forwards 2.5s;
+            box-shadow: 0 0 15px rgba(136, 8, 8, 0.6);
+            text-align: center;
+            min-width: 250px;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
         /* --- МОБИЛЬНАЯ ОПТИМИЗАЦИЯ --- */
         @media (max-width: 768px) {
-            header {
-                position: relative; /* На мобилке хедер уходит при скролле */
-            }
+            header { position: relative; }
             .logo { font-size: 1.8rem; }
             .hero-text h2 { font-size: 2.2rem; }
             .hero-text p { font-size: 0.9rem; padding: 0 10px; }
@@ -205,6 +236,8 @@
     </style>
 </head>
 <body>
+
+<div id="toast-container"></div>
 
 <button class="size-btn" onclick="toggleSizePanel()">РОЗМІРНА СІТКА</button>
 
@@ -320,7 +353,17 @@
     let currentGalleryImages = [];
     let currentImgIndex = 0;
 
-    // СИСТЕМА КАПЕЛЬ КРОВИ
+    // ФУНКЦИЯ КРУТОГО УВЕДОМЛЕНИЯ
+    function showToast(text) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerText = text;
+        container.appendChild(toast);
+        // Удаляем элемент после анимации (через 3 секунды)
+        setTimeout(() => { toast.remove(); }, 3000);
+    }
+
     function createDrop() {
         const logo = document.getElementById('logoArea');
         if(!logo) return;
@@ -337,7 +380,6 @@
     }
     setInterval(createDrop, 200);
 
-    // Весь остальной JS без изменений
     function toggleSizePanel() { document.getElementById('sizePanel').classList.toggle('active'); }
     function openGallery(images) {
         currentGalleryImages = images;
@@ -359,12 +401,13 @@
         const size = document.getElementById(sizeId).value;
         cart.push({name, price, size});
         document.getElementById('cart-count').innerText = cart.length;
-        alert('Додано!');
+        showToast('ДОДАНО В КОШИК 💀'); // Заменили alert
     }
     function removeFromCart(index) {
         cart.splice(index, 1);
         document.getElementById('cart-count').innerText = cart.length;
         renderCart();
+        showToast('ВИДАЛЕНО'); // Заменили alert
     }
     function renderCart() {
         const list = document.getElementById('cartItemsList');
@@ -376,7 +419,7 @@
         document.getElementById('cartTotal').innerText = `Всього: ${total}₴`;
     }
     function openOrderForm() {
-        if (cart.length === 0) return alert('Кошик порожній!');
+        if (cart.length === 0) return showToast('КОШИК ПОРОЖНІЙ!'); // Заменили alert
         document.getElementById('cartModal').style.display = 'none';
         document.getElementById('orderModal').style.display = 'flex';
     }
@@ -385,7 +428,7 @@
         const fio = document.getElementById('orderFIO').value;
         const phone = document.getElementById('orderPhone').value;
         const np = document.getElementById('orderNP').value;
-        if (!fio || !phone || !np) return alert('Заповни всі данные!');
+        if (!fio || !phone || !np) return showToast('ЗАПОВНИ ВСІ ДАНІ!'); // Заменили alert
         let message = "💀 ЗАМОВЛЕННЯ 💀%0A%0A";
         message += `👤 ПІБ: ${fio}%0A📞 Тел: ${phone}%0A📦 НП: ${np}%0A%0A`;
         let total = 0;
