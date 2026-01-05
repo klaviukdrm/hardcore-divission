@@ -169,6 +169,25 @@
         }
         .buy-btn:disabled { background: #444; cursor: not-allowed; }
 
+        .copy-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111;
+            padding: 5px 10px;
+            border: 1px solid #333;
+            margin-top: 5px;
+        }
+        .mini-copy-btn {
+            background: var(--blood);
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
         .cart-widget {
             position: fixed; bottom: 20px; right: 20px; background: var(--blood);
             width: 55px; height: 55px; border-radius: 50%; display: flex;
@@ -262,17 +281,7 @@
 </div>
 
 <div class="modal-overlay" id="orderModal">
-    <div class="modal-content" id="orderModalContent">
-        <div class="close-btn" onclick="closeOrderForm()">✕</div>
-        <h2 style="color: var(--blood); margin-bottom: 15px;">ДОСТАВКА</h2>
-        <div class="order-form">
-            <input type="text" id="orderFIO" placeholder="ПІБ">
-            <input type="text" id="orderPhone" placeholder="Номер телефону">
-            <input type="text" id="orderNP" placeholder="Місто та № відділення НП">
-            <p style="font-size: 0.75rem; color: #777; margin-bottom: 15px;">*Дані будуть передані в Telegram-бот</p>
-            <button class="buy-btn" id="confirmBtn" onclick="finalizeOrder()">ПІДТВЕРДИТИ</button>
-        </div>
-    </div>
+    <div class="modal-content" id="orderModalContent"></div>
 </div>
 
 <header>
@@ -359,6 +368,11 @@
         setTimeout(() => { toast.remove(); }, 3000);
     }
 
+    function copyVal(val) {
+        navigator.clipboard.writeText(val);
+        showToast('СКОПІЙОВАНО! 💀');
+    }
+
     function createDrop() {
         const logo = document.getElementById('logoArea');
         if(!logo) return;
@@ -411,11 +425,47 @@
         }).join('');
         document.getElementById('cartTotal').innerText = `Всього: ${total}₴`;
     }
+
     function openOrderForm() {
         if (cart.length === 0) return showToast('КОШИК ПОРОЖНІЙ!');
         document.getElementById('cartModal').style.display = 'none';
+        let total = cart.reduce((sum, i) => sum + i.price, 0);
+        document.getElementById('orderModalContent').innerHTML = `
+            <div class="close-btn" onclick="closeOrderForm()">✕</div>
+            <h2 style="color: var(--blood); margin-bottom: 15px;">ОПЛАТА</h2>
+            <div style="background:#000; padding:15px; border:1px solid #333; font-size:0.9rem; color:#fff; line-height:1.4;">
+                🪙ФОП РАХУНОК (IBAN):
+                <div class="copy-line"><b>UA783220010000026002320017237</b> <button class="mini-copy-btn" onclick="copyVal('UA783220010000026002320017237')">Copy</button></div><br>
+                💸PayPal: 
+                <div class="copy-line"><b>dreamprint777@ukr.net</b> <button class="mini-copy-btn" onclick="copyVal('dreamprint777@ukr.net')">Copy</button></div><br>
+                💳КАРТА ФОП РАХУНКУ:
+                <div class="copy-line"><b>4035 2000 4130 1190</b> <button class="mini-copy-btn" onclick="copyVal('4035200041301190')">Copy</button></div><br>
+                ЄДРПОУ:
+                <div class="copy-line"><b>3215715672</b> <button class="mini-copy-btn" onclick="copyVal('3215715672')">Copy</button></div><br>
+                ФОП:
+                <div class="copy-line"><b>Тарасов Олег Михайлович</b> <button class="mini-copy-btn" onclick="copyVal('Тарасов Олег Михайлович')">Copy</button></div><br>
+                💰 Сума: <span style="color:var(--blood); font-weight:bold; font-size:1.1rem;">${total}₴</span><br>
+                Призначення: оплата за товар від Хардкор
+            </div>
+            <button class="buy-btn" style="margin-top:15px;" onclick="showDeliveryInputs()">Я ОПЛАТИВ</button>
+        `;
         document.getElementById('orderModal').style.display = 'flex';
     }
+
+    function showDeliveryInputs() {
+        document.getElementById('orderModalContent').innerHTML = `
+            <div class="close-btn" onclick="closeOrderForm()">✕</div>
+            <h2 style="color: var(--blood); margin-bottom: 15px;">ДОСТАВКА</h2>
+            <div class="order-form">
+                <input type="text" id="orderFIO" placeholder="ПІБ">
+                <input type="text" id="orderPhone" placeholder="Номер телефону">
+                <input type="text" id="orderNP" placeholder="Місто та № відділення НП">
+                <p style="font-size: 0.75rem; color: #777; margin-bottom: 15px;">*Дані будуть передані в Telegram-бот</p>
+                <button class="buy-btn" id="confirmBtn" onclick="finalizeOrder()">ПІДТВЕРДИТИ</button>
+            </div>
+        `;
+    }
+
     function closeOrderForm() { document.getElementById('orderModal').style.display = 'none'; }
 
     async function finalizeOrder() {
@@ -423,48 +473,30 @@
         const phone = document.getElementById('orderPhone').value;
         const np = document.getElementById('orderNP').value;
         const btn = document.getElementById('confirmBtn');
-
         if (!fio || !phone || !np) return showToast('ЗАПОВНИ ВСІ ДАНІ!');
-
         btn.innerText = "ВІДПРАВКА...";
         btn.disabled = true;
-
         let total = 0;
         let itemsInfo = "";
         cart.forEach((item, idx) => {
             itemsInfo += `${idx + 1}. ${item.name} (${item.size}) — ${item.price}₴\n`;
             total += item.price;
         });
-
         let messageText = `<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>\n\n👤 <b>ПІБ:</b> ${fio}\n📞 <b>Тел:</b> ${phone}\n📦 <b>НП:</b> ${np}\n\n${itemsInfo}\n<b>💰 СУМА: ${total}₴</b>`;
-
         try {
             const response = await fetch('/api/send', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: messageText })
             });
-
             if (response.ok) {
                 showToast('ДАНІ ПРИЙНЯТО! 🩸');
-                
                 document.getElementById('orderModalContent').innerHTML = `
                     <div class="close-btn" onclick="location.reload()">✕</div>
-                    <h2 style="color: var(--blood); margin-bottom: 15px;">ОПЛАТА</h2>
-                    <div style="background:#000; padding:15px; border:1px solid #333; font-size:0.9rem; color:#fff; line-height:1.4;">
-                        🪙ФОП РАХУНОК (IBAN):<br><b>UA783220010000026002320017237</b><br><br>
-                        💸PayPal: <b>Oleh Tarasov dreamprint777@ukr.net</b><br><br>
-                        💳КАРТА ФОП РАХУНКУ :<br><b>4035 2000 4130 1190</b> (монобанк)<br><br>
-                        ЄДРПОУ: 3215715672<br>
-                        ФОП Тарасов Олег Михайлович<br><br>
-                        💰 Сума: <span style="color:var(--blood); font-weight:bold; font-size:1.1rem;">${total}₴</span><br>
-                        Призначення: оплата за товар від Хардкор<br><br>
-                        <span style="color:#777;">Термін виготовлення та відправки 3-5 робочих днів (пн-пт).</span><br><br>
-                        <span style="color:var(--blood);">По всім питанням пишіть в бота:</span> <br><b>@Hardcore_Division_bot</b>
-                    </div>
-                    <button class="buy-btn" style="margin-top:15px;" onclick="location.reload()">Я ОПЛАТИВ</button>
+                    <h2 style="color: var(--blood); margin-bottom: 15px;">УСПІШНО</h2>
+                    <p style="font-size:0.9rem;">Ваші дані відправлені менеджеру. <br><br>Термін виготовлення 3-5 робочих днів.</p>
+                    <button class="buy-btn" style="margin-top:20px;" onclick="location.reload()">ОК</button>
                 `;
-                
                 cart = [];
                 document.getElementById('cart-count').innerText = '0';
             } else {
