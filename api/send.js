@@ -10,29 +10,28 @@ export default async function handler(req, res) {
     try {
         let response;
 
-        if (photo) {
-            // 1. Убеждаемся, что base64 чистый (убираем префикс, если он есть)
-            const base64Data = photo.split(',')[1] || photo;
-            const byteCharacters = atob(base64Data);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], { type: 'image/png' });
+        if (photo && photo.includes('base64')) {
+            // 1. Очищаем строку base64 от префикса (data:image/png;base64,...)
+            const base64Data = photo.split(',')[1];
+            
+            // 2. Используем Buffer (стандарт Node.js) вместо аtob/Blob
+            const buffer = Buffer.from(base64Data, 'base64');
 
             const formData = new FormData();
             formData.append('chat_id', chatId);
             formData.append('caption', message);
             formData.append('parse_mode', 'HTML');
-            formData.append('photo', blob, 'payment.png');
+            
+            // Важный момент: конвертируем Buffer в Blob для FormData
+            const fileBlob = new Blob([buffer], { type: 'image/png' });
+            formData.append('photo', fileBlob, 'payment.png');
 
-            // 2. При отправке FormData заголовки Content-Type ставить НЕЛЬЗЯ, fetch сделает это сам
             response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
                 method: 'POST',
                 body: formData
             });
         } else {
+            // Обычная текстовая отправка
             response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -49,7 +48,7 @@ export default async function handler(req, res) {
         if (response.ok) {
             return res.status(200).json({ success: true });
         } else {
-            console.error('TG Error Detailed:', result); // Это покажет в логах Vercel, что именно не так
+            console.error('TG Error:', result);
             return res.status(500).json({ success: false, error: result.description });
         }
     } catch (error) {
