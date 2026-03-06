@@ -6,7 +6,6 @@
     <title>HARDCORE DIVISION | ONLY BLOOD</title>
     
     <link rel="icon" type="image/png" href="favicon.png">
-    
     <link href="https://fonts.googleapis.com/css2?family=Nosifer&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,6 +14,24 @@
             --black: #050505;
             --gray: #1a1a1a;
             --text: #e0e0e0;
+        }
+
+        header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--blood);
+            background: rgba(0,0,0,0.9);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            overflow: visible;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        header.header-hidden {
+            transform: translateY(-100%);
         }
 
         * {
@@ -29,6 +46,7 @@
             color: var(--text);
             font-family: 'Oswald', sans-serif;
             overflow-x: hidden;
+            padding-top: 100px;
         }
 
         body::before {
@@ -39,17 +57,6 @@
             background: radial-gradient(circle at 50% 50%, rgba(136, 8, 8, 0.1) 0%, transparent 80%);
             pointer-events: none;
             z-index: -1;
-        }
-
-        header {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 2px solid var(--blood);
-            background: rgba(0,0,0,0.9);
-            position: sticky; 
-            top: 0;
-            z-index: 100;
-            overflow: visible;
         }
 
         .logo-container {
@@ -65,29 +72,27 @@
             letter-spacing: 2px;
             position: relative;
             z-index: 2;
+            animation: pulse-logo 3s infinite ease-in-out;
         }
 
-        .blood-drop {
-            position: absolute;
-            background-color: var(--blood);
-            width: 2px;
-            border-radius: 0 0 4px 4px;
-            z-index: 1;
-            pointer-events: none;
-            top: 70%;
-            animation: fall linear forwards;
+        @keyframes pulse-logo {
+            0%, 100% { 
+                color: var(--blood);
+                text-shadow: 0 0 10px rgba(136, 8, 8, 0.8);
+                filter: brightness(1);
+            }
+            50% { 
+                color: #ff0000;
+                text-shadow: 0 0 25px rgba(255, 0, 0, 1);
+                filter: brightness(1.5);
+            }
         }
 
-        @keyframes fall {
-            0% { transform: translateY(0) scaleY(1); opacity: 1; }
-            70% { opacity: 1; }
-            100% { transform: translateY(120px) scaleY(1.5); opacity: 0; }
-        }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
         .hero-text { text-align: center; margin-bottom: 60px; text-transform: uppercase; }
         .hero-text h2 { font-size: 3rem; color: #fff; }
         .hero-text span { color: var(--blood); }
+        .hero-text p { color: #888; letter-spacing: 2px; margin-top: 10px; }
 
         .size-btn {
             position: fixed; top: 50%; right: 0;
@@ -141,11 +146,11 @@
 
         .product-card {
             background: var(--gray); border: 1px solid #333; transition: 0.3s;
-            position: relative; overflow: hidden; animation: fadeIn 1s ease forwards;
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
         }
         .product-card:hover { border-color: var(--blood); box-shadow: 0 0 20px rgba(136, 8, 8, 0.4); }
 
-        .product-img-container { width: 100%; height: 450px; overflow: hidden; position: relative; }
+        .product-img-container { width: 100%; height: 450px; overflow: hidden; position: relative; cursor: pointer; }
         .product-img, .product-img-alt { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         .product-img-alt { position: absolute; top: 0; left: 0; opacity: 0; }
         
@@ -155,14 +160,14 @@
             .product-card:hover .product-img-alt { opacity: 1; }
         }
 
-        .product-info { padding: 25px; }
-        .product-title { font-size: 1.8rem; margin-bottom: 10px; color: var(--blood); }
-        .product-desc { font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px; color: #bbb; }
-        .price { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; color: #fff; }
+        .product-info { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-title { font-size: 1.6rem; margin-bottom: 10px; color: var(--blood); text-transform: uppercase; }
+        .product-desc { font-size: 0.85rem; line-height: 1.5; margin-bottom: 15px; color: #bbb; }
+        .price { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; color: #fff; }
 
         select {
             background: #000; color: #fff; border: 1px solid var(--blood);
-            padding: 12px; width: 100%; margin-bottom: 15px; outline: none; font-size: 16px;
+            padding: 12px; width: 100%; margin-bottom: 15px; outline: none; font-size: 16px; font-family: 'Oswald', sans-serif;
         }
 
         .buy-btn {
@@ -172,30 +177,15 @@
         }
         .buy-btn:disabled { background: #444; cursor: not-allowed; }
 
-        .copy-line {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #111;
-            padding: 5px 10px;
-            border: 1px solid #333;
-            margin-top: 5px;
-        }
-        .mini-copy-btn {
-            background: var(--blood);
-            color: white;
-            border: none;
-            padding: 3px 8px;
-            font-size: 0.7rem;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
+        .copy-line { display: flex; justify-content: space-between; align-items: center; background: #111; padding: 5px 10px; border: 1px solid #333; margin-top: 5px; }
+        .mini-copy-btn { background: var(--blood); color: white; border: none; padding: 3px 8px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; }
 
         .cart-widget {
             position: fixed; bottom: 20px; right: 20px; background: var(--blood);
             width: 55px; height: 55px; border-radius: 50%; display: flex;
             align-items: center; justify-content: center; cursor: pointer; z-index: 1000;
         }
+        #cart-count { background: white; color: var(--blood); border-radius: 50%; padding: 2px 7px; font-size: 0.8rem; position: absolute; top: 5px; right: 5px; font-weight: bold; }
 
         .cart-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333; font-size: 0.9rem; }
         .remove-item { color: var(--blood); cursor: pointer; }
@@ -205,53 +195,25 @@
 
         footer { text-align: center; padding: 20px; font-size: 0.7rem; border-top: 1px solid #333; color: #555; }
 
-        #toast-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            pointer-events: none;
-        }
-
+        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; pointer-events: none; }
         .toast {
-            background: var(--blood);
-            color: white;
-            padding: 15px 30px;
-            border: 2px solid white;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+            background: var(--blood); color: white; padding: 15px 30px; border: 2px solid white;
+            text-transform: uppercase; font-weight: bold; letter-spacing: 1px; margin-bottom: 10px;
             animation: slideDown 0.4s ease forwards, fadeOut 0.4s ease forwards 2.5s;
-            box-shadow: 0 0 15px rgba(136, 8, 8, 0.6);
-            text-align: center;
-            min-width: 250px;
+            box-shadow: 0 0 15px rgba(136, 8, 8, 0.6); text-align: center; min-width: 250px;
         }
 
-        @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
+        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
         @media (max-width: 768px) {
-            header { position: relative; }
+            header { position: fixed; }
             .logo { font-size: 1.8rem; }
             .hero-text h2 { font-size: 2.2rem; }
-            .hero-text p { font-size: 0.9rem; padding: 0 10px; }
             .shop-grid { grid-template-columns: 1fr; gap: 25px; }
             .product-img-container { height: 380px; }
-            .modal-content { width: 95%; padding: 20px; }
-            .size-btn { font-size: 0.8rem; padding: 8px 15px; }
             .product-img-alt { display: none; } 
         }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -287,7 +249,7 @@
     <div class="modal-content" id="orderModalContent"></div>
 </div>
 
-<header>
+<header id="mainHeader">
     <div class="logo-container" id="logoArea">
         <h1 class="logo">HARDCORE DIVISION</h1>
     </div>
@@ -296,27 +258,30 @@
 <div class="container">
     <div class="hero-text">
         <h2>ONLY <span>BLOOD</span></h2>
-        <p>Це не про моду. Це про вибір.</p>
+        <p>DIVISION OF THE BRAVE</p>
     </div>
 
     <div class="shop-grid">
+        
         <div class="product-card">
             <div class="product-img-container" onclick="openGallery(['images/photo_2025-12-31_17-17-16.jpg', 'images/photo_2025-12-31_17-17-18.jpg'])">
                 <img src="images/photo_2025-12-31_17-17-16.jpg" class="product-img">
                 <img src="images/photo_2025-12-31_17-17-18.jpg" class="product-img-alt">
             </div>
             <div class="product-info">
-                <h3 class="product-title">ON MY KNIFE</h3>
-                <p class="product-desc">Для тих, хто йде до цілі і не відступає. Характер замість шуму.</p>
-                <div class="price">1900₴</div>
-                <select id="size-1">
-                    <option value="S">SIZE: S</option>
-                    <option value="M">SIZE: M</option>
-                    <option value="L">SIZE: L</option>
-                    <option value="XL">SIZE: XL</option>
-                    <option value="2XL">SIZE: 2XL</option>
-                </select>
-                <button class="buy-btn" onclick="addToCart('ON MY KNIFE', 1900, 'size-1')">В КОШИК</button>
+                <div>
+                    <h3 class="product-title">ON MY KNIFE</h3>
+                    <p class="product-desc">Для тих, хто йде до цілі і не відступає. Характер замість шуму.</p>
+                </div>
+                <div>
+                    <div class="price">1900₴</div>
+                    <select id="size-1">
+                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                        <option value="2XL">SIZE: 2XL</option>
+                    </select>
+                    <button class="buy-btn" onclick="addToCart('ON MY KNIFE', 1900, 'size-1')">В КОШИК</button>
+                </div>
             </div>
         </div>
 
@@ -326,24 +291,202 @@
                 <img src="images/photo_2026-01-03_10-19-49.jpg" class="product-img-alt">
             </div>
             <div class="product-info">
-                <h3 class="product-title">HARDCORE BLOOD</h3>
-                <p class="product-desc">Для тих, у кого кров кипить не від слів, а від дій. Повна відмова от компромісів.</p>
-                <div class="price">1900₴</div>
-                <select id="size-2">
-                    <option value="S">SIZE: S</option>
-                    <option value="M">SIZE: M</option>
-                    <option value="L">SIZE: L</option>
-                    <option value="XL">SIZE: XL</option>
-                    <option value="2XL">SIZE: 2XL</option>
-                </select>
-                <button class="buy-btn" onclick="addToCart('HARDCORE BLOOD', 1900, 'size-2')">В КОШИК</button>
+                <div>
+                    <h3 class="product-title">HARDCORE BLOOD</h3>
+                    <p class="product-desc">Для тих, у кого кров кипить не від слів, а від дій. Повна відмова от компромісів.</p>
+                </div>
+                <div>
+                    <div class="price">1900₴</div>
+                    <select id="size-2">
+                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                        <option value="2XL">SIZE: 2XL</option>
+                    </select>
+                    <button class="buy-btn" onclick="addToCart('HARDCORE BLOOD', 1900, 'size-2')">В КОШИК</button>
+                </div>
             </div>
         </div>
+
+        <div class="product-card">
+            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-03.jpg', 'images/photo_2_2026-03-06_19-48-03.jpg'])">
+                <img src="images/photo_1_2026-03-06_19-48-03.jpg" class="product-img">
+                <img src="images/photo_2_2026-03-06_19-48-03.jpg" class="product-img-alt">
+            </div>
+            <div class="product-info">
+                <div>
+                    <h3 class="product-title">Hardcore Confederates</h3>
+                    <p class="product-desc">Класичний символ бунту та вільної душі. Виразний стиль для тих, хто цінує традиції спротиву.</p>
+                </div>
+                <div>
+                    <div class="price">1850₴</div>
+                    <select id="size-3">
+                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                    </select>
+                    <button class="buy-btn" onclick="addToCart('Confederates Hoodie', 1850, 'size-3')">В КОШИК</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-20.jpg', 'images/photo_2_2026-03-06_19-48-20.jpg'])">
+                <img src="images/photo_1_2026-03-06_19-48-20.jpg" class="product-img">
+                <img src="images/photo_2_2026-03-06_19-48-20.jpg" class="product-img-alt">
+            </div>
+            <div class="product-info">
+                <div>
+                    <h3 class="product-title">Hardcore Hentai</h3>
+                    <p class="product-desc">Сміливе поєднання сучасної культури та жорсткого вуличному стилю. Для тих, хто не боїться бути в центрі уваги.</p>
+                </div>
+                <div>
+                    <div class="price">1750₴</div>
+                    <select id="size-4">
+                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                    </select>
+                    <button class="buy-btn" onclick="addToCart('Hentai Hoodie', 1750, 'size-4')">В КОШИК</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-26.jpg', 'images/photo_2_2026-03-06_19-48-26.jpg', 'images/photo_3_2026-03-06_19-48-26.jpg', 'images/photo_4_2026-03-06_19-48-26.jpg'])">
+                <img src="images/photo_1_2026-03-06_19-48-26.jpg" class="product-img">
+                <img src="images/photo_2_2026-03-06_19-48-26.jpg" class="product-img-alt">
+            </div>
+            <div class="product-info">
+                <div>
+                    <h3 class="product-title">HARDCORE NATION</h3>
+                    <p class="product-desc">Про тих, кого не зламали обставини. Загартоване тиском, боротьбою та вибором бути сильними. Ми не шукаємо легких шляхів — ми их створюємо.</p>
+                </div>
+                <div>
+                    <div class="price">1750₴</div>
+                    <select id="size-5">
+                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                    </select>
+                    <button class="buy-btn" onclick="addToCart('HARDCORE NATION', 1750, 'size-5')">В КОШИК</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-05.jpg', 'images/photo_2_2026-03-06_19-49-05.jpg', 'images/photo_3_2026-03-06_19-49-05.jpg'])">
+                <img src="images/photo_1_2026-03-06_19-49-05.jpg" class="product-img">
+                <img src="images/photo_2_2026-03-06_19-49-05.jpg" class="product-img-alt">
+            </div>
+            <div class="product-info">
+                <div>
+                    <h3 class="product-title">HARDCORE HAMMER</h3>
+                    <p class="product-desc">Худі, яке б’є по слабкості. Грубе по характеру, надійне по відчуттях. Наче молот у руках — простий, але вирішує все.</p>
+                </div>
+                <div>
+                    <div class="price">1850₴</div>
+                    <select id="size-6">
+                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                    </select>
+                    <button class="buy-btn" onclick="addToCart('HARDCORE HAMMER', 1850, 'size-6')">В КОШИК</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-15.jpg', 'images/photo_2_2026-03-06_19-49-15.jpg', 'images/photo_3_2026-03-06_19-49-15.jpg', 'images/photo_4_2026-03-06_19-49-15.jpg'])">
+                <img src="images/photo_1_2026-03-06_19-49-15.jpg" class="product-img">
+                <img src="images/photo_2_2026-03-06_19-49-15.jpg" class="product-img-alt">
+            </div>
+            <div class="product-info">
+                <div>
+                    <h3 class="product-title">MILITANT PRO</h3>
+                    <p class="product-desc">Для тих, хто мислить як боєць. Річ, яка працює разом з тобою, поєднуючи комфорт та залізний характер.</p>
+                </div>
+                <div>
+                    <div class="price">1750₴</div>
+                    <select id="size-7">
+                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                    </select>
+                    <button class="buy-btn" onclick="addToCart('MILITANT PRO', 1750, 'size-7')">В КОШИК</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-25.jpg', 'images/photo_2_2026-03-06_19-49-25.jpg'])">
+                <img src="images/photo_1_2026-03-06_19-49-25.jpg" class="product-img">
+                <img src="images/photo_2_2026-03-06_19-49-25.jpg" class="product-img-alt">
+            </div>
+            <div class="product-info">
+                <div>
+                    <h3 class="product-title">Misanthrop Hoodie</h3>
+                    <p class="product-desc">Дистанція та стиль. Худі для тих, хто обирає свій шлях окремо від натовпу. Тільки чорний, тільки хардкор.</p>
+                </div>
+                <div>
+                    <div class="price">1750₴</div>
+                    <select id="size-8">
+                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                    </select>
+                    <button class="buy-btn" onclick="addToCart('Misanthrop Hoodie', 1750, 'size-8')">В КОШИК</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-30.jpg', 'images/photo_2_2026-03-06_19-49-30.jpg', 'images/photo_3_2026-03-06_19-49-30.jpg'])">
+                <img src="images/photo_1_2026-03-06_19-49-30.jpg" class="product-img">
+                <img src="images/photo_2_2026-03-06_19-49-30.jpg" class="product-img-alt">
+            </div>
+            <div class="product-info">
+                <div>
+                    <h3 class="product-title">Hardcore Division</h3>
+                    <p class="product-desc">Для стійких духом, хто не ламається під тиском і йде до кінця. Жорсткий характер, жодних компромісів.</p>
+                </div>
+                <div>
+                    <div class="price">800₴</div>
+                    <select id="size-9">
+                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                    </select>
+                    <button class="buy-btn" onclick="addToCart('Division T-Shirt', 800, 'size-9')">В КОШИК</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-40.jpg', 'images/photo_2_2026-03-06_19-49-40.jpg'])">
+                <img src="images/photo_1_2026-03-06_19-49-40.jpg" class="product-img">
+                <img src="images/photo_2_2026-03-06_19-49-40.jpg" class="product-img-alt">
+            </div>
+            <div class="product-info">
+                <div>
+                    <h3 class="product-title">Hardcore Division Classic</h3>
+                    <p class="product-desc">Класика бренду. Мінімалізм та характер. Доступна у двох основних кольорах ⬜️⬛️.</p>
+                </div>
+                <div>
+                    <div class="price">800₴</div>
+                    <select id="size-10">
+                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                    </select>
+                    <button class="buy-btn" onclick="addToCart('Classic Tee', 800, 'size-10')">В КОШИК</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <div class="socials">
-    <p style="margin-bottom: 20px; color: #555; font-size: 0.8rem;">JOIN THE DIVISION</p>
     <a href="https://t.me/hardcore_divis1on" target="_blank">Telegram</a>
     <a href="https://www.instagram.com/hardcore_division_brand" target="_blank">Instagram</a>
     <a href="https://www.tiktok.com/@hardcore.division" target="_blank">TikTok</a>
@@ -361,7 +504,17 @@
     let cart = [];
     let currentGalleryImages = [];
     let currentImgIndex = 0;
-    let paymentScreenshot = null; // Для хранения base64 картинки
+    let paymentScreenshot = null;
+    let lastScrollTop = 0;
+
+    window.onscroll = function() {
+        let header = document.getElementById("mainHeader");
+        if (window.scrollY > 100) {
+            header.classList.add("header-hidden");
+        } else {
+            header.classList.remove("header-hidden");
+        }
+    };
 
     function showToast(text) {
         const container = document.getElementById('toast-container');
@@ -376,20 +529,6 @@
         navigator.clipboard.writeText(val);
         showToast('СКОПІЙОВАНО! 💀');
     }
-
-    function createDrop() {
-        const logo = document.getElementById('logoArea');
-        if(!logo) return;
-        const drop = document.createElement('div');
-        drop.classList.add('blood-drop');
-        drop.style.left = Math.random() * logo.offsetWidth + 'px';
-        const duration = Math.random() * 2 + 1.5;
-        drop.style.height = Math.random() * 15 + 5 + 'px';
-        drop.style.animationDuration = duration + 's';
-        logo.appendChild(drop);
-        setTimeout(() => drop.remove(), duration * 1000);
-    }
-    setInterval(createDrop, 200);
 
     function toggleSizePanel() { document.getElementById('sizePanel').classList.toggle('active'); }
     function openGallery(images) {
@@ -418,7 +557,6 @@
         cart.splice(index, 1);
         document.getElementById('cart-count').innerText = cart.length;
         renderCart();
-        showToast('ВИДАЛЕНО');
     }
     function renderCart() {
         const list = document.getElementById('cartItemsList');
@@ -476,7 +614,7 @@
                 <input type="text" id="orderFIO" placeholder="ПІБ">
                 <input type="text" id="orderPhone" placeholder="Номер телефону">
                 <input type="text" id="orderNP" placeholder="Місто та № відділення НП">
-                <p style="font-size: 0.75rem; color: #777; margin-bottom: 15px;">*Дані та скріншот будуть передані в бот</p>
+                <input type="text" id="orderTG" placeholder="Ваш Telegram (необов'язково)">
                 <button class="buy-btn" id="confirmBtn" onclick="finalizeOrder()">ПІДТВЕРДИТИ</button>
             </div>
         `;
@@ -488,6 +626,7 @@
         const fio = document.getElementById('orderFIO').value;
         const phone = document.getElementById('orderPhone').value;
         const np = document.getElementById('orderNP').value;
+        const tg = document.getElementById('orderTG').value;
         const btn = document.getElementById('confirmBtn');
         if (!fio || !phone || !np) return showToast('ЗАПОВНИ ВСІ ДАНІ!');
         
@@ -496,35 +635,28 @@
 
         let total = cart.reduce((sum, i) => sum + i.price, 0);
         let itemsInfo = cart.map((item, idx) => `${idx + 1}. ${item.name} (${item.size}) — ${item.price}₴`).join('\n');
-        let messageText = `<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>\n\n👤 <b>ПІБ:</b> ${fio}\n📞 <b>Тел:</b> ${phone}\n📦 <b>НП:</b> ${np}\n\n${itemsInfo}\n<b>💰 СУМА: ${total}₴</b>`;
+        let tgText = tg ? `\n✈️ <b>TG:</b> ${tg}` : "";
+        let messageText = `<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>\n\n👤 <b>ПІБ:</b> ${fio}\n📞 <b>Тел:</b> ${phone}${tgText}\n📦 <b>НП:</b> ${np}\n\n${itemsInfo}\n<b>💰 СУМА: ${total}₴</b>`;
 
         try {
-            const response = await fetch('/api/send', {
+            const response = await fetch('YOUR_BACKEND_URL', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
                     message: messageText,
-                    photo: paymentScreenshot // Отправляем base64 строку
+                    image: paymentScreenshot
                 })
             });
-
             if (response.ok) {
-                showToast('ДАНІ ТА СКРІН ПРИЙНЯТО! 🩸');
-                document.getElementById('orderModalContent').innerHTML = `
-                    <div class="close-btn" onclick="location.reload()">✕</div>
-                    <h2 style="color: var(--blood); margin-bottom: 15px;">УСПІШНО</h2>
-                    <p style="font-size:0.9rem;">Ваше замовлення разом зі скріншотом відправлено менеджеру.</p>
-                    <button class="buy-btn" style="margin-top:20px;" onclick="location.reload()">ОК</button>
-                `;
+                showToast('ЗАМОВЛЕННЯ ПРИЙНЯТО! 🩸');
                 cart = [];
-                document.getElementById('cart-count').innerText = '0';
+                document.getElementById('cart-count').innerText = 0;
+                closeOrderForm();
             } else {
-                showToast('ПОМИЛКА СЕРВЕРА');
-                btn.innerText = "ПІДТВЕРДИТИ";
-                btn.disabled = false;
+                throw new Error();
             }
         } catch (e) {
-            showToast('ПОМИЛКА МЕРЕЖИ');
+            showToast('ПОМИЛКА ВІДПРАВКИ!');
             btn.innerText = "ПІДТВЕРДИТИ";
             btn.disabled = false;
         }
