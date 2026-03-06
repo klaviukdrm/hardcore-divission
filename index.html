@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HARDCORE DIVISION | ONLY BLOOD</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Nosifer&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -358,6 +361,7 @@
     let cart = [];
     let currentGalleryImages = [];
     let currentImgIndex = 0;
+    let paymentScreenshot = null; // Для хранения base64 картинки
 
     function showToast(text) {
         const container = document.getElementById('toast-container');
@@ -442,17 +446,29 @@
                 <div class="copy-line"><b>4035 2000 4130 1190</b> <button class="mini-copy-btn" onclick="copyVal('4035200041301190')">Copy</button></div><br>
                 ЄДРПОУ:
                 <div class="copy-line"><b>3215715672</b> <button class="mini-copy-btn" onclick="copyVal('3215715672')">Copy</button></div><br>
-                ФОП:
-                <div class="copy-line"><b>Тарасов Олег Михайлович</b> <button class="mini-copy-btn" onclick="copyVal('Тарасов Олег Михайлович')">Copy</button></div><br>
                 💰 Сума: <span style="color:var(--blood); font-weight:bold; font-size:1.1rem;">${total}₴</span><br>
                 Призначення: оплата за товар від Хардкор
+            </div>
+            <div style="margin-top:15px;">
+                 <label style="display:block; color:var(--blood); font-size:0.8rem; margin-bottom:5px;">ДОДАТИ СКРІНШОТ ОПЛАТИ (ОБОВ'ЯЗКОВО):</label>
+                 <input type="file" id="orderScreenshot" accept="image/*" style="width:100%; font-size:0.8rem; color:#fff;" onchange="handleFileSelect(event)">
             </div>
             <button class="buy-btn" style="margin-top:15px;" onclick="showDeliveryInputs()">Я ОПЛАТИВ</button>
         `;
         document.getElementById('orderModal').style.display = 'flex';
     }
 
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => { paymentScreenshot = e.target.result; };
+            reader.readAsDataURL(file);
+        }
+    }
+
     function showDeliveryInputs() {
+        if(!paymentScreenshot) return showToast('ДОДАЙ СКРІНШОТ!');
         document.getElementById('orderModalContent').innerHTML = `
             <div class="close-btn" onclick="closeOrderForm()">✕</div>
             <h2 style="color: var(--blood); margin-bottom: 15px;">ДОСТАВКА</h2>
@@ -460,13 +476,13 @@
                 <input type="text" id="orderFIO" placeholder="ПІБ">
                 <input type="text" id="orderPhone" placeholder="Номер телефону">
                 <input type="text" id="orderNP" placeholder="Місто та № відділення НП">
-                <p style="font-size: 0.75rem; color: #777; margin-bottom: 15px;">*Дані будуть передані в Telegram-бот</p>
+                <p style="font-size: 0.75rem; color: #777; margin-bottom: 15px;">*Дані та скріншот будуть передані в бот</p>
                 <button class="buy-btn" id="confirmBtn" onclick="finalizeOrder()">ПІДТВЕРДИТИ</button>
             </div>
         `;
     }
 
-    function closeOrderForm() { document.getElementById('orderModal').style.display = 'none'; }
+    function closeOrderForm() { document.getElementById('orderModal').style.display = 'none'; paymentScreenshot = null; }
 
     async function finalizeOrder() {
         const fio = document.getElementById('orderFIO').value;
@@ -474,27 +490,30 @@
         const np = document.getElementById('orderNP').value;
         const btn = document.getElementById('confirmBtn');
         if (!fio || !phone || !np) return showToast('ЗАПОВНИ ВСІ ДАНІ!');
+        
         btn.innerText = "ВІДПРАВКА...";
         btn.disabled = true;
-        let total = 0;
-        let itemsInfo = "";
-        cart.forEach((item, idx) => {
-            itemsInfo += `${idx + 1}. ${item.name} (${item.size}) — ${item.price}₴\n`;
-            total += item.price;
-        });
+
+        let total = cart.reduce((sum, i) => sum + i.price, 0);
+        let itemsInfo = cart.map((item, idx) => `${idx + 1}. ${item.name} (${item.size}) — ${item.price}₴`).join('\n');
         let messageText = `<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>\n\n👤 <b>ПІБ:</b> ${fio}\n📞 <b>Тел:</b> ${phone}\n📦 <b>НП:</b> ${np}\n\n${itemsInfo}\n<b>💰 СУМА: ${total}₴</b>`;
+
         try {
             const response = await fetch('/api/send', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: messageText })
+                body: JSON.stringify({ 
+                    message: messageText,
+                    photo: paymentScreenshot // Отправляем base64 строку
+                })
             });
+
             if (response.ok) {
-                showToast('ДАНІ ПРИЙНЯТО! 🩸');
+                showToast('ДАНІ ТА СКРІН ПРИЙНЯТО! 🩸');
                 document.getElementById('orderModalContent').innerHTML = `
                     <div class="close-btn" onclick="location.reload()">✕</div>
                     <h2 style="color: var(--blood); margin-bottom: 15px;">УСПІШНО</h2>
-                    <p style="font-size:0.9rem;">Ваші дані відправлені менеджеру. <br><br>Термін виготовлення 3-5 робочих днів.</p>
+                    <p style="font-size:0.9rem;">Ваше замовлення разом зі скріншотом відправлено менеджеру.</p>
                     <button class="buy-btn" style="margin-top:20px;" onclick="location.reload()">ОК</button>
                 `;
                 cart = [];
@@ -511,7 +530,5 @@
         }
     }
 </script>
-
 </body>
 </html>
-
