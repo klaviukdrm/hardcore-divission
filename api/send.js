@@ -5,20 +5,31 @@ export default async function handler(req, res) {
 
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
-    const { message, photo } = req.body;
+    
+    // ВАЖНО: берем 'image', так как во фронтенде написано JSON.stringify({ image: ... })
+    const { message, image } = req.body;
+
+    if (!botToken || !chatId) {
+        console.error('Ошибка: Не настроены переменные окружения TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID');
+        return res.status(500).json({ success: false, error: 'Server config error' });
+    }
 
     try {
         let response;
 
-        if (photo) {
-            // Если прислали фото (скриншот оплаты)
+        if (image) {
+            // Если прислали фото (base64)
+            // Убираем префикс (data:image/png;base64,), если он есть
+            const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
+            const buffer = Buffer.from(base64Data, 'base64');
+
             const formData = new FormData();
             formData.append('chat_id', chatId);
-            formData.append('caption', message); // Текст заказа идет подписью к фото
+            formData.append('caption', message);
             formData.append('parse_mode', 'HTML');
             
-            // Превращаем base64 обратно в Blob для отправки в Telegram
-            const blob = await fetch(photo).then(r => r.blob());
+            // Создаем файл из буфера для отправки
+            const blob = new Blob([buffer], { type: 'image/png' });
             formData.append('photo', blob, 'payment.png');
 
             response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
@@ -26,7 +37,7 @@ export default async function handler(req, res) {
                 body: formData
             });
         } else {
-            // Обычная текстовая отправка (если скрина нет)
+            // Обычная текстовая отправка
             response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -38,12 +49,13 @@ export default async function handler(req, res) {
             });
         }
 
+        const result = await response.json();
+
         if (response.ok) {
             return res.status(200).json({ success: true });
         } else {
-            const errorInfo = await response.json();
-            console.error('TG Error:', errorInfo);
-            return res.status(500).json({ success: false });
+            console.error('TG API Error:', result);
+            return res.status(500).json({ success: false, error: result.description });
         }
     } catch (error) {
         console.error('API Error:', error);
