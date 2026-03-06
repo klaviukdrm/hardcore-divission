@@ -10,11 +10,12 @@ export default async function handler(req, res) {
     try {
         let response;
 
+        // Проверяем наличие фото и наличие в нем строки base64
         if (photo && photo.includes('base64')) {
-            // 1. Очищаем строку base64 от префикса (data:image/png;base64,...)
-            const base64Data = photo.split(',')[1];
+            // 1. Извлекаем чистые данные base64
+            const base64Data = photo.split(',')[1] || photo;
             
-            // 2. Используем Buffer (стандарт Node.js) вместо аtob/Blob
+            // 2. Превращаем base64 в Buffer (это стандарт для Node.js)
             const buffer = Buffer.from(base64Data, 'base64');
 
             const formData = new FormData();
@@ -22,7 +23,7 @@ export default async function handler(req, res) {
             formData.append('caption', message);
             formData.append('parse_mode', 'HTML');
             
-            // Важный момент: конвертируем Buffer в Blob для FormData
+            // 3. Создаем Blob из буфера (современный fetch в Node.js это понимает)
             const fileBlob = new Blob([buffer], { type: 'image/png' });
             formData.append('photo', fileBlob, 'payment.png');
 
@@ -31,7 +32,7 @@ export default async function handler(req, res) {
                 body: formData
             });
         } else {
-            // Обычная текстовая отправка
+            // Если фото нет, шлем просто текст
             response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -48,7 +49,7 @@ export default async function handler(req, res) {
         if (response.ok) {
             return res.status(200).json({ success: true });
         } else {
-            console.error('TG Error:', result);
+            console.error('TG Error Detailed:', result);
             return res.status(500).json({ success: false, error: result.description });
         }
     } catch (error) {
