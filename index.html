@@ -225,7 +225,15 @@
 <div class="side-panel" id="sizePanel">
     <div class="close-btn" onclick="toggleSizePanel()">✕</div>
     <h2 style="color: var(--blood); text-align: center; margin-top: 20px;">РОЗМІРНА СІТКА</h2>
-    <img src="images/photo_2026-01-03_00-09-39 (1).jpg" alt="Size Guide" style="width:100%; margin-top:20px;">
+    
+    <div style="display: flex; justify-content: center; gap: 5px; padding: 0 15px; margin-top: 15px;">
+        <button id="size-btn-t" onclick="setSizeType('tshirt')" style="flex: 1; background: #222; color: #888; border: 1px solid #333; padding: 10px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: bold;">ФУТБОЛКИ</button>
+        <button id="size-btn-h" onclick="setSizeType('hoodie')" style="flex: 1; background: var(--blood); color: white; border: none; padding: 10px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: bold;">ХУДІ</button>
+    </div>
+
+    <div style="padding: 15px; margin-top: 10px;">
+        <img src="images/photo_2026-01-03_00-09-39 (1).jpg" id="mainSizeImg" alt="Size Guide" style="width:100%; border: 1px solid #222; display: block;">
+    </div>
 </div>
 
 <div class="gallery-overlay" id="gallery">
@@ -535,6 +543,21 @@
     }
 
     function toggleSizePanel() { document.getElementById('sizePanel').classList.toggle('active'); }
+    function setSizeType(type) {
+    const img = document.getElementById('mainSizeImg');
+    const btnT = document.getElementById('size-btn-t');
+    const btnH = document.getElementById('size-btn-h');
+
+    if (type === 'tshirt') {
+        img.src = 'images/photo_2026-02-04_23-37-40 (1).jpg';
+        btnT.style.background = 'var(--blood)'; btnT.style.color = 'white';
+        btnH.style.background = '#222'; btnH.style.color = '#888';
+    } else {
+        img.src = 'images/photo_2026-01-03_00-09-39 (1).jpg';
+        btnH.style.background = 'var(--blood)'; btnH.style.color = 'white';
+        btnT.style.background = '#222'; btnT.style.color = '#888';
+    }
+}
     function openGallery(images) {
         currentGalleryImages = images;
         currentImgIndex = 0;
@@ -696,7 +719,7 @@ function closePrivacy() {
             <p>2. Ваші дані використовуються виключно для обробки замовлення.</p>
             <p>3. Ми не передаємо інформацію третім особам, крім логістичних служб.</p>
             <p>4. Натискаючи «Оформити замовлення», ви погоджуєтесь із цими правилами.</p>
-            <p>5. Ви маєте право вимагати видалення своїх даних за запитом.</p>
+            <p>4. Натискаючи «Оформити замовлення», ви погоджуєтесь із цими правилами.</p>
         </div>
     </div>
 </div>
