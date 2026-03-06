@@ -10,29 +10,23 @@ export default async function handler(req, res) {
     try {
         let response;
 
-        // Проверяем наличие фото и наличие в нем строки base64
-        if (photo && photo.includes('base64')) {
-            // 1. Извлекаем чистые данные base64
-            const base64Data = photo.split(',')[1] || photo;
-            
-            // 2. Превращаем base64 в Buffer (это стандарт для Node.js)
-            const buffer = Buffer.from(base64Data, 'base64');
-
+        if (photo) {
+            // Если прислали фото (скриншот оплаты)
             const formData = new FormData();
             formData.append('chat_id', chatId);
-            formData.append('caption', message);
+            formData.append('caption', message); // Текст заказа идет подписью к фото
             formData.append('parse_mode', 'HTML');
             
-            // 3. Создаем Blob из буфера (современный fetch в Node.js это понимает)
-            const fileBlob = new Blob([buffer], { type: 'image/png' });
-            formData.append('photo', fileBlob, 'payment.png');
+            // Превращаем base64 обратно в Blob для отправки в Telegram
+            const blob = await fetch(photo).then(r => r.blob());
+            formData.append('photo', blob, 'payment.png');
 
             response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
                 method: 'POST',
                 body: formData
             });
         } else {
-            // Если фото нет, шлем просто текст
+            // Обычная текстовая отправка (если скрина нет)
             response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -44,13 +38,12 @@ export default async function handler(req, res) {
             });
         }
 
-        const result = await response.json();
-
         if (response.ok) {
             return res.status(200).json({ success: true });
         } else {
-            console.error('TG Error Detailed:', result);
-            return res.status(500).json({ success: false, error: result.description });
+            const errorInfo = await response.json();
+            console.error('TG Error:', errorInfo);
+            return res.status(500).json({ success: false });
         }
     } catch (error) {
         console.error('API Error:', error);
