@@ -11,22 +11,28 @@ export default async function handler(req, res) {
         let response;
 
         if (photo) {
-            // Если прислали фото (скриншот оплаты)
+            // 1. Убеждаемся, что base64 чистый (убираем префикс, если он есть)
+            const base64Data = photo.split(',')[1] || photo;
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'image/png' });
+
             const formData = new FormData();
             formData.append('chat_id', chatId);
-            formData.append('caption', message); // Текст заказа идет подписью к фото
+            formData.append('caption', message);
             formData.append('parse_mode', 'HTML');
-            
-            // Превращаем base64 обратно в Blob для отправки в Telegram
-            const blob = await fetch(photo).then(r => r.blob());
             formData.append('photo', blob, 'payment.png');
 
+            // 2. При отправке FormData заголовки Content-Type ставить НЕЛЬЗЯ, fetch сделает это сам
             response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
                 method: 'POST',
                 body: formData
             });
         } else {
-            // Обычная текстовая отправка (если скрина нет)
             response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -38,12 +44,13 @@ export default async function handler(req, res) {
             });
         }
 
+        const result = await response.json();
+
         if (response.ok) {
             return res.status(200).json({ success: true });
         } else {
-            const errorInfo = await response.json();
-            console.error('TG Error:', errorInfo);
-            return res.status(500).json({ success: false });
+            console.error('TG Error Detailed:', result); // Это покажет в логах Vercel, что именно не так
+            return res.status(500).json({ success: false, error: result.description });
         }
     } catch (error) {
         console.error('API Error:', error);
