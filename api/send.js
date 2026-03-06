@@ -5,28 +5,37 @@ export default async function handler(req, res) {
 
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
-    const { message, photo } = req.body;
+    
+    // Берем или photo, или image (чтобы точно сработало)
+    const { message, photo, image } = req.body;
+    const imageData = photo || image;
 
     try {
         let response;
 
-        if (photo) {
-            // Если прислали фото (скриншот оплаты)
+        // Проверяем, пришла ли картинка в формате base64
+        if (imageData && imageData.includes('base64')) {
+            // 1. Убираем "шапку" base64 (data:image/png;base64,...)
+            const base64Data = imageData.split(',')[1];
+            
+            // 2. Делаем из строки файл (Buffer) — это стандарт для Node.js
+            const buffer = Buffer.from(base64Data, 'base64');
+
             const formData = new FormData();
             formData.append('chat_id', chatId);
-            formData.append('caption', message); // Текст заказа идет подписью к фото
+            formData.append('caption', message);
             formData.append('parse_mode', 'HTML');
             
-            // Превращаем base64 обратно в Blob для отправки в Telegram
-            const blob = await fetch(photo).then(r => r.blob());
-            formData.append('photo', blob, 'payment.png');
+            // 3. Создаем Blob из буфера для отправки
+            const fileBlob = new Blob([buffer], { type: 'image/png' });
+            formData.append('photo', fileBlob, 'payment.png');
 
             response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
                 method: 'POST',
                 body: formData
             });
         } else {
-            // Обычная текстовая отправка (если скрина нет)
+            // Если фото не пришло, шлем просто текст
             response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -38,12 +47,13 @@ export default async function handler(req, res) {
             });
         }
 
+        const result = await response.json();
+
         if (response.ok) {
             return res.status(200).json({ success: true });
         } else {
-            const errorInfo = await response.json();
-            console.error('TG Error:', errorInfo);
-            return res.status(500).json({ success: false });
+            console.error('TG Error:', result);
+            return res.status(500).json({ success: false, error: result.description });
         }
     } catch (error) {
         console.error('API Error:', error);
