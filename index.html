@@ -496,8 +496,12 @@
     <span id="cart-count">0</span>🛒
 </div>
 
-<footer>
-    &copy; 2026 HARDCORE DIVISION. ВСІ ПРАВА ЗАХИЩЕНІ КРОВ'Ю.
+<footer style="margin-top: 50px; padding: 30px; text-align: center; border-top: 1px solid #1a1a1a;">
+    <div style="font-size: 11px; color: #555; letter-spacing: 1px;">
+        &copy; 2026 HARDCORE DIVISION. ВСІ ПРАВА ЗАХИЩЕНІ КРОВ'Ю.
+        <br>
+        <a href="javascript:void(0)" onclick="openPrivacy()" style="color: #444; text-decoration: underline; font-size: 9px; margin-top: 10px; display: inline-block; text-transform: uppercase;">Політика конфіденційності</a>
+    </div>
 </footer>
 
 <script>
@@ -593,19 +597,28 @@
                  <label style="display:block; color:var(--blood); font-size:0.8rem; margin-bottom:5px;">ДОДАТИ СКРІНШОТ ОПЛАТИ (ОБОВ'ЯЗКОВО):</label>
                  <input type="file" id="orderScreenshot" accept="image/*" style="width:100%; font-size:0.8rem; color:#fff;" onchange="handleFileSelect(event)">
             </div>
-            <button class="buy-btn" style="margin-top:15px;" onclick="showDeliveryInputs()">Я ОПЛАТИВ</button>
+            <button class="buy-btn" id="payBtn" style="margin-top:15px; opacity: 0.5;" onclick="showDeliveryInputs()" disabled>Я ОПЛАТИВ</button>
         `;
         document.getElementById('orderModal').style.display = 'flex';
     }
 
     function handleFileSelect(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => { paymentScreenshot = e.target.result; };
-            reader.readAsDataURL(file);
-        }
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => { 
+            paymentScreenshot = e.target.result; 
+            // Включаем кнопку и возвращаем ей яркость
+            const payBtn = document.getElementById('payBtn');
+            if(payBtn) {
+                payBtn.disabled = false;
+                payBtn.style.opacity = '1';
+                payBtn.style.background = 'var(--blood)';
+            }
+        };
+        reader.readAsDataURL(file);
     }
+}
 
     function showDeliveryInputs() {
         if(!paymentScreenshot) return showToast('ДОДАЙ СКРІНШОТ!');
@@ -626,12 +639,14 @@
 
     async function finalizeOrder() {
         const fio = document.getElementById('orderFIO').value;
-        const phone = document.getElementById('orderPhone').value;
+        const phone = document.getElementById('orderPhone').value.replace(/\D/g, ''); // Чистим номер
         const np = document.getElementById('orderNP').value;
         const tg = document.getElementById('orderTG').value;
         const btn = document.getElementById('confirmBtn');
-        if (!fio || !phone || !np) return showToast('ЗАПОВНИ ВСІ ДАНІ!');
-        
+
+        // Оставляем твою старую простую проверку, но добавим длину телефона
+        if (!fio || phone.length < 10 || !np) return showToast('ПЕРЕВІРТЕ ДАНІ ТА НОМЕР!');
+
         btn.innerText = "ВІДПРАВКА...";
         btn.disabled = true;
 
@@ -663,6 +678,28 @@
             btn.disabled = false;
         }
     }
+
+    function openPrivacy() {
+    document.getElementById('privacyModal').style.display = 'flex';
+}
+
+function closePrivacy() {
+    document.getElementById('privacyModal').style.display = 'none';
+}
 </script>
+<div id="privacyModal" class="modal" style="display: none; align-items: center; justify-content: center; z-index: 10000; background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
+    <div class="modal-content" style="max-width: 450px; background: #000; border: 1px solid #333; padding: 30px; position: relative; text-align: left; margin: auto;">
+        <div class="close-btn" onclick="closePrivacy()" style="position: absolute; top: 10px; right: 15px; cursor: pointer; color: #ff0000; font-size: 20px;">✕</div>
+        <h3 style="color: #ff0000; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase;">КОНФІДЕНЦІЙНІСТЬ</h3>
+        <div style="font-size: 0.8rem; color: #999; line-height: 1.6;">
+            <p>1. Ми збираємо тільки ті дані, що необхідні для доставки (ПІБ, телефон, номер НП).</p>
+            <p>2. Ваші дані використовуються виключно для обробки замовлення.</p>
+            <p>3. Ми не передаємо інформацію третім особам, крім логістичних служб.</p>
+            <p>4. Натискаючи «Оформити замовлення», ви погоджуєтесь із цими правилами.</p>
+            <p>5. Ви маєте право вимагати видалення своїх даних за запитом.</p>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
