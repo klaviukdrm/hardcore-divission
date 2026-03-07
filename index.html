@@ -472,18 +472,25 @@
 
 <div id="toast-container"></div>
 
-<button class="size-btn" onclick="toggleSizePanel()">РОЗМІРНА СІТКА</button>
+<button class="size-btn" data-ua="РОЗМІРНА СІТКА" data-eng="SIZE GUIDE" onclick="toggleSizePanel()">РОЗМІРНА СІТКА</button>
 
 <div class="side-panel" id="sizePanel">
     <div class="close-btn" onclick="toggleSizePanel()">✕</div>
-    <h2 style="color: var(--blood); text-align: center; margin-top: 20px;">РОЗМІРНА СІТКА</h2>
     
-    <div style="display: flex; justify-content: center; gap: 5px; padding: 0 15px; margin-top: 15px;">
-        <button id="size-btn-t" onclick="setSizeType('tshirt')" style="flex: 1; background: #222; color: #888; border: 1px solid #333; padding: 10px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: bold;">ФУТБОЛКИ</button>
-        <button id="size-btn-h" onclick="setSizeType('hoodie')" style="flex: 1; background: var(--blood); color: white; border: none; padding: 10px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: bold;">ХУДІ</button>
+    <h2 data-ua="РОЗМІРНА СІТКА" data-eng="SIZE GUIDE" style="color: var(--blood); text-align: center; margin-top: 20px;">РОЗМІРНА СІТКА</h2>
+    
+    <div style="display: flex; justify-content: center; gap: 5px; padding: 0 15px; margin-top: 15px; margin-bottom: 15px;">
+        <button id="size-btn-t" data-ua="ФУТБОЛКИ" data-eng="T-SHIRTS" onclick="setSizeType('tshirt')" 
+            style="flex: 1; background: #222; color: #888; border: 1px solid #333; padding: 10px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: bold;">
+            ФУТБОЛКИ
+        </button>
+        <button id="size-btn-h" data-ua="ХУДІ" data-eng="HOODIES" onclick="setSizeType('hoodie')" 
+            style="flex: 1; background: var(--blood); color: white; border: none; padding: 10px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: bold;">
+            ХУДІ
+        </button>
     </div>
 
-    <div style="padding: 15px; margin-top: 10px;">
+    <div style="padding: 0 10px;">
         <img src="images/Screenshot_197.png" id="mainSizeImg" alt="Size Guide" style="width:100%; border: 1px solid #222; display: block;">
     </div>
 </div>
@@ -498,10 +505,13 @@
 <div class="modal-overlay" id="cartModal">
     <div class="modal-content">
         <div class="close-btn" onclick="toggleCart()">✕</div>
-        <h2 style="color: var(--blood); border-bottom: 1px solid var(--blood); padding-bottom: 10px; margin-bottom: 15px;">ВАШ КОШИК</h2>
+        <h2 data-ua="ВАШ КОШИК" data-eng="YOUR CART" style="color: var(--blood); border-bottom: 1px solid var(--blood); padding-bottom: 10px; margin-bottom: 15px;">ВАШ КОШИК</h2>
+        
         <div id="cartItemsList"></div>
+        
         <div id="cartTotal" style="font-weight: bold; font-size: 1.1rem; margin: 20px 0;">Всього: 0₴</div>
-        <button class="buy-btn" onclick="openOrderForm()">ОФОРМИТИ ЗАМОВЛЕННЯ</button>
+        
+        <button class="buy-btn" data-ua="ОФОРМИТИ ЗАМОВЛЕННЯ" data-eng="CHECKOUT" onclick="openOrderForm()">ОФОРМИТИ ЗАМОВЛЕННЯ</button>
     </div>
 </div>
 
@@ -951,13 +961,13 @@
 
 <footer style="margin-top: 50px; padding: 40px 20px; text-align: center; border-top: 1px solid #1a1a1a;">
     <div style="margin-bottom: 25px;">
-        <p style="font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">Контакт оператора</p>
+        <p data-ua="Контакт оператора" data-eng="Operator contact" style="font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">Контакт оператора</p>
         <a href="tel:+380665615906" style="
             display: inline-block;
             color: #ccc;
             text-decoration: none;
             font-size: 15px;
-            font-family: monospace; /* Моноширинный шрифт добавит стиля 'милитари' */
+            font-family: monospace;
             font-weight: bold;
             letter-spacing: 2px;
             border: 1px solid #222;
@@ -971,9 +981,9 @@
     </div>
 
     <div style="font-size: 11px; color: #555; letter-spacing: 1px;">
-        &copy; 2026 HARDCORE DIVISION. ВСІ ПРАВА ЗАХИЩЕНІ КРОВ'Ю.
+        <span data-ua="&copy; 2026 HARDCORE DIVISION. ВСІ ПРАВА ЗАХИЩЕНІ КРОВ'Ю." data-eng="&copy; 2026 HARDCORE DIVISION. ALL RIGHTS RESERVED BY BLOOD.">&copy; 2026 HARDCORE DIVISION. ВСІ ПРАВА ЗАХИЩЕНІ КРОВ'Ю.</span>
         <br>
-        <a href="javascript:void(0)" onclick="openPrivacy()" style="color: #444; text-decoration: underline; font-size: 9px; margin-top: 10px; display: inline-block; text-transform: uppercase;">Політика конфіденційності</a>
+        <a href="javascript:void(0)" onclick="openPrivacy()" data-ua="Політика конфіденційності" data-eng="Privacy Policy" style="color: #444; text-decoration: underline; font-size: 9px; margin-top: 10px; display: inline-block; text-transform: uppercase;">Політика конфіденційності</a>
     </div>
 </footer>
 
@@ -1146,33 +1156,54 @@
 }
 
     function showDeliveryInputs() {
-        if(!paymentScreenshot) return showToast('ДОДАЙ СКРІНШОТ!');
+        const lang = localStorage.getItem('preferred_lang') || 'ua';
+        
+        const t = {
+            title: lang === 'ua' ? 'ДОСТАВКА' : 'DELIVERY',
+            fio: lang === 'ua' ? 'ПІБ' : 'Full Name',
+            phone: lang === 'ua' ? 'Номер телефону' : 'Phone Number',
+            np: lang === 'ua' ? 'Місто та № відділення НП' : 'City & Nova Poshta Dept',
+            tg: lang === 'ua' ? "Ваш Telegram (необов'язково)" : "Your Telegram (optional)",
+            btn: lang === 'ua' ? 'ПІДТВЕРДИТИ' : 'CONFIRM',
+            err: lang === 'ua' ? 'ДОДАЙ СКРІНШОТ!' : 'ADD SCREENSHOT!'
+        };
+
+        if(!paymentScreenshot) return showToast(t.err);
+
         document.getElementById('orderModalContent').innerHTML = `
             <div class="close-btn" onclick="closeOrderForm()">✕</div>
-            <h2 style="color: var(--blood); margin-bottom: 15px;">ДОСТАВКА</h2>
+            <h2 style="color: var(--blood); margin-bottom: 15px;">${t.title}</h2>
             <div class="order-form">
-                <input type="text" id="orderFIO" placeholder="ПІБ">
-                <input type="text" id="orderPhone" placeholder="Номер телефону">
-                <input type="text" id="orderNP" placeholder="Місто та № відділення НП">
-                <input type="text" id="orderTG" placeholder="Ваш Telegram (необов'язково)">
-                <button class="buy-btn" id="confirmBtn" onclick="finalizeOrder()">ПІДТВЕРДИТИ</button>
+                <input type="text" id="orderFIO" placeholder="${t.fio}">
+                <input type="text" id="orderPhone" placeholder="${t.phone}">
+                <input type="text" id="orderNP" placeholder="${t.np}">
+                <input type="text" id="orderTG" placeholder="${t.tg}">
+                <button class="buy-btn" id="confirmBtn" onclick="finalizeOrder()">${t.btn}</button>
             </div>
         `;
     }
 
-    function closeOrderForm() { document.getElementById('orderModal').style.display = 'none'; paymentScreenshot = null; }
+    function closeOrderForm() { 
+        document.getElementById('orderModal').style.display = 'none'; 
+        paymentScreenshot = null; 
+    }
 
     async function finalizeOrder() {
+        const lang = localStorage.getItem('preferred_lang') || 'ua';
         const fio = document.getElementById('orderFIO').value;
-        const phone = document.getElementById('orderPhone').value.replace(/\D/g, ''); // Чистим номер
+        const phone = document.getElementById('orderPhone').value.replace(/\D/g, '');
         const np = document.getElementById('orderNP').value;
         const tg = document.getElementById('orderTG').value;
         const btn = document.getElementById('confirmBtn');
 
-        // Оставляем твою старую простую проверку, но добавим длину телефона
-        if (!fio || phone.length < 10 || !np) return showToast('ПЕРЕВІРТЕ ДАНІ ТА НОМЕР!');
+        const msgErr = lang === 'ua' ? 'ПЕРЕВІРТЕ ДАНІ ТА НОМЕР!' : 'CHECK DATA & NUMBER!';
+        const msgWait = lang === 'ua' ? 'ВІДПРАВКА...' : 'SENDING...';
+        const msgSuccess = lang === 'ua' ? 'ЗАМОВЛЕННЯ ПРИЙНЯТО! 🩸' : 'ORDER RECEIVED! 🩸';
+        const msgFail = lang === 'ua' ? 'ПОМИЛКА ВІДПРАВКИ!' : 'SENDING ERROR!';
 
-        btn.innerText = "ВІДПРАВКА...";
+        if (!fio || phone.length < 10 || !np) return showToast(msgErr);
+
+        btn.innerText = msgWait;
         btn.disabled = true;
 
         let total = cart.reduce((sum, i) => sum + i.price, 0);
@@ -1190,7 +1221,7 @@
                 })
             });
             if (response.ok) {
-                showToast('ЗАМОВЛЕННЯ ПРИЙНЯТО! 🩸');
+                showToast(msgSuccess);
                 cart = [];
                 document.getElementById('cart-count').innerText = 0;
                 closeOrderForm();
@@ -1198,8 +1229,8 @@
                 throw new Error();
             }
         } catch (e) {
-            showToast('ПОМИЛКА ВІДПРАВКИ!');
-            btn.innerText = "ПІДТВЕРДИТИ";
+            showToast(msgFail);
+            btn.innerText = lang === 'ua' ? 'ПІДТВЕРДИТИ' : 'CONFIRM';
             btn.disabled = false;
         }
     }
@@ -1252,10 +1283,8 @@ function filterProducts(category) {
 
 // Функция переключения языка
 function setLang(lang) {
-    // Сохраняем выбор в браузере, чтобы при перезагрузке язык не слетал
     localStorage.setItem('preferred_lang', lang);
     
-    // Находим все элементы, у которых есть атрибут data-ua
     document.querySelectorAll('[data-ua]').forEach(el => {
         const translation = el.getAttribute('data-' + lang);
         if (translation) {
@@ -1263,10 +1292,11 @@ function setLang(lang) {
         }
     });
 
-    // Визуально подсвечиваем активный язык в хедере
+    // Цей рядок змусить кошик перемалюватися з новою мовою "Total/Всього"
+    renderCart();
+
     const uaBtn = document.getElementById('lang-ua');
     const engBtn = document.getElementById('lang-eng');
-    
     if (uaBtn && engBtn) {
         uaBtn.classList.toggle('active', lang === 'ua');
         engBtn.classList.toggle('active', lang === 'eng');
@@ -1283,13 +1313,18 @@ document.addEventListener('DOMContentLoaded', () => {
 <div id="privacyModal" class="modal" style="display: none; align-items: center; justify-content: center; z-index: 10000; background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
     <div class="modal-content" style="max-width: 450px; background: #000; border: 1px solid #333; padding: 30px; position: relative; text-align: left; margin: auto;">
         <div class="close-btn" onclick="closePrivacy()" style="position: absolute; top: 10px; right: 15px; cursor: pointer; color: #ff0000; font-size: 20px;">✕</div>
-        <h3 style="color: #ff0000; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase;">КОНФІДЕНЦІЙНІСТЬ</h3>
+        <h3 data-ua="КОНФІДЕНЦІЙНІСТЬ" data-eng="PRIVACY POLICY" style="color: #ff0000; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase;">КОНФІДЕНЦІЙНІСТЬ</h3>
         <div style="font-size: 0.8rem; color: #999; line-height: 1.6;">
-            <p>1. Ми збираємо тільки ті дані, що необхідні для доставки (ПІБ, телефон, номер НП).</p>
-            <p>2. Ваші дані використовуються виключно для обробки замовлення.</p>
-            <p>3. Ми не передаємо інформацію третім особам, крім логістичних служб.</p>
-            <p>4. Натискаючи «Оформити замовлення», ви погоджуєтесь із цими правилами.</p>
-            <p>5. Ви маєте право вимагати видалення своїх даних за запитом.</p>
+            <p data-ua="1. Ми збираємо тільки ті дані, що необхідні для доставки (ПІБ, телефон, номер НП)." 
+               data-eng="1. We only collect data necessary for delivery (Full name, phone, Nova Poshta branch).">1. Ми збираємо тільки ті дані, що необхідні для доставки (ПІБ, телефон, номер НП).</p>
+            <p data-ua="2. Ваші дані використовуються виключно для обробки замовлення." 
+               data-eng="2. Your data is used exclusively for order processing.">2. Ваші дані використовуються виключно для обробки замовлення.</p>
+            <p data-ua="3. Ми не передаємо інформацію третім особам, крім логістичних служб." 
+               data-eng="3. We do not transfer information to third parties, except for logistics services.">3. Ми не передаємо інформацію третім особам, крім логістичних служб.</p>
+            <p data-ua="4. Натискаючи «Оформити замовлення», ви погоджуєтесь із цими правилами." 
+               data-eng="4. By clicking 'Place Order', you agree to these rules.">4. Натискаючи «Оформити замовлення», ви погоджуєтесь із цими правилами.</p>
+            <p data-ua="5. Ви маєте право вимагати видалення своїх даних за запитом." 
+               data-eng="5. You have the right to request the deletion of your data upon request.">5. Ви маєте право вимагати видалення своїх даних за запитом.</p>
         </div>
     </div>
 </div>
