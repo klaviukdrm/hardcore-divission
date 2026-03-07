@@ -256,6 +256,216 @@
     transform: scale(0.95);
     pointer-events: none;
 }
+
+/* --- ОНОВЛЕНИЙ ШИРШИЙ БЛОК "О НАС" --- */
+.about-section {
+    text-align: center;
+    margin: 0 auto 80px; /* Збільшив відступ знизу до товарів */
+    max-width: 1100px; /* СУТТЄВО ЗБІЛЬШИВ ШИРИНУ, ЩОБ ПРИБРАТИ ПУСТОТУ */
+    padding: 0 20px;
+}
+
+.about-logo-title {
+    font-family: 'Nosifer', cursive;
+    font-size: 2.5rem; /* Трохи збільшив шрифт заголовка */
+    color: var(--blood);
+    margin-bottom: 25px;
+    text-shadow: 0 0 15px rgba(136, 8, 8, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.about-image {
+    width: 400px; /* ЗБІЛЬШИВ ЛОГОТИП МАЙЖЕ ВДВІЧІ */
+    height: auto;
+    border: 2px solid var(--blood);
+    filter: grayscale(1) contrast(1.1);
+    transition: all 0.6s ease;
+    margin-bottom: 50px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.8);
+}
+
+.about-image:hover {
+    filter: grayscale(0) contrast(1);
+    box-shadow: 0 0 35px var(--blood);
+    transform: scale(1.02); /* Зменшив ефект збільшення, бо лого і так велике */
+}
+
+.manifesto {
+    font-size: 1.2rem; /* Трохи збільшив шрифт тексту */
+    line-height: 2; /* Збільшив міжрядковий інтервал для легкості читання */
+    color: #f5f5f5;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 400;
+}
+
+.manifesto p {
+    margin-bottom: 30px;
+}
+
+.manifesto span {
+    color: var(--blood);
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(136, 8, 8, 0.5);
+}
+
+.manifesto a {
+    color: var(--blood);
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 1px solid transparent;
+    transition: 0.3s;
+}
+
+.manifesto a:hover {
+    color: #fff;
+    border-bottom: 1px dashed var(--blood);
+}
+
+/* Адаптив для мобільних пристроїв */
+@media (max-width: 768px) {
+    .about-logo-title { font-size: 1.8rem; }
+    .about-image { 
+        width: 80%; /* На мобілках хай займає 80% ширини екрану */
+        max-width: 300px; /* Але не більше 300px */
+        margin-bottom: 35px; 
+    }
+    .manifesto { font-size: 1rem; line-height: 1.8; }
+    .about-section { margin-bottom: 50px; }
+}
+
+/* --- РОЗТЯГНУТИЙ БЛОК "ПРО НАС" --- */
+.about-section {
+    text-align: center;
+    margin: 0 auto 100px;
+    /* Ширина 1200px зазвичай ідеально збігається з сіткою карток */
+    max-width: 1200px; 
+    padding: 0 15px;
+}
+
+.about-logo-title {
+    font-family: 'Nosifer', cursive;
+    font-size: 3rem;
+    color: var(--blood);
+    margin-bottom: 30px;
+    text-shadow: 0 0 20px rgba(136, 8, 8, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 10px; /* Сильно розтягнув заголовок */
+}
+
+.about-image {
+    width: 500px; /* Ще масивніше лого */
+    height: auto;
+    border: 1px solid #222;
+    filter: grayscale(1) contrast(1.2);
+    transition: all 0.8s ease;
+    margin-bottom: 60px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.9);
+}
+
+.about-image:hover {
+    filter: grayscale(0);
+    border-color: var(--blood);
+    box-shadow: 0 0 50px var(--blood);
+}
+
+.manifesto {
+    font-size: 1.3rem;
+    line-height: 2.2;
+    color: #eee;
+    text-transform: uppercase;
+    /* Розтягуємо текст по ширині контейнера */
+    text-align: justify; 
+    text-align-last: center; /* Остання стрічка абзацу — по центру */
+    letter-spacing: 3px; /* Додав повітря між літерами */
+    font-weight: 500;
+}
+
+.manifesto p {
+    margin-bottom: 40px;
+    /* Додатковий відступ по боках, щоб не липло до країв екрану на середніх моніторах */
+    padding: 0 10px; 
+}
+
+.manifesto span {
+    color: var(--blood);
+    font-weight: 900;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+
+.manifesto a {
+    color: var(--blood);
+    text-decoration: none;
+    border-bottom: 2px solid var(--blood);
+    padding-bottom: 2px;
+}
+
+/* Адаптив для мобілок (щоб не поламалось) */
+@media (max-width: 768px) {
+    .about-section { margin-bottom: 60px; }
+    .about-logo-title { font-size: 1.8rem; letter-spacing: 4px; }
+    .about-image { width: 90%; margin-bottom: 40px; }
+    .manifesto { 
+        font-size: 1rem; 
+        text-align: center; /* На мобілках justify виглядає криво, краще центр */
+        letter-spacing: 1px;
+    }
+}
+
+/* Контейнер теперь центрирует содержимое */
+.lang-switcher {
+    display: flex;
+    gap: 25px; /* Увеличил расстояние между UA и ENG */
+    align-items: center;
+    justify-content: center; /* Центровка по горизонтали */
+    flex-grow: 1; /* Позволяет контейнеру занять свободное место в хедере */
+    margin: 0 auto;
+}
+
+/* Стили для самих кнопок */
+.lang-btn {
+    cursor: pointer;
+    font-size: 1.4rem; /* Сделал БОЛЬШИМИ буквами */
+    font-weight: 900;
+    color: #333; /* Темно-серый для неактивного */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    letter-spacing: 3px; /* Разрядил буквы для стиля */
+    text-transform: uppercase;
+}
+
+/* Эффект при наведении */
+.lang-btn:hover {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+/* Активный язык — горит ЯРКО-КРАСНЫМ */
+.lang-btn.active {
+    color: var(--blood); /* Твой основной красный */
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 5px #000;
+    transform: scale(1.2);
+}
+
+/* Анимированная полоска под активным языком */
+.lang-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--blood);
+    box-shadow: 0 0 15px var(--blood);
+    animation: line-grow 0.5s forwards;
+}
+
+@keyframes line-grow {
+    from { width: 0; left: 50%; }
+    to { width: 100%; left: 0; }
+}
     </style>
 </head>
 <body>
@@ -303,6 +513,10 @@
     <div class="logo-container" id="logoArea">
         <h1 class="logo">HARDCORE DIVISION</h1>
     </div>
+    <div class="lang-switcher">
+    <span id="lang-ua" class="lang-btn active" onclick="setLang('ua')">UA</span>
+    <span id="lang-eng" class="lang-btn" onclick="setLang('eng')">ENG</span>
+</div>
 </header>
 
 <div class="container">
@@ -311,10 +525,41 @@
         <p>DIVISION OF THE BRAVE</p>
     </div>
 
+    <div class="about-section">
+    <h2 class="about-logo-title">Hardcore Division</h2>
+    
+    <img src="images/photo_2026-03-07_18-15-01.jpg" alt="Hardcore Division Logo" class="about-image">
+    
+    <div class="manifesto">
+        <p data-ua="Нас не цікавлять тренди. Нас цікавить, хто ти, коли ніхто не дивиться." 
+       data-eng="Trends don't interest us. We care who you are when no one is watching.">
+       Нас не цікавлять тренди. Нас цікавить, хто ти, коли ніхто не дивиться.
+    </p>
+
+    <p>
+       <a href="https://t.me/hardcore_divis1on" target="_blank">Hardcore Division</a> — 
+       <span data-ua="для тих, хто виріс на дисципліні та внутрішній люті. Для тих, хто знає ціну словам вірність та характер." 
+             data-eng="for those who grew up on discipline and inner rage. For those who know the price of loyalty and character.">
+             для тих, хто виріс на дисципліні та внутрішній люті. Для тих, хто знає ціну словам вірність та характер.
+       </span>
+    </p>
+
+    <p data-ua="Ми не продаємо образ. Ми створюємо форму для стану. Для тиску. Для руху вперед. Для своїх." 
+       data-eng="We don't sell an image. We create the form for a state of mind. For pressure. For moving forward. For our own.">
+       Ми не продаємо образ. Ми створюємо форму для стану. Для тиску. Для руху вперед. Для своїх.
+    </p>
+
+    <p data-ua="Якщо ти тут — значить, ти зрозумів. Зрозумів — залишайся." 
+       data-eng="If you're here — you understand. If you understand — stay.">
+       Якщо ти тут — значить, ти зрозумів. Зрозумів — залишайся.
+    </p>
+    </div>
+</div>
+
 <div class="filter-container" style="text-align: center; margin-bottom: 30px;">
-    <button class="filter-btn active" onclick="filterProducts('all')">ВСЕ</button>
-    <button class="filter-btn" onclick="filterProducts('худі')">ХУДІ</button>
-    <button class="filter-btn" onclick="filterProducts('футболка')">ФУТБОЛКИ</button>
+    <button class="filter-btn active" data-ua="ВСЕ" data-eng="ALL" onclick="filterProducts('all')">ВСЕ</button>
+    <button class="filter-btn" data-ua="ХУДІ" data-eng="HOODIE" onclick="filterProducts('худі')">ХУДІ</button>
+    <button class="filter-btn" data-ua="ФУТБОЛКИ" data-eng="T-SHIRTS" onclick="filterProducts('футболка')">ФУТБОЛКИ</button>
 </div>
 
    <div class="shop-grid">
@@ -966,6 +1211,35 @@ function filterProducts(category) {
         }
     });
 }
+
+// Функция переключения языка
+function setLang(lang) {
+    // Сохраняем выбор в браузере, чтобы при перезагрузке язык не слетал
+    localStorage.setItem('preferred_lang', lang);
+    
+    // Находим все элементы, у которых есть атрибут data-ua
+    document.querySelectorAll('[data-ua]').forEach(el => {
+        const translation = el.getAttribute('data-' + lang);
+        if (translation) {
+            el.innerText = translation;
+        }
+    });
+
+    // Визуально подсвечиваем активный язык в хедере
+    const uaBtn = document.getElementById('lang-ua');
+    const engBtn = document.getElementById('lang-eng');
+    
+    if (uaBtn && engBtn) {
+        uaBtn.classList.toggle('active', lang === 'ua');
+        engBtn.classList.toggle('active', lang === 'eng');
+    }
+}
+
+// Запускаем проверку языка сразу при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('preferred_lang') || 'ua';
+    setLang(savedLang);
+});
 
 </script>
 <div id="privacyModal" class="modal" style="display: none; align-items: center; justify-content: center; z-index: 10000; background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
