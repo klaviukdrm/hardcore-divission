@@ -214,6 +214,48 @@
             .product-img-container { height: 380px; }
             .product-img-alt { display: none; } 
         }
+        /* Стилі кнопок фільтрації */
+/* Стилі кнопок фільтрації */
+.filter-btn {
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 10px 25px;
+    margin: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    outline: none;
+    font-family: 'Oswald', sans-serif; /* Додав шрифт для стилю */
+}
+
+/* Стан, коли кнопка вибрана (Червоний) */
+.filter-btn.active {
+    background: var(--blood) !important; 
+    border-color: var(--blood) !important;
+    color: #fff !important;
+    box-shadow: 0 0 20px rgba(136, 8, 8, 0.8); /* Світіння у стилі сайту */
+}
+
+/* Ефект при наведенні на неактивну кнопку */
+.filter-btn:hover:not(.active) {
+    background: #fff;
+    color: #000;
+}
+
+/* Анімація для карток товарів */
+.product-card {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    /* Переконайся, що display: flex тут не заважає фільтрації в JS */
+}
+
+/* Клас для приховання з анімацією */
+.product-card.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
     </style>
 </head>
 <body>
@@ -269,231 +311,388 @@
         <p>DIVISION OF THE BRAVE</p>
     </div>
 
-    <div class="shop-grid">
-        
-        <div class="product-card">
-            <div class="product-img-container" onclick="openGallery(['images/photo_2025-12-31_17-17-16.jpg', 'images/photo_2025-12-31_17-17-18.jpg'])">
-                <img src="images/photo_2025-12-31_17-17-16.jpg" class="product-img">
-                <img src="images/photo_2025-12-31_17-17-18.jpg" class="product-img-alt">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">ONLY BLOOD</h3>
-                    <p class="product-desc">Для тих, хто йде до цілі і не відступає. Характер замість шуму.</p>
-                </div>
-                <div>
-                    <div class="price">1750₴</div>
-                    <select id="size-1">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option>
-                    </select>
-                    <button class="buy-btn" onclick="addToCart('ONLY BLOOD', 1750, 'size-1')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-img-container" onclick="openGallery(['images/photo_2026-01-02_15-43-43.jpg', 'images/photo_2026-01-03_10-19-49.jpg'])">
-                <img src="images/photo_2026-01-02_15-43-43.jpg" class="product-img">
-                <img src="images/photo_2026-01-03_10-19-49.jpg" class="product-img-alt">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">HARDCORE BLOOD</h3>
-                    <p class="product-desc">Для тих, у кого кров кипить не від слів, а від дій. Повна відмова от компромісів.</p>
-                </div>
-                <div>
-                    <div class="price">1750₴</div>
-                    <select id="size-2">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option>
-                    </select>
-                    <button class="buy-btn" onclick="addToCart('HARDCORE BLOOD', 1900, 'size-2')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-03.jpg', 'images/photo_2_2026-03-06_19-48-03.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-48-03.jpg" class="product-img">
-                <img src="images/photo_2_2026-03-06_19-48-03.jpg" class="product-img-alt">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">Hardcore Confederates</h3>
-                    <p class="product-desc">Класичний символ бунту та вільної душі. Виразний стиль для тих, хто цінує традиції спротиву.</p>
-                </div>
-                <div>
-                    <div class="price">1850₴</div>
-                    <select id="size-3">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" onclick="addToCart('Confederates Hoodie', 1850, 'size-3')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-20.jpg', 'images/photo_2_2026-03-06_19-48-20.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-48-20.jpg" class="product-img">
-                <img src="images/photo_2_2026-03-06_19-48-20.jpg" class="product-img-alt">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">Hardcore Hentai</h3>
-                    <p class="product-desc">Сміливе поєднання сучасної культури та жорсткого вуличному стилю. Для тих, хто не боїться бути в центрі уваги.</p>
-                </div>
-                <div>
-                    <div class="price">1750₴</div>
-                    <select id="size-4">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" onclick="addToCart('Hentai Hoodie', 1750, 'size-4')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-26.jpg', 'images/photo_2_2026-03-06_19-48-26.jpg', 'images/photo_3_2026-03-06_19-48-26.jpg', 'images/photo_4_2026-03-06_19-48-26.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-48-26.jpg" class="product-img">
-                <img src="images/photo_2_2026-03-06_19-48-26.jpg" class="product-img-alt">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">HARDCORE NATION</h3>
-                    <p class="product-desc">Про тих, кого не зламали обставини. Загартоване тиском, боротьбою та вибором бути сильними. Ми не шукаємо легких шляхів — ми их створюємо.</p>
-                </div>
-                <div>
-                    <div class="price">1750₴</div>
-                    <select id="size-5">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" onclick="addToCart('HARDCORE NATION', 1750, 'size-5')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-05.jpg', 'images/photo_2_2026-03-06_19-49-05.jpg', 'images/photo_3_2026-03-06_19-49-05.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-49-05.jpg" class="product-img">
-                <img src="images/photo_2_2026-03-06_19-49-05.jpg" class="product-img-alt">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">HARDCORE HAMMER</h3>
-                    <p class="product-desc">Худі, яке б’є по слабкості. Грубе по характеру, надійне по відчуттях. Наче молот у руках — простий, але вирішує все.</p>
-                </div>
-                <div>
-                    <div class="price">1850₴</div>
-                    <select id="size-6">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" onclick="addToCart('HARDCORE HAMMER', 1850, 'size-6')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-15.jpg', 'images/photo_2_2026-03-06_19-49-15.jpg', 'images/photo_3_2026-03-06_19-49-15.jpg', 'images/photo_4_2026-03-06_19-49-15.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-49-15.jpg" class="product-img">
-                <img src="images/photo_2_2026-03-06_19-49-15.jpg" class="product-img-alt">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">MILITANT PRO</h3>
-                    <p class="product-desc">Для тих, хто мислить як боєць. Річ, яка працює разом з тобою, поєднуючи комфорт та залізний характер.</p>
-                </div>
-                <div>
-                    <div class="price">1750₴</div>
-                    <select id="size-7">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" onclick="addToCart('MILITANT PRO', 1750, 'size-7')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-25.jpg', 'images/photo_2_2026-03-06_19-49-25.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-49-25.jpg" class="product-img">
-                <img src="images/photo_2_2026-03-06_19-49-25.jpg" class="product-img-alt">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">Misanthrop Hoodie</h3>
-                    <p class="product-desc">Дистанція та стиль. Худі для тих, хто обирає свій шлях окремо від натовпу. Тільки чорний, тільки хардкор.</p>
-                </div>
-                <div>
-                    <div class="price">1750₴</div>
-                    <select id="size-8">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" onclick="addToCart('Misanthrop Hoodie', 1750, 'size-8')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-30.jpg', 'images/photo_2_2026-03-06_19-49-30.jpg', 'images/photo_3_2026-03-06_19-49-30.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-49-30.jpg" class="product-img">
-                <img src="images/photo_2_2026-03-06_19-49-30.jpg" class="product-img-alt">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">Hardcore Division</h3>
-                    <p class="product-desc">Для стійких духом, хто не ламається під тиском і йде до кінця. Жорсткий характер, жодних компромісів.</p>
-                </div>
-                <div>
-                    <div class="price">850₴</div>
-                    <select id="size-9">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" onclick="addToCart('Division T-Shirt', 850, 'size-9')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-40.jpg', 'images/photo_2_2026-03-06_19-49-40.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-49-40.jpg" class="product-img">
-                <img src="images/photo_2_2026-03-06_19-49-40.jpg" class="product-img-alt">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">Hardcore Division Classic</h3>
-                    <p class="product-desc">Класика бренду. Мінімалізм та характер. Доступна у двох основних кольорах ⬜️⬛️.</p>
-                </div>
-                <div>
-                    <div class="price">850₴</div>
-                    <select id="size-10">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" onclick="addToCart('Classic Tee', 850, 'size-10')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
+<div class="filter-container" style="text-align: center; margin-bottom: 30px;">
+    <button class="filter-btn active" onclick="filterProducts('all')">ВСЕ</button>
+    <button class="filter-btn" onclick="filterProducts('худі')">ХУДІ</button>
+    <button class="filter-btn" onclick="filterProducts('футболка')">ФУТБОЛКИ</button>
 </div>
 
+   <div class="shop-grid">
+    
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_2025-12-31_17-17-16.jpg', 'images/photo_2025-12-31_17-17-18.jpg'])">
+            <img src="images/photo_2025-12-31_17-17-16.jpg" class="product-img">
+            <img src="images/photo_2025-12-31_17-17-18.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">ONLY BLOOD</h3>
+                <p class="product-desc">Для тих, хто йде до цілі і не відступає. Характер замість шуму.</p>
+            </div>
+            <div>
+                <div class="price">1750₴</div>
+                <select id="size-1">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('ONLY BLOOD', 1750, 'size-1')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_2026-01-02_15-43-43.jpg', 'images/photo_2026-01-03_10-19-49.jpg'])">
+            <img src="images/photo_2026-01-02_15-43-43.jpg" class="product-img">
+            <img src="images/photo_2026-01-03_10-19-49.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">HARDCORE BLOOD</h3>
+                <p class="product-desc">Для тих, у кого кров кипить не від слів, а від дій. Повна відмова от компромісів.</p>
+            </div>
+            <div>
+                <div class="price">1750₴</div>
+                <select id="size-2">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('HARDCORE BLOOD', 1900, 'size-2')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-03.jpg', 'images/photo_2_2026-03-06_19-48-03.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-48-03.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-48-03.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">Hardcore Confederates</h3>
+                <p class="product-desc">Класичний символ бунту та вільної душі. Виразний стиль для тих, хто цінує традиції спротиву.</p>
+            </div>
+            <div>
+                <div class="price">1850₴</div>
+                <select id="size-3">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Confederates Hoodie', 1850, 'size-3')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-20.jpg', 'images/photo_2_2026-03-06_19-48-20.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-48-20.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-48-20.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">Hardcore Hentai</h3>
+                <p class="product-desc">Сміливе поєднання сучасної культури та жорсткого вуличному стилю. Для тих, хто не боїться бути в центрі уваги.</p>
+            </div>
+            <div>
+                <div class="price">1750₴</div>
+                <select id="size-4">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Hentai Hoodie', 1750, 'size-4')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-26.jpg', 'images/photo_2_2026-03-06_19-48-26.jpg', 'images/photo_3_2026-03-06_19-48-26.jpg', 'images/photo_4_2026-03-06_19-48-26.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-48-26.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-48-26.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">HARDCORE NATION</h3>
+                <p class="product-desc">Про тих, кого не зламали обставини. Загартоване тиском, боротьбою та вибором бути сильними.</p>
+            </div>
+            <div>
+                <div class="price">1750₴</div>
+                <select id="size-5">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('HARDCORE NATION', 1750, 'size-5')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-05.jpg', 'images/photo_2_2026-03-06_19-49-05.jpg', 'images/photo_3_2026-03-06_19-49-05.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-49-05.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-49-05.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">HARDCORE HAMMER</h3>
+                <p class="product-desc">Худі, яке б’є по слабкості. Грубе по характеру, надійне по відчуттях.</p>
+            </div>
+            <div>
+                <div class="price">1850₴</div>
+                <select id="size-6">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('HARDCORE HAMMER', 1850, 'size-6')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-15.jpg', 'images/photo_2_2026-03-06_19-49-15.jpg', 'images/photo_3_2026-03-06_19-49-15.jpg', 'images/photo_4_2026-03-06_19-49-15.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-49-15.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-49-15.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">MILITANT PRO</h3>
+                <p class="product-desc">Для тих, хто мислить як боєць. Річ, яка працює разом з тобою.</p>
+            </div>
+            <div>
+                <div class="price">1750₴</div>
+                <select id="size-7">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('MILITANT PRO', 1750, 'size-7')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-25.jpg', 'images/photo_2_2026-03-06_19-49-25.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-49-25.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-49-25.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">Misanthrop Hoodie</h3>
+                <p class="product-desc">Дистанція та стиль. Худі для тих, хто обирає свій шлях окремо від натовпу.</p>
+            </div>
+            <div>
+                <div class="price">1750₴</div>
+                <select id="size-8">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Misanthrop Hoodie', 1750, 'size-8')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-30.jpg', 'images/photo_2_2026-03-06_19-49-30.jpg', 'images/photo_3_2026-03-06_19-49-30.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-49-30.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-49-30.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">Hardcore Division</h3>
+                <p class="product-desc">Для стійких духом, хто не ламається під тиском. Жодних компромісів.</p>
+            </div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-9">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Division T-Shirt', 850, 'size-9')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-40.jpg', 'images/photo_2_2026-03-06_19-49-40.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-49-40.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-49-40.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">Hardcore Division Classic</h3>
+                <p class="product-desc">Класика бренду. Мінімалізм та характер. ⬜️⬛️</p>
+            </div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-10">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Classic Tee', 850, 'size-10')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_13_2026-03-07_08-39-14.jpg', 'images/photo_14_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_13_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_14_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Hardcore Hentai</h3><p class="product-desc">Стиль та провокація.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f1">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Hardcore Hentai T-Shirt', 850, 'size-f1')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_3_2026-03-07_08-39-14.jpg', 'images/photo_4_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_3_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_4_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Militant Pro</h3><p class="product-desc">Дисципліна та професіоналізм.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f2">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Militant Pro T-Shirt', 850, 'size-f2')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_5_2026-03-07_08-39-14.jpg', 'images/photo_6_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_5_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_6_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">ONLY BLOOD</h3><p class="product-desc">Результат понад усе.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f3">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Only Blood T-Shirt', 850, 'size-f3')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_7_2026-03-07_08-39-14.jpg', 'images/photo_8_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_7_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_8_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Misantrop</h3><p class="product-desc">Твоя дистанція від світу.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f4">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Misantrop T-Shirt', 850, 'size-f4')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_9_2026-03-07_08-39-14.jpg', 'images/photo_10_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_9_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_10_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Idea of Nation</h3><p class="product-desc">Ідейний фундамент.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f5">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Idea of Nation T-Shirt', 850, 'size-f5')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_11_2026-03-07_08-39-14.jpg', 'images/photo_12_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_11_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_12_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Hardcore Hammer</h3><p class="product-desc">Важкий аргумент.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f6">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Hammer T-Shirt', 850, 'size-f6')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_17_2026-03-07_08-39-14.jpg', 'images/photo_18_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_17_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_18_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Hardcore Division</h3><p class="product-desc">Твій основний підрозділ.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f7">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Division T-Shirt', 850, 'size-f7')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_15_2026-03-07_08-39-14.jpg', 'images/photo_16_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_15_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_16_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Hardcore Confederates</h3><p class="product-desc">Дух свободи.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f9">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" onclick="addToCart('Confederates T-Shirt', 850, 'size-f9')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+</div>
 <div class="socials">
     <a href="https://t.me/hardcore_divis1on" target="_blank">Telegram</a>
     <a href="https://www.instagram.com/hardcore_division_brand" target="_blank">Instagram</a>
@@ -729,6 +928,45 @@
 function closePrivacy() {
     document.getElementById('privacyModal').style.display = 'none';
 }
+
+function filterProducts(category) {
+    const cards = document.querySelectorAll('.product-card');
+    const buttons = document.querySelectorAll('.filter-btn');
+
+    // 1. Керування підсвічуванням кнопок
+    buttons.forEach(btn => {
+        // Отримуємо текст кнопки та категорію з onclick для точності
+        const btnOnClick = btn.getAttribute('onclick');
+        
+        if (btnOnClick.includes(`'${category}'`)) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    // 2. Фільтрація карток з анімацією
+    cards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+        
+        if (category === 'all' || cardCategory === category) {
+            // Показуємо: спочатку display, потім прибираємо клас hidden для анімації
+            card.style.display = 'flex';
+            setTimeout(() => {
+                card.classList.remove('hidden');
+            }, 10);
+        } else {
+            // Ховаємо: спочатку додаємо hidden (opacity 0), потім прибираємо display
+            card.classList.add('hidden');
+            setTimeout(() => {
+                if (card.classList.contains('hidden')) {
+                    card.style.display = 'none';
+                }
+            }, 400); // Час збігається з CSS transition
+        }
+    });
+}
+
 </script>
 <div id="privacyModal" class="modal" style="display: none; align-items: center; justify-content: center; z-index: 10000; background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
     <div class="modal-content" style="max-width: 450px; background: #000; border: 1px solid #333; padding: 30px; position: relative; text-align: left; margin: auto;">
@@ -746,4 +984,3 @@ function closePrivacy() {
 
 </body>
 </html>
-
