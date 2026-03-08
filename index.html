@@ -21,17 +21,13 @@
             text-align: center;
             border-bottom: 2px solid var(--blood);
             background: rgba(0,0,0,0.9);
-            position: fixed;
+            position: absolute;
             width: 100%;
             top: 0;
             left: 0;
             z-index: 100;
             overflow: visible;
-            transition: transform 0.4s ease-in-out;
-        }
-
-        header.header-hidden {
-            transform: translateY(-100%);
+            transition: none;
         }
 
         * {
@@ -994,15 +990,6 @@
     let paymentScreenshot = null;
     let lastScrollTop = 0;
 
-    window.onscroll = function() {
-        let header = document.getElementById("mainHeader");
-        if (window.scrollY > 100) {
-            header.classList.add("header-hidden");
-        } else {
-            header.classList.remove("header-hidden");
-        }
-    };
-
     function showToast(text) {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
@@ -1307,6 +1294,13 @@ function setLang(lang) {
 document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('preferred_lang') || 'ua';
     setLang(savedLang);
+
+    // Фикс для хедера: сбрасываем лишние классы, если они остались в кэше браузера
+    const header = document.querySelector('header');
+    if (header) {
+        header.classList.remove('header-hidden');
+        header.style.transform = 'none';
+    }
 });
 
 </script>
