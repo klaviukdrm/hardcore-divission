@@ -1,13 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HARDCORE DIVISION | ONLY BLOOD</title>
-    <meta name="description" content="Hardcore Division: одежда для сильных духом. Only Blood.">
-    <meta name="keywords" content="hardcore division, одежда, худи, футболки, only blood">
-    <meta name="robots" content="index, follow">
-
+    
     <link rel="icon" type="image/jpeg" href="images/photo_2025-12-31_20-24-32.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Nosifer&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -20,34 +17,28 @@
         }
 
         header {
-            padding: 15px 20px; /* Чуть компактнее */
+            padding: 20px;
             text-align: center;
             border-bottom: 2px solid var(--blood);
-            background: rgba(0,0,0,0.95); /* Чуть темнее для современности */
+            background: rgba(0,0,0,0.9);
             position: fixed;
             width: 100%;
             top: 0;
             left: 0;
             z-index: 100;
             overflow: visible;
-            transition: transform 0.3s ease-in-out; /* Smoother */
-            box-shadow: 0 4px 12px rgba(136, 8, 8, 0.2); /* Modern shadow для глубины */
-            
+            transition: transform 0.4s ease-in-out;
         }
 
         header.header-hidden {
             transform: translateY(-100%);
         }
 
-        * .logo {
-            font-family: 'Nosifer', cursive;
-            font-size: 2.2rem; /* Чуть меньше для минимализма */
-            color: var(--blood);
-            text-shadow: 0 0 8px rgba(136, 8, 8, 0.6); /* Уменьшил glow */
-            letter-spacing: 1.5px; /* Чище spacing */
-            position: relative;
-            z-index: 2;
-            animation: pulse-logo 3s infinite ease-in-out;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -151,7 +142,7 @@
         }
         .prev { left: 10px; } .next { right: 10px; }
 
-        .shop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
 
         .product-card {
             background: var(--gray); border: 1px solid #333; transition: 0.3s;
@@ -202,7 +193,7 @@
         .socials { text-align: center; padding: 40px 20px; background: #000; }
         .socials a { color: var(--blood); text-decoration: none; margin: 0 10px; font-size: 1rem; text-transform: uppercase; display: inline-block; padding: 5px; }
 
-        footer { text-align: center; padding: 20px; font-size: 0.7rem; border-top: 1px solid #333; color: #555; margin-top: 50px; padding: 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; }
+        footer { text-align: center; padding: 20px; font-size: 0.7rem; border-top: 1px solid #333; color: #555; }
 
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; pointer-events: none; }
         .toast {
@@ -223,211 +214,258 @@
             .product-img-container { height: 380px; }
             .product-img-alt { display: none; } 
         }
-
         /* Стилі кнопок фільтрації */
-        .filter-btn {
-            background: transparent;
-            border: 1px solid #fff;
-            color: #fff;
-            padding: 10px 25px;
-            margin: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            outline: none;
-            font-family: 'Oswald', sans-serif; /* Додав шрифт для стилю */
-        }
+/* Стилі кнопок фільтрації */
+.filter-btn {
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 10px 25px;
+    margin: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    outline: none;
+    font-family: 'Oswald', sans-serif; /* Додав шрифт для стилю */
+}
 
-        /* Стан, коли кнопка вибрана (Червоний) */
-        .filter-btn.active {
-            background: var(--blood) !important; 
-            border-color: var(--blood) !important;
-            color: #fff !important;
-            box-shadow: 0 0 20px rgba(136, 8, 8, 0.8); /* Світіння у стилі сайту */
-        }
+/* Стан, коли кнопка вибрана (Червоний) */
+.filter-btn.active {
+    background: var(--blood) !important; 
+    border-color: var(--blood) !important;
+    color: #fff !important;
+    box-shadow: 0 0 20px rgba(136, 8, 8, 0.8); /* Світіння у стилі сайту */
+}
 
-        /* Ефект при наведенні на неактивну кнопку */
-        .filter-btn:hover:not(.active) {
-            background: #fff;
-            color: #000;
-        }
+/* Ефект при наведенні на неактивну кнопку */
+.filter-btn:hover:not(.active) {
+    background: #fff;
+    color: #000;
+}
 
-        /* Анімація для карток товарів */
-        .product-card {
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            /* Переконайся, що display: flex тут не заважає фільтрації в JS */
-        }
+/* Анімація для карток товарів */
+.product-card {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    /* Переконайся, що display: flex тут не заважає фільтрації в JS */
+}
 
-        /* Клас для приховання з анімацією */
-        .product-card.hidden {
-            opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
-        }
+/* Клас для приховання з анімацією */
+.product-card.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
 
-        /* --- РОЗТЯГНУТИЙ БЛОК "ПРО НАС" --- */
-        .about-section {
-            text-align: center;
-            margin: 0 auto 100px;
-            /* Ширина 1200px зазвичай ідеально збігається з сіткою карток */
-            max-width: 1200px; 
-            padding: 0 15px;
-        }
+/* --- ОНОВЛЕНИЙ ШИРШИЙ БЛОК "О НАС" --- */
+.about-section {
+    text-align: center;
+    margin: 0 auto 80px; /* Збільшив відступ знизу до товарів */
+    max-width: 1100px; /* СУТТЄВО ЗБІЛЬШИВ ШИРИНУ, ЩОБ ПРИБРАТИ ПУСТОТУ */
+    padding: 0 20px;
+}
 
-        .about-logo-title {
-            font-family: 'Nosifer', cursive;
-            font-size: 3rem;
-            color: var(--blood);
-            margin-bottom: 30px;
-            text-shadow: 0 0 20px rgba(136, 8, 8, 0.8);
-            text-transform: uppercase;
-            letter-spacing: 10px; /* Сильно розтягнув заголовок */
-        }
+.about-logo-title {
+    font-family: 'Nosifer', cursive;
+    font-size: 2.5rem; /* Трохи збільшив шрифт заголовка */
+    color: var(--blood);
+    margin-bottom: 25px;
+    text-shadow: 0 0 15px rgba(136, 8, 8, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
 
-        .about-image {
-            width: 500px; /* Ще масивніше лого */
-            height: auto;
-            border: 1px solid #222;
-            filter: grayscale(1) contrast(1.2);
-            transition: all 0.8s ease;
-            margin-bottom: 60px;
-            box-shadow: 0 0 40px rgba(0,0,0,0.9);
-        }
+.about-image {
+    width: 400px; /* ЗБІЛЬШИВ ЛОГОТИП МАЙЖЕ ВДВІЧІ */
+    height: auto;
+    border: 2px solid var(--blood);
+    filter: grayscale(1) contrast(1.1);
+    transition: all 0.6s ease;
+    margin-bottom: 50px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.8);
+}
 
-        .about-image:hover {
-            filter: grayscale(0);
-            border-color: var(--blood);
-            box-shadow: 0 0 50px var(--blood);
-        }
+.about-image:hover {
+    filter: grayscale(0) contrast(1);
+    box-shadow: 0 0 35px var(--blood);
+    transform: scale(1.02); /* Зменшив ефект збільшення, бо лого і так велике */
+}
 
-        .manifesto {
-            font-size: 1.3rem;
-            line-height: 2.2;
-            color: #eee;
-            text-transform: uppercase;
-            /* Розтягуємо текст по ширині контейнера */
-            text-align: justify; 
-            text-align-last: center; /* Остання стрічка абзацу — по центру */
-            letter-spacing: 3px; /* Додав повітря між літерами */
-            font-weight: 500;
-        }
+.manifesto {
+    font-size: 1.2rem; /* Трохи збільшив шрифт тексту */
+    line-height: 2; /* Збільшив міжрядковий інтервал для легкості читання */
+    color: #f5f5f5;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 400;
+}
 
-        .manifesto p {
-            margin-bottom: 40px;
-            /* Додатковий відступ по боках, щоб не липло до країв екрану на середніх моніторах */
-            padding: 0 10px; 
-        }
+.manifesto p {
+    margin-bottom: 30px;
+}
 
-        .manifesto span {
-            color: var(--blood);
-            font-weight: 900;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
-        }
+.manifesto span {
+    color: var(--blood);
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(136, 8, 8, 0.5);
+}
 
-        .manifesto a {
-            color: var(--blood);
-            text-decoration: none;
-            border-bottom: 2px solid var(--blood);
-            padding-bottom: 2px;
-        }
+.manifesto a {
+    color: var(--blood);
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 1px solid transparent;
+    transition: 0.3s;
+}
 
-        /* Адаптив для мобілок (щоб не поламалось) */
-        @media (max-width: 768px) {
-            .about-section { margin-bottom: 60px; }
-            .about-logo-title { font-size: 1.8rem; letter-spacing: 4px; }
-            .about-image { width: 90%; margin-bottom: 40px; }
-            .manifesto { 
-                font-size: 1rem; 
-                text-align: center; /* На мобілках justify виглядає криво, краще центр */
-                letter-spacing: 1px;
-            }
-        }
+.manifesto a:hover {
+    color: #fff;
+    border-bottom: 1px dashed var(--blood);
+}
 
-        /* Контейнер теперь центрирует содержимое */
-        .lang-switcher {
-            display: flex;
-            gap: 25px; /* Увеличил расстояние между UA и ENG */
-            align-items: center;
-            justify-content: center; /* Центровка по горизонтали */
-            flex-grow: 1; /* Позволяет контейнеру занять свободное место в хедере */
-            margin: 0 auto;
-        }
+/* Адаптив для мобільних пристроїв */
+@media (max-width: 768px) {
+    .about-logo-title { font-size: 1.8rem; }
+    .about-image { 
+        width: 80%; /* На мобілках хай займає 80% ширини екрану */
+        max-width: 300px; /* Але не більше 300px */
+        margin-bottom: 35px; 
+    }
+    .manifesto { font-size: 1rem; line-height: 1.8; }
+    .about-section { margin-bottom: 50px; }
+}
 
-        /* Стили для самих кнопок */
-        .lang-btn {
-            cursor: pointer;
-            font-size: 1.4rem; /* Сделал БОЛЬШИМИ буквами */
-            font-weight: 900;
-            color: #333; /* Темно-серый для неактивного */
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            letter-spacing: 3px; /* Разрядил буквы для стиля */
-            text-transform: uppercase;
-        }
+/* --- РОЗТЯГНУТИЙ БЛОК "ПРО НАС" --- */
+.about-section {
+    text-align: center;
+    margin: 0 auto 100px;
+    /* Ширина 1200px зазвичай ідеально збігається з сіткою карток */
+    max-width: 1200px; 
+    padding: 0 15px;
+}
 
-        /* Эффект при наведении */
-        .lang-btn:hover {
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-            transform: scale(1.1);
-        }
+.about-logo-title {
+    font-family: 'Nosifer', cursive;
+    font-size: 3rem;
+    color: var(--blood);
+    margin-bottom: 30px;
+    text-shadow: 0 0 20px rgba(136, 8, 8, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 10px; /* Сильно розтягнув заголовок */
+}
 
-        /* Активный язык — горит ЯРКО-КРАСНЫМ */
-        .lang-btn.active {
-            color: var(--blood); /* Твой основной красный */
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 5px #000;
-            transform: scale(1.2);
-        }
+.about-image {
+    width: 500px; /* Ще масивніше лого */
+    height: auto;
+    border: 1px solid #222;
+    filter: grayscale(1) contrast(1.2);
+    transition: all 0.8s ease;
+    margin-bottom: 60px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.9);
+}
 
-        /* Анимированная полоска под активным языком */
-        .lang-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--blood);
-            box-shadow: 0 0 15px var(--blood);
-            animation: line-grow 0.5s forwards;
-        }
+.about-image:hover {
+    filter: grayscale(0);
+    border-color: var(--blood);
+    box-shadow: 0 0 50px var(--blood);
+}
 
-        @keyframes line-grow {
-            from { width: 0; left: 50%; }
-            to { width: 100%; left: 0; }
-        }
+.manifesto {
+    font-size: 1.3rem;
+    line-height: 2.2;
+    color: #eee;
+    text-transform: uppercase;
+    /* Розтягуємо текст по ширині контейнера */
+    text-align: justify; 
+    text-align-last: center; /* Остання стрічка абзацу — по центру */
+    letter-spacing: 3px; /* Додав повітря між літерами */
+    font-weight: 500;
+}
 
-        /* Перенесенные inline-styles */
-        #sizePanel h2 { color: var(--blood); text-align: center; margin-top: 20px; }
-        #sizePanel .size-btns-container { display: flex; justify-content: center; gap: 5px; padding: 0 15px; margin-top: 15px; margin-bottom: 15px; }
-        #sizePanel .size-btns-container button { flex: 1; background: #222; color: #888; border: 1px solid #333; padding: 10px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: bold; }
-        #sizePanel .size-btns-container button.active { background: var(--blood); color: white; border: none; }
-        #sizePanel .size-img-container { padding: 0 10px; }
-        #sizePanel .size-img-container img { width:100%; border: 1px solid #222; display: block; }
+.manifesto p {
+    margin-bottom: 40px;
+    /* Додатковий відступ по боках, щоб не липло до країв екрану на середніх моніторах */
+    padding: 0 10px; 
+}
 
-        #gallery .close-btn { color:white; top:15px; right:15px; }
+.manifesto span {
+    color: var(--blood);
+    font-weight: 900;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
 
-        #cartModal h2 { color: var(--blood); border-bottom: 1px solid var(--blood); padding-bottom: 10px; margin-bottom: 15px; }
-        #cartTotal { font-weight: bold; font-size: 1.1rem; margin: 20px 0; }
+.manifesto a {
+    color: var(--blood);
+    text-decoration: none;
+    border-bottom: 2px solid var(--blood);
+    padding-bottom: 2px;
+}
 
-        footer .operator-label { font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
-        footer .tel-link { 
-            display: inline-block;
-            color: #ccc;
-            text-decoration: none;
-            font-size: 15px;
-            font-family: monospace;
-            font-weight: bold;
-            letter-spacing: 2px;
-            border: 1px solid #222;
-            padding: 12px 24px;
-            transition: all 0.4s ease;
-            background: rgba(255, 255, 255, 0.02);
-        }
-        footer .tel-link:hover { border-color:#ff0000; color:#ff0000; box-shadow:0 0 15px rgba(255,0,0,0.2); }
-        footer .copyright { font-size: 11px; color: #555; letter-spacing: 1px; }
-        footer .privacy-link { color: #444; text-decoration: underline; font-size: 9px; margin-top: 10px; display: inline-block; text-transform: uppercase; }
+/* Адаптив для мобілок (щоб не поламалось) */
+@media (max-width: 768px) {
+    .about-section { margin-bottom: 60px; }
+    .about-logo-title { font-size: 1.8rem; letter-spacing: 4px; }
+    .about-image { width: 90%; margin-bottom: 40px; }
+    .manifesto { 
+        font-size: 1rem; 
+        text-align: center; /* На мобілках justify виглядає криво, краще центр */
+        letter-spacing: 1px;
+    }
+}
+
+/* Контейнер теперь центрирует содержимое */
+.lang-switcher {
+    display: flex;
+    gap: 25px; /* Увеличил расстояние между UA и ENG */
+    align-items: center;
+    justify-content: center; /* Центровка по горизонтали */
+    flex-grow: 1; /* Позволяет контейнеру занять свободное место в хедере */
+    margin: 0 auto;
+}
+
+/* Стили для самих кнопок */
+.lang-btn {
+    cursor: pointer;
+    font-size: 1.4rem; /* Сделал БОЛЬШИМИ буквами */
+    font-weight: 900;
+    color: #333; /* Темно-серый для неактивного */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    letter-spacing: 3px; /* Разрядил буквы для стиля */
+    text-transform: uppercase;
+}
+
+/* Эффект при наведении */
+.lang-btn:hover {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+/* Активный язык — горит ЯРКО-КРАСНЫМ */
+.lang-btn.active {
+    color: var(--blood); /* Твой основной красный */
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 5px #000;
+    transform: scale(1.2);
+}
+
+/* Анимированная полоска под активным языком */
+.lang-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--blood);
+    box-shadow: 0 0 15px var(--blood);
+    animation: line-grow 0.5s forwards;
+}
+
+@keyframes line-grow {
+    from { width: 0; left: 50%; }
+    to { width: 100%; left: 0; }
+}
     </style>
 </head>
 <body>
@@ -439,43 +477,45 @@
 <div class="side-panel" id="sizePanel">
     <div class="close-btn" onclick="toggleSizePanel()">✕</div>
     
-    <h2 data-ua="РОЗМІРНА СІТКА" data-eng="SIZE GUIDE">РОЗМІРНА СІТКА</h2>
+    <h2 data-ua="РОЗМІРНА СІТКА" data-eng="SIZE GUIDE" style="color: var(--blood); text-align: center; margin-top: 20px;">РОЗМІРНА СІТКА</h2>
     
-    <div class="size-btns-container">
-        <button id="size-btn-t" data-ua="ФУТБОЛКИ" data-eng="T-SHIRTS" onclick="setSizeType('tshirt')" class="active">
+    <div style="display: flex; justify-content: center; gap: 5px; padding: 0 15px; margin-top: 15px; margin-bottom: 15px;">
+        <button id="size-btn-t" data-ua="ФУТБОЛКИ" data-eng="T-SHIRTS" onclick="setSizeType('tshirt')" 
+            style="flex: 1; background: #222; color: #888; border: 1px solid #333; padding: 10px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: bold;">
             ФУТБОЛКИ
         </button>
-        <button id="size-btn-h" data-ua="ХУДІ" data-eng="HOODIES" onclick="setSizeType('hoodie')">
+        <button id="size-btn-h" data-ua="ХУДІ" data-eng="HOODIES" onclick="setSizeType('hoodie')" 
+            style="flex: 1; background: var(--blood); color: white; border: none; padding: 10px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: bold;">
             ХУДІ
         </button>
     </div>
 
-    <div class="size-img-container">
-        <img src="images/Screenshot_198.png" id="mainSizeImg" alt="Size Guide Image" loading="lazy">
+    <div style="padding: 0 10px;">
+        <img src="images/Screenshot_197.png" id="mainSizeImg" alt="Size Guide" style="width:100%; border: 1px solid #222; display: block;">
     </div>
 </div>
 
-<div class="gallery-overlay" id="gallery" role="dialog" aria-modal="true">
-    <div class="close-btn" onclick="closeGallery()" aria-label="Close gallery">✕</div>
-    <button class="gallery-nav prev" onclick="changeImg(-1)" tabindex="0" aria-label="Previous image">&#10094;</button>
-    <img src="" id="galleryImg" alt="Gallery Image" loading="lazy">
-    <button class="gallery-nav next" onclick="changeImg(1)" tabindex="0" aria-label="Next image">&#10095;</button>
+<div class="gallery-overlay" id="gallery">
+    <div class="close-btn" style="color:white; top:15px; right:15px;" onclick="closeGallery()">✕</div>
+    <button class="gallery-nav prev" onclick="changeImg(-1)">&#10094;</button>
+    <img src="" id="galleryImg">
+    <button class="gallery-nav next" onclick="changeImg(1)">&#10095;</button>
 </div>
 
-<div class="modal-overlay" id="cartModal" role="dialog" aria-modal="true">
+<div class="modal-overlay" id="cartModal">
     <div class="modal-content">
-        <div class="close-btn" onclick="toggleCart()" aria-label="Close cart">✕</div>
-        <h2 data-ua="ВАШ КОШИК" data-eng="YOUR CART">ВАШ КОШИК</h2>
+        <div class="close-btn" onclick="toggleCart()">✕</div>
+        <h2 data-ua="ВАШ КОШИК" data-eng="YOUR CART" style="color: var(--blood); border-bottom: 1px solid var(--blood); padding-bottom: 10px; margin-bottom: 15px;">ВАШ КОШИК</h2>
         
         <div id="cartItemsList"></div>
         
-        <div id="cartTotal">Всього: 0₴</div>
+        <div id="cartTotal" style="font-weight: bold; font-size: 1.1rem; margin: 20px 0;">Всього: 0₴</div>
         
         <button class="buy-btn" data-ua="ОФОРМИТИ ЗАМОВЛЕННЯ" data-eng="CHECKOUT" onclick="openOrderForm()">ОФОРМИТИ ЗАМОВЛЕННЯ</button>
     </div>
 </div>
 
-<div class="modal-overlay" id="orderModal" role="dialog" aria-modal="true">
+<div class="modal-overlay" id="orderModal">
     <div class="modal-content" id="orderModalContent"></div>
 </div>
 
@@ -484,9 +524,9 @@
         <h1 class="logo">HARDCORE DIVISION</h1>
     </div>
     <div class="lang-switcher">
-        <span id="lang-ua" class="lang-btn active" onclick="setLang('ua')">UA</span>
-        <span id="lang-eng" class="lang-btn" onclick="setLang('eng')">ENG</span>
-    </div>
+    <span id="lang-ua" class="lang-btn active" onclick="setLang('ua')">UA</span>
+    <span id="lang-eng" class="lang-btn" onclick="setLang('eng')">ENG</span>
+</div>
 </header>
 
 <div class="container">
@@ -495,418 +535,418 @@
         <p>DIVISION OF THE BRAVE</p>
     </div>
 
-    <div class="about-section">
-        <h2 class="about-logo-title">Hardcore Division</h2>
-        
-        <img src="images/photo_2026-03-07_18-15-01.jpg" alt="Hardcore Division Logo" class="about-image" loading="lazy">
-        
-        <div class="manifesto">
-            <p data-ua="Нас не цікавлять тренди. Нас цікавить, хто ти, коли ніхто не дивиться." 
-               data-eng="Trends don't interest us. We care who you are when no one is watching.">
-               Нас не цікавлять тренди. Нас цікавить, хто ти, коли ніхто не дивиться.
-            </p>
+   <div class="about-section">
+    <h2 class="about-logo-title">Hardcore Division</h2>
+    
+    <img src="images/photo_2026-03-07_18-15-01.jpg" alt="Hardcore Division Logo" class="about-image">
+    
+    <div class="manifesto">
+        <p data-ua="Нас не цікавлять тренди. Нас цікавить, хто ти, коли ніхто не дивиться." 
+           data-eng="Trends don't interest us. We care who you are when no one is watching.">
+           Нас не цікавлять тренди. Нас цікавить, хто ти, коли ніхто не дивиться.
+        </p>
 
-            <p>
-                <a href="https://t.me/hardcore_divis1on" target="_blank">Hardcore Division</a> — 
-                <span data-ua="для тих, хто виріс на дисципліні та внутрішній люті. Для тих, хто знає ціну словам вірність та характер." 
-                      data-eng="for those who grew up on discipline and inner rage. For those who know the price of loyalty and character.">
-                      для тих, хто виріс на дисципліні та внутрішній люті. Для тих, хто знає ціну словам вірність та характер.
-                </span>
-            </p>
+        <p>
+            <a href="https://t.me/hardcore_divis1on" target="_blank">Hardcore Division</a> — 
+            <span data-ua="для тих, хто виріс на дисципліні та внутрішній люті. Для тих, хто знає ціну словам вірність та характер." 
+                  data-eng="for those who grew up on discipline and inner rage. For those who know the price of loyalty and character.">
+                  для тих, хто виріс на дисципліні та внутрішній люті. Для тих, хто знає ціну словам вірність та характер.
+            </span>
+        </p>
 
-            <p data-ua="Ми не продаємо образ. Ми створюємо форму для стану. Для тиску. Для руху вперед. Для своїх." 
-               data-eng="We don't sell an image. We create the form for a state of mind. For pressure. For moving forward. For our own.">
-               Ми не продаємо образ. Ми створюємо форму для стану. Для тиску. Для руху вперед. Для своїх.
-            </p>
+        <p data-ua="Ми не продаємо образ. Ми створюємо форму для стану. Для тиску. Для руху вперед. Для своїх." 
+           data-eng="We don't sell an image. We create the form for a state of mind. For pressure. For moving forward. For our own.">
+           Ми не продаємо образ. Ми створюємо форму для стану. Для тиску. Для руху вперед. Для своїх.
+        </p>
 
-            <p data-ua="Якщо ти тут — значить, ти зрозумів. Зрозумів — залишайся." 
-               data-eng="If you're here — you understand. If you understand — stay.">
-               Якщо ти тут — значить, ти зрозумів. Зрозумів — залишайся.
-            </p>
+        <p data-ua="Якщо ти тут — значить, ти зрозумів. Зрозумів — залишайся." 
+           data-eng="If you're here — you understand. If you understand — stay.">
+           Якщо ти тут — значить, ти зрозумів. Зрозумів — залишайся.
+        </p>
+    </div>
+</div>
+
+<div class="filter-container" style="text-align: center; margin-bottom: 30px;">
+    <button class="filter-btn active" data-ua="ВСЕ" data-eng="ALL" onclick="filterProducts('all')">ВСЕ</button>
+    <button class="filter-btn" data-ua="ХУДІ" data-eng="HOODIE" onclick="filterProducts('худі')">ХУДІ</button>
+    <button class="filter-btn" data-ua="ФУТБОЛКИ" data-eng="T-SHIRTS" onclick="filterProducts('футболка')">ФУТБОЛКИ</button>
+</div>
+
+<div class="shop-grid">
+    
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_2025-12-31_17-17-16.jpg', 'images/photo_2025-12-31_17-17-18.jpg'])">
+            <img src="images/photo_2025-12-31_17-17-16.jpg" class="product-img">
+            <img src="images/photo_2025-12-31_17-17-18.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">ONLY BLOOD</h3>
+                <p class="product-desc" data-ua="Для тих, хто йде до цілі і не відступає. Характер замість шуму." data-eng="For those who pursue their goal and never back down. Character over noise.">Для тих, хто йде до цілі і не відступає. Характер замість шуму.</p>
+            </div>
+            <div>
+                <div class="price">1750₴</div>
+                <select id="size-1">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('ONLY BLOOD', 1750, 'size-1')">В КОШИК</button>
+            </div>
         </div>
     </div>
 
-    <div class="filter-container" style="text-align: center; margin-bottom: 30px;">
-        <button class="filter-btn active" data-ua="ВСЕ" data-eng="ALL" onclick="filterProducts('all')" tabindex="0">ВСЕ</button>
-        <button class="filter-btn" data-ua="ХУДІ" data-eng="HOODIE" onclick="filterProducts('худі')" tabindex="0">ХУДІ</button>
-        <button class="filter-btn" data-ua="ФУТБОЛКИ" data-eng="T-SHIRTS" onclick="filterProducts('футболка')" tabindex="0">ФУТБОЛКИ</button>
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_2026-01-02_15-43-43.jpg', 'images/photo_2026-01-03_10-19-49.jpg'])">
+            <img src="images/photo_2026-01-02_15-43-43.jpg" class="product-img">
+            <img src="images/photo_2026-01-03_10-19-49.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">HARDCORE BLOOD</h3>
+                <p class="product-desc" data-ua="Для тих, у кого кров кипить не від слів, а від дій. Повна відмова від компромісів." data-eng="For those whose blood boils from actions, not words. Complete refusal of compromises.">Для тих, у кого кров кипить не від слів, а від дій. Повна відмова від компромісів.</p>
+            </div>
+            <div>
+                <div class="price">1750₴</div>
+                <select id="size-2">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE BLOOD', 1750, 'size-2')">В КОШИК</button>
+            </div>
+        </div>
     </div>
 
-    <div class="shop-grid">
-        
-        <div class="product-card" data-category="худі">
-            <div class="product-img-container" onclick="openGallery(['images/photo_2025-12-31_17-17-16.jpg', 'images/photo_2025-12-31_17-17-18.jpg'])">
-                <img src="images/photo_2025-12-31_17-17-16.jpg" class="product-img" alt="Only Blood Hoodie front view" loading="lazy">
-                <img src="images/photo_2025-12-31_17-17-18.jpg" class="product-img-alt" alt="Only Blood Hoodie back view" loading="lazy">
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-03.jpg', 'images/photo_2_2026-03-06_19-48-03.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-48-03.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-48-03.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">Hardcore Confederates</h3>
+                <p class="product-desc" data-ua="Класичний символ бунту та вільної душі. Виразний стиль для тих, хто цінує традиції спротиву." data-eng="A classic symbol of rebellion and a free soul. Bold style for those who value traditions of resistance.">Класичний символ бунту та вільної душі. Виразний стиль для тих, хто цінує традиції спротиву.</p>
             </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">ONLY BLOOD</h3>
-                    <p class="product-desc" data-ua="Для тих, хто йде до цілі і не відступає. Характер замість шуму." data-eng="For those who pursue their goal and never back down. Character over noise.">Для тих, хто йде до цілі і не відступає. Характер замість шуму.</p>
-                </div>
-                <div>
-                    <div class="price" data-uah="1750" data-usd="40">1750₴</div>
-                    <select id="size-1">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('ONLY BLOOD', 1750, 40, 'size-1')">В КОШИК</button>
-                </div>
+            <div>
+                <div class="price">1850₴</div>
+                <select id="size-3">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Confederates Hoodie', 1850, 'size-3')">В КОШИК</button>
             </div>
         </div>
-
-        <div class="product-card" data-category="худі">
-            <div class="product-img-container" onclick="openGallery(['images/photo_2026-01-02_15-43-43.jpg', 'images/photo_2026-01-03_10-19-49.jpg'])">
-                <img src="images/photo_2026-01-02_15-43-43.jpg" class="product-img" alt="Hardcore Blood Hoodie front view" loading="lazy">
-                <img src="images/photo_2026-01-03_10-19-49.jpg" class="product-img-alt" alt="Hardcore Blood Hoodie back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">HARDCORE BLOOD</h3>
-                    <p class="product-desc" data-ua="Для тих, у кого кров кипить не від слів, а від дій. Повна відмова від компромісів." data-eng="For those whose blood boils from actions, not words. Complete refusal of compromises.">Для тих, у кого кров кипить не від слів, а від дій. Повна відмова від компромісів.</p>
-                </div>
-                <div>
-                    <div class="price" data-uah="1750" data-usd="40">1750₴</div>
-                    <select id="size-2">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE BLOOD', 1750, 40, 'size-2')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="худі">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-03.jpg', 'images/photo_2_2026-03-06_19-48-03.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-48-03.jpg" class="product-img" alt="Hardcore Confederates Hoodie front view" loading="lazy">
-                <img src="images/photo_2_2026-03-06_19-48-03.jpg" class="product-img-alt" alt="Hardcore Confederates Hoodie back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">Hardcore Confederates</h3>
-                    <p class="product-desc" data-ua="Класичний символ бунту та вільної душі. Виразний стиль для тих, хто цінує традиції спротиву." data-eng="A classic symbol of rebellion and a free soul. Bold style for those who value traditions of resistance.">Класичний символ бунту та вільної душі. Виразний стиль для тих, хто цінує традиції спротиву.</p>
-                </div>
-                <div>
-                    <div class="price" data-uah="1850" data-usd="45">1850₴</div>
-                    <select id="size-3">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Confederates Hoodie', 1850, 45, 'size-3')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="худі">
-            <div class="product-img-container" onclick="openGallery(['images/IMG_6728.JPEG', 'images/IMG_6729.JPEG', 'images/IMG_6730.JPEG', 'images/IMG_6731.JPEG'])">
-                <img src="images/IMG_6728.JPEG" class="product-img" alt="Hardcore Hentai Hoodie front view" loading="lazy">
-                <img src="images/IMG_6729.JPEG" class="product-img-alt" alt="Hardcore Hentai Hoodie back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">Hardcore Hentai</h3>
-                    <p class="product-desc" data-ua="Сміливе поєднання сучасної культури та жорсткого вуличному стилю." data-eng="A bold fusion of modern culture and hardcore street style.">Сміливе поєднання сучасної культури та жорсткого вуличному стилю.</p>
-                </div>
-                <div>
-                    <div class="price" data-uah="1750" data-usd="40">1750₴</div>
-                    <select id="size-4">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Hentai Hoodie', 1750, 40, 'size-4')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="худі">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-26.jpg', 'images/photo_2_2026-03-06_19-48-26.jpg', 'images/photo_3_2026-03-06_19-48-26.jpg', 'images/photo_4_2026-03-06_19-48-26.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-48-26.jpg" class="product-img" alt="Hardcore Nation Hoodie front view" loading="lazy">
-                <img src="images/photo_2_2026-03-06_19-48-26.jpg" class="product-img-alt" alt="Hardcore Nation Hoodie back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">HARDCORE NATION</h3>
-                    <p class="product-desc" data-ua="Про тих, кого не зламали обставини. Загартоване тиском та боротьбою." data-eng="About those not broken by circumstances. Tempered by pressure and struggle.">Про тих, кого не зламали обставини. Загартоване тиском та боротьбою.</p>
-                </div>
-                <div>
-                    <div class="price" data-uah="1750" data-usd="40">1750₴</div>
-                    <select id="size-5">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE NATION', 1750, 40, 'size-5')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="худі">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-05.jpg', 'images/photo_2_2026-03-06_19-49-05.jpg', 'images/photo_3_2026-03-06_19-49-05.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-49-05.jpg" class="product-img" alt="Hardcore Hammer Hoodie front view" loading="lazy">
-                <img src="images/photo_2_2026-03-06_19-49-05.jpg" class="product-img-alt" alt="Hardcore Hammer Hoodie back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">HARDCORE HAMMER</h3>
-                    <p class="product-desc" data-ua="Худі, яке б’є по слабкості. Грубе по характеру, надійне по відчуттях." data-eng="A hoodie that strikes at weakness. Tough in character, reliable in feel.">Худі, яке б’є по слабкості. Грубе по характеру, надійне по відчуттях.</p>
-                </div>
-                <div>
-                    <div class="price" data-uah="1850" data-usd="45">1850₴</div>
-                    <select id="size-6">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE HAMMER', 1850, 45, 'size-6')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="худі">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-15.jpg', 'images/photo_2_2026-03-06_19-49-15.jpg', 'images/photo_3_2026-03-06_19-49-15.jpg', 'images/photo_4_2026-03-06_19-49-15.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-49-15.jpg" class="product-img" alt="Militant Pro Hoodie front view" loading="lazy">
-                <img src="images/photo_2_2026-03-06_19-49-15.jpg" class="product-img-alt" alt="Militant Pro Hoodie back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">MILITANT PRO</h3>
-                    <p class="product-desc" data-ua="Для тих, хто мислить як боєць. Річ, яка працює разом з тобою." data-eng="For those who think like a warrior. Gear that works with you.">Для тих, хто мислить як боєць. Річ, яка працює разом з тобою.</p>
-                </div>
-                <div>
-                    <div class="price" data-uah="1750" data-usd="40">1750₴</div>
-                    <select id="size-7">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('MILITANT PRO', 1750, 40, 'size-7')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="худі">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-25.jpg', 'images/photo_2_2026-03-06_19-49-25.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-49-25.jpg" class="product-img" alt="Misanthrop Hoodie front view" loading="lazy">
-                <img src="images/photo_2_2026-03-06_19-49-25.jpg" class="product-img-alt" alt="Misanthrop Hoodie back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">Misanthrop Hoodie</h3>
-                    <p class="product-desc" data-ua="Дистанція та стиль. Для тих, хто окремо від натовпу." data-eng="Distance and style. For those who stand apart from the crowd.">Дистанція та стиль. Для тих, хто окремо від натовпу.</p>
-                </div>
-                <div>
-                    <div class="price" data-uah="1750" data-usd="40">1750₴</div>
-                    <select id="size-8">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Misanthrop Hoodie', 1750, 40, 'size-8')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="футболка">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-30.jpg', 'images/photo_2_2026-03-06_19-49-30.jpg', 'images/photo_3_2026-03-06_19-49-30.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-49-30.jpg" class="product-img" alt="Hardcore Division T-Shirt front view" loading="lazy">
-                <img src="images/photo_2_2026-03-06_19-49-30.jpg" class="product-img-alt" alt="Hardcore Division T-Shirt back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">Hardcore Division</h3>
-                    <p class="product-desc" data-ua="Для стійких духом, хто не ламається під тиском. Жодних компромісів." data-eng="For the strong-willed who don't break under pressure. No compromises.">Для стійких духом, хто не ламається під тиском. Жодних компромісів.</p>
-                </div>
-                <div>
-                    <div class="price" data-uah="800" data-usd="20">800₴</div>
-                    <select id="size-9">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Division T-Shirt', 800, 20, 'size-9')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="футболка">
-            <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-40.jpg', 'images/photo_2_2026-03-06_19-49-40.jpg'])">
-                <img src="images/photo_1_2026-03-06_19-49-40.jpg" class="product-img" alt="Hardcore Division Classic T-Shirt front view" loading="lazy">
-                <img src="images/photo_2_2026-03-06_19-49-40.jpg" class="product-img-alt" alt="Hardcore Division Classic T-Shirt back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div>
-                    <h3 class="product-title">Hardcore Division Classic</h3>
-                    <p class="product-desc" data-ua="Класика бренду. Мінімалізм та характер. ⬜️⬛️" data-eng="Brand classic. Minimalism and character. ⬜️⬛️">Класика бренду. Мінімалізм та характер. ⬜️⬛️</p>
-                </div>
-                <div>
-                    <div class="price" data-uah="800" data-usd="20">800₴</div>
-                    <select id="size-10">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Classic Tee', 800, 20, 'size-10')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="футболка">
-            <div class="product-img-container" onclick="openGallery(['images/photo_13_2026-03-07_08-39-14.jpg', 'images/photo_14_2026-03-07_08-39-14.jpg'])">
-                <img src="images/photo_13_2026-03-07_08-39-14.jpg" class="product-img" alt="Hardcore Hentai T-Shirt front view" loading="lazy">
-                <img src="images/photo_14_2026-03-07_08-39-14.jpg" class="product-img-alt" alt="Hardcore Hentai T-Shirt back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div><h3 class="product-title">Hardcore Hentai</h3><p class="product-desc" data-ua="Стиль та провокація." data-eng="Style and provocation.">Стиль та провокація.</p></div>
-                <div>
-                    <div class="price" data-uah="800" data-usd="20">800₴</div>
-                    <select id="size-f1">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Hardcore Hentai T-Shirt', 800, 20, 'size-f1')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="футболка">
-            <div class="product-img-container" onclick="openGallery(['images/photo_3_2026-03-07_08-39-14.jpg', 'images/photo_4_2026-03-07_08-39-14.jpg'])">
-                <img src="images/photo_3_2026-03-07_08-39-14.jpg" class="product-img" alt="Militant Pro T-Shirt front view" loading="lazy">
-                <img src="images/photo_4_2026-03-07_08-39-14.jpg" class="product-img-alt" alt="Militant Pro T-Shirt back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div><h3 class="product-title">Militant Pro</h3><p class="product-desc" data-ua="Дисципліна та професіоналізм." data-eng="Discipline and professionalism.">Дисципліна та професіоналізм.</p></div>
-                <div>
-                    <div class="price" data-uah="800" data-usd="20">800₴</div>
-                    <select id="size-f2">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Militant Pro T-Shirt', 800, 20, 'size-f2')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="футболка">
-            <div class="product-img-container" onclick="openGallery(['images/photo_5_2026-03-07_08-39-14.jpg', 'images/photo_6_2026-03-07_08-39-14.jpg'])">
-                <img src="images/photo_5_2026-03-07_08-39-14.jpg" class="product-img" alt="Only Blood T-Shirt front view" loading="lazy">
-                <img src="images/photo_6_2026-03-07_08-39-14.jpg" class="product-img-alt" alt="Only Blood T-Shirt back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div><h3 class="product-title">ONLY BLOOD</h3><p class="product-desc" data-ua="Результат понад усе." data-eng="Result above all else.">Результат понад усе.</p></div>
-                <div>
-                    <div class="price" data-uah="800" data-usd="20">800₴</div>
-                    <select id="size-f3">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Only Blood T-Shirt', 800, 20, 'size-f3')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="футболка">
-            <div class="product-img-container" onclick="openGallery(['images/photo_7_2026-03-07_08-39-14.jpg', 'images/photo_8_2026-03-07_08-39-14.jpg'])">
-                <img src="images/photo_7_2026-03-07_08-39-14.jpg" class="product-img" alt="Misantrop T-Shirt front view" loading="lazy">
-                <img src="images/photo_8_2026-03-07_08-39-14.jpg" class="product-img-alt" alt="Misantrop T-Shirt back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div><h3 class="product-title">Misantrop</h3><p class="product-desc" data-ua="Твоя дистанція від світу." data-eng="Your distance from the world.">Твоя дистанція від світу.</p></div>
-                <div>
-                    <div class="price" data-uah="800" data-usd="20">800₴</div>
-                    <select id="size-f4">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Misantrop T-Shirt', 800, 20, 'size-f4')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="футболка">
-            <div class="product-img-container" onclick="openGallery(['images/photo_9_2026-03-07_08-39-14.jpg', 'images/photo_10_2026-03-07_08-39-14.jpg'])">
-                <img src="images/photo_9_2026-03-07_08-39-14.jpg" class="product-img" alt="Idea of Nation T-Shirt front view" loading="lazy">
-                <img src="images/photo_10_2026-03-07_08-39-14.jpg" class="product-img-alt" alt="Idea of Nation T-Shirt back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div><h3 class="product-title">Idea of Nation</h3><p class="product-desc" data-ua="Ідейний фундамент." data-eng="Ideological foundation.">Ідейний фундамент.</p></div>
-                <div>
-                    <div class="price" data-uah="800" data-usd="20">800₴</div>
-                    <select id="size-f5">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Idea of Nation T-Shirt', 800, 20, 'size-f5')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="футболка">
-            <div class="product-img-container" onclick="openGallery(['images/photo_11_2026-03-07_08-39-14.jpg', 'images/photo_12_2026-03-07_08-39-14.jpg'])">
-                <img src="images/photo_11_2026-03-07_08-39-14.jpg" class="product-img" alt="Hardcore Hammer T-Shirt front view" loading="lazy">
-                <img src="images/photo_12_2026-03-07_08-39-14.jpg" class="product-img-alt" alt="Hardcore Hammer T-Shirt back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div><h3 class="product-title">Hardcore Hammer</h3><p class="product-desc" data-ua="Важкий аргумент." data-eng="A heavy argument.">Важкий аргумент.</p></div>
-                <div>
-                    <div class="price" data-uah="800" data-usd="20">800₴</div>
-                    <select id="size-f6">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Hammer T-Shirt', 800, 20, 'size-f6')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="футболка">
-            <div class="product-img-container" onclick="openGallery(['images/photo_17_2026-03-07_08-39-14.jpg', 'images/photo_18_2026-03-07_08-39-14.jpg'])">
-                <img src="images/photo_17_2026-03-07_08-39-14.jpg" class="product-img" alt="Hardcore Division T-Shirt front view" loading="lazy">
-                <img src="images/photo_18_2026-03-07_08-39-14.jpg" class="product-img-alt" alt="Hardcore Division T-Shirt back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div><h3 class="product-title">Hardcore Division</h3><p class="product-desc" data-ua="Твій основний підрозділ." data-eng="Your main unit.">Твій основний підрозділ.</p></div>
-                <div>
-                    <div class="price" data-uah="800" data-usd="20">800₴</div>
-                    <select id="size-f7">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Division T-Shirt', 800, 20, 'size-f7')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card" data-category="футболка">
-            <div class="product-img-container" onclick="openGallery(['images/photo_15_2026-03-07_08-39-14.jpg', 'images/photo_16_2026-03-07_08-39-14.jpg'])">
-                <img src="images/photo_15_2026-03-07_08-39-14.jpg" class="product-img" alt="Hardcore Confederates T-Shirt front view" loading="lazy">
-                <img src="images/photo_16_2026-03-07_08-39-14.jpg" class="product-img-alt" alt="Hardcore Confederates T-Shirt back view" loading="lazy">
-            </div>
-            <div class="product-info">
-                <div><h3 class="product-title">Hardcore Confederates</h3><p class="product-desc" data-ua="Дух свободи." data-eng="The spirit of freedom.">Дух свободи.</p></div>
-                <div>
-                    <div class="price" data-uah="800" data-usd="20">800₴</div>
-                    <select id="size-f9">
-                        <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                        <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                        <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
-                    </select>
-                    <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Confederates T-Shirt', 800, 20, 'size-f9')">В КОШИК</button>
-                </div>
-            </div>
-        </div>
-
     </div>
+
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/IMG_6728.JPEG', 'images/IMG_6729.JPEG', 'images/IMG_6730.JPEG', 'images/IMG_6731.JPEG'])">
+            <img src="images/IMG_6728.JPEG" class="product-img">
+            <img src="images/IMG_6729.JPEG" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">Hardcore Hentai</h3>
+                <p class="product-desc" data-ua="Сміливе поєднання сучасної культури та жорсткого вуличному стилю." data-eng="A bold fusion of modern culture and hardcore street style.">Сміливе поєднання сучасної культури та жорсткого вуличному стилю.</p>
+            </div>
+            <div>
+                <div class="price">1750₴</div>
+                <select id="size-4">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Hentai Hoodie', 1750, 'size-4')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-48-26.jpg', 'images/photo_2_2026-03-06_19-48-26.jpg', 'images/photo_3_2026-03-06_19-48-26.jpg', 'images/photo_4_2026-03-06_19-48-26.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-48-26.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-48-26.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">HARDCORE NATION</h3>
+                <p class="product-desc" data-ua="Про тих, кого не зламали обставини. Загартоване тиском та боротьбою." data-eng="About those not broken by circumstances. Tempered by pressure and struggle.">Про тих, кого не зламали обставини. Загартоване тиском та боротьбою.</p>
+            </div>
+            <div>
+                <div class="price">1750₴</div>
+                <select id="size-5">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE NATION', 1750, 'size-5')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-05.jpg', 'images/photo_2_2026-03-06_19-49-05.jpg', 'images/photo_3_2026-03-06_19-49-05.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-49-05.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-49-05.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">HARDCORE HAMMER</h3>
+                <p class="product-desc" data-ua="Худі, яке б’є по слабкості. Грубе по характеру, надійне по відчуттях." data-eng="A hoodie that strikes at weakness. Tough in character, reliable in feel.">Худі, яке б’є по слабкості. Грубе по характеру, надійне по відчуттях.</p>
+            </div>
+            <div>
+                <div class="price">1850₴</div>
+                <select id="size-6">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE HAMMER', 1850, 'size-6')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-15.jpg', 'images/photo_2_2026-03-06_19-49-15.jpg', 'images/photo_3_2026-03-06_19-49-15.jpg', 'images/photo_4_2026-03-06_19-49-15.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-49-15.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-49-15.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">MILITANT PRO</h3>
+                <p class="product-desc" data-ua="Для тих, хто мислить як боєць. Річ, яка працює разом з тобою." data-eng="For those who think like a warrior. Gear that works with you.">Для тих, хто мислить як боєць. Річ, яка працює разом з тобою.</p>
+            </div>
+            <div>
+                <div class="price">1750₴</div>
+                <select id="size-7">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('MILITANT PRO', 1750, 'size-7')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="худі">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-25.jpg', 'images/photo_2_2026-03-06_19-49-25.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-49-25.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-49-25.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">Misanthrop Hoodie</h3>
+                <p class="product-desc" data-ua="Дистанція та стиль. Для тих, хто окремо від натовпу." data-eng="Distance and style. For those who stand apart from the crowd.">Дистанція та стиль. Для тих, хто окремо від натовпу.</p>
+            </div>
+            <div>
+                <div class="price">1750₴</div>
+                <select id="size-8">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Misanthrop Hoodie', 1750, 'size-8')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-30.jpg', 'images/photo_2_2026-03-06_19-49-30.jpg', 'images/photo_3_2026-03-06_19-49-30.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-49-30.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-49-30.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">Hardcore Division</h3>
+                <p class="product-desc" data-ua="Для стійких духом, хто не ламається під тиском. Жодних компромісів." data-eng="For the strong-willed who don't break under pressure. No compromises.">Для стійких духом, хто не ламається під тиском. Жодних компромісів.</p>
+            </div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-9">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Division T-Shirt', 850, 'size-9')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_1_2026-03-06_19-49-40.jpg', 'images/photo_2_2026-03-06_19-49-40.jpg'])">
+            <img src="images/photo_1_2026-03-06_19-49-40.jpg" class="product-img">
+            <img src="images/photo_2_2026-03-06_19-49-40.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div>
+                <h3 class="product-title">Hardcore Division Classic</h3>
+                <p class="product-desc" data-ua="Класика бренду. Мінімалізм та характер. ⬜️⬛️" data-eng="Brand classic. Minimalism and character. ⬜️⬛️">Класика бренду. Мінімалізм та характер. ⬜️⬛️</p>
+            </div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-10">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Classic Tee', 850, 'size-10')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_13_2026-03-07_08-39-14.jpg', 'images/photo_14_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_13_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_14_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Hardcore Hentai</h3><p class="product-desc" data-ua="Стиль та провокація." data-eng="Style and provocation.">Стиль та провокація.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f1">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Hardcore Hentai T-Shirt', 850, 'size-f1')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_3_2026-03-07_08-39-14.jpg', 'images/photo_4_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_3_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_4_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Militant Pro</h3><p class="product-desc" data-ua="Дисципліна та професіоналізм." data-eng="Discipline and professionalism.">Дисципліна та професіоналізм.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f2">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Militant Pro T-Shirt', 850, 'size-f2')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_5_2026-03-07_08-39-14.jpg', 'images/photo_6_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_5_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_6_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">ONLY BLOOD</h3><p class="product-desc" data-ua="Результат понад усе." data-eng="Result above all else.">Результат понад усе.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f3">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Only Blood T-Shirt', 850, 'size-f3')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_7_2026-03-07_08-39-14.jpg', 'images/photo_8_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_7_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_8_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Misantrop</h3><p class="product-desc" data-ua="Твоя дистанція від світу." data-eng="Your distance from the world.">Твоя дистанція від світу.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f4">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Misantrop T-Shirt', 850, 'size-f4')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_9_2026-03-07_08-39-14.jpg', 'images/photo_10_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_9_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_10_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Idea of Nation</h3><p class="product-desc" data-ua="Ідейний фундамент." data-eng="Ideological foundation.">Ідейний фундамент.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f5">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Idea of Nation T-Shirt', 850, 'size-f5')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_11_2026-03-07_08-39-14.jpg', 'images/photo_12_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_11_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_12_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Hardcore Hammer</h3><p class="product-desc" data-ua="Важкий аргумент." data-eng="A heavy argument.">Важкий аргумент.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f6">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Hammer T-Shirt', 850, 'size-f6')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_17_2026-03-07_08-39-14.jpg', 'images/photo_18_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_17_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_18_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Hardcore Division</h3><p class="product-desc" data-ua="Твій основний підрозділ." data-eng="Your main unit.">Твій основний підрозділ.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f7">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Division T-Shirt', 850, 'size-f7')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/photo_15_2026-03-07_08-39-14.jpg', 'images/photo_16_2026-03-07_08-39-14.jpg'])">
+            <img src="images/photo_15_2026-03-07_08-39-14.jpg" class="product-img">
+            <img src="images/photo_16_2026-03-07_08-39-14.jpg" class="product-img-alt">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">Hardcore Confederates</h3><p class="product-desc" data-ua="Дух свободи." data-eng="The spirit of freedom.">Дух свободи.</p></div>
+            <div>
+                <div class="price">850₴</div>
+                <select id="size-f9">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Confederates T-Shirt', 850, 'size-f9')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 </div>
 <div class="socials">
@@ -919,18 +959,31 @@
     <span id="cart-count">0</span>🛒
 </div>
 
-<footer>
+<footer style="margin-top: 50px; padding: 40px 20px; text-align: center; border-top: 1px solid #1a1a1a;">
     <div style="margin-bottom: 25px;">
-        <p class="operator-label" data-ua="Контакт оператора" data-eng="Operator contact">Контакт оператора</p>
-        <a href="tel:+380665615906" class="tel-link">
+        <p data-ua="Контакт оператора" data-eng="Operator contact" style="font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">Контакт оператора</p>
+        <a href="tel:+380665615906" style="
+            display: inline-block;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 15px;
+            font-family: monospace;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border: 1px solid #222;
+            padding: 12px 24px;
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.02);
+        " onmouseover="this.style.borderColor='#ff0000'; this.style.color='#ff0000'; this.style.boxShadow='0 0 15px rgba(255,0,0,0.2)';" 
+           onmouseout="this.style.borderColor='#222'; this.style.color='#ccc'; this.style.boxShadow='none';">
             +380 66 561 59 06
         </a>
     </div>
 
-    <div class="copyright">
+    <div style="font-size: 11px; color: #555; letter-spacing: 1px;">
         <span data-ua="&copy; 2026 HARDCORE DIVISION. ВСІ ПРАВА ЗАХИЩЕНІ КРОВ'Ю." data-eng="&copy; 2026 HARDCORE DIVISION. ALL RIGHTS RESERVED BY BLOOD.">&copy; 2026 HARDCORE DIVISION. ВСІ ПРАВА ЗАХИЩЕНІ КРОВ'Ю.</span>
         <br>
-        <a href="javascript:void(0)" onclick="openPrivacy()" class="privacy-link" data-ua="Політика конфіденційності" data-eng="Privacy Policy">Політика конфіденційності</a>
+        <a href="javascript:void(0)" onclick="openPrivacy()" data-ua="Політика конфіденційності" data-eng="Privacy Policy" style="color: #444; text-decoration: underline; font-size: 9px; margin-top: 10px; display: inline-block; text-transform: uppercase;">Політика конфіденційності</a>
     </div>
 </footer>
 
@@ -940,30 +993,18 @@
     let currentImgIndex = 0;
     let paymentScreenshot = null;
     let lastScrollTop = 0;
-    let touchStartX = 0;
-    let touchEndX = 0;
 
-    window.addEventListener('scroll', function() {
-    let st = window.pageYOffset || document.documentElement.scrollTop;
-    let header = document.getElementById("mainHeader");
-    
-    if (st > 100 && st > lastScrollTop) {
-        // Scroll down >100px — прячем
-        header.classList.add("header-hidden");
-    } else if (st <= 0) {
-        // Только на самом верху — показываем
-        header.classList.remove("header-hidden");
-    }
-    // Не показываем при скролле up, если не в топе
-    
-    lastScrollTop = st <= 0 ? 0 : st;
-}, false);
+    window.onscroll = function() {
+        let header = document.getElementById("mainHeader");
+        if (window.scrollY > 100) {
+            header.classList.add("header-hidden");
+        } else {
+            header.classList.remove("header-hidden");
+        }
+    };
 
     function showToast(text) {
         const container = document.getElementById('toast-container');
-        if (container.children.length >= 3) {
-            container.removeChild(container.firstChild);
-        }
         const toast = document.createElement('div');
         toast.className = 'toast';
         toast.innerText = text;
@@ -978,23 +1019,20 @@
 
     function toggleSizePanel() { document.getElementById('sizePanel').classList.toggle('active'); }
     function setSizeType(type) {
-        const img = document.getElementById('mainSizeImg');
-        const btnT = document.getElementById('size-btn-t');
-        const btnH = document.getElementById('size-btn-h');
+    const img = document.getElementById('mainSizeImg');
+    const btnT = document.getElementById('size-btn-t');
+    const btnH = document.getElementById('size-btn-h');
 
-        if (type === 'tshirt') {
-            img.src = 'images/Screenshot_198.png';
-            img.alt = 'T-Shirt Size Guide';
-            btnT.classList.add('active');
-            btnH.classList.remove('active');
-        } else {
-            img.src = 'images/Screenshot_197.png';
-            img.alt = 'Hoodie Size Guide';
-            btnH.classList.add('active');
-            btnT.classList.remove('active');
-        }
+    if (type === 'tshirt') {
+        img.src = 'images/Screenshot_198.png';
+        btnT.style.background = 'var(--blood)'; btnT.style.color = 'white';
+        btnH.style.background = '#222'; btnH.style.color = '#888';
+    } else {
+        img.src = 'images/Screenshot_197.png';
+        btnH.style.background = 'var(--blood)'; btnH.style.color = 'white';
+        btnT.style.background = '#222'; btnT.style.color = '#888';
     }
-
+}
     function openGallery(images) {
         currentGalleryImages = images;
         currentImgIndex = 0;
@@ -1006,139 +1044,116 @@
         currentImgIndex = (currentImgIndex + dir + currentGalleryImages.length) % currentGalleryImages.length;
         document.getElementById('galleryImg').src = currentGalleryImages[currentImgIndex];
     }
-
-    // Swipe support for gallery
-    document.getElementById('gallery').addEventListener('touchstart', function(e) {
-        touchStartX = e.changedTouches[0].screenX;
-    });
-    document.getElementById('gallery').addEventListener('touchend', function(e) {
-        touchEndX = e.changedTouches[0].screenX;
-        if (touchStartX - touchEndX > 50) changeImg(1); // Swipe left
-        if (touchEndX - touchStartX > 50) changeImg(-1); // Swipe right
-    });
-
     function toggleCart() {
         const modal = document.getElementById('cartModal');
         modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
         renderCart();
     }
-    function addToCart(name, priceUah, priceUsd, sizeId) {
-        const sizeSelect = document.getElementById(sizeId);
-        if (!sizeSelect || !sizeSelect.value) {
-            showToast('ОБЕРІТЬ РОЗМІР!');
-            return;
-        }
-        const size = sizeSelect.value;
-        const lang = localStorage.getItem('preferred_lang') || 'ua';
-        cart.push({name, priceUah, priceUsd, size});
-        document.getElementById('cart-count').innerText = cart.length;
-        
-        const msg = lang === 'ua' ? 'ДОДАНО В КОШИК 💀' : 'ADDED TO CART 💀';
-        showToast(msg);
-    }
+    function addToCart(name, price, sizeId) {
+    const size = document.getElementById(sizeId).value;
+    const lang = localStorage.getItem('preferred_lang') || 'ua';
+    cart.push({name, price, size});
+    document.getElementById('cart-count').innerText = cart.length;
+    
+    const msg = lang === 'ua' ? 'ДОДАНО В КОШИК 💀' : 'ADDED TO CART 💀';
+    showToast(msg);
+}
     function removeFromCart(index) {
         cart.splice(index, 1);
         document.getElementById('cart-count').innerText = cart.length;
         renderCart();
     }
     function renderCart() {
-        const list = document.getElementById('cartItemsList');
-        const lang = localStorage.getItem('preferred_lang') || 'ua'; // Визначаємо мову
-        let total = 0;
-        
-        if (cart.length === 0) {
-            list.innerHTML = `<p style="text-align: center; color: #888;">${lang === 'ua' ? 'КОШИК ПОРОЖНІЙ' : 'CART IS EMPTY'}</p>`;
-        } else {
-            list.innerHTML = cart.map((item, idx) => {
-                const itemPrice = lang === 'ua' ? item.priceUah : item.priceUsd;
-                total += itemPrice;
-                const currency = lang === 'ua' ? '₴' : '$';
-                return `<div class="cart-item"><span>${item.name} (${item.size}) — ${itemPrice}${currency}</span><span class="remove-item" onclick="removeFromCart(${idx})">✕</span></div>`;
-            }).join('');
-        }
+    const list = document.getElementById('cartItemsList');
+    const lang = localStorage.getItem('preferred_lang') || 'ua'; // Визначаємо мову
+    let total = 0;
+    
+    list.innerHTML = cart.map((item, idx) => {
+        total += item.price;
+        return `<div class="cart-item"><span>${item.name} (${item.size})</span><span class="remove-item" onclick="removeFromCart(${idx})">✕</span></div>`;
+    }).join('');
 
-        // Перекладаємо підсумок
-        const totalText = lang === 'ua' ? 'Всього' : 'Total';
-        const currency = lang === 'ua' ? '₴' : '$';
-        document.getElementById('cartTotal').innerText = `${totalText}: ${total}${currency}`;
-    }
+    // Перекладаємо підсумок
+    const totalText = lang === 'ua' ? 'Всього' : 'Total';
+    document.getElementById('cartTotal').innerText = `${totalText}: ${total}₴`;
+}
 
     function openOrderForm() {
-        if (cart.length === 0) return showToast('КОШИК ПОРОЖНІЙ!');
-        document.getElementById('cartModal').style.display = 'none';
+    if (cart.length === 0) return showToast('КОШИК ПОРОЖНІЙ!');
+    document.getElementById('cartModal').style.display = 'none';
+    
+    const lang = localStorage.getItem('preferred_lang') || 'ua';
+    const total = cart.reduce((sum, i) => sum + i.price, 0);
+
+    const t = {
+        title: lang === 'ua' ? 'ОПЛАТА' : 'PAYMENT',
+        sum: lang === 'ua' ? 'Сума до сплати' : 'Total Amount',
+        screenshot: lang === 'ua' ? "ДОДАТИ СКРІНШОТ ОПЛАТИ (ОБОВ'ЯЗКОВО):" : "ADD PAYMENT SCREENSHOT (REQUIRED):",
+        btn: lang === 'ua' ? 'Я ОПЛАТИВ' : 'I PAID'
+    };
+
+    document.getElementById('orderModalContent').innerHTML = `
+        <div class="close-btn" onclick="closeOrderForm()">✕</div>
+        <h2 style="color: var(--blood); margin-bottom: 15px;">${t.title}</h2>
         
-        const lang = localStorage.getItem('preferred_lang') || 'ua';
-        const total = lang === 'ua' ? cart.reduce((sum, i) => sum + i.priceUah, 0) : cart.reduce((sum, i) => sum + i.priceUsd, 0);
-        const currency = lang === 'ua' ? '₴' : '$';
-
-        const t = {
-            title: lang === 'ua' ? 'ОПЛАТА' : 'PAYMENT',
-            sum: lang === 'ua' ? 'Сума до сплати' : 'Total Amount',
-            screenshot: lang === 'ua' ? "ДОДАТИ СКРІНШОТ ОПЛАТИ (ОБОВ'ЯЗКОВО):" : "ADD PAYMENT SCREENSHOT (REQUIRED):",
-            btn: lang === 'ua' ? 'Я ОПЛАТИВ' : 'I PAID'
-        };
-
-        document.getElementById('orderModalContent').innerHTML = `
-            <div class="close-btn" onclick="closeOrderForm()" aria-label="Close order form">✕</div>
-            <h2 style="color: var(--blood); margin-bottom: 15px;">${t.title}</h2>
+        <div style="background:#000; padding:15px; border:1px solid #222; font-size:0.85rem; color:#fff; line-height:1.6; text-align:left;">
             
-            <div style="background:#000; padding:15px; border:1px solid #222; font-size:0.85rem; color:#fff; line-height:1.6; text-align:left;">
-                
-                <div style="margin-bottom:10px;">
-                    <span style="color:#888;">🪙 ФОП РАХУНОК (IBAN):</span><br>
-                    <div class="copy-line"><b>UA783220010000026002320017237</b> <button class="mini-copy-btn" onclick="copyVal('UA783220010000026002320017237')">Copy</button></div>
-                </div>
-
-                <div style="margin-bottom:10px;">
-                    <span style="color:#888;">💸 PayPal:</span><br>
-                    <div class="copy-line"><b>dreamprint777@ukr.net</b> <button class="mini-copy-btn" onclick="copyVal('dreamprint777@ukr.net')">Copy</button></div>
-                </div>
-
-                <div style="margin-bottom:10px;">
-                    <span style="color:#888;">💳 КАРТА ФОП РАХУНКУ:</span><br>
-                    <div class="copy-line"><b>4035200041301190</b> <button class="mini-copy-btn" onclick="copyVal('4035200041301190')">Copy</button></div>
-                </div>
-
-                <div style="margin-bottom:10px;">
-                    <span style="color:#888;">🔢 ЄДРПОУ:</span><br>
-                    <div class="copy-line"><b>3215715672</b> <button class="mini-copy-btn" onclick="copyVal('3215715672')">Copy</button></div>
-                </div>
-
-                <div style="border-top:1px solid #222; padding-top:10px; margin-top:10px;">
-                    👤 <b>ФОП:</b> Тарасов Олег Михайлович
-                </div>
-
-                <div style="margin-top:15px; padding-top:10px; border-top:1px dashed #444;">
-                    💰 ${t.sum}: <span style="color:var(--blood); font-weight:bold; font-size:1.1rem;">${total}${currency}</span>
-                </div>
+            <div style="margin-bottom:10px;">
+                <span style="color:#888;">🪙 ФОП РАХУНОК (IBAN):</span><br>
+                <div class="copy-line"><b>UA783220010000026002320017237</b> <button class="mini-copy-btn" onclick="copyVal('UA783220010000026002320017237')">Copy</button></div>
             </div>
 
-            <div style="margin-top:15px;">
-                 <label style="display:block; color:var(--blood); font-size:0.75rem; margin-bottom:5px; text-transform:uppercase; letter-spacing:1px;">${t.screenshot}</label>
-                 <input type="file" id="orderScreenshot" accept="image/*" style="width:100%; font-size:0.8rem; color:#ccc;" onchange="handleFileSelect(event)">
-                 <div id="screenshotPreview" style="margin-top:10px;"></div>
+            <div style="margin-bottom:10px;">
+                <span style="color:#888;">💸 PayPal:</span><br>
+                <div class="copy-line"><b>dreamprint777@ukr.net</b> <button class="mini-copy-btn" onclick="copyVal('dreamprint777@ukr.net')">Copy</button></div>
             </div>
-            
-            <button class="buy-btn" id="payBtn" style="margin-top:20px; opacity: 0.5;" onclick="showDeliveryInputs()" disabled>${t.btn}</button>
-        `;
-        document.getElementById('orderModal').style.display = 'flex';
-    }
+
+            <div style="margin-bottom:10px;">
+                <span style="color:#888;">💳 КАРТА ФОП РАХУНКУ:</span><br>
+                <div class="copy-line"><b>4035200041301190</b> <button class="mini-copy-btn" onclick="copyVal('4035200041301190')">Copy</button></div>
+            </div>
+
+            <div style="margin-bottom:10px;">
+                <span style="color:#888;">🔢 ЄДРПОУ:</span><br>
+                <div class="copy-line"><b>3215715672</b> <button class="mini-copy-btn" onclick="copyVal('3215715672')">Copy</button></div>
+            </div>
+
+            <div style="border-top:1px solid #222; pt-10px; margin-top:10px;">
+                👤 <b>ФОП:</b> Тарасов Олег Михайлович
+            </div>
+
+            <div style="margin-top:15px; padding-top:10px; border-top:1px dashed #444;">
+                💰 ${t.sum}: <span style="color:var(--blood); font-weight:bold; font-size:1.1rem;">${total}₴</span>
+            </div>
+        </div>
+
+        <div style="margin-top:15px;">
+             <label style="display:block; color:var(--blood); font-size:0.75rem; margin-bottom:5px; text-transform:uppercase; letter-spacing:1px;">${t.screenshot}</label>
+             <input type="file" id="orderScreenshot" accept="image/*" style="width:100%; font-size:0.8rem; color:#ccc;" onchange="handleFileSelect(event)">
+        </div>
+        
+        <button class="buy-btn" id="payBtn" style="margin-top:20px; opacity: 0.5;" onclick="showDeliveryInputs()" disabled>${t.btn}</button>
+    `;
+    document.getElementById('orderModal').style.display = 'flex';
+}
 
     function handleFileSelect(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => { 
-                paymentScreenshot = e.target.result; 
-                document.getElementById('screenshotPreview').innerHTML = `<img src="${paymentScreenshot}" alt="Payment Screenshot Preview" style="max-width:100%; margin-top:10px; border:1px solid #444;">`;
-                const payBtn = document.getElementById('payBtn');
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => { 
+            paymentScreenshot = e.target.result; 
+            // Включаем кнопку и возвращаем ей яркость
+            const payBtn = document.getElementById('payBtn');
+            if(payBtn) {
                 payBtn.disabled = false;
                 payBtn.style.opacity = '1';
                 payBtn.style.background = 'var(--blood)';
-            };
-            reader.readAsDataURL(file);
-        }
+            }
+        };
+        reader.readAsDataURL(file);
     }
+}
 
     function showDeliveryInputs() {
         const lang = localStorage.getItem('preferred_lang') || 'ua';
@@ -1156,24 +1171,16 @@
         if(!paymentScreenshot) return showToast(t.err);
 
         document.getElementById('orderModalContent').innerHTML = `
-            <div class="close-btn" onclick="closeOrderForm()" aria-label="Close order form">✕</div>
+            <div class="close-btn" onclick="closeOrderForm()">✕</div>
             <h2 style="color: var(--blood); margin-bottom: 15px;">${t.title}</h2>
             <div class="order-form">
-                <input type="text" id="orderFIO" data-ua-placeholder="${t.fio}" data-eng-placeholder="${t.fio}">
-                <input type="text" id="orderPhone" data-ua-placeholder="${t.phone}" data-eng-placeholder="${t.phone}">
-                <input type="text" id="orderNP" data-ua-placeholder="${t.np}" data-eng-placeholder="${t.np}">
-                <input type="text" id="orderTG" data-ua-placeholder="${t.tg}" data-eng-placeholder="${t.tg}">
+                <input type="text" id="orderFIO" placeholder="${t.fio}">
+                <input type="text" id="orderPhone" placeholder="${t.phone}">
+                <input type="text" id="orderNP" placeholder="${t.np}">
+                <input type="text" id="orderTG" placeholder="${t.tg}">
                 <button class="buy-btn" id="confirmBtn" onclick="finalizeOrder()">${t.btn}</button>
             </div>
         `;
-        updatePlaceholders(lang);
-    }
-
-    function updatePlaceholders(lang) {
-        document.querySelectorAll('input[data-ua-placeholder]').forEach(el => {
-            const ph = el.getAttribute('data-' + lang + '-placeholder');
-            if (ph) el.placeholder = ph;
-        });
     }
 
     function closeOrderForm() { 
@@ -1183,10 +1190,10 @@
 
     async function finalizeOrder() {
         const lang = localStorage.getItem('preferred_lang') || 'ua';
-        const fio = escapeHtml(document.getElementById('orderFIO').value);
-        let phone = document.getElementById('orderPhone').value.replace(/\D/g, '');
-        const np = escapeHtml(document.getElementById('orderNP').value);
-        const tg = escapeHtml(document.getElementById('orderTG').value);
+        const fio = document.getElementById('orderFIO').value;
+        const phone = document.getElementById('orderPhone').value.replace(/\D/g, '');
+        const np = document.getElementById('orderNP').value;
+        const tg = document.getElementById('orderTG').value;
         const btn = document.getElementById('confirmBtn');
 
         const msgErr = lang === 'ua' ? 'ПЕРЕВІРТЕ ДАНІ ТА НОМЕР!' : 'CHECK DATA & NUMBER!';
@@ -1194,17 +1201,15 @@
         const msgSuccess = lang === 'ua' ? 'ЗАМОВЛЕННЯ ПРИЙНЯТО! 🩸' : 'ORDER RECEIVED! 🩸';
         const msgFail = lang === 'ua' ? 'ПОМИЛКА ВІДПРАВКИ!' : 'SENDING ERROR!';
 
-        if (!fio || !/^\+?380\d{9}$/.test(phone) || !np) return showToast(msgErr);
-        if (phone.startsWith('+')) phone = phone.slice(1);
+        if (!fio || phone.length < 10 || !np) return showToast(msgErr);
 
         btn.innerText = msgWait;
         btn.disabled = true;
 
-        let total = lang === 'ua' ? cart.reduce((sum, i) => sum + i.priceUah, 0) : cart.reduce((sum, i) => sum + i.priceUsd, 0);
-        let currency = lang === 'ua' ? '₴' : '$';
-        let itemsInfo = cart.map((item, idx) => `${idx + 1}. ${item.name} (${item.size}) — ${lang === 'ua' ? item.priceUah + '₴' : item.priceUsd + '$'}`).join('\n');
+        let total = cart.reduce((sum, i) => sum + i.price, 0);
+        let itemsInfo = cart.map((item, idx) => `${idx + 1}. ${item.name} (${item.size}) — ${item.price}₴`).join('\n');
         let tgText = tg ? `\n✈️ <b>TG:</b> ${tg}` : "";
-        let messageText = `<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>\n\n👤 <b>ПІБ:</b> ${fio}\n📞 <b>Тел:</b> ${phone}${tgText}\n📦 <b>НП:</b> ${np}\n\n${itemsInfo}\n<b>💰 СУМА: ${total}${currency}</b>`;
+        let messageText = `<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>\n\n👤 <b>ПІБ:</b> ${fio}\n📞 <b>Тел:</b> ${phone}${tgText}\n📦 <b>НП:</b> ${np}\n\n${itemsInfo}\n<b>💰 СУМА: ${total}₴</b>`;
 
         try {
             const response = await fetch('/api/send', {
@@ -1221,119 +1226,88 @@
                 document.getElementById('cart-count').innerText = 0;
                 closeOrderForm();
             } else {
-                throw new Error('Send failed');
+                throw new Error();
             }
         } catch (e) {
-            console.error('Error sending order:', e);
             showToast(msgFail);
             btn.innerText = lang === 'ua' ? 'ПІДТВЕРДИТИ' : 'CONFIRM';
             btn.disabled = false;
         }
     }
 
-    function escapeHtml(unsafe) {
-        return unsafe
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
     function openPrivacy() {
-        document.getElementById('privacyModal').style.display = 'flex';
-    }
+    document.getElementById('privacyModal').style.display = 'flex';
+}
 
-    function closePrivacy() {
-        document.getElementById('privacyModal').style.display = 'none';
-    }
+function closePrivacy() {
+    document.getElementById('privacyModal').style.display = 'none';
+}
 
-    function filterProducts(category) {
-        const cards = document.querySelectorAll('.product-card');
-        const buttons = document.querySelectorAll('.filter-btn');
+function filterProducts(category) {
+    const cards = document.querySelectorAll('.product-card');
+    const buttons = document.querySelectorAll('.filter-btn');
 
-        // 1. Керування підсвічуванням кнопок
-        buttons.forEach(btn => {
-            // Отримуємо текст кнопки та категорію з onclick для точності
-            const btnOnClick = btn.getAttribute('onclick');
-            
-            if (btnOnClick.includes(`'${category}'`)) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-
-        // 2. Фільтрація карток з анімацією
-        cards.forEach(card => {
-            const cardCategory = card.getAttribute('data-category').toLowerCase();
-            const filterCat = category.toLowerCase();
-            
-            if (filterCat === 'all' || cardCategory === filterCat) {
-                // Показуємо: спочатку display, потім прибираємо клас hidden для анімації
-                card.style.display = 'flex';
-                setTimeout(() => {
-                    card.classList.remove('hidden');
-                }, 10);
-            } else {
-                // Ховаємо: спочатку додаємо hidden (opacity 0), потім прибираємо display
-                card.classList.add('hidden');
-                setTimeout(() => {
-                    if (card.classList.contains('hidden')) {
-                        card.style.display = 'none';
-                    }
-                }, 400); // Час збігається з CSS transition
-            }
-        });
-    }
-
-    // Функция переключения языка
-    function setLang(lang) {
-        localStorage.setItem('preferred_lang', lang);
-        document.documentElement.lang = lang === 'ua' ? 'uk' : 'en';
+    // 1. Керування підсвічуванням кнопок
+    buttons.forEach(btn => {
+        // Отримуємо текст кнопки та категорію з onclick для точності
+        const btnOnClick = btn.getAttribute('onclick');
         
-        document.querySelectorAll('[data-ua]').forEach(el => {
-            const translation = el.getAttribute('data-' + lang);
-            if (translation) {
-                el.innerText = translation;
-            }
-        });
-
-        // Обновляем цены
-        document.querySelectorAll('.price').forEach(el => {
-            const val = lang === 'ua' ? el.getAttribute('data-uah') : el.getAttribute('data-usd');
-            const currency = lang === 'ua' ? '₴' : '$';
-            el.innerText = `${val}${currency}`;
-        });
-
-        updatePlaceholders(lang);
-
-        // Цей рядок змусить кошик перемалюватися з новою мовою "Total/Всього"
-        renderCart();
-
-        const uaBtn = document.getElementById('lang-ua');
-        const engBtn = document.getElementById('lang-eng');
-        if (uaBtn && engBtn) {
-            uaBtn.classList.toggle('active', lang === 'ua');
-            engBtn.classList.toggle('active', lang === 'eng');
+        if (btnOnClick.includes(`'${category}'`)) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
         }
+    });
+
+    // 2. Фільтрація карток з анімацією
+    cards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+        
+        if (category === 'all' || cardCategory === category) {
+            // Показуємо: спочатку display, потім прибираємо клас hidden для анімації
+            card.style.display = 'flex';
+            setTimeout(() => {
+                card.classList.remove('hidden');
+            }, 10);
+        } else {
+            // Ховаємо: спочатку додаємо hidden (opacity 0), потім прибираємо display
+            card.classList.add('hidden');
+            setTimeout(() => {
+                if (card.classList.contains('hidden')) {
+                    card.style.display = 'none';
+                }
+            }, 400); // Час збігається з CSS transition
+        }
+    });
+}
+
+// Функция переключения языка
+function setLang(lang) {
+    localStorage.setItem('preferred_lang', lang);
+    
+    document.querySelectorAll('[data-ua]').forEach(el => {
+        const translation = el.getAttribute('data-' + lang);
+        if (translation) {
+            el.innerText = translation;
+        }
+    });
+
+    // Цей рядок змусить кошик перемалюватися з новою мовою "Total/Всього"
+    renderCart();
+
+    const uaBtn = document.getElementById('lang-ua');
+    const engBtn = document.getElementById('lang-eng');
+    if (uaBtn && engBtn) {
+        uaBtn.classList.toggle('active', lang === 'ua');
+        engBtn.classList.toggle('active', lang === 'eng');
     }
+}
 
-    // Запускаем проверку языка сразу при загрузке страницы
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedLang = localStorage.getItem('preferred_lang') || 'ua';
-        setLang(savedLang);
-    });
-
-    // Keyboard navigation for filters and gallery
-    document.querySelectorAll('.filter-btn, .gallery-nav').forEach(btn => {
-        btn.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                btn.click();
-            }
-        });
-    });
+// Запускаем проверку языка сразу при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('preferred_lang') || 'ua';
+    setLang(savedLang);
+});
 
 </script>
 <div id="privacyModal" class="modal" style="display: none; align-items: center; justify-content: center; z-index: 10000; background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
