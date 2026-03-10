@@ -1042,8 +1042,11 @@
 
 <footer style="margin-top: 50px; padding: 40px 20px; text-align: center; border-top: 1px solid #1a1a1a;">
     <div style="margin-bottom: 25px;">
-        <p data-ua="Контакт оператора (Telegram)" data-eng="Operator contact (Telegram)" style="font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">Контакт оператора (Telegram)</p>
-        <a href="https://t.me/Hardcore_Division_bot" target="_blank" style="
+        <p id="contact-title" style="font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">
+            Контакт оператора
+        </p>
+
+        <a id="contact-link" href="#" style="
             display: inline-block;
             color: #ccc;
             text-decoration: none;
@@ -1055,9 +1058,9 @@
             padding: 12px 24px;
             transition: all 0.4s ease;
             background: rgba(255, 255, 255, 0.02);
-        " onmouseover="this.style.borderColor='#ff0000'; this.style.color='#ff0000'; this.style.boxShadow='0 0 15px rgba(255,0,0,0.2)';" 
-           onmouseout="this.style.borderColor='#222'; this.style.color='#ccc'; this.style.boxShadow='none';">
-            @Hardcore_Division_bot
+        " 
+        onmouseover="this.style.borderColor='#ff0000'; this.style.color='#ff0000'; this.style.boxShadow='0 0 15px rgba(255,0,0,0.2)';" 
+        onmouseout="this.style.borderColor='#222'; this.style.color='#ccc'; this.style.boxShadow='none';">
         </a>
     </div>
 
@@ -1411,6 +1414,110 @@ function updatePrices(lang) {
 document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('preferred_lang') || 'ua';
     setLang(savedLang);
+});
+
+function updateContact() {
+    const now = new Date();
+    
+    const kyivHour = parseInt(new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Europe/Kyiv',
+        hour: 'numeric',
+        hour12: false
+    }).format(now));
+
+    const linkContainer = document.getElementById("contact-link");
+    const title = document.getElementById("contact-title");
+
+    // Определяем язык
+    const lang = localStorage.getItem('preferred_lang') || 'ua';
+
+    // Тексты для UA и ENG
+    const texts = {
+        ua: {
+            onlineTitle: "Оператор онлайн",
+            offlineTitle: "Оператор офлайн",
+            telegramText: "Напишіть у Telegram",
+        },
+        eng: {
+            onlineTitle: "Operator online",
+            offlineTitle: "Operator offline",
+            telegramText: "Message on Telegram",
+        }
+    };
+
+    const t = texts[lang];
+
+    if (kyivHour >= 9 && kyivHour < 20) {
+        // Онлайн — две отдельные кнопки
+        title.textContent = t.onlineTitle;
+
+        linkContainer.innerHTML = `
+            <a href="tel:+380665615906" style="
+                display: inline-block;
+                color: #ccc;
+                text-decoration: none;
+                font-size: 15px;
+                font-family: monospace;
+                font-weight: bold;
+                letter-spacing: 2px;
+                border: 1px solid #222;
+                padding: 12px 24px;
+                transition: all 0.4s ease;
+                background: rgba(255, 255, 255, 0.02);
+                margin-right: 10px;
+            "
+            onmouseover="this.style.borderColor='#ff0000'; this.style.color='#ff0000'; this.style.boxShadow='0 0 15px rgba(255,0,0,0.2)';" 
+            onmouseout="this.style.borderColor='#222'; this.style.color='#ccc'; this.style.boxShadow='none';">
+                📞 +380 66 561 59 06
+            </a>
+
+            <a href="https://t.me/Hardcore_Division_bot" target="_blank" style="
+                display: inline-block;
+                color: #ccc;
+                text-decoration: none;
+                font-size: 15px;
+                font-family: monospace;
+                font-weight: bold;
+                letter-spacing: 2px;
+                border: 1px solid #222;
+                padding: 12px 24px;
+                transition: all 0.4s ease;
+                background: rgba(255, 255, 255, 0.02);
+            "
+            onmouseover="this.style.borderColor='#ff0000'; this.style.color='#ff0000'; this.style.boxShadow='0 0 15px rgba(255,0,0,0.2)';" 
+            onmouseout="this.style.borderColor='#222'; this.style.color='#ccc'; this.style.boxShadow='none';">
+                🤖 Telegram
+            </a>
+        `;
+    } else {
+        // Офлайн — одна кнопка Telegram
+        title.textContent = t.offlineTitle;
+
+        linkContainer.innerHTML = `
+            <a href="https://t.me/Hardcore_Division_bot" target="_blank" style="
+                display: inline-block;
+                color: #ccc;
+                text-decoration: none;
+                font-size: 15px;
+                font-family: monospace;
+                font-weight: bold;
+                letter-spacing: 2px;
+                border: 1px solid #222;
+                padding: 12px 24px;
+                transition: all 0.4s ease;
+                background: rgba(255, 255, 255, 0.02);
+            "
+            onmouseover="this.style.borderColor='#ff0000'; this.style.color='#ff0000'; this.style.boxShadow='0 0 15px rgba(255,0,0,0.2)';" 
+            onmouseout="this.style.borderColor='#222'; this.style.color='#ccc'; this.style.boxShadow='none';">
+                🤖 ${t.telegramText}
+            </a>
+        `;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateContact();
+    setInterval(updateContact, 60000);
 });
 
 </script>
