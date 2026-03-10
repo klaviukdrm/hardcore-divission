@@ -428,7 +428,7 @@
     cursor: pointer;
     font-size: 1.4rem; /* Сделал БОЛЬШИМИ буквами */
     font-weight: 900;
-    color: #333; /* Темно-серый для неактивного */
+    color: #8b8b8b; /* Темно-серый для неактивного */
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     letter-spacing: 3px; /* Разрядил буквы для стиля */
@@ -465,6 +465,62 @@
 @keyframes line-grow {
     from { width: 0; left: 50%; }
     to { width: 100%; left: 0; }
+}
+
+/* Новые стили для FAQ в корзине */
+.faq-btn {
+    background: transparent;
+    border: 1px solid var(--blood);
+    color: var(--blood);
+    padding: 10px;
+    width: 100%;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    margin: 10px 0;
+}
+
+.faq-btn:hover {
+    background: var(--blood);
+    color: white;
+}
+
+#faqSection {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    background: #111;
+    padding: 0 15px;
+    border: 1px solid #333;
+    margin-bottom: 15px;
+}
+
+#faqSection.faq-open {
+    max-height: 500px; /* Достаточно для контента, можно увеличить */
+    padding: 15px;
+}
+
+#faqSection ul {
+    list-style: none;
+    font-size: 0.9rem;
+    color: #bbb;
+}
+
+#faqSection li {
+    margin-bottom: 15px;
+}
+
+#faqSection h4 {
+    color: var(--blood);
+    margin-bottom: 5px;
+    font-size: 1rem;
+}
+
+#faqSection p {
+    color: #ddd;
+    line-height: 1.4;
 }
     </style>
 </head>
@@ -510,6 +566,32 @@
         <div id="cartItemsList"></div>
         
         <div id="cartTotal" style="font-weight: bold; font-size: 1.1rem; margin: 20px 0;">Всього: 0₴</div>
+        
+        <!-- Новая кнопка FAQ -->
+        <button class="faq-btn" data-ua="ЧАСТІ ЗАПИТАННЯ" data-eng="FAQ" onclick="toggleFAQ()">ЧАСТІ ЗАПИТАННЯ</button>
+        
+        <!-- Новый блок FAQ (скрытый по умолчанию) -->
+        <div id="faqSection">
+            <ul>
+                <li>
+                    <h4 data-ua="Чи можна накладним платежем?" data-eng="Can I pay on delivery?">Чи можна накладним платежем?</h4>
+                    <p data-ua="Ні, тільки повна передплата." data-eng="No, only full prepayment.">Ні, тільки повна передплата.</p>
+                </li>
+                <li>
+                    <h4 data-ua="Скільки часу на відправку?" data-eng="How long for shipping?">Скільки часу на відправку?</h4>
+                    <p data-ua="3-5 робочих днів." data-eng="3-5 business days.">3-5 робочих днів.</p>
+                </li>
+                <li>
+                    <h4 data-ua="Як підібрати розмір?" data-eng="How to choose the size?">Як підібрати розмір?</h4>
+                    <p data-ua="Зайдіть у розмірну сітку для коректного вибору." data-eng="Check the size guide for accurate selection.">Зайдіть у розмірну сітку для коректного вибору.</p>
+                </li>
+                <li>
+                    <h4 data-ua="Чи є повернення, якщо розмір не підійшов?" data-eng="Is there a return if the size doesn't fit?">Чи є повернення, якщо розмір не підійшов?</h4>
+                    <p data-ua="Ні, повернення немає, уважно обирайте розмір." data-eng="No, returns are not available, please choose the size carefully.">Ні, повернення немає, уважно обирайте розмір.</p>
+                </li>
+                <!-- Добавь здесь більше li с вопросами, если нужно -->
+            </ul>
+        </div>
         
         <button class="buy-btn" data-ua="ОФОРМИТИ ЗАМОВЛЕННЯ" data-eng="CHECKOUT" onclick="openOrderForm()">ОФОРМИТИ ЗАМОВЛЕННЯ</button>
     </div>
@@ -591,7 +673,7 @@
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
                     <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
                 </select>
-                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('ONLY BLOOD', 1750, 40, 'size-1')">В КОШИК</button>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('BLOOD ON MY KNIFE HOODIE', 1750, 40, 'size-1')">В КОШИК</button>
             </div>
         </div>
     </div>
@@ -613,7 +695,7 @@
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
                     <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
                 </select>
-                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE BLOOD', 1750, 40, 'size-2')">В КОШИК</button>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE ONLY BLOOD HOODIE', 1750, 40, 'size-2')">В КОШИК</button>
             </div>
         </div>
     </div>
@@ -679,7 +761,7 @@
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
                     <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
                 </select>
-                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE NATION', 1750, 40, 'size-5')">В КОШИК</button>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE NATION HOODIE', 1750, 40, 'size-5')">В КОШИК</button>
             </div>
         </div>
     </div>
@@ -701,7 +783,7 @@
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
                     <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
                 </select>
-                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE HAMMER', 1850, 45, 'size-6')">В КОШИК</button>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE HAMMER HOODIE', 1850, 45, 'size-6')">В КОШИК</button>
             </div>
         </div>
     </div>
@@ -723,7 +805,7 @@
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
                     <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
                 </select>
-                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('MILITANT PRO', 1750, 40, 'size-7')">В КОШИК</button>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('MILITANT PRO HOODIE', 1750, 40, 'size-7')">В КОШИК</button>
             </div>
         </div>
     </div>
@@ -846,7 +928,7 @@
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
                     <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
                 </select>
-                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Blood on my knife', 800, 20, 'size-f3')">В КОШИК</button>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Blood on my knife T-Shirt', 800, 20, 'size-f3')">В КОШИК</button>
             </div>
         </div>
     </div>
@@ -922,7 +1004,7 @@
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
                     <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
                 </select>
-                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Only Blood', 800, 20, 'size-f7')">В КОШИК</button>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('Only Blood T-Shirt', 800, 20, 'size-f7')">В КОШИК</button>
             </div>
         </div>
     </div>
@@ -1077,6 +1159,12 @@
 
     document.getElementById('cartTotal').innerText = `${totalText}: ${total}${currency}`;
 }
+
+    // Новая функция для toggle FAQ
+    function toggleFAQ() {
+        const faqSection = document.getElementById('faqSection');
+        faqSection.classList.toggle('faq-open');
+    }
 
     function openOrderForm() {
     if (cart.length === 0) return showToast('КОШИК ПОРОЖНІЙ!');
