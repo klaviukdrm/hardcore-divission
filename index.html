@@ -21,10 +21,17 @@
             text-align: center;
             border-bottom: 2px solid var(--blood);
             background: rgba(0,0,0,0.9);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
             z-index: 100;
             overflow: visible;
-            /* Видалено: position: fixed; top: 0; left: 0; width: 100%; transition: transform 0.4s ease-in-out; */
-            /* Видалено: .header-hidden { transform: translateY(-100%); } */
+            transition: transform 0.4s ease-in-out;
+        }
+
+        header.header-hidden {
+            transform: translateY(-100%);
         }
 
         * {
@@ -39,7 +46,7 @@
             color: var(--text);
             font-family: 'Oswald', sans-serif;
             overflow-x: hidden;
-            /* Видалено: padding-top: 100px; */
+            padding-top: 100px;
         }
 
         body::before {
@@ -1068,7 +1075,14 @@
     let paymentScreenshot = null;
     let lastScrollTop = 0;
 
-    /* Видалено: window.onscroll = function() { ... }; */
+    window.onscroll = function() {
+        let header = document.getElementById("mainHeader");
+        if (window.scrollY > 100) {
+            header.classList.add("header-hidden");
+        } else {
+            header.classList.remove("header-hidden");
+        }
+    };
 
     function showToast(text) {
         const container = document.getElementById('toast-container');
