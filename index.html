@@ -1425,93 +1425,18 @@ function updateContact() {
         hour12: false
     }).format(now));
 
-    const linkContainer = document.getElementById("contact-link");
+    const link = document.getElementById("contact-link");
     const title = document.getElementById("contact-title");
 
-    // Определяем язык
-    const lang = localStorage.getItem('preferred_lang') || 'ua';
-
-    // Тексты для UA и ENG
-    const texts = {
-        ua: {
-            onlineTitle: "Оператор онлайн",
-            offlineTitle: "Оператор офлайн",
-            telegramText: "Напишіть у Telegram",
-        },
-        eng: {
-            onlineTitle: "Operator online",
-            offlineTitle: "Operator offline",
-            telegramText: "Message on Telegram",
-        }
-    };
-
-    const t = texts[lang];
-
     if (kyivHour >= 9 && kyivHour < 20) {
-        // Онлайн — две отдельные кнопки
-        title.textContent = t.onlineTitle;
-
-        linkContainer.innerHTML = `
-            <a href="tel:+380665615906" style="
-                display: inline-block;
-                color: #ccc;
-                text-decoration: none;
-                font-size: 15px;
-                font-family: monospace;
-                font-weight: bold;
-                letter-spacing: 2px;
-                border: 1px solid #222;
-                padding: 12px 24px;
-                transition: all 0.4s ease;
-                background: rgba(255, 255, 255, 0.02);
-                margin-right: 10px;
-            "
-            onmouseover="this.style.borderColor='#ff0000'; this.style.color='#ff0000'; this.style.boxShadow='0 0 15px rgba(255,0,0,0.2)';" 
-            onmouseout="this.style.borderColor='#222'; this.style.color='#ccc'; this.style.boxShadow='none';">
-                📞 +380 66 561 59 06
-            </a>
-
-            <a href="https://t.me/Hardcore_Division_bot" target="_blank" style="
-                display: inline-block;
-                color: #ccc;
-                text-decoration: none;
-                font-size: 15px;
-                font-family: monospace;
-                font-weight: bold;
-                letter-spacing: 2px;
-                border: 1px solid #222;
-                padding: 12px 24px;
-                transition: all 0.4s ease;
-                background: rgba(255, 255, 255, 0.02);
-            "
-            onmouseover="this.style.borderColor='#ff0000'; this.style.color='#ff0000'; this.style.boxShadow='0 0 15px rgba(255,0,0,0.2)';" 
-            onmouseout="this.style.borderColor='#222'; this.style.color='#ccc'; this.style.boxShadow='none';">
-                🤖 Telegram
-            </a>
-        `;
+        title.textContent = "Контакт оператора";
+        link.textContent = "+380 66 561 59 06";
+        link.href = "tel:+380665615906";
     } else {
-        // Офлайн — одна кнопка Telegram
-        title.textContent = t.offlineTitle;
-
-        linkContainer.innerHTML = `
-            <a href="https://t.me/Hardcore_Division_bot" target="_blank" style="
-                display: inline-block;
-                color: #ccc;
-                text-decoration: none;
-                font-size: 15px;
-                font-family: monospace;
-                font-weight: bold;
-                letter-spacing: 2px;
-                border: 1px solid #222;
-                padding: 12px 24px;
-                transition: all 0.4s ease;
-                background: rgba(255, 255, 255, 0.02);
-            "
-            onmouseover="this.style.borderColor='#ff0000'; this.style.color='#ff0000'; this.style.boxShadow='0 0 15px rgba(255,0,0,0.2)';" 
-            onmouseout="this.style.borderColor='#222'; this.style.color='#ccc'; this.style.boxShadow='none';">
-                🤖 ${t.telegramText}
-            </a>
-        `;
+        title.textContent = "Контакт оператора (Telegram)";
+        link.textContent = "@Hardcore_Division_bot";
+        link.href = "https://t.me/Hardcore_Division_bot";
+        link.target = "_blank";
     }
 }
 
