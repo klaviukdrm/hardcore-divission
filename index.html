@@ -1410,32 +1410,33 @@ function updatePrices(lang) {
   });
 }
 
-// Запускаем проверку языка сразу при загрузке страницы
-document.addEventListener('DOMContentLoaded', () => {
-    const savedLang = localStorage.getItem('preferred_lang') || 'ua';
-    setLang(savedLang);
-});
-
 function updateContact() {
     const link = document.getElementById("contact-link");
     const title = document.getElementById("contact-title");
 
-    // ВСЕГДА только ТГ-бот (номер телефона полностью удалён из кода)
+    // ВСЕГДА только ТГ-бот
     title.textContent = "Контакт оператора (Telegram)";
     link.href = "https://t.me/Hardcore_Division_bot";
     link.target = "_blank";
 
-    // Вставляем текст + мигающий зелёный круг прямо рядом с ником
-    link.innerHTML = `@Hardcore_Division_bot <span style="display:inline-block;width:12px;height:12px;background:#00ff00;border-radius:50%;margin-left:8px;vertical-align:middle;box-shadow:0 0 10px #00ff00;animation:blink-green 1.2s infinite;"></span>`;
+    // Мигающий зелёный круг (теперь медленнее и мягче)
+    link.innerHTML = `@Hardcore_Division_bot 
+        <span style="display:inline-block;width:12px;height:12px;background:#00ff00;border-radius:50%;margin-left:8px;vertical-align:middle;box-shadow:0 0 8px #00ff00;animation:blink-green 2.8s infinite ease-in-out;"></span>`;
 
-    // Добавляем анимацию мигания один раз (больше не трогаем ничего в документе)
+    // Обновлённая анимация (медленнее + менее агрессивное затухание)
     if (!document.getElementById('blink-style')) {
         const style = document.createElement('style');
         style.id = 'blink-style';
         style.innerHTML = `
             @keyframes blink-green {
-                0%, 100% { opacity: 1.5; }
-                30% { opacity: 0.55; }
+                0%, 100% { 
+                    opacity: 1; 
+                    box-shadow: 0 0 8px #00ff00;
+                }
+                50% { 
+                    opacity: 0.55; 
+                    box-shadow: 0 0 3px #00ff00;
+                }
             }
         `;
         document.head.appendChild(style);
