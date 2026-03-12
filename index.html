@@ -1410,6 +1410,12 @@ function updatePrices(lang) {
   });
 }
 
+// Запускаем проверку языка сразу при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('preferred_lang') || 'ua';
+    setLang(savedLang);
+});
+
 function updateContact() {
     const link = document.getElementById("contact-link");
     const title = document.getElementById("contact-title");
