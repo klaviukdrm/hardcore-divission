@@ -4,6 +4,7 @@ let cart = [];
     let paymentScreenshot = null;
     let orderRegion = 'ua';
     let orderStep = 'payment';
+    let deliveryData = null;
     let lastScrollTop = 0;
 
     window.onscroll = function() {
@@ -253,7 +254,7 @@ let cart = [];
                  <input type="file" id="orderScreenshot" accept="image/*" style="width:100%; font-size:0.8rem; color:#ccc;" onchange="handleFileSelect(event)">
             </div>
             
-            <button class="buy-btn" id="payBtn" style="margin-top:20px; opacity: 0.5;" onclick="showDeliveryInputs()" disabled>${t.btn}</button>
+            <button class="buy-btn" id="payBtn" style="margin-top:20px; opacity: 0.5;" onclick="finalizeOrder()" disabled>${t.btn}</button>
         `;
         document.getElementById('orderModal').style.display = 'flex';
 
@@ -270,7 +271,8 @@ let cart = [];
     if (cart.length === 0) return showToast(lang === 'ua' ? 'КОШИК ПОРОЖНІЙ!' : 'CART IS EMPTY!');
     document.getElementById('cartModal').style.display = 'none';
     orderRegion = 'ua';
-    renderOrderPayment();
+    deliveryData = null;
+    renderDeliveryForm();
 }
 
     function compressImageDataUrl(dataUrl, maxSize, quality) {
@@ -319,13 +321,6 @@ let cart = [];
     }
 }
 
-    function showDeliveryInputs() {
-        const lang = localStorage.getItem('preferred_lang') || 'ua';
-        const t = { err: lang === 'ua' ? 'ДОДАЙ СКРІНШОТ!' : 'ADD SCREENSHOT!' };
-        if(!paymentScreenshot) return showToast(t.err);
-        renderDeliveryForm();
-    }
-
     function renderDeliveryForm() {
         const lang = localStorage.getItem('preferred_lang') || 'ua';
         orderStep = 'delivery';
@@ -336,7 +331,7 @@ let cart = [];
             phone: lang === 'ua' ? 'Номер телефону' : 'Phone Number',
             np: lang === 'ua' ? 'Місто та № відділення НП' : 'City & Nova Poshta Dept',
             tg: lang === 'ua' ? "Ваш Telegram (необов'язково)" : "Your Telegram (optional)",
-            btn: lang === 'ua' ? 'ПІДТВЕРДИТИ' : 'CONFIRM',
+            btn: lang === 'ua' ? 'ДАЛІ ДО ОПЛАТИ' : 'NEXT: PAYMENT',
 
             country: lang === 'ua' ? 'Країна' : 'Country',
             state: lang === 'ua' ? 'Штат/регіон' : 'State/Region',
@@ -376,9 +371,65 @@ let cart = [];
             ${regionSwitch}
             <div class="order-form">
                 ${orderRegion === 'ua' ? uaFields : worldFields}
-                <button class="buy-btn" id="confirmBtn" onclick="finalizeOrder()">${t.btn}</button>
+                <button class="buy-btn" id="confirmBtn" onclick="proceedToPayment()">${t.btn}</button>
             </div>
         `;
+        document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    function proceedToPayment() {
+        const lang = localStorage.getItem('preferred_lang') || 'ua';
+        const msgErrUa = lang === 'ua' ? 'ПЕРЕВІРТЕ ДАНІ ТА НОМЕР!' : 'CHECK DATA & NUMBER!';
+        const msgErrWorld = lang === 'ua' ? 'ЗАПОВНІТЬ УСІ ПОЛЯ (EMAIL)!' : 'FILL ALL FIELDS (EMAIL)!';
+
+        if (orderRegion === 'ua') {
+            const fio = document.getElementById('orderFIO').value;
+            const phoneRaw = document.getElementById('orderPhone').value;
+            const phone = phoneRaw.replace(/\\D/g, '');
+            const np = document.getElementById('orderNP').value;
+            const tg = document.getElementById('orderTG').value;
+
+            if (!fio || phone.length < 10 || !np) return showToast(msgErrUa);
+
+            deliveryData = {
+                region: 'ua',
+                data: { fio, phone, np, tg }
+            };
+        } else {
+            const country = document.getElementById('orderCountry').value.trim();
+            const state = document.getElementById('orderState').value.trim();
+            const postal = document.getElementById('orderPostal').value.trim();
+            const city = document.getElementById('orderCity').value.trim();
+            const phoneLocalRaw = document.getElementById('orderPhoneLocal').value.trim();
+            const phoneLocalDigits = phoneLocalRaw.replace(/\\D/g, '');
+            const nameLatin = document.getElementById('orderNameLatin').value.trim();
+            const email = document.getElementById('orderEmail').value.trim();
+            const postOffice = document.getElementById('orderPostOffice').value.trim();
+            const residence = document.getElementById('orderResidence').value.trim();
+
+            const emailOk = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
+
+            if (!country || !state || !postal || !city || !phoneLocalRaw || phoneLocalDigits.length < 6 || !nameLatin || !email || !emailOk || !postOffice || !residence) {
+                return showToast(msgErrWorld);
+            }
+
+            deliveryData = {
+                region: 'world',
+                data: {
+                    country,
+                    state,
+                    postal,
+                    city,
+                    phoneLocal: phoneLocalRaw,
+                    nameLatin,
+                    email,
+                    postOffice,
+                    residence
+                }
+            };
+        }
+
+        renderOrderPayment();
     }
 
     function closeOrderForm() { 
@@ -386,17 +437,53 @@ let cart = [];
         paymentScreenshot = null; 
         orderRegion = 'ua';
         orderStep = 'payment';
+        deliveryData = null;
+    }
+
+    function renderOrderSuccess() {
+        const lang = localStorage.getItem('preferred_lang') || 'ua';
+        orderStep = 'success';
+
+        const t = {
+            title: lang === 'ua' ? 'ЗАМОВЛЕННЯ УСПІШНЕ' : 'ORDER SUCCESS',
+            text: lang === 'ua'
+                ? 'Замовлення успішно оформлено. Очікуйте відправку протягом 3–5 робочих днів.'
+                : 'Order successfully placed. Please expect shipping within 3–5 business days.',
+            questions: lang === 'ua' ? 'З усіх питань:' : 'For any questions:',
+            btn: lang === 'ua' ? 'ЗАКРИТИ' : 'CLOSE'
+        };
+
+        document.getElementById('orderModalContent').innerHTML = `
+            <div class="close-btn" onclick="closeOrderForm()">&#10005;</div>
+            <h2 style="color: var(--blood); margin-bottom: 15px;">${t.title}</h2>
+            <div style="background:#000; padding:15px; border:1px solid #222; font-size:0.9rem; color:#ddd; line-height:1.6; text-align:left;">
+                <p style="margin-bottom:10px;">${t.text}</p>
+                <p>${t.questions} <a href="https://t.me/Hardcore_Division_bot" target="_blank" style="color: var(--blood); text-decoration: none;">@Hardcore_Division_bot</a></p>
+            </div>
+            <button class="buy-btn" style="margin-top:20px;" onclick="closeOrderForm()">${t.btn}</button>
+        `;
+        document.getElementById('orderModal').style.display = 'flex';
     }
 
     async function finalizeOrder() {
         const lang = localStorage.getItem('preferred_lang') || 'ua';
-        const btn = document.getElementById('confirmBtn');
+        const btn = document.getElementById('payBtn');
 
         const msgErrUa = lang === 'ua' ? 'ПЕРЕВІРТЕ ДАНІ ТА НОМЕР!' : 'CHECK DATA & NUMBER!';
         const msgErrWorld = lang === 'ua' ? 'ЗАПОВНІТЬ УСІ ПОЛЯ (EMAIL)!' : 'FILL ALL FIELDS (EMAIL)!';
+        const msgNeedScreenshot = lang === 'ua' ? 'ДОДАЙ СКРІНШОТ!' : 'ADD SCREENSHOT!';
+        const msgNeedDelivery = lang === 'ua' ? 'СПОЧАТКУ ЗАПОВНІТЬ ДОСТАВКУ!' : 'FILL DELIVERY FIRST!';
         const msgWait = lang === 'ua' ? 'ВІДПРАВКА...' : 'SENDING...';
         const msgSuccess = lang === 'ua' ? 'ЗАМОВЛЕННЯ ПРИЙНЯТО! 🩸' : 'ORDER RECEIVED! 🩸';
         const msgFail = lang === 'ua' ? 'ПОМИЛКА ВІДПРАВКИ!' : 'SENDING ERROR!';
+        const payLabel = lang === 'ua' ? 'Я ОПЛАТИВ' : 'I PAID';
+
+        if (!paymentScreenshot) return showToast(msgNeedScreenshot);
+        if (!deliveryData || deliveryData.region !== orderRegion) {
+            showToast(msgNeedDelivery);
+            renderDeliveryForm();
+            return;
+        }
 
         btn.innerText = msgWait;
         btn.disabled = true;
@@ -407,14 +494,13 @@ let cart = [];
         let messageText = '';
 
         if (orderRegion === 'ua') {
-            const fio = document.getElementById('orderFIO').value;
-            const phoneRaw = document.getElementById('orderPhone').value;
-            const phone = phoneRaw.replace(/\D/g, '');
-            const np = document.getElementById('orderNP').value;
-            const tg = document.getElementById('orderTG').value;
+            const fio = deliveryData.data.fio;
+            const phone = deliveryData.data.phone;
+            const np = deliveryData.data.np;
+            const tg = deliveryData.data.tg;
 
-            if (!fio || phone.length < 10 || !np) {
-                btn.innerText = lang === 'ua' ? 'ПІДТВЕРДИТИ' : 'CONFIRM';
+            if (!fio || !phone || phone.length < 10 || !np) {
+                btn.innerText = payLabel;
                 btn.disabled = false;
                 return showToast(msgErrUa);
             }
@@ -422,21 +508,21 @@ let cart = [];
             let tgText = tg ? `\n✈️ <b>TG:</b> ${tg}` : "";
             messageText = `<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>\n\n👤 <b>ПІБ:</b> ${fio}\n📞 <b>Тел:</b> ${phone}${tgText}\n📦 <b>НП:</b> ${np}\n\n${itemsInfo}\n<b>💰 СУМА: ${total}${currency}</b>`;
         } else {
-            const country = document.getElementById('orderCountry').value.trim();
-            const state = document.getElementById('orderState').value.trim();
-            const postal = document.getElementById('orderPostal').value.trim();
-            const city = document.getElementById('orderCity').value.trim();
-            const phoneLocalRaw = document.getElementById('orderPhoneLocal').value.trim();
+            const country = deliveryData.data.country;
+            const state = deliveryData.data.state;
+            const postal = deliveryData.data.postal;
+            const city = deliveryData.data.city;
+            const phoneLocalRaw = deliveryData.data.phoneLocal;
             const phoneLocalDigits = phoneLocalRaw.replace(/\D/g, '');
-            const nameLatin = document.getElementById('orderNameLatin').value.trim();
-            const email = document.getElementById('orderEmail').value.trim();
-            const postOffice = document.getElementById('orderPostOffice').value.trim();
-            const residence = document.getElementById('orderResidence').value.trim();
+            const nameLatin = deliveryData.data.nameLatin;
+            const email = deliveryData.data.email;
+            const postOffice = deliveryData.data.postOffice;
+            const residence = deliveryData.data.residence;
 
             const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
             if (!country || !state || !postal || !city || !phoneLocalRaw || phoneLocalDigits.length < 6 || !nameLatin || !email || !emailOk || !postOffice || !residence) {
-                btn.innerText = lang === 'ua' ? 'ПІДТВЕРДИТИ' : 'CONFIRM';
+                btn.innerText = payLabel;
                 btn.disabled = false;
                 return showToast(msgErrWorld);
             }
@@ -473,13 +559,16 @@ let cart = [];
                 showToast(msgSuccess);
                 cart = [];
                 document.getElementById('cart-count').innerText = 0;
-                closeOrderForm();
+                paymentScreenshot = null;
+                deliveryData = null;
+                orderRegion = 'ua';
+                renderOrderSuccess();
             } else {
                 throw new Error();
             }
         } catch (e) {
             showToast(msgFail);
-            btn.innerText = lang === 'ua' ? 'ПІДТВЕРДИТИ' : 'CONFIRM';
+            btn.innerText = payLabel;
             btn.disabled = false;
         }
     }
