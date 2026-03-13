@@ -5,6 +5,13 @@
             --gray: #1a1a1a;
             --text: #e0e0e0;
         }
+@font-face {
+    font-family: 'AncientMedium';
+    src: url('fonts/Ancient Medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 
         header {
             padding: 10px;
@@ -55,8 +62,8 @@
         }
 
         .logo {
-            font-family: 'Nosifer', cursive;
-            font-size: 2rem;
+            font-family: 'AncientMedium', serif;
+            font-size: 2.64rem;
             color: var(--blood);
             text-shadow: 0 0 10px rgba(136, 8, 8, 0.8);
             letter-spacing: 2px;
@@ -246,7 +253,7 @@
 
         @media (max-width: 768px) {
             header { position: fixed; }
-            .logo { font-size: 1.6rem; }
+            .logo { font-size: 2.112rem; }
             .hero-text h2 { font-size: 2.2rem; }
             .shop-grid { grid-template-columns: 1fr; gap: 25px; }
             .product-img-container { height: 380px; }
@@ -305,7 +312,7 @@
 }
 
 .about-logo-title {
-    font-family: 'Nosifer', cursive;
+    font-family: 'AncientMedium', serif;
     font-size: 3rem;
     color: var(--blood);
     margin-bottom: 30px;
@@ -364,7 +371,7 @@
 /* Адаптив для мобілок (щоб не поламалось) */
 @media (max-width: 768px) {
     .about-section { margin-bottom: 60px; }
-    .about-logo-title { font-size: 1.6rem; letter-spacing: 4px; }
+    .about-logo-title { font-size: 2.3rem; letter-spacing: 4px; }
     .about-image { width: 90%; margin-bottom: 40px; }
     .manifesto { 
         font-size: 1rem; 
