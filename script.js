@@ -449,9 +449,6 @@ let cart = [];
             text: lang === 'ua'
                 ? 'Замовлення успішно оформлено. Очікуйте відправку протягом 3–5 робочих днів.'
                 : 'Order successfully placed. Please expect shipping within 3–5 business days.',
-            notice: lang === 'ua'
-                ? 'Зараз проводяться технічні роботи. Замовлення можна чекати від тижня до двох.'
-                : 'Maintenance in progress. Orders may take 1–2 weeks.',
             questions: lang === 'ua' ? 'З усіх питань:' : 'For any questions:',
             btn: lang === 'ua' ? 'ЗАКРИТИ' : 'CLOSE'
         };
@@ -461,7 +458,6 @@ let cart = [];
             <h2 style="color: var(--blood); margin-bottom: 15px;">${t.title}</h2>
             <div style="background:#000; padding:15px; border:1px solid #222; font-size:0.9rem; color:#ddd; line-height:1.6; text-align:left;">
                 <p style="margin-bottom:10px;">${t.text}</p>
-                <div class="maintenance-note" style="margin: 8px 0 12px;">${t.notice}</div>
                 <p>${t.questions} <a href="https://t.me/Hardcore_Division_bot" target="_blank" style="color: var(--blood); text-decoration: none;">@Hardcore_Division_bot</a></p>
             </div>
             <button class="buy-btn" style="margin-top:20px;" onclick="closeOrderForm()">${t.btn}</button>
