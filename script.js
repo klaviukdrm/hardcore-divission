@@ -1,20 +1,229 @@
 let cart = [];
-    let currentGalleryImages = [];
-    let currentImgIndex = 0;
-    let paymentScreenshot = null;
-    let orderRegion = 'ua';
-    let orderStep = 'payment';
-    let deliveryData = null;
-    let lastScrollTop = 0;
+let currentGalleryImages = [];
+let currentImgIndex = 0;
+let paymentScreenshot = null;
+let orderRegion = 'ua';
+let orderStep = 'payment';
+let deliveryData = null;
 
-    window.onscroll = function() {
-        let header = document.getElementById("mainHeader");
-        if (window.scrollY > 100) {
-            header.classList.add("header-hidden");
-        } else {
-            header.classList.remove("header-hidden");
+const SUPABASE_URL = 'https://njzrkdsbzbjtxhrwezxl.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_K-mRHPnT6ZCkjzXHfQIthw_fjrYjFL1';
+const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+const SUPABASE_CDN_FALLBACK = 'https://unpkg.com/@supabase/supabase-js@2';
+const SUPABASE_ESM = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+let supabase = null;
+let supabaseLoadPromise = null;
+
+const IS_LOCALHOST = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+
+let currentUser = null;
+let authMode = 'login';
+let cachedOrders = [];
+let authView = 'auth';
+
+function initSupabaseClient() {
+    if (supabase || !window.supabase) return false;
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    initAuth();
+    return true;
+}
+
+function safeInitSupabaseClient() {
+    try {
+        return initSupabaseClient();
+    } catch (e) {
+        console.warn('Supabase init failed', e);
+        return false;
+    }
+}
+
+function loadSupabaseScript() {
+    if (supabaseLoadPromise) return supabaseLoadPromise;
+    supabaseLoadPromise = (async () => {
+        if (window.supabase && safeInitSupabaseClient()) {
+            return true;
         }
-    };
+
+        const tryLoadScript = (src) => new Promise((resolve) => {
+            let script = document.querySelector(`script[data-supabase="${src}"]`);
+            if (!script) {
+                script = document.createElement('script');
+                script.src = src;
+                script.async = true;
+                script.dataset.supabase = src;
+                document.head.appendChild(script);
+            }
+            const done = () => resolve(true);
+            const fail = () => resolve(false);
+            script.addEventListener('load', done, { once: true });
+            script.addEventListener('error', fail, { once: true });
+            setTimeout(() => resolve(false), 5000);
+        });
+
+        let loaded = await tryLoadScript(SUPABASE_CDN);
+        if (!loaded) {
+            loaded = await tryLoadScript(SUPABASE_CDN_FALLBACK);
+        }
+        if (loaded && window.supabase && safeInitSupabaseClient()) {
+            return true;
+        }
+
+        try {
+            const mod = await import(SUPABASE_ESM);
+            if (mod && mod.createClient) {
+                window.supabase = mod;
+                return safeInitSupabaseClient();
+            }
+        } catch (e) {
+            console.warn('Supabase ESM import failed', e);
+        }
+
+        return false;
+    })();
+    return supabaseLoadPromise;
+}
+
+async function ensureSupabaseReady() {
+    if (supabase) return true;
+    if (window.supabase && safeInitSupabaseClient()) return true;
+    return await loadSupabaseScript();
+}
+
+function isLocalAuthEnabled() {
+    return IS_LOCALHOST;
+}
+
+function getLocalSession() {
+    const raw = localStorage.getItem('local_auth');
+    if (!raw) return null;
+    try {
+        const data = JSON.parse(raw);
+        if (data && data.email) return { email: data.email, local: true };
+    } catch (e) {}
+    return null;
+}
+
+function setLocalSession(email) {
+    localStorage.setItem('local_auth', JSON.stringify({ email }));
+}
+
+function clearLocalSession() {
+    localStorage.removeItem('local_auth');
+}
+
+function readLocalOrders() {
+    const raw = localStorage.getItem('local_orders');
+    if (!raw) return [];
+    try {
+        const data = JSON.parse(raw);
+        return Array.isArray(data) ? data : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function writeLocalOrders(orders) {
+    localStorage.setItem('local_orders', JSON.stringify(orders));
+}
+
+function getLocalUsers() {
+    const raw = localStorage.getItem('local_users');
+    if (!raw) return [];
+    try {
+        const data = JSON.parse(raw);
+        return Array.isArray(data) ? data : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function saveLocalUsers(users) {
+    localStorage.setItem('local_users', JSON.stringify(users));
+}
+
+function findLocalUser(email) {
+    const users = getLocalUsers();
+    return users.find((u) => u.email === email);
+}
+
+function upsertLocalUser(user) {
+    const users = getLocalUsers();
+    const idx = users.findIndex((u) => u.email === user.email);
+    if (idx >= 0) {
+        users[idx] = user;
+    } else {
+        users.push(user);
+    }
+    saveLocalUsers(users);
+}
+
+function getLocalProfile(email) {
+    const user = findLocalUser(email);
+    return user && user.profile ? user.profile : {};
+}
+
+function saveLocalProfile(email, profile) {
+    const user = findLocalUser(email);
+    if (!user) return;
+    user.profile = profile;
+    upsertLocalUser(user);
+}
+
+function getProfileData() {
+    if (!currentUser) return {};
+
+    let profile = {};
+    if (isLocalAuthEnabled()) {
+        profile = getLocalProfile(currentUser.email) || {};
+    } else if (currentUser.user_metadata) {
+        const meta = currentUser.user_metadata;
+        if (meta.profile && typeof meta.profile === 'object') {
+            profile = meta.profile;
+        }
+        if (meta.full_name && !profile.fullName) profile.fullName = meta.full_name;
+        if (meta.phone && !profile.phone) profile.phone = meta.phone;
+    }
+
+    if (!profile.email && currentUser.email) profile.email = currentUser.email;
+    return profile;
+}
+
+function getLang() {
+    return localStorage.getItem('preferred_lang') || 'ua';
+}
+
+function isEmailValid(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function escapeHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+function escapeAttr(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function valueAttr(value) {
+    return value ? `value="${escapeAttr(value)}"` : '';
+}
+
+window.onscroll = function() {
+    let header = document.getElementById("mainHeader");
+    if (window.scrollY > 100) {
+        header.classList.add("header-hidden");
+    } else {
+        header.classList.remove("header-hidden");
+    }
+};
 
     function showToast(text) {
         const container = document.getElementById('toast-container');
@@ -127,6 +336,480 @@ let cart = [];
         faqSection.classList.toggle('faq-open');
     }
 
+    function toggleAuthModal() {
+        const modal = document.getElementById('authModal');
+        if (!modal) return;
+        const willOpen = modal.style.display !== 'flex';
+        modal.style.display = willOpen ? 'flex' : 'none';
+        if (willOpen) {
+            if (currentUser) {
+                if (authView === 'auth') authView = 'orders';
+            } else {
+                authView = 'auth';
+            }
+        }
+        updateAuthUI();
+    }
+
+    function closeAuthModal() {
+        const modal = document.getElementById('authModal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    function setAuthMode(mode) {
+        authMode = mode;
+        const loginTab = document.getElementById('authTabLogin');
+        const signupTab = document.getElementById('authTabSignup');
+        const submitBtn = document.getElementById('authSubmitBtn');
+        const fullNameInput = document.getElementById('authFullName');
+        const phoneInput = document.getElementById('authPhone');
+        const lang = getLang();
+
+        if (loginTab && signupTab) {
+            loginTab.classList.toggle('active', mode === 'login');
+            signupTab.classList.toggle('active', mode === 'signup');
+        }
+        if (submitBtn) {
+            submitBtn.innerText = mode === 'login'
+                ? (lang === 'ua' ? 'УВІЙТИ' : 'SIGN IN')
+                : (lang === 'ua' ? 'ЗАРЕЄСТРУВАТИСЯ' : 'SIGN UP');
+        }
+        if (fullNameInput) fullNameInput.style.display = mode === 'signup' ? 'block' : 'none';
+        if (phoneInput) phoneInput.style.display = mode === 'signup' ? 'block' : 'none';
+    }
+
+    function setAuthView(view) {
+        authView = view;
+        updateAuthView(true);
+    }
+
+    function updateAuthView(fromUserAction) {
+        const navAuth = document.getElementById('authNavAuth');
+        const navOrders = document.getElementById('authNavOrders');
+        const navProfile = document.getElementById('authNavProfile');
+        const authSection = document.getElementById('authSection');
+        const ordersSection = document.getElementById('ordersSectionModal');
+        const profileSection = document.getElementById('profileSection');
+        const lang = getLang();
+
+        let view = authView;
+        if (!currentUser && (view === 'orders' || view === 'profile')) {
+            view = 'auth';
+            if (fromUserAction) {
+                showToast(lang === 'ua' ? 'СПОЧАТКУ УВІЙДІТЬ' : 'PLEASE SIGN IN FIRST');
+            }
+        }
+        authView = view;
+
+        if (navAuth) navAuth.classList.toggle('active', view === 'auth');
+        if (navOrders) navOrders.classList.toggle('active', view === 'orders');
+        if (navProfile) navProfile.classList.toggle('active', view === 'profile');
+
+        if (authSection) authSection.classList.toggle('active', view === 'auth');
+        if (ordersSection) ordersSection.classList.toggle('active', view === 'orders');
+        if (profileSection) profileSection.classList.toggle('active', view === 'profile');
+
+        if (view === 'orders') {
+            if (currentUser && cachedOrders.length === 0) {
+                loadOrders();
+            } else {
+                renderOrders(cachedOrders);
+            }
+        }
+        if (view === 'profile') {
+            loadProfileForm();
+        }
+    }
+
+    function loadProfileForm() {
+        const profile = getProfileData();
+        const isLoggedIn = !!currentUser;
+        const emailValue = currentUser ? currentUser.email : (profile.email || '');
+
+        const fields = [
+            ['profileFullName', profile.fullName || ''],
+            ['profilePhone', profile.phone || ''],
+            ['profileEmail', emailValue || ''],
+            ['profileTG', profile.tg || ''],
+            ['profileNP', profile.np || ''],
+            ['profileCountry', profile.country || ''],
+            ['profileState', profile.state || ''],
+            ['profilePostal', profile.postal || ''],
+            ['profileCity', profile.city || ''],
+            ['profilePhoneLocal', profile.phoneLocal || ''],
+            ['profileNameLatin', profile.nameLatin || ''],
+            ['profilePostOffice', profile.postOffice || ''],
+            ['profileResidence', profile.residence || '']
+        ];
+
+        fields.forEach(([id, value]) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.value = value;
+            el.disabled = !isLoggedIn;
+        });
+
+        const emailEl = document.getElementById('profileEmail');
+        if (emailEl && isLoggedIn) {
+            emailEl.disabled = true;
+        }
+    }
+
+    async function saveProfile() {
+        const lang = getLang();
+        if (!currentUser) {
+            return showToast(lang === 'ua' ? 'СПОЧАТКУ УВІЙДІТЬ' : 'PLEASE SIGN IN FIRST');
+        }
+
+        const profile = {
+            fullName: (document.getElementById('profileFullName') || {}).value || '',
+            phone: (document.getElementById('profilePhone') || {}).value || '',
+            email: (document.getElementById('profileEmail') || {}).value || '',
+            tg: (document.getElementById('profileTG') || {}).value || '',
+            np: (document.getElementById('profileNP') || {}).value || '',
+            country: (document.getElementById('profileCountry') || {}).value || '',
+            state: (document.getElementById('profileState') || {}).value || '',
+            postal: (document.getElementById('profilePostal') || {}).value || '',
+            city: (document.getElementById('profileCity') || {}).value || '',
+            phoneLocal: (document.getElementById('profilePhoneLocal') || {}).value || '',
+            nameLatin: (document.getElementById('profileNameLatin') || {}).value || '',
+            postOffice: (document.getElementById('profilePostOffice') || {}).value || '',
+            residence: (document.getElementById('profileResidence') || {}).value || ''
+        };
+
+        if (profile.email && !isEmailValid(profile.email)) {
+            return showToast(lang === 'ua' ? 'НЕВІРНИЙ EMAIL' : 'INVALID EMAIL');
+        }
+
+        if (isLocalAuthEnabled()) {
+            saveLocalProfile(currentUser.email, profile);
+            showToast(lang === 'ua' ? 'ЗБЕРЕЖЕНО' : 'SAVED');
+            return;
+        }
+
+        if (!supabase) {
+            const ready = await ensureSupabaseReady();
+            if (!ready) return showToast('AUTH UNAVAILABLE');
+        }
+        const { data, error } = await supabase.auth.updateUser({
+            data: {
+                full_name: profile.fullName,
+                phone: profile.phone,
+                profile: profile
+            }
+        });
+
+        if (error) {
+            return showToast(lang === 'ua' ? 'ПОМИЛКА ЗБЕРЕЖЕННЯ' : 'SAVE ERROR');
+        }
+
+        if (data && data.user) {
+            currentUser = data.user;
+            updateAuthUI();
+        }
+        showToast(lang === 'ua' ? 'ЗБЕРЕЖЕНО' : 'SAVED');
+    }
+
+    async function submitAuth() {
+        const emailEl = document.getElementById('authEmail');
+        const passEl = document.getElementById('authPassword');
+        const fullNameEl = document.getElementById('authFullName');
+        const phoneEl = document.getElementById('authPhone');
+        const email = emailEl ? emailEl.value.trim() : '';
+        const password = passEl ? passEl.value : '';
+        const fullName = fullNameEl ? fullNameEl.value.trim() : '';
+        const phone = phoneEl ? phoneEl.value.trim() : '';
+        const lang = getLang();
+
+        if (!email || !password || !isEmailValid(email)) {
+            return showToast(lang === 'ua' ? 'ВКАЖІТЬ EMAIL ТА ПАРОЛЬ' : 'ENTER EMAIL AND PASSWORD');
+        }
+        if (authMode === 'signup' && (!fullName || !phone)) {
+            return showToast(lang === 'ua' ? 'ВКАЖІТЬ ПІБ ТА ТЕЛЕФОН' : 'ENTER NAME AND PHONE');
+        }
+
+        if (isLocalAuthEnabled()) {
+            if (authMode === 'signup') {
+                const existing = findLocalUser(email);
+                if (existing) {
+                    return showToast(lang === 'ua' ? 'EMAIL ВЖЕ ІСНУЄ' : 'EMAIL ALREADY EXISTS');
+                }
+                upsertLocalUser({
+                    email,
+                    password,
+                    profile: { fullName, phone, email }
+                });
+                setLocalSession(email);
+                currentUser = { email, local: true };
+                updateAuthUI();
+                showToast(lang === 'ua' ? 'УСПІШНО' : 'SUCCESS');
+                closeAuthModal();
+                loadOrders();
+            } else {
+                const user = findLocalUser(email);
+                if (user && user.password === password) {
+                    setLocalSession(email);
+                    currentUser = { email, local: true };
+                    updateAuthUI();
+                    showToast(lang === 'ua' ? 'УСПІШНО' : 'SUCCESS');
+                    closeAuthModal();
+                    loadOrders();
+                } else {
+                    showToast(lang === 'ua' ? 'НЕВІРНИЙ ЛОКАЛЬНИЙ ЛОГІН' : 'INVALID LOCAL LOGIN');
+                }
+            }
+            return;
+        }
+
+        if (!supabase) {
+            const ready = await ensureSupabaseReady();
+            if (!ready) return showToast('AUTH UNAVAILABLE');
+        }
+
+        let result;
+        if (authMode === 'login') {
+            result = await supabase.auth.signInWithPassword({ email, password });
+        } else {
+            result = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: fullName,
+                        phone: phone,
+                        profile: {
+                            fullName,
+                            phone,
+                            email
+                        }
+                    }
+                }
+            });
+        }
+
+        if (result.error) {
+            const msg = String(result.error.message || '').toLowerCase();
+            const isDup = authMode === 'signup' && (msg.includes('already') || msg.includes('exists') || msg.includes('registered'));
+            const isInvalidLogin = authMode === 'login' && msg.includes('invalid');
+            if (isDup) {
+                return showToast(lang === 'ua' ? 'EMAIL ВЖЕ ІСНУЄ' : 'EMAIL ALREADY EXISTS');
+            }
+            if (isInvalidLogin) {
+                return showToast(lang === 'ua' ? 'НЕВІРНИЙ ЛОГІН АБО ПАРОЛЬ' : 'INVALID LOGIN OR PASSWORD');
+            }
+            return showToast(lang === 'ua' ? 'ПОМИЛКА АВТОРИЗАЦІЇ' : 'AUTH ERROR');
+        }
+
+        showToast(lang === 'ua' ? 'УСПІШНО' : 'SUCCESS');
+        closeAuthModal();
+    }
+
+    async function logout() {
+        if (isLocalAuthEnabled()) {
+            clearLocalSession();
+            currentUser = null;
+            cachedOrders = [];
+            updateAuthUI();
+            closeAuthModal();
+            return;
+        }
+        if (!supabase) return;
+        await supabase.auth.signOut();
+        closeAuthModal();
+    }
+
+    async function initAuth() {
+        if (isLocalAuthEnabled()) {
+            currentUser = getLocalSession();
+            updateAuthUI();
+            if (currentUser) await loadOrders();
+            return;
+        }
+        if (!supabase) return;
+        const { data } = await supabase.auth.getSession();
+        currentUser = data.session ? data.session.user : null;
+        updateAuthUI();
+        if (currentUser) await loadOrders();
+
+        supabase.auth.onAuthStateChange((_event, session) => {
+            currentUser = session ? session.user : null;
+            updateAuthUI();
+            if (currentUser) {
+                loadOrders();
+            } else {
+                cachedOrders = [];
+                renderOrders(cachedOrders);
+            }
+        });
+    }
+
+    function updateAuthUI() {
+        const statusEl = document.getElementById('authStatus');
+        const formEl = document.getElementById('authForm');
+        const logoutBtn = document.getElementById('authLogoutBtn');
+        const tabsEl = document.getElementById('authTabs');
+        const accountBtn = document.getElementById('accountBtn');
+        const navWrap = document.getElementById('authNav');
+        const navAuth = document.getElementById('authNavAuth');
+        const navOrders = document.getElementById('authNavOrders');
+        const navProfile = document.getElementById('authNavProfile');
+        const lang = getLang();
+
+        if (currentUser) {
+            if (statusEl) {
+                statusEl.innerText = lang === 'ua'
+                    ? `Ви увійшли як ${currentUser.email}`
+                    : `Signed in as ${currentUser.email}`;
+            }
+            if (formEl) formEl.style.display = 'none';
+            if (tabsEl) tabsEl.style.display = 'none';
+            if (logoutBtn) logoutBtn.style.display = 'block';
+            if (accountBtn) accountBtn.classList.add('logged-in');
+            if (navWrap) navWrap.style.display = 'flex';
+            if (navAuth) {
+                navAuth.style.display = 'inline-flex';
+                navAuth.dataset.ua = 'ВИХІД';
+                navAuth.dataset.eng = 'LOGOUT';
+                navAuth.innerText = lang === 'ua' ? 'ВИХІД' : 'LOGOUT';
+            }
+            if (navOrders) navOrders.style.display = 'inline-flex';
+            if (navProfile) navProfile.style.display = 'inline-flex';
+        } else {
+            if (statusEl) {
+                statusEl.innerText = lang === 'ua'
+                    ? 'Ви не увійшли'
+                    : 'You are not signed in';
+            }
+            if (formEl) formEl.style.display = 'block';
+            if (tabsEl) tabsEl.style.display = 'flex';
+            if (logoutBtn) logoutBtn.style.display = 'none';
+            if (accountBtn) accountBtn.classList.remove('logged-in');
+            if (navWrap) navWrap.style.display = 'none';
+            if (navAuth) {
+                navAuth.style.display = 'none';
+                navAuth.dataset.ua = 'ВХІД';
+                navAuth.dataset.eng = 'AUTH';
+                navAuth.innerText = lang === 'ua' ? 'ВХІД' : 'AUTH';
+            }
+            if (navOrders) navOrders.style.display = 'none';
+            if (navProfile) navProfile.style.display = 'none';
+            authView = 'auth';
+        }
+
+        setAuthMode(authMode);
+        updateAuthView(false);
+        renderOrders(cachedOrders);
+    }
+
+    async function loadOrders() {
+        if (isLocalAuthEnabled()) {
+            if (!currentUser) return;
+            const all = readLocalOrders();
+            cachedOrders = all
+                .filter((order) => order && order.email === currentUser.email)
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            renderOrders(cachedOrders);
+            return;
+        }
+        if (!supabase || !currentUser) return;
+        const lang = getLang();
+        const { data, error } = await supabase
+            .from('orders')
+            .select('id, created_at, total, currency, items, region')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            showToast(lang === 'ua' ? 'ПОМИЛКА ЗАВАНТАЖЕННЯ ЗАМОВЛЕНЬ' : 'ORDER LOAD ERROR');
+            return;
+        }
+
+        cachedOrders = Array.isArray(data) ? data : [];
+        renderOrders(cachedOrders);
+    }
+
+    function formatOrderDate(iso, lang) {
+        try {
+            const locale = lang === 'ua' ? 'uk-UA' : 'en-US';
+            return new Date(iso).toLocaleDateString(locale, { year: 'numeric', month: 'short', day: '2-digit' });
+        } catch (e) {
+            return iso || '';
+        }
+    }
+
+    function formatCurrencyLabel(code, lang) {
+        if (code === 'UAH') return lang === 'ua' ? ' грн' : ' UAH';
+        if (code === 'USD') return ' $';
+        return ` ${code || ''}`;
+    }
+
+    function renderOrdersList(list, empty, orders, lang, loggedIn) {
+        if (!list || !empty) return;
+
+        if (!loggedIn) {
+            empty.style.display = 'block';
+            empty.innerText = lang === 'ua' ? 'Увійдіть, щоб переглянути історію.' : 'Sign in to view your order history.';
+            list.innerHTML = '';
+            return;
+        }
+
+        if (!orders || orders.length === 0) {
+            empty.style.display = 'block';
+            empty.innerText = lang === 'ua' ? 'Замовлень поки немає.' : 'No orders yet.';
+            list.innerHTML = '';
+            return;
+        }
+
+        empty.style.display = 'none';
+        const t = {
+            date: lang === 'ua' ? 'Дата' : 'Date',
+            order: lang === 'ua' ? 'Замовлення' : 'Order',
+            total: lang === 'ua' ? 'Сума' : 'Total'
+        };
+
+        list.innerHTML = orders.map((order) => {
+            const currencyLabel = formatCurrencyLabel(order.currency, lang);
+            const items = Array.isArray(order.items) ? order.items : [];
+            const itemsHtml = items.map((item) => {
+                const name = escapeHtml(item.name);
+                const size = escapeHtml(item.size);
+                const price = item.price != null ? item.price : '';
+                return `<div>${name} (${size}) — ${price}${currencyLabel}</div>`;
+            }).join('');
+            const dateText = formatOrderDate(order.created_at, lang);
+            const orderId = order.id ? String(order.id).slice(0, 8).toUpperCase() : '';
+
+            return `
+                <div class="order-card">
+                    <div class="order-meta">${t.date}: ${dateText} • ${t.order}: ${orderId}</div>
+                    <div class="order-items">${itemsHtml}</div>
+                    <div class="order-total">${t.total}: ${order.total}${currencyLabel}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderOrders(orders) {
+        const lang = getLang();
+        const loggedIn = !!currentUser;
+
+        const section = document.getElementById('ordersSection');
+        const list = document.getElementById('ordersList');
+        const empty = document.getElementById('ordersEmpty');
+        if (section && list && empty) {
+            if (!loggedIn) {
+                section.style.display = 'none';
+            } else {
+                section.style.display = 'block';
+                renderOrdersList(list, empty, orders, lang, true);
+            }
+        }
+
+        const modalList = document.getElementById('ordersListModal');
+        const modalEmpty = document.getElementById('ordersEmptyModal');
+        if (modalList && modalEmpty) {
+            renderOrdersList(modalList, modalEmpty, orders, lang, loggedIn);
+        }
+    }
     function renderRegionSwitch(lang) {
         const uaLabel = lang === 'ua' ? 'УКРАЇНА' : 'UKRAINE';
         const worldLabel = 'WORLDWIDE';
@@ -162,6 +845,8 @@ let cart = [];
         };
 
         const regionSwitch = renderRegionSwitch(lang);
+        const userEmail = currentUser ? currentUser.email : '';
+        const emailAttr = userEmail ? `value="${userEmail}" disabled` : '';
 
         let paymentBlock = '';
         if (orderRegion === 'ua') {
@@ -324,6 +1009,7 @@ let cart = [];
     function renderDeliveryForm() {
         const lang = localStorage.getItem('preferred_lang') || 'ua';
         orderStep = 'delivery';
+        const profile = getProfileData();
 
         const t = {
             title: lang === 'ua' ? 'ДОСТАВКА' : 'DELIVERY',
@@ -339,30 +1025,35 @@ let cart = [];
             city: lang === 'ua' ? 'Населений пункт' : 'City',
             phoneLocal: lang === 'ua' ? 'Мобільний номер місцевого оператора' : 'Local mobile number',
             nameLatin: lang === 'ua' ? 'ПІБ латиницею' : 'Full name (Latin)',
-            email: lang === 'ua' ? 'Email' : 'Email',
+            emailOptional: lang === 'ua' ? 'Email (необов\'язково)' : 'Email (optional)',
+            emailRequired: lang === 'ua' ? 'Email' : 'Email',
             postOffice: lang === 'ua' ? 'Адреса і номер відділення пошти' : 'Post office address and number',
             residence: lang === 'ua' ? 'Адреса фактичного проживання' : 'Residential address'
         };
 
         const regionSwitch = renderRegionSwitch(lang);
+        const userEmail = currentUser ? currentUser.email : '';
+        const emailValue = userEmail || profile.email || '';
+        const emailAttr = emailValue ? `value="${escapeAttr(emailValue)}"${currentUser ? ' disabled' : ''}` : '';
 
         const uaFields = `
-            <input type="text" id="orderFIO" placeholder="${t.fio}">
-            <input type="text" id="orderPhone" placeholder="${t.phone}">
-            <input type="text" id="orderNP" placeholder="${t.np}">
-            <input type="text" id="orderTG" placeholder="${t.tg}">
+            <input type="text" id="orderFIO" placeholder="${t.fio}" ${valueAttr(profile.fullName)}>
+            <input type="text" id="orderPhone" placeholder="${t.phone}" ${valueAttr(profile.phone)}>
+            <input type="text" id="orderNP" placeholder="${t.np}" ${valueAttr(profile.np)}>
+            <input type="email" id="orderEmailUa" placeholder="${t.emailOptional}" ${emailAttr}>
+            <input type="text" id="orderTG" placeholder="${t.tg}" ${valueAttr(profile.tg)}>
         `;
 
         const worldFields = `
-            <input type="text" id="orderCountry" placeholder="${t.country}">
-            <input type="text" id="orderState" placeholder="${t.state}">
-            <input type="text" id="orderPostal" placeholder="${t.postal}">
-            <input type="text" id="orderCity" placeholder="${t.city}">
-            <input type="text" id="orderPhoneLocal" placeholder="${t.phoneLocal}">
-            <input type="text" id="orderNameLatin" placeholder="${t.nameLatin}">
-            <input type="email" id="orderEmail" placeholder="${t.email}">
-            <textarea id="orderPostOffice" placeholder="${t.postOffice}"></textarea>
-            <textarea id="orderResidence" placeholder="${t.residence}"></textarea>
+            <input type="text" id="orderCountry" placeholder="${t.country}" ${valueAttr(profile.country)}>
+            <input type="text" id="orderState" placeholder="${t.state}" ${valueAttr(profile.state)}>
+            <input type="text" id="orderPostal" placeholder="${t.postal}" ${valueAttr(profile.postal)}>
+            <input type="text" id="orderCity" placeholder="${t.city}" ${valueAttr(profile.city)}>
+            <input type="text" id="orderPhoneLocal" placeholder="${t.phoneLocal}" ${valueAttr(profile.phoneLocal)}>
+            <input type="text" id="orderNameLatin" placeholder="${t.nameLatin}" ${valueAttr(profile.nameLatin)}>
+            <input type="email" id="orderEmail" placeholder="${t.emailRequired}" ${emailAttr}>
+            <textarea id="orderPostOffice" placeholder="${t.postOffice}">${escapeHtml(profile.postOffice || '')}</textarea>
+            <textarea id="orderResidence" placeholder="${t.residence}">${escapeHtml(profile.residence || '')}</textarea>
         `;
 
         document.getElementById('orderModalContent').innerHTML = `
@@ -381,19 +1072,22 @@ let cart = [];
         const lang = localStorage.getItem('preferred_lang') || 'ua';
         const msgErrUa = lang === 'ua' ? 'ПЕРЕВІРТЕ ДАНІ ТА НОМЕР!' : 'CHECK DATA & NUMBER!';
         const msgErrWorld = lang === 'ua' ? 'ЗАПОВНІТЬ УСІ ПОЛЯ (EMAIL)!' : 'FILL ALL FIELDS (EMAIL)!';
+        const msgBadEmail = lang === 'ua' ? 'НЕВІРНИЙ EMAIL' : 'INVALID EMAIL';
 
         if (orderRegion === 'ua') {
             const fio = document.getElementById('orderFIO').value;
             const phoneRaw = document.getElementById('orderPhone').value;
             const phone = phoneRaw.replace(/\\D/g, '');
             const np = document.getElementById('orderNP').value;
+            const email = document.getElementById('orderEmailUa').value.trim();
             const tg = document.getElementById('orderTG').value;
 
             if (!fio || phone.length < 10 || !np) return showToast(msgErrUa);
+            if (email && !isEmailValid(email)) return showToast(msgBadEmail);
 
             deliveryData = {
                 region: 'ua',
-                data: { fio, phone, np, tg }
+                data: { fio, phone, np, email, tg }
             };
         } else {
             const country = document.getElementById('orderCountry').value.trim();
@@ -407,11 +1101,12 @@ let cart = [];
             const postOffice = document.getElementById('orderPostOffice').value.trim();
             const residence = document.getElementById('orderResidence').value.trim();
 
-            const emailOk = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
+            const emailOk = isEmailValid(email);
 
             if (!country || !state || !postal || !city || !phoneLocalRaw || phoneLocalDigits.length < 6 || !nameLatin || !email || !emailOk || !postOffice || !residence) {
                 return showToast(msgErrWorld);
             }
+            if (!emailOk) return showToast(msgBadEmail);
 
             deliveryData = {
                 region: 'world',
@@ -458,7 +1153,7 @@ let cart = [];
             <h2 style="color: var(--blood); margin-bottom: 15px;">${t.title}</h2>
             <div style="background:#000; padding:15px; border:1px solid #222; font-size:0.9rem; color:#ddd; line-height:1.6; text-align:left;">
                 <p style="margin-bottom:10px;">${t.text}</p>
-                <p>${t.questions} <a href="https://t.me/Hardcore_Division_bot" target="_blank" style="color: var(--blood); text-decoration: none;">@Hardcore_Division_bot</a></p>
+                <p>${t.questions} <a href="https://t.me/Hardcore_Division_bot" target="_blank" rel="noopener noreferrer" style="color: var(--blood); text-decoration: none;">@Hardcore_Division_bot</a></p>
             </div>
             <button class="buy-btn" style="margin-top:20px;" onclick="closeOrderForm()">${t.btn}</button>
         `;
@@ -466,16 +1161,18 @@ let cart = [];
     }
 
     async function finalizeOrder() {
-        const lang = localStorage.getItem('preferred_lang') || 'ua';
+        const lang = getLang();
         const btn = document.getElementById('payBtn');
 
         const msgErrUa = lang === 'ua' ? 'ПЕРЕВІРТЕ ДАНІ ТА НОМЕР!' : 'CHECK DATA & NUMBER!';
         const msgErrWorld = lang === 'ua' ? 'ЗАПОВНІТЬ УСІ ПОЛЯ (EMAIL)!' : 'FILL ALL FIELDS (EMAIL)!';
+        const msgBadEmail = lang === 'ua' ? 'НЕВІРНИЙ EMAIL' : 'INVALID EMAIL';
         const msgNeedScreenshot = lang === 'ua' ? 'ДОДАЙ СКРІНШОТ!' : 'ADD SCREENSHOT!';
         const msgNeedDelivery = lang === 'ua' ? 'СПОЧАТКУ ЗАПОВНІТЬ ДОСТАВКУ!' : 'FILL DELIVERY FIRST!';
         const msgWait = lang === 'ua' ? 'ВІДПРАВКА...' : 'SENDING...';
         const msgSuccess = lang === 'ua' ? 'ЗАМОВЛЕННЯ ПРИЙНЯТО! 🩸' : 'ORDER RECEIVED! 🩸';
         const msgFail = lang === 'ua' ? 'ПОМИЛКА ВІДПРАВКИ!' : 'SENDING ERROR!';
+        const msgDbWarn = lang === 'ua' ? 'ЗАМОВЛЕННЯ ПРИЙНЯТО, АЛЕ ІСТОРІЯ МОЖЕ НЕ ОНОВИТИСЬ' : 'ORDER RECEIVED, BUT HISTORY MAY NOT UPDATE';
         const payLabel = lang === 'ua' ? 'Я ОПЛАТИВ' : 'I PAID';
 
         if (!paymentScreenshot) return showToast(msgNeedScreenshot);
@@ -488,15 +1185,28 @@ let cart = [];
         btn.innerText = msgWait;
         btn.disabled = true;
 
-        const currency = lang === 'ua' ? '₴' : '$';
+        const currencySymbol = lang === 'ua' ? '₴' : '$';
+        const currencyCode = lang === 'ua' ? 'UAH' : 'USD';
         let total = cart.reduce((sum, i) => sum + (lang === 'ua' ? i.uah : i.usd), 0);
-        let itemsInfo = cart.map((item, idx) => `${idx + 1}. ${item.name} (${item.size}) — ${lang === 'ua' ? item.uah : item.usd}${currency}`).join('\n');
+        let itemsInfo = cart.map((item, idx) => {
+            const price = lang === 'ua' ? item.uah : item.usd;
+            return `${idx + 1}. ${escapeHtml(item.name)} (${escapeHtml(item.size)}) — ${price}${currencySymbol}`;
+        }).join('\n');
+        let itemsPayload = cart.map((item) => ({
+            name: item.name,
+            size: item.size,
+            price: lang === 'ua' ? item.uah : item.usd,
+            currency: currencyCode
+        }));
         let messageText = '';
+        let orderEmail = '';
+        let orderPhone = '';
 
         if (orderRegion === 'ua') {
             const fio = deliveryData.data.fio;
             const phone = deliveryData.data.phone;
             const np = deliveryData.data.np;
+            const email = deliveryData.data.email;
             const tg = deliveryData.data.tg;
 
             if (!fio || !phone || phone.length < 10 || !np) {
@@ -504,9 +1214,24 @@ let cart = [];
                 btn.disabled = false;
                 return showToast(msgErrUa);
             }
+            if (email && !isEmailValid(email)) {
+                btn.innerText = payLabel;
+                btn.disabled = false;
+                return showToast(msgBadEmail);
+            }
 
-            let tgText = tg ? `\n✈️ <b>TG:</b> ${tg}` : "";
-            messageText = `<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>\n\n👤 <b>ПІБ:</b> ${fio}\n📞 <b>Тел:</b> ${phone}${tgText}\n📦 <b>НП:</b> ${np}\n\n${itemsInfo}\n<b>💰 СУМА: ${total}${currency}</b>`;
+            const fioSafe = escapeHtml(fio);
+            const phoneSafe = escapeHtml(phone);
+            const npSafe = escapeHtml(np);
+            const emailSafe = escapeHtml(email);
+            const tgSafe = tg ? escapeHtml(tg) : '';
+
+            const emailText = email ? `\n📧 <b>Email:</b> ${emailSafe}` : '';
+            const tgText = tg ? `\n✈️ <b>TG:</b> ${tgSafe}` : '';
+
+            messageText = `<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>\n\n👤 <b>ПІБ:</b> ${fioSafe}\n📞 <b>Тел:</b> ${phoneSafe}${emailText}${tgText}\n📦 <b>НП:</b> ${npSafe}\n\n${itemsInfo}\n<b>💰 СУМА: ${total}${currencySymbol}</b>`;
+            orderEmail = email;
+            orderPhone = phone;
         } else {
             const country = deliveryData.data.country;
             const state = deliveryData.data.state;
@@ -519,12 +1244,17 @@ let cart = [];
             const postOffice = deliveryData.data.postOffice;
             const residence = deliveryData.data.residence;
 
-            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            const emailOk = isEmailValid(email);
 
             if (!country || !state || !postal || !city || !phoneLocalRaw || phoneLocalDigits.length < 6 || !nameLatin || !email || !emailOk || !postOffice || !residence) {
                 btn.innerText = payLabel;
                 btn.disabled = false;
                 return showToast(msgErrWorld);
+            }
+            if (!emailOk) {
+                btn.innerText = payLabel;
+                btn.disabled = false;
+                return showToast(msgBadEmail);
             }
 
             const labels = {
@@ -543,7 +1273,51 @@ let cart = [];
                 sum: lang === 'ua' ? 'СУМА' : 'TOTAL'
             };
 
-            messageText = `<b>💀 ${labels.order} 💀</b>\n\n🌍 <b>${labels.delivery}:</b> ${labels.region}\n👤 <b>${labels.nameLatin}:</b> ${nameLatin}\n📞 <b>${labels.phone}:</b> ${phoneLocalRaw}\n📧 <b>${labels.email}:</b> ${email}\n🏷️ <b>${labels.country}:</b> ${country}\n🏷️ <b>${labels.state}:</b> ${state}\n🏷️ <b>${labels.postal}:</b> ${postal}\n🏷️ <b>${labels.city}:</b> ${city}\n📮 <b>${labels.postOffice}:</b> ${postOffice}\n🏠 <b>${labels.residence}:</b> ${residence}\n\n${itemsInfo}\n<b>💰 ${labels.sum}: ${total}${currency}</b>`;
+            const emailLine = email ? `\n📧 <b>${labels.email}:</b> ${escapeHtml(email)}` : '';
+            messageText = `<b>💀 ${labels.order} 💀</b>\n\n🌍 <b>${labels.delivery}:</b> ${escapeHtml(labels.region)}\n👤 <b>${labels.nameLatin}:</b> ${escapeHtml(nameLatin)}\n📞 <b>${labels.phone}:</b> ${escapeHtml(phoneLocalRaw)}${emailLine}\n🏷️ <b>${labels.country}:</b> ${escapeHtml(country)}\n🏷️ <b>${labels.state}:</b> ${escapeHtml(state)}\n🏷️ <b>${labels.postal}:</b> ${escapeHtml(postal)}\n🏷️ <b>${labels.city}:</b> ${escapeHtml(city)}\n📮 <b>${labels.postOffice}:</b> ${escapeHtml(postOffice)}\n🏠 <b>${labels.residence}:</b> ${escapeHtml(residence)}\n\n${itemsInfo}\n<b>💰 ${labels.sum}: ${total}${currencySymbol}</b>`;
+            orderEmail = email;
+            orderPhone = phoneLocalRaw;
+        }
+
+        const orderPayload = {
+            email: orderEmail,
+            phone: orderPhone,
+            region: orderRegion,
+            currency: currencyCode,
+            total: total,
+            items: itemsPayload,
+            delivery: deliveryData
+        };
+
+        if (isLocalAuthEnabled()) {
+            const orders = readLocalOrders();
+            const orderId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+            orders.push({
+                id: orderId,
+                created_at: new Date().toISOString(),
+                email: orderPayload.email,
+                phone: orderPayload.phone,
+                region: orderPayload.region,
+                currency: orderPayload.currency,
+                total: orderPayload.total,
+                items: orderPayload.items
+            });
+            writeLocalOrders(orders);
+            showToast(msgSuccess);
+            cart = [];
+            document.getElementById('cart-count').innerText = 0;
+            paymentScreenshot = null;
+            deliveryData = null;
+            orderRegion = 'ua';
+            renderOrderSuccess();
+            loadOrders();
+            return;
+        }
+
+        let authToken = null;
+        if (supabase) {
+            const sessionData = await supabase.auth.getSession();
+            authToken = sessionData.data.session ? sessionData.data.session.access_token : null;
         }
 
         try {
@@ -552,17 +1326,24 @@ let cart = [];
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     message: messageText,
-                    image: paymentScreenshot
+                    image: paymentScreenshot,
+                    order: orderPayload,
+                    authToken
                 })
             });
+            const result = await response.json().catch(() => ({}));
             if (response.ok) {
                 showToast(msgSuccess);
+                if (result && result.dbStored === false) {
+                    showToast(msgDbWarn);
+                }
                 cart = [];
                 document.getElementById('cart-count').innerText = 0;
                 paymentScreenshot = null;
                 deliveryData = null;
                 orderRegion = 'ua';
                 renderOrderSuccess();
+                if (currentUser) loadOrders();
             } else {
                 throw new Error();
             }
@@ -572,7 +1353,6 @@ let cart = [];
             btn.disabled = false;
         }
     }
-
     function openPrivacy() {
     document.getElementById('privacyModal').style.display = 'flex';
 }
@@ -644,6 +1424,7 @@ function setLang(lang) {
 
     updatePrices(lang);
     updateContact();
+    updateAuthUI();
 }
 
 function updatePrices(lang) {
@@ -654,8 +1435,14 @@ function updatePrices(lang) {
 
 // Запускаем проверку языка сразу при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
-    const savedLang = localStorage.getItem('preferred_lang') || 'ua';
+    const savedLang = getLang();
     setLang(savedLang);
+    if (isLocalAuthEnabled()) {
+        initAuth();
+    }
+    initSupabaseClient();
+    setTimeout(initSupabaseClient, 300);
+    setTimeout(initSupabaseClient, 1200);
 });
 
 function updateContact() {
@@ -673,8 +1460,45 @@ function updateContact() {
     link.textContent = t.tg;
     link.href = "https://t.me/Hardcore_Division_bot";
     link.target = "_blank";
+    link.rel = "noopener noreferrer";
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    updateContact();
-});
+function exposeGlobals() {
+    Object.assign(window, {
+        toggleSizePanel,
+        setSizeType,
+        openGallery,
+        closeGallery,
+        changeImg,
+        toggleCart,
+        addToCart,
+        removeFromCart,
+        toggleFAQ,
+        openOrderForm,
+        handleFileSelect,
+        setOrderRegion,
+        renderOrderPayment,
+        proceedToPayment,
+        closeOrderForm,
+        finalizeOrder,
+        openPrivacy,
+        closePrivacy,
+        filterProducts,
+        setLang,
+        toggleAuthModal,
+        setAuthView,
+        setAuthMode,
+        submitAuth,
+        logout,
+        saveProfile,
+        copyVal
+    });
+}
+
+exposeGlobals();
+
+ 
+
+
+
+
