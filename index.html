@@ -88,78 +88,14 @@
     <div class="modal-content" id="orderModalContent"></div>
 </div>
 
-<div class="modal-overlay" id="authModal">
-    <div class="modal-content auth-modal">
-        <div class="close-btn" onclick="closeAuthModal()">&#10005;</div>
-        <h2 id="authTitle" data-ua="АККАУНТ" data-eng="ACCOUNT" style="color: var(--blood); margin-bottom: 15px;">АККАУНТ</h2>
-
-        <div id="authStatus" class="auth-status">...</div>
-
-        <div id="authNav" class="auth-nav">
-            <button id="authNavAuth" class="auth-nav-btn active" onclick="setAuthView('auth')" data-ua="ВХІД" data-eng="AUTH">ВХІД</button>
-            <button id="authNavOrders" class="auth-nav-btn" onclick="setAuthView('orders')" data-ua="ІСТОРІЯ" data-eng="ORDERS">ІСТОРІЯ</button>
-            <button id="authNavProfile" class="auth-nav-btn" onclick="setAuthView('profile')" data-ua="ОСОБИСТІ ДАНІ" data-eng="PROFILE">ОСОБИСТІ ДАНІ</button>
-        </div>
-
-        <div id="authSection" class="auth-section">
-            <div id="authTabs" class="auth-tabs">
-                <button id="authTabLogin" class="auth-tab active" onclick="setAuthMode('login')" data-ua="ВХІД" data-eng="LOGIN">ВХІД</button>
-                <button id="authTabSignup" class="auth-tab" onclick="setAuthMode('signup')" data-ua="РЕЄСТРАЦІЯ" data-eng="SIGN UP">РЕЄСТРАЦІЯ</button>
-            </div>
-
-            <div id="authForm" class="auth-form">
-                <input type="text" id="authFullName" placeholder="ПІБ">
-                <input type="text" id="authPhone" placeholder="Номер телефону">
-                <input type="email" id="authEmail" placeholder="Email">
-                <input type="password" id="authPassword" placeholder="Password">
-                <button class="buy-btn" id="authSubmitBtn" onclick="submitAuth()">SIGN IN</button>
-            </div>
-
-            <button class="logout-btn" id="authLogoutBtn" onclick="logout()">LOGOUT</button>
-        </div>
-
-        <div id="ordersSectionModal" class="auth-section">
-            <h3 data-ua="ІСТОРІЯ ЗАМОВЛЕНЬ" data-eng="ORDER HISTORY">ІСТОРІЯ ЗАМОВЛЕНЬ</h3>
-            <div id="ordersEmptyModal" class="orders-empty" data-ua="Замовлень поки немає." data-eng="No orders yet.">Замовлень поки немає.</div>
-            <div id="ordersListModal" class="orders-list"></div>
-        </div>
-
-        <div id="profileSection" class="auth-section">
-            <h3 data-ua="ОСОБИСТІ ДАНІ" data-eng="PERSONAL INFO">ОСОБИСТІ ДАНІ</h3>
-            <div class="profile-grid">
-                <input type="text" id="profileFullName" placeholder="ПІБ">
-                <input type="text" id="profilePhone" placeholder="Номер телефону">
-                <input type="email" id="profileEmail" placeholder="Email">
-                <input type="text" id="profileTG" placeholder="Telegram">
-                <input type="text" id="profileNP" placeholder="Місто та № відділення НП">
-
-                <input type="text" id="profileCountry" placeholder="Країна">
-                <input type="text" id="profileState" placeholder="Штат/регіон">
-                <input type="text" id="profilePostal" placeholder="Поштовий індекс">
-                <input type="text" id="profileCity" placeholder="Населений пункт">
-                <input type="text" id="profilePhoneLocal" placeholder="Мобільний номер місцевого оператора">
-                <input type="text" id="profileNameLatin" placeholder="ПІБ латиницею">
-                <textarea id="profilePostOffice" placeholder="Адреса і номер відділення пошти"></textarea>
-                <textarea id="profileResidence" placeholder="Адреса фактичного проживання"></textarea>
-            </div>
-            <button class="buy-btn" id="profileSaveBtn" onclick="saveProfile()" data-ua="ЗБЕРЕГТИ" data-eng="SAVE">ЗБЕРЕГТИ</button>
-        </div>
-    </div>
-</div>
-
 <header id="mainHeader">
     <div class="logo-container" id="logoArea">
         <h1 class="logo">HARDCORE DIVISION</h1>
     </div>
-    <div class="header-controls">
-        <div class="lang-switcher">
-            <span id="lang-ua" class="lang-btn active" onclick="setLang('ua')">UA</span>
-            <span id="lang-eng" class="lang-btn" onclick="setLang('eng')">ENG</span>
-        </div>
-        <div class="account-actions">
-            <button id="accountBtn" class="account-btn" data-ua="АККАУНТ" data-eng="ACCOUNT" onclick="toggleAuthModal()">АККАУНТ</button>
-        </div>
-    </div>
+    <div class="lang-switcher">
+    <span id="lang-ua" class="lang-btn active" onclick="setLang('ua')">UA</span>
+    <span id="lang-eng" class="lang-btn" onclick="setLang('eng')">ENG</span>
+</div>
 </header>
 
 <div class="container">
@@ -180,7 +116,7 @@
         </p>
 
         <p>
-            <a href="https://t.me/hardcore_divis1on" target="_blank" rel="noopener noreferrer">Hardcore Division</a> — 
+            <a href="https://t.me/hardcore_divis1on" target="_blank">Hardcore Division</a> — 
             <span data-ua="для тих, хто виріс на дисципліні та внутрішній люті. Для тих, хто знає ціну словам вірність та характер." 
                   data-eng="for those who grew up on discipline and inner rage. For those who know the price of loyalty and character.">
                   для тих, хто виріс на дисципліні та внутрішній люті. Для тих, хто знає ціну словам вірність та характер.
@@ -580,17 +516,11 @@
     </div>
 </div>
 
-<div id="ordersSection" class="orders-section" style="display: none;">
-    <h2 id="ordersTitle" data-ua="МОЇ ЗАМОВЛЕННЯ" data-eng="MY ORDERS">МОЇ ЗАМОВЛЕННЯ</h2>
-    <div id="ordersEmpty" class="orders-empty" data-ua="Замовлень поки немає." data-eng="No orders yet.">Замовлень поки немає.</div>
-    <div id="ordersList" class="orders-list"></div>
-</div>
-
 </div>
 <div class="socials">
-    <a href="https://t.me/hardcore_divis1on" target="_blank" rel="noopener noreferrer">Telegram</a>
-    <a href="https://www.instagram.com/hardcore_division_brand" target="_blank" rel="noopener noreferrer">Instagram</a>
-    <a href="https://www.tiktok.com/@hardcore.division" target="_blank" rel="noopener noreferrer">TikTok</a>
+    <a href="https://t.me/hardcore_divis1on" target="_blank">Telegram</a>
+    <a href="https://www.instagram.com/hardcore_division_brand" target="_blank">Instagram</a>
+    <a href="https://www.tiktok.com/@hardcore.division" target="_blank">TikTok</a>
 </div>
 
 <div class="cart-widget" onclick="toggleCart()">
@@ -603,7 +533,7 @@
             Контакт оператора (Telegram)
         </p>
 
-        <a id="contact-link" href="https://t.me/Hardcore_Division_bot" target="_blank" rel="noopener noreferrer" style="
+        <a id="contact-link" href="https://t.me/Hardcore_Division_bot" target="_blank" style="
             display: inline-block;
             color: #ccc;
             text-decoration: none;
@@ -630,7 +560,6 @@
 </footer>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
 <script src="script.js" defer></script>
 
 <div id="privacyModal" class="modal" style="display: none; align-items: center; justify-content: center; z-index: 10000; background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
@@ -654,5 +583,4 @@
 
 </body>
 </html>
-
 
