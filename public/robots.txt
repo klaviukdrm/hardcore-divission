@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://hardcoredivision.in.ua/sitemap.xml
