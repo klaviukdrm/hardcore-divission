@@ -3,6 +3,7 @@
     const page = document.body && document.body.dataset ? document.body.dataset.page : "";
     const baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, "");
     let activeProduct = null;
+    const storeSeoKeywords = "hardcore division, правий мерч україна, правый мерч украина, мілітарі одяг, милитари одежда, язичництво, pagan streetwear, hoodie, t-shirt, український бренд одягу";
 
     function absUrl(path) {
         try {
@@ -76,7 +77,21 @@
     }
 
     function buildSeoLine(product) {
-        return `${product.title}. ${product.seoKeywords}. Hardcore Division ${inferTypeName(product)} streetwear.`;
+        return `${product.title}. ${product.seoKeywords}. ${storeSeoKeywords}. Hardcore Division ${inferTypeName(product)} streetwear.`;
+    }
+
+    function buildProductSeoCopy(product) {
+        const type = inferTypeName(product);
+        const typeUa = type === "T-Shirt" ? "футболка" : "худі";
+        const typeRu = type === "T-Shirt" ? "футболка" : "худи";
+        const descUa = (product.descUa || product.descEng || product.title).trim();
+        const descEng = (product.descEng || product.descUa || product.title).trim();
+
+        return {
+            ua: `Купити ${typeUa} ${product.title} від Hardcore Division. ${descUa} Правий мерч Україна, мілітарі одяг, streetwear, український бренд одягу.`,
+            ru: `Купить ${typeRu} ${product.title} от Hardcore Division. ${descUa} Правый мерч Украина, милитари одежда, streetwear бренд.`,
+            eng: `Buy ${product.title} ${type} by Hardcore Division. ${descEng} Streetwear clothing from a Ukrainian brand.`
+        };
     }
 
     function enhanceCatalogCards() {
@@ -133,13 +148,13 @@
 
     function setupCatalogSeo() {
         const title = "HARDCORE DIVISION | ONLY BLOOD";
-        const description = "Official Hardcore Division catalog: hoodies and t-shirts with hardcore streetwear identity.";
+        const description = "Hardcore Division — правий мерч Україна: мілітарі одяг, худі та футболки у стилі streetwear.";
         const image = absUrl("images/photo_2026-03-07_18-15-01.jpg");
 
         document.title = title;
         setCanonical("/");
         setMetaName("description", description);
-        setMetaName("keywords", "hardcore division, streetwear, hoodie, t-shirt, ukrainian brand, hardcore clothing");
+        setMetaName("keywords", storeSeoKeywords);
         setMetaName("robots", "index, follow, max-image-preview:large");
         setMetaName("googlebot", "index, follow, max-image-preview:large");
         setMetaProperty("og:title", title);
@@ -158,6 +173,8 @@
             "name": "Hardcore Division",
             "url": absUrl("/"),
             "logo": image,
+            "description": "Правий мерч Україна: мілітарі одяг, худі та футболки Hardcore Division.",
+            "keywords": storeSeoKeywords,
             "sameAs": [
                 "https://t.me/hardcore_divis1on",
                 "https://www.instagram.com/hardcore_division_brand",
@@ -169,6 +186,7 @@
             "@context": "https://schema.org",
             "@type": "ItemList",
             "name": "Hardcore Division Catalog",
+            "description": "Правий мерч Україна, мілітарі одяг, худі та футболки Hardcore Division.",
             "itemListOrder": "https://schema.org/ItemListOrderAscending",
             "numberOfItems": products.length,
             "itemListElement": products.map((product, index) => ({
@@ -194,6 +212,7 @@
         const sizeGuideLabel = lang === "ua" ? "\u0420\u043E\u0437\u043C\u0456\u0440\u043D\u0430 \u0441\u0456\u0442\u043A\u0430" : "Size guide";
         const slugLabel = lang === "ua" ? "\u0410\u0440\u0442\u0438\u043A\u0443\u043B" : "SKU";
         const seoKeywords = buildSeoLine(product);
+        const productSeoCopy = buildProductSeoCopy(product);
 
         const thumbs = imageGallery.map((img, idx) =>
             `<img src="${img}" alt="${product.title} view ${idx + 1}" data-idx="${idx}" loading="lazy" decoding="async">`
@@ -230,7 +249,13 @@
                         <img src="images/photo_2026-03-13_20-42-54.png" alt="">
                     </div>
                 </div>
-                <p class="seo-hidden">${seoKeywords}</p>
+                <section class="seo-hidden" aria-label="Product search keywords">
+                    <h2>${product.title} Hardcore Division</h2>
+                    <p>${productSeoCopy.ua}</p>
+                    <p>${productSeoCopy.ru}</p>
+                    <p>${productSeoCopy.eng}</p>
+                    <p>${seoKeywords}</p>
+                </section>
             </article>
         `;
 
