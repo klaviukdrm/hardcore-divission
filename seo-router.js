@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     const products = Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : [];
     const page = document.body && document.body.dataset ? document.body.dataset.page : "";
     const baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, "");
@@ -137,7 +137,7 @@
         const image = absUrl("images/photo_2026-03-07_18-15-01.jpg");
 
         document.title = title;
-        setCanonical("index.html");
+        setCanonical("/");
         setMetaName("description", description);
         setMetaName("keywords", "hardcore division, streetwear, hoodie, t-shirt, ukrainian brand, hardcore clothing");
         setMetaName("robots", "index, follow, max-image-preview:large");
@@ -146,7 +146,7 @@
         setMetaProperty("og:description", description);
         setMetaProperty("og:image", image);
         setMetaProperty("og:image:alt", "Hardcore Division clothing catalog preview");
-        setMetaProperty("og:url", absUrl("index.html"));
+        setMetaProperty("og:url", absUrl("/"));
         setMetaName("twitter:title", title);
         setMetaName("twitter:description", description);
         setMetaName("twitter:image", image);
@@ -156,7 +156,7 @@
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "Hardcore Division",
-            "url": absUrl("index.html"),
+            "url": absUrl("/"),
             "logo": image,
             "sameAs": [
                 "https://t.me/hardcore_divis1on",
