@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account | Hardcore Division</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="account">
+<header id="mainHeader">
+    <div class="logo-container" id="logoArea">
+        <h1 class="logo"><a href="index.html" style="text-decoration:none; color:inherit;">HARDCORE DIVISION</a></h1>
+    </div>
+    <div class="lang-switcher">
+        <a class="account-btn account-icon-btn" href="index.html" aria-label="Каталог" title="Каталог">
+            <svg viewBox="0 0 24 24" width="20" height="20" role="img" aria-hidden="true">
+                <path d="M5 9.5l2.1-3.2A1.9 1.9 0 0 1 8.7 5h6.6a1.9 1.9 0 0 1 1.6 1.3L19 9.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 9.5h16v8.6A1.9 1.9 0 0 1 18.1 20H5.9A1.9 1.9 0 0 1 4 18.1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M9 12.4h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </a>
+        <span id="lang-ua" class="lang-btn active">UA</span>
+        <span id="lang-eng" class="lang-btn">ENG</span>
+    </div>
+</header>
+
+<main class="container account-shell">
+    <section class="panel-card">
+        <h2 class="panel-title" data-ua="АКАУНТ" data-eng="ACCOUNT">АКАУНТ</h2>
+        <p class="panel-subtitle" data-ua="Реєстрація та вхід по телефону +380XXXXXXXXX" data-eng="Register and login with +380XXXXXXXXX phone number">Реєстрація та вхід по телефону +380XXXXXXXXX</p>
+
+        <div id="accountMessage" class="panel-message" aria-live="polite"></div>
+
+        <div id="authArea" class="auth-grid">
+            <div class="auth-toggle" role="tablist" aria-label="Auth mode switch">
+                <button id="showLoginBtn" class="auth-toggle-btn active" type="button" data-ua="УВІЙТИ" data-eng="LOGIN">УВІЙТИ</button>
+                <button id="showRegisterBtn" class="auth-toggle-btn" type="button" data-ua="ЗАРЕЄСТРУВАТИСЯ" data-eng="REGISTER">ЗАРЕЄСТРУВАТИСЯ</button>
+            </div>
+
+            <form id="loginForm" class="panel-form" novalidate>
+                <h3 data-ua="ВХІД" data-eng="LOGIN">ВХІД</h3>
+                <label class="field-label" for="loginPhone" data-ua="Телефон" data-eng="Phone">Телефон</label>
+                <input id="loginPhone" type="tel" placeholder="+380XXXXXXXXX" required>
+                <label class="field-label" for="loginPassword" data-ua="Пароль" data-eng="Password">Пароль</label>
+                <input id="loginPassword" type="password" minlength="8" required>
+                <button class="buy-btn" type="submit" data-ua="Увійти" data-eng="Sign In">Увійти</button>
+            </form>
+
+            <form id="registerForm" class="panel-form" novalidate hidden>
+                <h3 data-ua="РЕЄСТРАЦІЯ" data-eng="REGISTER">РЕЄСТРАЦІЯ</h3>
+                <label class="field-label" for="registerPhone" data-ua="Телефон" data-eng="Phone">Телефон</label>
+                <input id="registerPhone" type="tel" placeholder="+380XXXXXXXXX" required>
+                <label class="field-label" for="registerPassword" data-ua="Пароль" data-eng="Password">Пароль</label>
+                <input id="registerPassword" type="password" minlength="8" required>
+                <button class="buy-btn" type="submit" data-ua="Зареєструватися" data-eng="Create Account">Зареєструватися</button>
+            </form>
+        </div>
+
+        <div id="accountArea" class="account-area" hidden>
+            <div class="account-row">
+                <div>
+                    <div class="field-label" data-ua="Ваш телефон" data-eng="Your phone">Ваш телефон</div>
+                    <div id="accountPhone" class="account-phone">-</div>
+                </div>
+                <button id="logoutBtn" class="buy-btn account-logout" type="button" data-ua="Вийти" data-eng="Logout">Вийти</button>
+            </div>
+
+            <h3 class="orders-title" data-ua="Історія замовлень" data-eng="Order History">Історія замовлень</h3>
+            <div id="ordersList" class="orders-list"></div>
+        </div>
+    </section>
+</main>
+
+<div class="socials account-socials">
+    <a href="https://t.me/hardcore_divis1on" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path fill="currentColor" d="M21.6 4.2c.3-.2.7.1.6.5l-3.1 14.7c-.1.4-.5.6-.9.4l-4.3-3.2-2.2 2.2c-.2.2-.5.3-.8.2-.3-.1-.5-.4-.5-.7v-3.4L16 9.7l-7 4.2-3.6-1.1c-.7-.2-.8-1.1-.1-1.4z"/>
+        </svg>
+        Telegram
+    </a>
+    <a href="https://www.instagram.com/hardcore_division_brand" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
+        </svg>
+        Instagram
+    </a>
+    <a href="https://www.tiktok.com/@hardcore.division" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path d="M14 4v10.5a3.5 3.5 0 1 1-2-3.2V6h2.5c.7 1.6 2.1 2.8 3.8 3.2v2.1c-1.7-.2-3.2-1-4.3-2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        TikTok
+    </a>
+</div>
+
+<footer style="margin-top: 0; padding: 18px 20px 30px; text-align: center; border-top: 1px solid #1a1a1a;">
+    <div style="margin-bottom: 25px;">
+        <p id="contact-title" style="font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;" data-ua="Контакт оператора (Telegram)" data-eng="Operator Contact (Telegram)">
+            Контакт оператора (Telegram)
+        </p>
+        <a id="contact-link" class="operator-link" href="https://t.me/Hardcore_Division_bot" target="_blank" style="
+            display: inline-block;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 15px;
+            font-family: monospace;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border: 1px solid #222;
+            padding: 12px 24px;
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.02);
+        ">
+            <span class="telegram-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" role="img" aria-label="Telegram">
+                    <path fill="currentColor" d="M21.6 4.2c.3-.2.7.1.6.5l-3.1 14.7c-.1.4-.5.6-.9.4l-4.3-3.2-2.2 2.2c-.2.2-.5.3-.8.2-.3-.1-.5-.4-.5-.7v-3.4L16 9.7l-7 4.2-3.6-1.1c-.7-.2-.8-1.1-.1-1.4z"/>
+                </svg>
+            </span>
+            <span class="operator-handle">@Hardcore_Division_bot</span>
+            <span class="operator-online">
+                <span class="online-dot" aria-hidden="true"></span>
+            </span>
+        </a>
+    </div>
+    <div style="font-size: 11px; color: #555; letter-spacing: 1px;">
+        <span data-ua="&copy; 2026 HARDCORE DIVISION. ВСІ ПРАВА ЗАХИЩЕНІ КРОВ'Ю." data-eng="&copy; 2026 HARDCORE DIVISION. ALL RIGHTS RESERVED BY BLOOD.">&copy; 2026 HARDCORE DIVISION. ВСІ ПРАВА ЗАХИЩЕНІ КРОВ'Ю.</span>
+        <div class="footer-policy-links">
+            <button class="footer-policy-btn" data-policy="privacy" data-ua="Політика конфіденційності" data-eng="Privacy Policy">Політика конфіденційності</button>
+            <span class="footer-policy-sep">|</span>
+            <button class="footer-policy-btn" data-policy="delivery" data-ua="Доставка і оплата" data-eng="Delivery & Payment">Доставка і оплата</button>
+            <span class="footer-policy-sep">|</span>
+            <button class="footer-policy-btn" data-policy="agreement" data-ua="Угода користувача" data-eng="User Agreement">Угода користувача</button>
+            <span class="footer-policy-sep">|</span>
+            <button class="footer-policy-btn" data-policy="returns" data-ua="Умови повернення" data-eng="Return Policy">Умови повернення</button>
+        </div>
+    </div>
+</footer>
+
+<div id="privacyModal" class="modal" style="display: none; align-items: center; justify-content: center; z-index: 10000; background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
+    <div class="modal-content" style="max-width: 450px; background: #000; border: 1px solid #333; padding: 30px; position: relative; text-align: left; margin: auto;">
+        <div class="close-btn" id="privacyCloseBtn" style="position: absolute; top: 10px; right: 15px; cursor: pointer; color: #ff0000; font-size: 20px;">&#10005;</div>
+        <h3 data-ua="КОНФІДЕНЦІЙНІСТЬ" data-eng="PRIVACY POLICY" style="color: #ff0000; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase;">КОНФІДЕНЦІЙНІСТЬ</h3>
+        <div style="font-size: 0.8rem; color: #999; line-height: 1.6;">
+            <p data-ua="Ми збираємо тільки ті дані, що необхідні для доставки." data-eng="We only collect data necessary for delivery.">Ми збираємо тільки ті дані, що необхідні для доставки.</p>
+            <p data-ua="Ваші дані використовуються виключно для обробки замовлення." data-eng="Your data is used exclusively for order processing.">Ваші дані використовуються виключно для обробки замовлення.</p>
+            <p data-ua="Ми не передаємо інформацію третім особам, крім логістичних служб." data-eng="We do not transfer information to third parties, except for logistics services.">Ми не передаємо інформацію третім особам, крім логістичних служб.</p>
+        </div>
+    </div>
+</div>
+
+<div id="policyModal" class="modal" style="display: none; align-items: center; justify-content: center; z-index: 10000; background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
+    <div class="modal-content" style="max-width: 560px; background: #000; border: 1px solid #333; padding: 30px; position: relative; text-align: left; margin: auto;">
+        <div class="close-btn" id="policyCloseBtn" style="position: absolute; top: 10px; right: 15px; cursor: pointer; color: #ff0000; font-size: 20px;">&#10005;</div>
+        <h3 id="policyModalTitle" style="color: #ff0000; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase;">Доставка і оплата</h3>
+        <div id="policyModalBody"></div>
+    </div>
+</div>
+
+<script src="account.js" defer></script>
+</body>
+</html>

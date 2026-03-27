@@ -15,14 +15,7 @@ let cart = [];
 
     syncPulsePhase();
 
-    window.onscroll = function() {
-        let header = document.getElementById("mainHeader");
-        if (window.scrollY > 100) {
-            header.classList.add("header-hidden");
-        } else {
-            header.classList.remove("header-hidden");
-        }
-    };
+    window.onscroll = null;
 
     function showToast(text) {
         const container = document.getElementById('toast-container');
@@ -393,7 +386,7 @@ let cart = [];
         if (orderRegion === 'ua') {
             const fio = document.getElementById('orderFIO').value;
             const phoneRaw = document.getElementById('orderPhone').value;
-            const phone = phoneRaw.replace(/\\D/g, '');
+            const phone = phoneRaw.replace(/\D/g, '');
             const np = document.getElementById('orderNP').value;
             const tg = document.getElementById('orderTG').value;
 
@@ -409,7 +402,7 @@ let cart = [];
             const postal = document.getElementById('orderPostal').value.trim();
             const city = document.getElementById('orderCity').value.trim();
             const phoneLocalRaw = document.getElementById('orderPhoneLocal').value.trim();
-            const phoneLocalDigits = phoneLocalRaw.replace(/\\D/g, '');
+            const phoneLocalDigits = phoneLocalRaw.replace(/\D/g, '');
             const nameLatin = document.getElementById('orderNameLatin').value.trim();
             const email = document.getElementById('orderEmail').value.trim();
             const postOffice = document.getElementById('orderPostOffice').value.trim();
@@ -564,6 +557,11 @@ let cart = [];
                 })
             });
             if (response.ok) {
+                try {
+                    await saveOrderForAccountHistory(lang, total);
+                } catch (orderError) {
+                    console.error(orderError);
+                }
                 showToast(msgSuccess);
                 cart = [];
                 document.getElementById('cart-count').innerText = 0;
@@ -579,6 +577,55 @@ let cart = [];
             btn.innerText = payLabel;
             btn.disabled = false;
         }
+    }
+
+    function buildOrderItemsPayload(lang) {
+        const grouped = new Map();
+
+        cart.forEach((item) => {
+            const unitPrice = lang === 'ua' ? item.uah : item.usd;
+            const key = `${item.name}::${item.size}::${unitPrice}`;
+            const existing = grouped.get(key);
+
+            if (existing) {
+                existing.quantity += 1;
+                return;
+            }
+
+            grouped.set(key, {
+                title: item.name,
+                size: item.size,
+                price: unitPrice,
+                quantity: 1,
+                product_id: null
+            });
+        });
+
+        return Array.from(grouped.values());
+    }
+
+    async function saveOrderForAccountHistory(lang, totalPrice) {
+        const payload = {
+            total_price: totalPrice,
+            items: buildOrderItemsPayload(lang)
+        };
+
+        const response = await fetch('/api/orders/create', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+
+        // Guest checkout is allowed; if user is not logged in we skip history save.
+        if (response.status === 401) {
+            return false;
+        }
+
+        if (!response.ok) {
+            throw new Error('Failed to save order in account history');
+        }
+
+        return true;
     }
 
     function openPrivacy() {
@@ -769,6 +816,31 @@ function updateContact() {
     link.target = "_blank";
 }
 
+async function syncAccountButtonState() {
+    const accountButtons = document.querySelectorAll('.account-icon-btn[data-account-link="true"]');
+    if (!accountButtons.length) return;
+
+    let isUserAuthenticated = false;
+    try {
+        const response = await fetch('/api/auth/me', {
+            method: 'GET',
+            cache: 'no-store'
+        });
+
+        if (response.ok) {
+            const payload = await response.json();
+            isUserAuthenticated = Boolean(payload && payload.authenticated && payload.role === 'user');
+        }
+    } catch (e) {
+        isUserAuthenticated = false;
+    }
+
+    accountButtons.forEach((button) => {
+        button.classList.toggle('account-btn-auth', isUserAuthenticated);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     updateContact();
+    syncAccountButtonState();
 });
