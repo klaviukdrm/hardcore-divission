@@ -1,0 +1,32 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/pages/index.html"
+    },
+    {
+      "source": "/index.html",
+      "destination": "/pages/index.html"
+    },
+    {
+      "source": "/product.html",
+      "destination": "/pages/product.html"
+    },
+    {
+      "source": "/account.html",
+      "destination": "/pages/account.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/pages/admin.html"
+    },
+    {
+      "source": "/admin.html",
+      "destination": "/pages/admin.html"
+    },
+    {
+      "source": "/seo-head-jsonld-example.html",
+      "destination": "/pages/seo-head-jsonld-example.html"
+    }
+  ]
+}
