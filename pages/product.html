@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
+    <title>Product | Hardcore Division</title>
+    <meta name="description" content="Hardcore Division product page: hoodies and t-shirts with hardcore streetwear identity.">
+    <meta name="keywords" content="hardcore division, hoodie, t-shirt, streetwear, clothing, ukrainian brand">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow, max-image-preview:large">
+    <meta property="og:type" content="product">
+    <meta property="og:site_name" content="Hardcore Division">
+    <meta property="og:title" content="Product | Hardcore Division">
+    <meta property="og:description" content="Hardcore Division product page with price, description, and checkout flow.">
+    <meta property="og:image" content="images/photo_2026-03-07_18-15-01.jpg">
+    <meta property="og:image:alt" content="Hardcore Division product page preview">
+    <meta property="og:url" content="product.html">
+    <meta property="og:locale" content="uk_UA">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Product | Hardcore Division">
+    <meta name="twitter:description" content="Hardcore Division product page with price, description, and checkout flow.">
+    <meta name="twitter:image" content="images/photo_2026-03-07_18-15-01.jpg">
+    <meta name="twitter:image:alt" content="Hardcore Division product page preview">
+    <meta name="theme-color" content="#050505">
+    <link rel="canonical" id="canonicalLink" href="/pages/product.html">
+    <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <script type="application/ld+json" id="org-jsonld"></script>
+    <script type="application/ld+json" id="catalog-jsonld"></script>
+</head>
+<body data-page="product">
+
+<div id="toast-container"></div>
+
+<div class="gallery-overlay" id="gallery">
+    <div class="close-btn" style="color:white; top:15px; right:15px;" onclick="closeGallery()">&#10005;</div>
+    <button class="gallery-nav prev" onclick="changeImg(-1)">&#10094;</button>
+    <img src="" id="galleryImg" loading="lazy" decoding="async" alt="Product gallery image">
+    <button class="gallery-nav next" onclick="changeImg(1)">&#10095;</button>
+</div>
+
+<div class="modal-overlay" id="cartModal">
+    <div class="modal-content">
+        <div class="close-btn" onclick="toggleCart()">&#10005;</div>
+        <h2 data-ua="ВАШ КОШИК" data-eng="YOUR CART" style="color: var(--blood); border-bottom: 1px solid var(--blood); padding-bottom: 10px; margin-bottom: 15px;">ВАШ КОШИК</h2>
+        <div id="cartItemsList"></div>
+        <div id="cartTotal" style="font-weight: bold; font-size: 1.1rem; margin: 20px 0;">Всього: 0₴</div>
+
+        <button class="faq-btn" data-ua="ЧАСТІ ЗАПИТАННЯ" data-eng="FAQ" onclick="toggleFAQ()">ЧАСТІ ЗАПИТАННЯ</button>
+        <div id="faqSection">
+            <ul>
+                <li>
+                    <h4 data-ua="Чи можна накладним платежем?" data-eng="Can I pay on delivery?">Чи можна накладним платежем?</h4>
+                    <p data-ua="Ні, тільки повна передплата." data-eng="No, only full prepayment.">Ні, тільки повна передплата.</p>
+                </li>
+                <li>
+                    <h4 data-ua="Скільки часу на відправку?" data-eng="How long for shipping?">Скільки часу на відправку?</h4>
+                    <p data-ua="3-5 робочих днів." data-eng="3-5 business days.">3-5 робочих днів.</p>
+                </li>
+                <li>
+                    <h4 data-ua="Як підібрати розмір?" data-eng="How to choose the size?">Як підібрати розмір?</h4>
+                    <p data-ua="Зайдіть у розмірну сітку для коректного вибору." data-eng="Check the size guide for accurate selection.">Зайдіть у розмірну сітку для коректного вибору.</p>
+                </li>
+                <li>
+                    <h4 data-ua="Чи є повернення, якщо розмір не підійшов?" data-eng="Is there a return if the size doesn't fit?">Чи є повернення, якщо розмір не підійшов?</h4>
+                    <p data-ua="Ні, повернення немає, уважно обирайте розмір." data-eng="No, returns are not available, please choose the size carefully.">Ні, повернення немає, уважно обирайте розмір.</p>
+                </li>
+            </ul>
+        </div>
+
+        <button class="buy-btn" data-ua="ОФОРМИТИ ЗАМОВЛЕННЯ" data-eng="CHECKOUT" onclick="openOrderForm()">ОФОРМИТИ ЗАМОВЛЕННЯ</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="orderModal">
+    <div class="modal-content" id="orderModalContent"></div>
+</div>
+
+<header id="mainHeader">
+    <div class="logo-container" id="logoArea">
+        <h1 class="logo"><a href="/pages/index.html" style="text-decoration:none; color:inherit;">HARDCORE DIVISION</a></h1>
+    </div>
+    <div class="lang-switcher">
+        <a class="account-btn account-icon-btn" data-account-link="true" href="/pages/account.html" aria-label="Account" title="Account">
+            <svg viewBox="0 0 24 24" width="20" height="20" role="img" aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </a>
+        <span id="lang-ua" class="lang-btn active" onclick="setLang('ua')">UA</span>
+        <span id="lang-eng" class="lang-btn" onclick="setLang('eng')">ENG</span>
+    </div>
+</header>
+
+<div class="container product-page">
+    <div class="hero-text" style="margin-bottom: 25px;">
+        <h2>PRODUCT <span>PAGE</span></h2>
+    </div>
+    <div id="productMount"></div>
+</div>
+
+<div class="socials">
+    <a href="https://t.me/hardcore_divis1on" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path fill="currentColor" d="M21.6 4.2c.3-.2.7.1.6.5l-3.1 14.7c-.1.4-.5.6-.9.4l-4.3-3.2-2.2 2.2c-.2.2-.5.3-.8.2-.3-.1-.5-.4-.5-.7v-3.4L16 9.7l-7 4.2-3.6-1.1c-.7-.2-.8-1.1-.1-1.4z"/>
+        </svg>
+        Telegram
+    </a>
+    <a href="https://www.instagram.com/hardcore_division_brand" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
+        </svg>
+        Instagram
+    </a>
+    <a href="https://www.tiktok.com/@hardcore.division" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path d="M14 4v10.5a3.5 3.5 0 1 1-2-3.2V6h2.5c.7 1.6 2.1 2.8 3.8 3.2v2.1c-1.7-.2-3.2-1-4.3-2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        TikTok
+    </a>
+</div>
+
+<div class="cart-widget" onclick="toggleCart()">
+    <span id="cart-count">0</span>&#128722;
+</div>
+
+<footer style="margin-top: 0; padding: 18px 20px 30px; text-align: center; border-top: 1px solid #1a1a1a;">
+    <div style="margin-bottom: 25px;">
+        <p id="contact-title" style="font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">
+            Контакт оператора (Telegram)
+        </p>
+        <a id="contact-link" class="operator-link" href="https://t.me/Hardcore_Division_bot" target="_blank" style="
+            display: inline-block;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 15px;
+            font-family: monospace;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border: 1px solid #222;
+            padding: 12px 24px;
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.02);
+        ">
+            <span class="telegram-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" role="img" aria-label="Telegram">
+                    <path fill="currentColor" d="M21.6 4.2c.3-.2.7.1.6.5l-3.1 14.7c-.1.4-.5.6-.9.4l-4.3-3.2-2.2 2.2c-.2.2-.5.3-.8.2-.3-.1-.5-.4-.5-.7v-3.4L16 9.7l-7 4.2-3.6-1.1c-.7-.2-.8-1.1-.1-1.4z"/>
+                </svg>
+            </span>
+            <span class="operator-handle">@Hardcore_Division_bot</span>
+            <span class="operator-online">
+                <span class="online-dot" aria-hidden="true"></span>
+            </span>
+        </a>
+    </div>
+    <div style="font-size: 11px; color: #555; letter-spacing: 1px;">
+        <span data-ua="&copy; 2026 HARDCORE DIVISION. ВСІ ПРАВА ЗАХИЩЕНІ КРОВ'Ю." data-eng="&copy; 2026 HARDCORE DIVISION. ALL RIGHTS RESERVED BY BLOOD.">&copy; 2026 HARDCORE DIVISION. ВСІ ПРАВА ЗАХИЩЕНІ КРОВ'Ю.</span>
+        <div class="footer-policy-links">
+            <button class="footer-policy-btn" onclick="openPrivacy()" data-ua="Політика конфіденційності" data-eng="Privacy Policy">Політика конфіденційності</button>
+            <span class="footer-policy-sep">•</span>
+            <button class="footer-policy-btn" onclick="openPolicy('delivery')" data-ua="Доставка і оплата" data-eng="Delivery & Payment">Доставка і оплата</button>
+            <span class="footer-policy-sep">•</span>
+            <button class="footer-policy-btn" onclick="openPolicy('agreement')" data-ua="Угода користувача" data-eng="User Agreement">Угода користувача</button>
+            <span class="footer-policy-sep">•</span>
+            <button class="footer-policy-btn" onclick="openPolicy('returns')" data-ua="Умови повернення" data-eng="Return Policy">Умови повернення</button>
+            <span class="footer-policy-sep">•</span>
+            <a class="footer-policy-btn" href="/pages/oferta.html" data-ua="Договір оферти" data-eng="Public Offer">Договір оферти</a>
+        </div>
+    </div>
+</footer>
+
+<div id="privacyModal" class="modal" style="display: none; align-items: center; justify-content: center; z-index: 10000; background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
+    <div class="modal-content" style="max-width: 450px; background: #000; border: 1px solid #333; padding: 30px; position: relative; text-align: left; margin: auto;">
+        <div class="close-btn" onclick="closePrivacy()" style="position: absolute; top: 10px; right: 15px; cursor: pointer; color: #ff0000; font-size: 20px;">&#10005;</div>
+        <h3 data-ua="КОНФІДЕНЦІЙНІСТЬ" data-eng="PRIVACY POLICY" style="color: #ff0000; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase;">КОНФІДЕНЦІЙНІСТЬ</h3>
+        <div style="font-size: 0.8rem; color: #999; line-height: 1.6;">
+            <p data-ua="Ми збираємо тільки ті дані, що необхідні для доставки." data-eng="We only collect data necessary for delivery.">Ми збираємо тільки ті дані, що необхідні для доставки.</p>
+            <p data-ua="Ваші дані використовуються виключно для обробки замовлення." data-eng="Your data is used exclusively for order processing.">Ваші дані використовуються виключно для обробки замовлення.</p>
+            <p data-ua="Ми не передаємо інформацію третім особам, крім логістичних служб." data-eng="We do not transfer information to third parties, except for logistics services.">Ми не передаємо інформацію третім особам, крім логістичних служб.</p>
+        </div>
+    </div>
+</div>
+
+<div id="policyModal" class="modal" style="display: none; align-items: center; justify-content: center; z-index: 10000; background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
+    <div class="modal-content" style="max-width: 560px; background: #000; border: 1px solid #333; padding: 30px; position: relative; text-align: left; margin: auto;">
+        <div class="close-btn" onclick="closePolicy()" style="position: absolute; top: 10px; right: 15px; cursor: pointer; color: #ff0000; font-size: 20px;">&#10005;</div>
+        <h3 id="policyModalTitle" style="color: #ff0000; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase;">Доставка і оплата</h3>
+        <div id="policyModalBody"></div>
+    </div>
+</div>
+
+<script src="/assets/js/products-data.js" defer></script>
+<script src="/assets/js/script.js" defer></script>
+<script src="/assets/js/seo-router.js" defer></script>
+
+</body>
+</html>
