@@ -1,4 +1,4 @@
-﻿let cart = [];
+let cart = [];
     let currentGalleryImages = [];
     let currentImgIndex = 0;
     let paymentScreenshot = null;
@@ -7,6 +7,44 @@
     let deliveryData = null;
     let lastScrollTop = 0;
     const pulseCycleMs = 3000;
+    const tshirt3xlSurchargeUah = 200;
+
+    function isTshirtItem(name) {
+        return /t-?shirt/i.test(String(name || ''));
+    }
+
+    function extractNumericPrice(priceText) {
+        const normalized = String(priceText || '').replace(',', '.');
+        const match = normalized.match(/[\d.]+/);
+        return match ? Number(match[0]) : 0;
+    }
+
+    function refreshCatalogPricePreview() {
+        const lang = localStorage.getItem('preferred_lang') || 'ua';
+        const cards = document.querySelectorAll('.shop-grid .product-card');
+
+        cards.forEach((card) => {
+            const priceEl = card.querySelector('.price');
+            const sizeSelect = card.querySelector('select');
+            const buyBtn = card.querySelector('.buy-btn');
+            if (!priceEl || !sizeSelect || !buyBtn) return;
+
+            const baseUahLabel = priceEl.getAttribute('data-uah') || '';
+            const baseUsdLabel = priceEl.getAttribute('data-usd') || '';
+            const onclickText = buyBtn.getAttribute('onclick') || '';
+
+            const isTshirt = isTshirtItem(onclickText);
+            const is3xl = String(sizeSelect.value || '').toUpperCase() === '3XL';
+            const surchargeUah = isTshirt && is3xl ? tshirt3xlSurchargeUah : 0;
+
+            if (lang === 'ua') {
+                const baseUah = extractNumericPrice(baseUahLabel);
+                priceEl.innerText = `${baseUah + surchargeUah}₴`;
+            } else {
+                priceEl.innerText = baseUsdLabel;
+            }
+        });
+    }
 
     function generatePublicOrderCode() {
         const digits = '0123456789';
@@ -115,7 +153,8 @@
     function addToCart(name, uah, usd, sizeId) {
     const size = document.getElementById(sizeId).value;
     const lang = localStorage.getItem('preferred_lang') || 'ua';
-    cart.push({name, uah, usd, size});
+    const sizeSurchargeUah = isTshirtItem(name) && size === '3XL' ? tshirt3xlSurchargeUah : 0;
+    cart.push({name, uah: uah + sizeSurchargeUah, usd, size});
     document.getElementById('cart-count').innerText = cart.length;
     
     const msg = lang === 'ua' ? 'ДОДАНО В КОШИК 💀' : 'ADDED TO CART 💀';
@@ -821,12 +860,26 @@ function updatePrices(lang) {
   document.querySelectorAll('.price').forEach(el => {
     el.innerText = lang === 'ua' ? el.getAttribute('data-uah') : el.getAttribute('data-usd');
   });
+  refreshCatalogPricePreview();
 }
 
 // Запускаем проверку языка сразу при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('preferred_lang') || 'ua';
     setLang(savedLang);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.querySelector('.shop-grid');
+    if (!grid) return;
+
+    grid.addEventListener('change', (event) => {
+        if (event.target && event.target.tagName === 'SELECT') {
+            refreshCatalogPricePreview();
+        }
+    });
+
+    refreshCatalogPricePreview();
 });
 
 function updateContact() {
