@@ -8,6 +8,7 @@ let cart = [];
     let lastScrollTop = 0;
     const pulseCycleMs = 3000;
     const tshirt3xlSurchargeUah = 200;
+    const liqpayPaymentsEnabled = false; // Switch to true to quickly restore LiqPay/Google Pay/Apple Pay
 
     function isTshirtItem(name) {
         return /t-?shirt/i.test(String(name || ''));
@@ -192,6 +193,15 @@ let cart = [];
         const uaLabel = isDelivery
             ? (lang === 'ua' ? 'УКРАЇНА' : 'UKRAINE')
             : (lang === 'ua' ? 'ОПЛАТА ПО РЕКВІЗИТАМ' : 'BANK DETAILS');
+
+        if (!liqpayPaymentsEnabled && !isDelivery) {
+            return `
+                <div class="region-switch">
+                    <button class="region-btn active">${uaLabel}</button>
+                </div>
+            `;
+        }
+
         const worldLabel = isDelivery ? 'WORLDWIDE' : 'GOOGLE PAY / APPLE PAY';
         return `
             <div class="region-switch">
@@ -202,7 +212,7 @@ let cart = [];
     }
 
     function setOrderRegion(region) {
-        orderRegion = region;
+        orderRegion = (!liqpayPaymentsEnabled && orderStep === 'payment') ? 'ua' : region;
         if (orderStep === 'payment') {
             renderOrderPayment();
         } else if (orderStep === 'delivery') {
@@ -213,6 +223,9 @@ let cart = [];
     function renderOrderPayment() {
         const lang = localStorage.getItem('preferred_lang') || 'ua';
         orderStep = 'payment';
+        if (!liqpayPaymentsEnabled) {
+            orderRegion = 'ua';
+        }
 
         const total = cart.reduce((sum, i) => sum + (lang === 'ua' ? i.uah : i.usd), 0);
         const currency = lang === 'ua' ? '₴' : '$';
