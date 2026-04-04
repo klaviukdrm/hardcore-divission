@@ -8,7 +8,7 @@ let cart = [];
     let lastScrollTop = 0;
     const pulseCycleMs = 3000;
     const tshirt3xlSurchargeUah = 200;
-    const liqpayPaymentsEnabled = false; // Switch to true to quickly restore LiqPay/Google Pay/Apple Pay
+    const liqpayPaymentsEnabled = true; // Switch to false to temporarily hide LiqPay/Google Pay/Apple Pay
 
     function isTshirtItem(name) {
         return /t-?shirt/i.test(String(name || ''));
