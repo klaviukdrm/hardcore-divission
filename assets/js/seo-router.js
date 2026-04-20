@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     const products = Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : [];
     const page = document.body && document.body.dataset ? document.body.dataset.page : "";
     const baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, "");
@@ -81,7 +81,7 @@
     }
 
     function getNewBadgeText() {
-        return "НОВЕ";
+        return getLang() === "eng" ? "NEW" : "НОВЕ";
     }
 
     function buildProductSeoCopy(product) {
@@ -154,6 +154,8 @@
             if (product.isNew && imgContainer && !existingImageBadge) {
                 const badge = document.createElement("span");
                 badge.className = "product-new-badge product-new-badge-corner";
+                badge.setAttribute("data-ua", "НОВЕ");
+                badge.setAttribute("data-eng", "NEW");
                 badge.textContent = getNewBadgeText(product);
                 imgContainer.appendChild(badge);
             }
@@ -254,7 +256,7 @@
         const seoKeywords = buildSeoLine(product);
         const productSeoCopy = buildProductSeoCopy(product);
         const newBadge = product.isNew
-            ? `<span class="product-new-badge product-new-badge-corner product-new-badge-detail-corner">${getNewBadgeText(product)}</span>`
+            ? `<span class="product-new-badge product-new-badge-corner product-new-badge-detail-corner" data-ua="НОВЕ" data-eng="NEW">${getNewBadgeText(product)}</span>`
             : "";
 
         const thumbs = imageGallery.map((img, idx) =>
