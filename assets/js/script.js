@@ -22,6 +22,45 @@ let cart = [];
     const pulseCycleMs = 3000;
     const tshirt3xlSurchargeUah = 200;
     const liqpayPaymentsEnabled = true; // Switch to false to temporarily hide LiqPay/Google Pay/Apple Pay
+    const cartStorageKey = 'hd_cart_v1';
+
+    function normalizeCartItem(item) {
+        if (!item || typeof item !== 'object') return null;
+        const name = String(item.name || '').trim();
+        const size = String(item.size || '').trim();
+        const uah = Number(item.uah);
+        const usd = Number(item.usd);
+        if (!name || !size || !Number.isFinite(uah) || !Number.isFinite(usd)) return null;
+        return { name, uah, usd, size };
+    }
+
+    function loadCartFromStorage() {
+        try {
+            const raw = localStorage.getItem(cartStorageKey);
+            if (!raw) return;
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) return;
+            cart = parsed.map(normalizeCartItem).filter(Boolean);
+        } catch (e) {
+            cart = [];
+        }
+    }
+
+    function saveCartToStorage() {
+        try {
+            localStorage.setItem(cartStorageKey, JSON.stringify(cart));
+        } catch (e) {
+            // Ignore storage errors (private mode/quota).
+        }
+    }
+
+    function updateCartCount() {
+        const cartCountEl = document.getElementById('cart-count');
+        if (!cartCountEl) return;
+        cartCountEl.innerText = String(cart.length);
+    }
+
+    loadCartFromStorage();
 
     function isTshirtItem(name) {
         return /t-?shirt/i.test(String(name || ''));
@@ -330,18 +369,23 @@ let cart = [];
     const lang = localStorage.getItem('preferred_lang') || 'ua';
     const sizeSurchargeUah = isTshirtItem(name) && size === '3XL' ? tshirt3xlSurchargeUah : 0;
     cart.push({name, uah: uah + sizeSurchargeUah, usd, size});
-    document.getElementById('cart-count').innerText = cart.length;
+    saveCartToStorage();
+    updateCartCount();
     
     const msg = lang === 'ua' ? 'ДОДАНО В КОШИК 💀' : 'ADDED TO CART 💀';
     showToast(msg);
 }
     function removeFromCart(index) {
         cart.splice(index, 1);
-        document.getElementById('cart-count').innerText = cart.length;
+        saveCartToStorage();
+        updateCartCount();
         renderCart();
     }
     function renderCart() {
+    updateCartCount();
     const list = document.getElementById('cartItemsList');
+    const totalEl = document.getElementById('cartTotal');
+    if (!list || !totalEl) return;
     const lang = localStorage.getItem('preferred_lang') || 'ua';
     const totalText = lang === 'ua' ? 'Всього' : 'Total';
     const currency = lang === 'ua' ? '₴' : '$';
@@ -353,7 +397,7 @@ let cart = [];
         return `<div class="cart-item"><span>${item.name} (${item.size}) — ${itemPrice}${currency}</span><span class="remove-item" onclick="removeFromCart(${idx})">&#10005;</span></div>`;
     }).join('');
 
-    document.getElementById('cartTotal').innerText = `${totalText}: ${total}${currency}`;
+    totalEl.innerText = `${totalText}: ${total}${currency}`;
 }
 
     // Новая функция для toggle FAQ
@@ -831,7 +875,8 @@ let cart = [];
                 showToast(msgTelegramWarn);
             }
             cart = [];
-            document.getElementById('cart-count').innerText = 0;
+            saveCartToStorage();
+            updateCartCount();
             paymentScreenshot = null;
             deliveryData = null;
             orderRegion = 'ua';
