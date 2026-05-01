@@ -314,24 +314,17 @@
             <div class="breadcrumbs">
                 <a href="/pages/index.html">Catalog</a> / <span>${product.title}</span>
             </div>
-            <article class="product-detail-card" itemscope itemtype="https://schema.org/Product">
+            <article class="product-detail-card">
                 <div class="product-detail-media">
                     ${newBadge}
-                    <img src="${mainImg}" id="productMainImage" class="product-detail-main-img" alt="${product.title} ${typeName}" loading="eager" decoding="async" itemprop="image">
+                    <img src="${mainImg}" id="productMainImage" class="product-detail-main-img" alt="${product.title} ${typeName}" loading="eager" decoding="async">
                     <div class="product-detail-thumbs">${thumbs}</div>
                 </div>
                 <div class="product-detail-info">
                     <a href="/pages/index.html" class="product-detail-back">${backLabel}</a>
-                    <h1 class="product-detail-title" itemprop="name">${product.title}</h1>
+                    <h1 class="product-detail-title">${product.title}</h1>
                     <p class="product-detail-meta"><strong>${slugLabel}:</strong> ${product.slug}</p>
-                    <p class="product-detail-desc" itemprop="description">${desc}</p>
-                    <div class="seo-hidden" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-                        <meta itemprop="priceCurrency" content="UAH">
-                        <meta itemprop="price" content="${product.priceUah}">
-                        <meta itemprop="url" content="${productAbsUrl(product.slug)}">
-                        <link itemprop="availability" href="https://schema.org/InStock">
-                        <link itemprop="itemCondition" href="https://schema.org/NewCondition">
-                    </div>
+                    <p class="product-detail-desc">${desc}</p>
                     <div class="price" id="productPrice" data-uah="${product.priceUah}\u20B4" data-usd="${product.priceUsd}$">${formatPriceLabel(product, lang)}</div>
                     <div class="product-detail-actions">
                         <select id="product-size">
