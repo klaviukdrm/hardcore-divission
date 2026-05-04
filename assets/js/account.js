@@ -1,4 +1,4 @@
-﻿const PHONE_COUNTRIES = [
+const PHONE_COUNTRIES = [
     { code: '380', label: 'Ukraine', example: '0661234567', localMin: 9, localMax: 9, stripLeadingZero: true },
     { code: '1', label: 'USA', example: '2025550123', localMin: 10, localMax: 10, stripLeadingZero: false },
     { code: '43', label: 'Austria', example: '6641234567' },
@@ -80,6 +80,7 @@ const registerPhoneLocal = document.getElementById('registerPhoneLocal');
 let currentOrders = [];
 let hasActiveSessionUI = false;
 const LAST_USER_PHONE_KEY = 'hd_last_user_phone';
+const ORDER_HISTORY_INFO_TEXT = 'Замовлення оформлено, очікуйте відправку протягом 3-5 робочих днів.';
 
 const ui = {
     ua: {
@@ -252,11 +253,6 @@ function renderOrders(orders) {
             const sizeText = item.size ? `, size ${item.size}` : '';
             return `<li>${item.quantity} x ${item.title}${sizeText} - ${item.price}</li>`;
         }).join('');
-        const trackingNumber = String(order.tracking_number || '').trim();
-        const needsTracking = order.status === 'Відправка (Нова Пошта, накладений платіж)';
-        const trackingLine = needsTracking || trackingNumber
-            ? `<div class="order-total">${t('tracking')}: ${trackingNumber || t('trackingPending')}</div>`
-            : '';
 
         return `
             <article class="order-card">
@@ -264,9 +260,8 @@ function renderOrders(orders) {
                     <strong>ID: ${order.id}</strong>
                     <span>${formatDate(order.created_at)}</span>
                 </div>
-                <div class="order-status">${t('status')}: ${translateStatus(order.status)}</div>
+                <div class="order-status">${ORDER_HISTORY_INFO_TEXT}</div>
                 <div class="order-total">${t('total')}: ${order.total_price}</div>
-                ${trackingLine}
                 <ul class="order-items">${rows}</ul>
             </article>
         `;
