@@ -14,14 +14,19 @@
 }
 
         header {
-            padding: 20px 12px;
-            text-align: center;
-            border-bottom: 2px solid var(--blood);
-            background: rgba(0,0,0,0.9);
-            position: static;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px max(40px, calc(50vw - 500px));
+            border-bottom: 1px solid var(--blood);
+            background: rgba(5, 5, 5, 0.95);
+            position: sticky;
+            top: 0;
             width: 100%;
-            z-index: 100;
-            overflow: visible;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         header.header-hidden {
@@ -60,7 +65,7 @@
 
         .logo {
             font-family: 'AncientMedium', serif;
-            font-size: 2.84rem;
+            font-size: 2.4rem;
             color: var(--blood);
             text-shadow: 0 0 10px rgba(136, 8, 8, 0.8);
             letter-spacing: 2px;
@@ -68,6 +73,8 @@
             z-index: 2;
             animation: pulse-logo 3s infinite ease-in-out;
             animation-delay: var(--pulse-sync-delay, 0ms);
+            margin: 0;
+            line-height: 1;
         }
 
         @keyframes pulse-logo {
@@ -744,22 +751,21 @@ body[data-page="catalog"] .size-btn {
 /* Center language switcher content */
 .lang-switcher {
     display: flex;
-    gap: 28px;
+    gap: 20px;
     align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-    margin: 0 auto;
+    justify-content: flex-end;
+    margin: 0;
 }
 
 /* Language buttons */
 .lang-btn {
     cursor: pointer;
-    font-size: 1.52rem;
+    font-size: 1.65rem;
     font-weight: 900;
     color: #8b8b8b;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     text-transform: uppercase;
 }
 
@@ -781,7 +787,7 @@ body[data-page="catalog"] .size-btn {
 .lang-btn.active::after {
     content: '';
     position: absolute;
-    bottom: -8px;
+    bottom: -4px;
     left: 0;
     width: 100%;
     height: 3px;
@@ -945,19 +951,20 @@ body[data-page="catalog"] .size-btn {
 }
 
 .account-icon-btn {
-    width: 50px;
-    height: 50px;
+    width: 54px;
+    height: 54px;
     padding: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 2px;
+    border-radius: 50%;
+    background: rgba(20, 20, 20, 0.8);
 }
 
 .account-icon-btn svg {
     display: block;
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
 }
 
 .account-btn.account-btn-auth {
@@ -1227,6 +1234,10 @@ body[data-page="catalog"] .size-btn {
 
     .lang-switcher {
         gap: 14px;
+    }
+
+    .lang-btn {
+        font-size: 1.35rem;
     }
 
     .account-btn {
