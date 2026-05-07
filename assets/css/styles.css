@@ -762,24 +762,40 @@ body[data-page="catalog"] .size-btn {
     cursor: pointer;
     font-size: 1.65rem;
     font-weight: 900;
-    color: #8b8b8b;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(100%) brightness(0.6);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     letter-spacing: 2px;
     text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    height: 42px;
+}
+
+#lang-ua {
+    background-image: url('https://flagcdn.com/w160/ua.png');
+}
+
+#lang-eng {
+    background-image: url('https://flagcdn.com/w160/gb.png');
 }
 
 /* Hover effect */
 .lang-btn:hover {
-    color: #fff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    color: transparent;
+    filter: grayscale(0%) brightness(1.2) drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
     transform: scale(1.1);
 }
 
 /* Active language state */
 .lang-btn.active {
-    color: var(--blood);
-    text-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 5px #000;
+    color: transparent;
+    filter: grayscale(0%) brightness(1.1) drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
     transform: scale(1.2);
 }
 
@@ -787,7 +803,7 @@ body[data-page="catalog"] .size-btn {
 .lang-btn.active::after {
     content: '';
     position: absolute;
-    bottom: -4px;
+    bottom: 0px;
     left: 0;
     width: 100%;
     height: 3px;
@@ -951,8 +967,8 @@ body[data-page="catalog"] .size-btn {
 }
 
 .account-icon-btn {
-    width: 54px;
-    height: 54px;
+    width: 48px;
+    height: 48px;
     padding: 0;
     display: inline-flex;
     align-items: center;
@@ -963,8 +979,8 @@ body[data-page="catalog"] .size-btn {
 
 .account-icon-btn svg {
     display: block;
-    width: 26px;
-    height: 26px;
+    width: 30px;
+    height: 30px;
 }
 
 .account-btn.account-btn-auth {
@@ -1238,6 +1254,7 @@ body[data-page="catalog"] .size-btn {
 
     .lang-btn {
         font-size: 1.35rem;
+        height: 38px;
     }
 
     .account-btn {
@@ -1246,8 +1263,8 @@ body[data-page="catalog"] .size-btn {
     }
 
     .account-icon-btn {
-        width: 44px;
-        height: 44px;
+        width: 42px;
+        height: 42px;
         padding: 0;
     }
 
