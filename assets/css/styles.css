@@ -957,7 +957,7 @@ body[data-page="catalog"] .size-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+    border-radius: 8px;
     background: rgba(20, 20, 20, 0.8);
 }
 
