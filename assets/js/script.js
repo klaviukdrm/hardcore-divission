@@ -88,9 +88,8 @@ let cart = [];
             const baseUsdLabel = priceEl.getAttribute('data-usd') || '';
             const onclickText = buyBtn.getAttribute('onclick') || '';
 
-            const isTshirt = isTshirtItem(onclickText);
             const is3xl = String(sizeSelect.value || '').toUpperCase() === '3XL';
-            const surchargeUah = isTshirt && is3xl ? tshirt3xlSurchargeUah : 0;
+            const surchargeUah = is3xl ? tshirt3xlSurchargeUah : 0;
 
             if (lang === 'ua') {
                 const baseUah = extractNumericPrice(baseUahLabel);
@@ -369,7 +368,7 @@ let cart = [];
     function addToCart(name, uah, usd, sizeId) {
     const size = document.getElementById(sizeId).value;
     const lang = localStorage.getItem('preferred_lang') || 'ua';
-    const sizeSurchargeUah = isTshirtItem(name) && size === '3XL' ? tshirt3xlSurchargeUah : 0;
+    const sizeSurchargeUah = size === '3XL' ? tshirt3xlSurchargeUah : 0;
     cart.push({name, uah: uah + sizeSurchargeUah, usd, size});
     saveCartToStorage();
     updateCartCount();
