@@ -83,9 +83,8 @@
 
         const lang = getLang();
         const selectedSize = String(sizeSelect.value || "").toUpperCase();
-        const isTshirt = inferTypeName(product) === "T-Shirt";
         const surchargeUah =
-            isTshirt && selectedSize === "3XL"
+            selectedSize === "3XL"
                 ? (typeof tshirt3xlSurchargeUah === "number" ? tshirt3xlSurchargeUah : 200)
                 : 0;
 
