@@ -45,24 +45,66 @@ export default async function handler(req, res) {
             }).filter(Boolean);
         }
 
+        function parseBase64DataUrl(dataUrl) {
+            const match = String(dataUrl || '').match(/^data:([^;,]+)?(?:;charset=[^;,]+)?;base64,(.+)$/i);
+            if (!match) return null;
+
+            const mimeType = String(match[1] || 'application/octet-stream').toLowerCase();
+            const rawBase64 = String(match[2] || '').trim();
+            if (!rawBase64) return null;
+
+            return {
+                mimeType,
+                buffer: Buffer.from(rawBase64, 'base64')
+            };
+        }
+
+        function extensionFromMimeType(mimeType) {
+            const map = {
+                'image/jpeg': 'jpg',
+                'image/jpg': 'jpg',
+                'image/png': 'png',
+                'image/webp': 'webp',
+                'image/gif': 'gif',
+                'image/bmp': 'bmp',
+                'image/tiff': 'tiff',
+                'image/heic': 'heic',
+                'image/heif': 'heif'
+            };
+            return map[mimeType] || 'bin';
+        }
+
+        const supportedPhotoMimeTypes = new Set([
+            'image/jpeg',
+            'image/jpg',
+            'image/png',
+            'image/webp',
+            'image/gif',
+            'image/bmp'
+        ]);
+
         // If image is base64, send it as a file to Telegram.
         if (imageData && imageData.includes('base64')) {
-            // 1) Strip the base64 prefix (data:image/png;base64,...).
-            const base64Data = imageData.split(',')[1];
-            
-            // 2) Convert base64 to Buffer.
-            const buffer = Buffer.from(base64Data, 'base64');
+            const parsedImage = parseBase64DataUrl(imageData);
+            if (!parsedImage || !parsedImage.buffer.length) {
+                return res.status(400).json({ success: false, error: 'Invalid payment screenshot data' });
+            }
+
+            const { mimeType, buffer } = parsedImage;
+            const ext = extensionFromMimeType(mimeType);
+            const isPhotoMime = supportedPhotoMimeTypes.has(mimeType);
+            const methodName = isPhotoMime ? 'sendPhoto' : 'sendDocument';
+            const fieldName = isPhotoMime ? 'photo' : 'document';
 
             const formData = new FormData();
             formData.append('chat_id', chatId);
             formData.append('caption', message);
             formData.append('parse_mode', 'HTML');
-            
-            // 3) Wrap buffer as Blob for multipart upload.
-            const fileBlob = new Blob([buffer], { type: 'image/png' });
-            formData.append('photo', fileBlob, 'payment.png');
 
-            response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+            const fileBlob = new Blob([buffer], { type: mimeType });
+            formData.append(fieldName, fileBlob, `payment.${ext}`);
+
+            response = await fetch(`https://api.telegram.org/bot${botToken}/${methodName}`, {
                 method: 'POST',
                 body: formData
             });
