@@ -180,11 +180,11 @@ let cart = [];
 
     if (type === 'tshirt') {
         img.src = 'images/Screenshot_198.png';
-        btnT.style.background = 'var(--blood)'; btnT.style.color = 'white';
+        btnT.style.background = '#39ff14'; btnT.style.color = '#ff1493';
         btnH.style.background = '#222'; btnH.style.color = '#888';
     } else {
         img.src = 'images/Screenshot_197.png';
-        btnH.style.background = 'var(--blood)'; btnH.style.color = 'white';
+        btnH.style.background = '#39ff14'; btnH.style.color = '#ff1493';
         btnT.style.background = '#222'; btnT.style.color = '#888';
     }
 }
@@ -534,7 +534,7 @@ let cart = [];
         if (paymentScreenshot && payBtn) {
             payBtn.disabled = false;
             payBtn.style.opacity = '1';
-            payBtn.style.background = 'var(--blood)';
+            payBtn.style.background = '#39ff14';
         }
     }
 
@@ -560,9 +560,14 @@ let cart = [];
                 canvas.width = targetW;
                 canvas.height = targetH;
                 const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, targetW, targetH);
+                if (!ctx) return resolve(dataUrl);
 
                 try {
+                    // JPEG does not support transparency; fill background to avoid black frames.
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, targetW, targetH);
+                    ctx.drawImage(img, 0, 0, targetW, targetH);
+
                     const compressed = canvas.toDataURL('image/jpeg', quality);
                     resolve(compressed);
                 } catch (e) {
