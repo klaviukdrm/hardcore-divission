@@ -317,15 +317,36 @@
 
         mount.innerHTML = `
             <style>
+                .product-detail-back {
+                    color: #888 !important;
+                }
                 @media (max-width: 768px) {
                     .product-detail-back,
                     .product-detail-meta {
                         display: none !important;
                     }
+                    .bc-desktop { display: none !important; }
+                    .bc-mobile { 
+                        display: inline-flex !important; 
+                        align-items: center;
+                        gap: 8px;
+                        background-color: transparent !important;
+                        color: #ccc !important;
+                        padding: 8px 15px !important;
+                        border-radius: 4px !important;
+                        text-decoration: none !important; 
+                        text-transform: uppercase; 
+                        font-size: 0.85rem; 
+                        letter-spacing: 1px; 
+                    }
+                }
+                @media (min-width: 769px) {
+                    .bc-mobile { display: none !important; }
                 }
             </style>
             <div class="breadcrumbs">
-                <a href="/pages/index.html">Catalog</a> / <span>${product.title}</span>
+                <span class="bc-desktop"><a href="/pages/index.html">Catalog</a> / <span>${product.title}</span></span>
+                <a href="/pages/index.html" class="bc-mobile">&#8592; ${backLabel}</a>
             </div>
             <article class="product-detail-card">
                 <div class="product-detail-media">
