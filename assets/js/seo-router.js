@@ -316,6 +316,14 @@
         ).join("");
 
         mount.innerHTML = `
+            <style>
+                @media (max-width: 768px) {
+                    .product-detail-back,
+                    .product-detail-meta {
+                        display: none !important;
+                    }
+                }
+            </style>
             <div class="breadcrumbs">
                 <a href="/pages/index.html">Catalog</a> / <span>${product.title}</span>
             </div>
