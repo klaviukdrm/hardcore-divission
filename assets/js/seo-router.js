@@ -321,23 +321,24 @@
                     color: #888 !important;
                 }
                 @media (max-width: 768px) {
-                    .product-detail-back,
                     .product-detail-meta {
                         display: none !important;
                     }
-                    .bc-desktop { display: none !important; }
-                    .bc-mobile { 
-                        display: inline-flex !important; 
+                    .breadcrumbs {
+                        display: none !important;
+                    }
+                    .product-detail-back {
+                        display: inline-flex !important;
                         align-items: center;
                         gap: 8px;
                         background-color: transparent !important;
                         color: #ccc !important;
-                        padding: 8px 15px !important;
-                        border-radius: 4px !important;
+                        padding: 0 !important;
                         text-decoration: none !important; 
                         text-transform: uppercase; 
                         font-size: 0.85rem; 
                         letter-spacing: 1px; 
+                        margin-bottom: 10px !important;
                     }
                 }
                 @media (min-width: 769px) {
