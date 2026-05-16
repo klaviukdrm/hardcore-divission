@@ -550,6 +550,7 @@
             header { position: static; }
             header { padding: 14px 10px; }
             body[data-page="catalog"] .container { padding-top: 38px; }
+            body[data-page="product"] .hero-text { display: none; }
             .logo { font-size: 2.24rem; }
             .hero-text h2 { font-size: 2.2rem; }
             .shop-grid { grid-template-columns: 1fr; gap: 25px; }
