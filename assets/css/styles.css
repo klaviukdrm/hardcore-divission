@@ -311,6 +311,12 @@
             appearance: none; /* Скрываем стандартную браузерную стрелку */
             -webkit-appearance: none;
             cursor: pointer;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        select:hover {
+            border-color: #ff1a1a;
+            box-shadow: 0 0 10px rgba(136, 8, 8, 0.5);
         }
 
         @media (min-width: 992px) {
@@ -323,6 +329,10 @@
             background: var(--blood); color: white; border: none; padding: 15px;
             width: 100%; font-weight: bold; cursor: pointer; text-transform: uppercase;
             letter-spacing: 1px; transition: 0.3s;
+        }
+        .buy-btn:hover:not(:disabled) {
+            background: #a40a0a;
+            box-shadow: 0 0 18px rgba(136, 8, 8, 0.7);
         }
         .buy-btn:disabled { background: #444; cursor: not-allowed; }
 
@@ -637,6 +647,12 @@
             align-items: center;
             gap: 8px;
             padding: 6px 8px;
+            transition: all 0.3s ease;
+        }
+        .socials a:hover {
+            color: #ff1a1a;
+            filter: drop-shadow(0 0 12px rgba(255, 0, 0, 0.6));
+            transform: scale(1.05);
         }
         .socials a svg {
             width: 18px;
