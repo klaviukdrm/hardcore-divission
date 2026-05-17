@@ -371,7 +371,7 @@
                             <option value="3XL">SIZE: 3XL</option>
                         </select>
                         <button class="buy-btn" id="addProductBtn">${addLabel}</button>
-                        <button class="buy-btn" id="sizeGuideBtn" style="margin-top:10px; background:#111; border:1px solid #333;">${sizeGuideLabel}</button>
+                        <button class="buy-btn size-guide-btn" id="sizeGuideBtn">${sizeGuideLabel}</button>
                     </div>
                     <div class="product-detail-filler-art" aria-hidden="true">
                         <img src="images/photo_2026-03-13_20-42-54.png" alt="">
