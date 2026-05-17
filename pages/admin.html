@@ -42,18 +42,6 @@
                 <h3 class="orders-title" style="margin:0;">Всі замовлення</h3>
                 <button id="adminLogoutBtn" class="buy-btn account-logout" type="button">Вийти</button>
             </div>
-            <form id="adminResetPasswordForm" class="panel-form admin-reset-form" novalidate>
-                <h3>Скинути пароль користувача</h3>
-                <label class="field-label" for="resetUserPhone">Телефон користувача (формат: +380...)</label>
-                <div class="admin-reset-row">
-                    <input id="resetUserPhone" type="tel" inputmode="tel" placeholder="+380661234567" required>
-                    <button id="adminResetPasswordBtn" class="buy-btn admin-reset-btn" type="submit">Скинути пароль</button>
-                </div>
-            </form>
-            <div id="adminResetResult" class="admin-reset-result" hidden>
-                <div class="order-total">Користувач: <span id="adminResetPhoneValue">-</span></div>
-                <div class="order-total">Тимчасовий пароль: <code id="adminTempPasswordValue" class="admin-temp-password">-</code></div>
-            </div>
             <div id="adminOrdersList" class="orders-list"></div>
         </div>
     </section>
