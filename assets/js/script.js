@@ -1196,6 +1196,25 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshCatalogPricePreview();
 });
 
+// Логіка для перевертання стрілочки в select
+document.addEventListener('click', (event) => {
+    if (event.target && event.target.tagName === 'SELECT') {
+        event.target.classList.toggle('is-open');
+    } else {
+        document.querySelectorAll('select.is-open').forEach(sel => sel.classList.remove('is-open'));
+    }
+});
+document.addEventListener('change', (event) => {
+    if (event.target && event.target.tagName === 'SELECT') {
+        event.target.classList.remove('is-open');
+    }
+});
+document.addEventListener('focusout', (event) => {
+    if (event.target && event.target.tagName === 'SELECT') {
+        event.target.classList.remove('is-open');
+    }
+});
+
 function updateContact() {
     const lang = localStorage.getItem('preferred_lang') || 'ua';
 
