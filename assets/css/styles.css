@@ -301,8 +301,16 @@
         .price { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; color: #fff; }
 
         select {
-            background: #000; color: #fff; border: 1px solid var(--blood);
-            padding: 12px; width: 100%; margin-bottom: 15px; outline: none; font-size: 16px; font-family: 'Oswald', sans-serif;
+            background-color: #000;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center; /* Сдвигаем стрелочку на 15px левее края */
+            background-size: 16px; /* Размер стрелочки */
+            color: #fff; border: 1px solid var(--blood);
+            padding: 12px 40px 12px 12px; width: 100%; margin-bottom: 15px; outline: none; font-size: 16px; font-family: 'Oswald', sans-serif;
+            appearance: none; /* Скрываем стандартную браузерную стрелку */
+            -webkit-appearance: none;
+            cursor: pointer;
         }
 
         .buy-btn {
@@ -476,7 +484,7 @@
             }
             .product-detail-actions select {
                 font-size: 1.08rem;
-                padding: 14px;
+            padding: 14px 40px 14px 14px;
             }
             .product-detail-actions .buy-btn {
                 font-size: 1.02rem;
@@ -1212,12 +1220,16 @@ body[data-page="catalog"] .size-btn {
 .panel-form textarea {
     width: 100%;
     border: 1px solid #2f2f2f;
-    background: #000;
+    background-color: #000;
     color: #fff;
     padding: 12px;
     margin-bottom: 8px;
     font-family: 'Oswald', sans-serif;
     font-size: 16px;
+}
+
+.panel-form select {
+    padding-right: 40px;
 }
 
 .panel-form input:focus,
