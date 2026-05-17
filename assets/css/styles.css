@@ -1124,6 +1124,22 @@ body[data-page="catalog"] .size-btn {
     box-shadow: 0 0 0 2px rgba(136, 8, 8, 0.25);
 }
 
+.forgot-pass-link {
+    display: inline-block;
+    margin: 2px 0 12px;
+    font-size: 0.8rem;
+    color: #9a9a9a;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    letter-spacing: 0.4px;
+    transition: color 0.2s ease;
+}
+
+.forgot-pass-link:hover {
+    color: #ffffff;
+}
+
 .phone-row {
     display: grid;
     grid-template-columns: minmax(185px, 1fr) minmax(0, 1.3fr);
@@ -1219,6 +1235,37 @@ body[data-page="catalog"] .size-btn {
     max-width: 420px;
 }
 
+.admin-reset-form {
+    max-width: 700px;
+    margin: 14px 0 16px;
+}
+
+.admin-reset-row {
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) auto;
+    gap: 10px;
+    align-items: end;
+}
+
+.admin-reset-btn {
+    width: auto;
+    min-width: 190px;
+}
+
+.admin-reset-result {
+    border: 1px solid #2a2a2a;
+    background: #090909;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+}
+
+.admin-temp-password {
+    font-family: monospace;
+    color: #ffffff;
+    font-size: 1rem;
+    letter-spacing: 0.6px;
+}
+
 .admin-order-actions {
     margin-top: 10px;
     display: grid;
@@ -1274,6 +1321,14 @@ body[data-page="catalog"] .size-btn {
     }
 
     .admin-order-actions .admin-save-btn {
+        width: 100%;
+    }
+
+    .admin-reset-row {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-reset-btn {
         width: 100%;
     }
 
