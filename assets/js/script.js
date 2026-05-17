@@ -350,6 +350,16 @@ let cart = [];
         galleryPanY = 0;
         applyGalleryZoomState();
     }
+    function initGalleryBackdropClose() {
+        const galleryEl = document.getElementById('gallery');
+        if (!galleryEl) return;
+
+        galleryEl.addEventListener('click', (event) => {
+            if (event.target === galleryEl) {
+                closeGallery();
+            }
+        });
+    }
     function changeImg(dir) {
         if (!currentGalleryImages.length || currentGalleryImages.length === 1 || galleryZoomed) return;
         currentImgIndex = (currentImgIndex + dir + currentGalleryImages.length) % currentGalleryImages.length;
@@ -1239,6 +1249,7 @@ async function syncAccountButtonState() {
 document.addEventListener('DOMContentLoaded', () => {
     updateContact();
     syncAccountButtonState();
+    initGalleryBackdropClose();
 });
 
 window.addEventListener('pageshow', () => {
