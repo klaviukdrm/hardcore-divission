@@ -1,4 +1,4 @@
-﻿const statuses = [
+const statuses = [
     'Пакування',
     'Відправка (Нова Пошта, накладений платіж)',
     'Завершено'
@@ -12,11 +12,24 @@ const adminArea = document.getElementById('adminArea');
 const adminOrdersList = document.getElementById('adminOrdersList');
 const adminMessage = document.getElementById('adminMessage');
 const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+const adminResetPasswordForm = document.getElementById('adminResetPasswordForm');
+const adminResetPasswordBtn = document.getElementById('adminResetPasswordBtn');
+const adminResetResult = document.getElementById('adminResetResult');
+const adminResetPhoneValue = document.getElementById('adminResetPhoneValue');
+const adminTempPasswordValue = document.getElementById('adminTempPasswordValue');
+
+const E164_PHONE_REGEX = /^\+\d{7,15}$/;
 
 function showMessage(text, isError = false) {
     adminMessage.textContent = text || '';
     adminMessage.classList.toggle('error', Boolean(text) && isError);
     adminMessage.classList.toggle('success', Boolean(text) && !isError);
+}
+
+function resetPasswordResult() {
+    if (adminResetResult) adminResetResult.hidden = true;
+    if (adminResetPhoneValue) adminResetPhoneValue.textContent = '-';
+    if (adminTempPasswordValue) adminTempPasswordValue.textContent = '-';
 }
 
 async function api(url, options = {}) {
@@ -185,6 +198,7 @@ function showLoginArea() {
     adminLoginForm.hidden = false;
     adminArea.hidden = true;
     adminOrdersList.innerHTML = '';
+    resetPasswordResult();
 }
 
 adminLoginForm.addEventListener('submit', async (event) => {
@@ -218,6 +232,43 @@ adminLogoutBtn.addEventListener('click', async () => {
         showMessage(e.message, true);
     }
 });
+
+if (adminResetPasswordForm) {
+    adminResetPasswordForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        showMessage('');
+
+        const input = document.getElementById('resetUserPhone');
+        const phone = String(input ? input.value : '').replace(/\s+/g, '').trim();
+
+        if (!E164_PHONE_REGEX.test(phone)) {
+            showMessage('Вкажіть телефон у форматі +380661234567.', true);
+            resetPasswordResult();
+            return;
+        }
+
+        try {
+            if (adminResetPasswordBtn) adminResetPasswordBtn.disabled = true;
+
+            const data = await api('/api/admin/reset-user-password', {
+                method: 'POST',
+                body: JSON.stringify({ phone })
+            });
+
+            if (adminResetPhoneValue) adminResetPhoneValue.textContent = data.phone || phone;
+            if (adminTempPasswordValue) adminTempPasswordValue.textContent = data.temporary_password || '-';
+            if (adminResetResult) adminResetResult.hidden = false;
+
+            showMessage('Пароль успішно скинуто. Передайте тимчасовий пароль клієнту.');
+            event.target.reset();
+        } catch (e) {
+            resetPasswordResult();
+            showMessage(e.message, true);
+        } finally {
+            if (adminResetPasswordBtn) adminResetPasswordBtn.disabled = false;
+        }
+    });
+}
 
 async function init() {
     try {
