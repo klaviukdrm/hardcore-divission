@@ -3,7 +3,7 @@ window.PRODUCTS_DATA = [
     "id": 25,
     "slug": "timur-mutsuraev-timur-mutsuraev-t-shirt",
     "category": "футболка",
-    "isNew": true,
+    "isNew": false,
     "title": "Timur Mutsuraev",
     "descUa": "Колекція про чеченського барда, який у своїх піснях виражав боротьбу за свободу, віру та любов до рідної землі.",
     "descEng": "A collection about the Chechen bard who expressed in his songs the struggle for freedom, faith, and love for his homeland.",
@@ -565,5 +565,74 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE CITADEL T-SHIRT",
     "cartSizeId": "size-f12",
     "seoKeywords": "HARDCORE CITADEL, HARDCORE CITADEL T-SHIRT, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+  },
+  {
+    "id": 26,
+    "slug": "turbohardcore-turbohardcore-hoodie",
+    "category": "худі",
+    "isNew": true,
+    "title": "TURBOHARDCORE",
+    "descUa": "Колаборація TURBOSKIN x HARDCORE DIVISION в дусі важкого стрітвиру щільний силует, жорсткий настрій і впізнаваний вуличний характер.",
+    "descEng": "A TURBOSKIN x HARDCORE DIVISION collaboration in heavy streetwear spirit with a dense silhouette, hard mood, and unmistakable street character.",
+    "image": "images/IMG_7812.JPEG",
+    "imageAlt": "images/IMG_7813.JPEG",
+    "gallery": [
+      "images/IMG_7812.JPEG",
+      "images/IMG_7813.JPEG"
+    ],
+    "priceUahLabel": "2000₴",
+    "priceUsdLabel": "50$",
+    "priceUah": 2000,
+    "priceUsd": 50,
+    "sizeId": "size-h14",
+    "cartName": "TURBOHARDCORE HOODIE",
+    "cartSizeId": "size-h14",
+    "seoKeywords": "TURBOHARDCORE, TURBOHARDCORE HOODIE, худі, hardcore division, turboskin, streetwear, ukraine brand"
+  },
+  {
+    "id": 27,
+    "slug": "turbohardcore-red-turbohardcore-t-shirt-red",
+    "category": "футболка",
+    "isNew": true,
+    "title": "TURBOHARDCORE T-SHIRT RED",
+    "descUa": "Колаборація TURBOSKIN x HARDCORE DIVISION у червоному виконанні енергія тиску, контрасту та прямого меседжу без компромісів.",
+    "descEng": "A TURBOSKIN x HARDCORE DIVISION collaboration in red execution with pressure, contrast, and a direct message with no compromises.",
+    "image": "images/IMG_7810.JPEG",
+    "imageAlt": "images/IMG_7811.JPEG",
+    "gallery": [
+      "images/IMG_7810.JPEG",
+      "images/IMG_7811.JPEG"
+    ],
+    "priceUahLabel": "1050₴",
+    "priceUsdLabel": "25$",
+    "priceUah": 1050,
+    "priceUsd": 25,
+    "sizeId": "size-f14",
+    "cartName": "TURBOHARDCORE T-SHIRT RED",
+    "cartSizeId": "size-f14",
+    "seoKeywords": "TURBOHARDCORE T-SHIRT RED, TURBOHARDCORE, футболка, hardcore division, turboskin, streetwear, ukraine brand"
+  },
+  {
+    "id": 28,
+    "slug": "turbohardcore-white-turbohardcore-t-shirt-white",
+    "category": "футболка",
+    "isNew": true,
+    "title": "TURBOHARDCORE T-SHIRT WHITE",
+    "descUa": "Колаборація TURBOSKIN x HARDCORE DIVISION у білому виконанні чиста база, різкий акцент і холодна брутальність у деталях.",
+    "descEng": "A TURBOSKIN x HARDCORE DIVISION collaboration in white execution with a clean base, sharp accent, and cold brutality in the details.",
+    "image": "images/IMG_7806.JPEG",
+    "imageAlt": "images/IMG_7809.JPEG",
+    "gallery": [
+      "images/IMG_7806.JPEG",
+      "images/IMG_7809.JPEG"
+    ],
+    "priceUahLabel": "1050₴",
+    "priceUsdLabel": "25$",
+    "priceUah": 1050,
+    "priceUsd": 25,
+    "sizeId": "size-f15",
+    "cartName": "TURBOHARDCORE T-SHIRT WHITE",
+    "cartSizeId": "size-f15",
+    "seoKeywords": "TURBOHARDCORE T-SHIRT WHITE, TURBOHARDCORE, футболка, hardcore division, turboskin, streetwear, ukraine brand"
   }
 ];
