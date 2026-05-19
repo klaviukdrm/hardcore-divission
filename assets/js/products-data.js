@@ -1,5 +1,30 @@
 window.PRODUCTS_DATA = [
   {
+    "id": 29,
+    "slug": "hardcore-jugend-hardcore-jugend-t-shirt",
+    "category": "футболка",
+    "isNew": true,
+    "title": "HARDCORE JUGEND",
+    "descUa": "Це про дисципліну, агресію та андеграундний дух. Холодні вулиці, гучна музика, безсонні ночі та покоління, яке відмовляється ставати слабким.",
+    "descEng": "This is about discipline, aggression, and underground spirit. Cold streets, loud music, sleepless nights, and a generation that refuses to become weak.",
+    "image": "images/IMG_7848.JPG",
+    "imageAlt": "images/IMG_7849.JPG",
+    "gallery": [
+      "images/IMG_7848.JPG",
+      "images/IMG_7849.JPG",
+      "images/IMG_7850.JPG",
+      "images/IMG_7857.JPG"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20$",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f16",
+    "cartName": "HARDCORE JUGEND T-SHIRT",
+    "cartSizeId": "size-f16",
+    "seoKeywords": "HARDCORE JUGEND, HARDCORE JUGEND T-SHIRT, футболка, hardcore division, streetwear, ukraine brand"
+  },
+  {
     "id": 25,
     "slug": "timur-mutsuraev-timur-mutsuraev-t-shirt",
     "category": "футболка",
