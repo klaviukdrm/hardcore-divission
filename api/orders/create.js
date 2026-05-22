@@ -28,6 +28,42 @@ function normalizeItems(items) {
         .filter(Boolean);
 }
 
+async function insertOrderItemsWithFallback(orderId, items) {
+    const itemRows = items.map((item) => ({
+        order_id: orderId,
+        product_id: item.product_id,
+        title: item.title,
+        price: item.price,
+        quantity: item.quantity,
+        size: item.size
+    }));
+
+    const bulkInsert = await supabaseRequest('order_items', {
+        method: 'POST',
+        body: itemRows,
+        prefer: 'return=representation'
+    });
+
+    if (bulkInsert.ok) {
+        const inserted = Array.isArray(bulkInsert.data) ? bulkInsert.data.length : itemRows.length;
+        return { ok: true, inserted };
+    }
+
+    let inserted = 0;
+    for (const row of itemRows) {
+        const singleInsert = await supabaseRequest('order_items', {
+            method: 'POST',
+            body: row,
+            prefer: 'return=representation'
+        });
+        if (singleInsert.ok) {
+            inserted += 1;
+        }
+    }
+
+    return { ok: inserted > 0, inserted };
+}
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return methodNotAllowed(res, ['POST']);
@@ -75,30 +111,18 @@ export default async function handler(req, res) {
     }
 
     const order = createOrder.data[0];
-    const itemRows = items.map((item) => ({
-        order_id: order.id,
-        product_id: item.product_id,
-        title: item.title,
-        price: item.price,
-        quantity: item.quantity,
-        size: item.size
-    }));
-
-    const insertItems = await supabaseRequest('order_items', {
-        method: 'POST',
-        body: itemRows,
-        prefer: 'return=representation'
-    });
-
-    if (!insertItems.ok) {
-        await supabaseRequest('orders', {
-            method: 'DELETE',
-            query: {
-                id: `eq.${order.id}`
+    const itemsResult = await insertOrderItemsWithFallback(order.id, items);
+    if (!itemsResult.ok) {
+        // Keep parent order even if item rows failed: user should still see the order in history.
+        return json(res, 201, {
+            success: true,
+            warning: 'Order was created, but items were not saved',
+            order: {
+                id: order.id,
+                total_price: order.total_price,
+                status: order.status
             }
         });
-
-        return json(res, 500, { error: 'Failed to save order items' });
     }
 
     return json(res, 201, {
