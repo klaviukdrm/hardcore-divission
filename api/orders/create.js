@@ -1,4 +1,4 @@
-﻿import { json, methodNotAllowed, parseJsonBody } from '../../lib/server/http.js';
+import { json, methodNotAllowed, parseJsonBody } from '../../lib/server/http.js';
 import { getUserSession } from '../../lib/server/session.js';
 import { requireSupabaseConfig, supabaseRequest } from '../../lib/server/supabase.js';
 
