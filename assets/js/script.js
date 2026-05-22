@@ -176,16 +176,37 @@ let cart = [];
     function setSizeType(type) {
     const img = document.getElementById('mainSizeImg');
     const btnT = document.getElementById('size-btn-t');
+    const btnS = document.getElementById('size-btn-s');
     const btnH = document.getElementById('size-btn-h');
+    const buttons = [btnT, btnS, btnH].filter(Boolean);
+
+    buttons.forEach((btn) => {
+        btn.style.background = '#222';
+        btn.style.color = '#888';
+        btn.style.border = '1px solid #333';
+    });
 
     if (type === 'tshirt') {
         img.src = 'images/Screenshot_198.png';
-        btnT.style.background = '#39ff14'; btnT.style.color = '#ff1493';
-        btnH.style.background = '#222'; btnH.style.color = '#888';
+        if (btnT) {
+            btnT.style.background = '#39ff14';
+            btnT.style.color = '#ff1493';
+            btnT.style.border = 'none';
+        }
+    } else if (type === 'sweatshirt') {
+        img.src = 'images/ChatGPT Image.png';
+        if (btnS) {
+            btnS.style.background = '#39ff14';
+            btnS.style.color = '#ff1493';
+            btnS.style.border = 'none';
+        }
     } else {
         img.src = 'images/Screenshot_197.png';
-        btnH.style.background = '#39ff14'; btnH.style.color = '#ff1493';
-        btnT.style.background = '#222'; btnT.style.color = '#888';
+        if (btnH) {
+            btnH.style.background = '#39ff14';
+            btnH.style.color = '#ff1493';
+            btnH.style.border = 'none';
+        }
     }
 }
     function getGalleryPoint(event) {
