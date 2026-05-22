@@ -1,5 +1,30 @@
 window.PRODUCTS_DATA = [
   {
+    "id": 30,
+    "slug": "hardcore-longsleeve-hardcore-longsleeve-sweatshirt",
+    "category": "світшоти",
+    "isNew": true,
+    "title": "HARDCORE LONGLSLEEVE",
+    "descUa": "Це про дисципліну, агресію та андеграундний дух. Холодні вулиці, гучна музика, безсонні ночі та покоління, яке відмовляється ставати слабким.",
+    "descEng": "This is about discipline, aggression, and underground spirit. Cold streets, loud music, sleepless nights, and a generation that refuses to become weak.",
+    "image": "images/IMG_7913.JPG",
+    "imageAlt": "images/IMG_7914.JPG",
+    "gallery": [
+      "images/IMG_7913.JPG",
+      "images/IMG_7914.JPG",
+      "images/IMG_7915.JPG",
+      "images/IMG_7916.JPG"
+    ],
+    "priceUahLabel": "1550₴",
+    "priceUsdLabel": "35$",
+    "priceUah": 1550,
+    "priceUsd": 35,
+    "sizeId": "size-sw1",
+    "cartName": "HARDCORE LONGLSLEEVE",
+    "cartSizeId": "size-sw1",
+    "seoKeywords": "HARDCORE LONGLSLEEVE, світшот, свитшот, hardcore division, streetwear, ukraine brand"
+  },
+  {
     "id": 29,
     "slug": "hardcore-jugend-hardcore-jugend-t-shirt",
     "category": "футболка",
