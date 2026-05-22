@@ -222,6 +222,12 @@
         }
 
         .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        @media (min-width: 993px) {
+            body[data-page="catalog"] .shop-grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 420px));
+                justify-content: center;
+            }
+        }
 
         .product-card {
             background: var(--gray); border: 1px solid #333; transition: 0.3s;
