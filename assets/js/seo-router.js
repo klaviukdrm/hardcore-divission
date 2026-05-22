@@ -63,13 +63,19 @@
     }
 
     function inferTypeName(product) {
-        return /t-?shirt/i.test(product.cartName) ? "T-Shirt" : "Hoodie";
+        const category = String(product && product.category ? product.category : "").toLowerCase();
+        const cartName = String(product && product.cartName ? product.cartName : "");
+        if (category === "світшоти" || /sweatshirt|longsleeve|longlsleeve/i.test(cartName)) {
+            return "Sweatshirt";
+        }
+        return /t-?shirt/i.test(cartName) ? "T-Shirt" : "Hoodie";
     }
 
     function getSizeGuideImage(product) {
-        return inferTypeName(product) === "T-Shirt"
-            ? "images/Screenshot_198.png"
-            : "images/Screenshot_197.png";
+        const type = inferTypeName(product);
+        if (type === "T-Shirt") return "images/Screenshot_198.png";
+        if (type === "Sweatshirt") return "images/ChatGPT Image.png";
+        return "images/Screenshot_197.png";
     }
 
     function formatPriceLabel(product, lang) {
@@ -105,8 +111,8 @@
 
     function buildProductSeoCopy(product) {
         const type = inferTypeName(product);
-        const typeUa = type === "T-Shirt" ? "футболка" : "худі";
-        const typeRu = type === "T-Shirt" ? "футболка" : "худи";
+        const typeUa = type === "T-Shirt" ? "футболка" : (type === "Sweatshirt" ? "світшот" : "худі");
+        const typeRu = type === "T-Shirt" ? "футболка" : (type === "Sweatshirt" ? "свитшот" : "худи");
         const descUa = (product.descUa || product.descEng || product.title).trim();
         const descEng = (product.descEng || product.descUa || product.title).trim();
 
@@ -213,14 +219,17 @@
                 return a.index - b.index;
             };
 
+            const sweatshirts = cardItems
+                .filter((item) => inferTypeName(item.product) === "Sweatshirt")
+                .sort(byHash);
             const tshirts = cardItems
                 .filter((item) => inferTypeName(item.product) === "T-Shirt")
                 .sort(byHash);
             const hoodies = cardItems
-                .filter((item) => inferTypeName(item.product) !== "T-Shirt")
+                .filter((item) => inferTypeName(item.product) === "Hoodie")
                 .sort(byHash);
 
-            const sorted = [];
+            const sorted = [...sweatshirts];
             const initialTshirts = Math.min(2, tshirts.length);
             for (let i = 0; i < initialTshirts; i += 1) {
                 sorted.push(tshirts.shift());
@@ -230,6 +239,17 @@
                 if (hoodies.length) sorted.push(hoodies.shift());
                 if (tshirts.length) sorted.push(tshirts.shift());
             }
+
+            const swapByTitle = (firstTitle, secondTitle) => {
+                const firstIndex = sorted.findIndex((item) => item.product && item.product.title === firstTitle);
+                const secondIndex = sorted.findIndex((item) => item.product && item.product.title === secondTitle);
+                if (firstIndex >= 0 && secondIndex >= 0 && firstIndex !== secondIndex) {
+                    [sorted[firstIndex], sorted[secondIndex]] = [sorted[secondIndex], sorted[firstIndex]];
+                }
+            };
+
+            // Requested manual swap in catalog order.
+            swapByTitle("HARDCORE JUGEND", "TURBOHARDCORE");
 
             const changedOrder = sorted.some((item, idx) => item !== cardItems[idx]);
             if (changedOrder) {
