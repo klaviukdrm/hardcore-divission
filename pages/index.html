@@ -52,6 +52,10 @@
             style="flex: 1; background: #222; color: #888; border: 1px solid #333; padding: 10px; cursor: pointer;">
             ФУТБОЛКИ
         </button>
+        <button id="size-btn-s" class="size-type-btn" data-ua="СВІТШОТИ" data-eng="SWEATSHIRTS" onclick="setSizeType('sweatshirt')" 
+            style="flex: 1; background: #222; color: #888; border: 1px solid #333; padding: 10px; cursor: pointer;">
+            СВІТШОТИ
+        </button>
         <button id="size-btn-h" class="size-type-btn" data-ua="ХУДІ" data-eng="HOODIES" onclick="setSizeType('hoodie')" 
             style="flex: 1; background: var(--blood); color: white; border: none; padding: 10px; cursor: pointer;">
             ХУДІ
@@ -175,6 +179,7 @@
     <button class="filter-btn active" data-ua="ВСЕ" data-eng="ALL" onclick="filterProducts('all')">ВСЕ</button>
     <button class="filter-btn" data-ua="ХУДІ" data-eng="HOODIE" onclick="filterProducts('худі')">ХУДІ</button>
     <button class="filter-btn" data-ua="ФУТБОЛКИ" data-eng="T-SHIRTS" onclick="filterProducts('футболка')">ФУТБОЛКИ</button>
+    <button class="filter-btn" data-ua="СВІТШОТИ" data-eng="SWEATSHIRTS" onclick="filterProducts('світшоти')">СВІТШОТИ</button>
     <div class="catalog-search-wrap">
         <div class="catalog-search-shell">
             <span class="catalog-search-icon" aria-hidden="true">
@@ -190,6 +195,25 @@
 
 <div class="shop-grid">
     
+    <div class="product-card" data-category="світшоти">
+        <div class="product-img-container" onclick="openGallery(['images/IMG_7913.JPG', 'images/IMG_7914.JPG', 'images/IMG_7915.JPG', 'images/IMG_7916.JPG'])">
+            <img src="images/IMG_7913.JPG" class="product-img" loading="lazy" decoding="async" alt="Hardcore Division product image">
+            <img src="images/IMG_7914.JPG" class="product-img-alt" loading="lazy" decoding="async" alt="Hardcore Division product image alternate view">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">HARDCORE LONGLSLEEVE</h3><p class="product-desc" data-ua="Це про дисципліну, агресію та андеграундний дух. Холодні вулиці, гучна музика, безсонні ночі та покоління, яке відмовляється ставати слабким." data-eng="This is about discipline, aggression, and underground spirit. Cold streets, loud music, sleepless nights, and a generation that refuses to become weak.">Це про дисципліну, агресію та андеграундний дух. Холодні вулиці, гучна музика, безсонні ночі та покоління, яке відмовляється ставати слабким.</p></div>
+            <div>
+                <div class="price" data-uah="1550₴" data-usd="35$"></div>
+                <select id="size-sw1">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE LONGLSLEEVE', 1550, 35, 'size-sw1')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
     <div class="product-card" data-category="футболка">
         <div class="product-img-container" onclick="openGallery(['images/IMG_7848.JPG', 'images/IMG_7849.JPG', 'images/IMG_7850.JPG', 'images/IMG_7857.JPG'])">
             <img src="images/IMG_7848.JPG" class="product-img" loading="lazy" decoding="async" alt="Hardcore Division product image">
