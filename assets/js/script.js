@@ -68,181 +68,6 @@ let cart = [];
         return /t-?shirt/i.test(String(name || ''));
     }
 
-    const UA_PHONE_MASK_TEMPLATE = '38 (0__) ___-__-__';
-    const UA_PHONE_MASK_SLOTS = [5, 6, 9, 10, 11, 13, 14, 16, 17];
-
-    function extractUaPhoneLocalDigits(rawValue) {
-        let digits = String(rawValue || '').replace(/\D/g, '');
-        if (digits.startsWith('380')) {
-            digits = digits.slice(3);
-        } else if (digits.startsWith('38')) {
-            digits = digits.slice(2);
-        }
-        if (digits.startsWith('0')) {
-            digits = digits.slice(1);
-        }
-        return digits.slice(0, 9);
-    }
-
-    function formatUaPhoneMask(rawValue) {
-        const localDigits = extractUaPhoneLocalDigits(rawValue);
-        const chars = UA_PHONE_MASK_TEMPLATE.split('');
-        for (let i = 0; i < UA_PHONE_MASK_SLOTS.length; i += 1) {
-            chars[UA_PHONE_MASK_SLOTS[i]] = localDigits[i] || '_';
-        }
-        return chars.join('');
-    }
-
-    function normalizeUaPhone(rawValue) {
-        const localDigits = extractUaPhoneLocalDigits(rawValue);
-        return localDigits.length === 9 ? `380${localDigits}` : '';
-    }
-
-    function initOrderPhoneMask() {
-        const phoneInput = document.getElementById('orderPhone');
-        if (!phoneInput) return;
-
-        phoneInput.setAttribute('inputmode', 'numeric');
-        phoneInput.setAttribute('autocomplete', 'tel');
-        phoneInput.setAttribute('placeholder', UA_PHONE_MASK_TEMPLATE);
-        phoneInput.value = formatUaPhoneMask(phoneInput.value);
-
-        const setPhoneMaskColor = (isFocused) => {
-            const hasDigits = extractUaPhoneLocalDigits(phoneInput.value).length > 0;
-            phoneInput.style.color = (isFocused || hasDigits) ? '#fff' : '#888';
-        };
-
-        const nextSlotIndex = (caretPos) => {
-            for (let i = 0; i < UA_PHONE_MASK_SLOTS.length; i += 1) {
-                if (UA_PHONE_MASK_SLOTS[i] >= caretPos) return i;
-            }
-            return UA_PHONE_MASK_SLOTS.length;
-        };
-
-        const getDigitsArray = () => {
-            const value = String(phoneInput.value || '');
-            const digits = [];
-            UA_PHONE_MASK_SLOTS.forEach((pos) => {
-                const ch = value[pos];
-                if (/\d/.test(ch || '')) digits.push(ch);
-            });
-            return digits;
-        };
-
-        const renderWithDigits = (digitsArray, slotIndex) => {
-            const normalizedDigits = digitsArray
-                .filter((ch) => /\d/.test(ch || ''))
-                .slice(0, UA_PHONE_MASK_SLOTS.length)
-                .join('');
-            phoneInput.value = formatUaPhoneMask(normalizedDigits);
-
-            const safeSlotIndex = Math.max(0, Math.min(slotIndex, UA_PHONE_MASK_SLOTS.length));
-            const caretPos = safeSlotIndex >= UA_PHONE_MASK_SLOTS.length
-                ? UA_PHONE_MASK_SLOTS[UA_PHONE_MASK_SLOTS.length - 1] + 1
-                : UA_PHONE_MASK_SLOTS[safeSlotIndex];
-            phoneInput.setSelectionRange(caretPos, caretPos);
-            setPhoneMaskColor(document.activeElement === phoneInput);
-        };
-
-        phoneInput.addEventListener('click', () => {
-            const start = phoneInput.selectionStart ?? 0;
-            const digitsCount = getDigitsArray().length;
-            const slot = Math.min(nextSlotIndex(start), digitsCount);
-            const caretPos = slot >= UA_PHONE_MASK_SLOTS.length
-                ? UA_PHONE_MASK_SLOTS[UA_PHONE_MASK_SLOTS.length - 1] + 1
-                : UA_PHONE_MASK_SLOTS[slot];
-            phoneInput.setSelectionRange(caretPos, caretPos);
-        });
-
-        phoneInput.addEventListener('focus', () => {
-            const digitsCount = getDigitsArray().length;
-            renderWithDigits(getDigitsArray(), digitsCount);
-            setPhoneMaskColor(true);
-        });
-
-        phoneInput.addEventListener('keydown', (event) => {
-            if (event.ctrlKey || event.metaKey || event.altKey) return;
-
-            const start = phoneInput.selectionStart ?? 0;
-            const end = phoneInput.selectionEnd ?? start;
-            const digitsArray = getDigitsArray();
-
-            if (/^\d$/.test(event.key)) {
-                event.preventDefault();
-                const insertAt = Math.min(nextSlotIndex(start), digitsArray.length);
-                const removeTo = end > start ? Math.min(nextSlotIndex(end), digitsArray.length) : insertAt;
-                if (removeTo > insertAt) {
-                    digitsArray.splice(insertAt, removeTo - insertAt);
-                }
-                if (digitsArray.length < UA_PHONE_MASK_SLOTS.length) {
-                    digitsArray.splice(insertAt, 0, event.key);
-                } else if (insertAt < UA_PHONE_MASK_SLOTS.length) {
-                    digitsArray[insertAt] = event.key;
-                }
-                renderWithDigits(digitsArray, insertAt + 1);
-                return;
-            }
-
-            if (event.key === 'Backspace' || event.key === 'Delete') {
-                event.preventDefault();
-                const digitsCount = digitsArray.length;
-                let caretSlot = Math.min(nextSlotIndex(start), digitsCount);
-
-                if (end > start) {
-                    const from = Math.min(nextSlotIndex(start), digitsCount);
-                    const to = Math.min(nextSlotIndex(end), digitsCount);
-                    if (to > from) {
-                        digitsArray.splice(from, to - from);
-                        caretSlot = from;
-                    }
-                } else if (digitsCount > 0) {
-                    const anchor = nextSlotIndex(start);
-                    const idx = event.key === 'Backspace'
-                        ? Math.min(Math.max(anchor - 1, 0), digitsCount - 1)
-                        : Math.min(Math.max(anchor, 0), digitsCount - 1);
-                    digitsArray.splice(idx, 1);
-                    caretSlot = idx;
-                }
-
-                renderWithDigits(digitsArray, caretSlot);
-                return;
-            }
-        });
-
-        phoneInput.addEventListener('paste', (event) => {
-            event.preventDefault();
-            const pasted = event.clipboardData ? event.clipboardData.getData('text') : '';
-            const pastedDigits = extractUaPhoneLocalDigits(pasted).split('');
-            if (!pastedDigits.length) return;
-
-            const start = phoneInput.selectionStart ?? 0;
-            const end = phoneInput.selectionEnd ?? start;
-            const digitsArray = getDigitsArray();
-            const insertAt = Math.min(nextSlotIndex(start), digitsArray.length);
-            const removeTo = end > start ? Math.min(nextSlotIndex(end), digitsArray.length) : insertAt;
-
-            if (removeTo > insertAt) {
-                digitsArray.splice(insertAt, removeTo - insertAt);
-            }
-
-            let cursor = insertAt;
-            pastedDigits.forEach((digit) => {
-                if (digitsArray.length >= UA_PHONE_MASK_SLOTS.length) return;
-                digitsArray.splice(cursor, 0, digit);
-                cursor += 1;
-            });
-
-            renderWithDigits(digitsArray, cursor);
-        });
-
-        phoneInput.addEventListener('blur', () => {
-            phoneInput.value = formatUaPhoneMask(getDigitsArray().join(''));
-            setPhoneMaskColor(false);
-        });
-
-        setPhoneMaskColor(false);
-    }
-
     function extractNumericPrice(priceText) {
         const normalized = String(priceText || '').replace(',', '.');
         const match = normalized.match(/[\d.]+/);
@@ -811,7 +636,7 @@ let cart = [];
         const t = {
             title: lang === 'ua' ? 'ДОСТАВКА' : 'DELIVERY',
             fio: lang === 'ua' ? 'ПІБ' : 'Full Name',
-            phone: '38 (0__) ___-__-__',
+            phone: lang === 'ua' ? 'Номер телефону' : 'Phone Number',
             np: lang === 'ua' ? 'Місто та № відділення НП' : 'City & Nova Poshta Dept',
             tg: lang === 'ua' ? "Ваш Telegram (необов'язково)" : "Your Telegram (optional)",
             btn: lang === 'ua' ? 'ДАЛІ ДО ОПЛАТИ' : 'NEXT: PAYMENT',
@@ -856,9 +681,6 @@ let cart = [];
             </div>
         `;
         document.getElementById('orderModal').style.display = 'flex';
-        if (orderRegion === 'ua') {
-            initOrderPhoneMask();
-        }
     }
 
     function proceedToPayment() {
@@ -867,11 +689,11 @@ let cart = [];
 
         const fio = document.getElementById('orderFIO').value;
         const phoneRaw = document.getElementById('orderPhone').value;
-        const phone = normalizeUaPhone(phoneRaw);
+        const phone = phoneRaw.replace(/\D/g, '');
         const np = document.getElementById('orderNP').value;
         const tg = document.getElementById('orderTG').value;
 
-        if (!fio || !phone || !np) return showToast(msgErrUa);
+        if (!fio || phone.length < 10 || !np) return showToast(msgErrUa);
 
         deliveryData = {
             region: orderRegion,
@@ -1053,7 +875,7 @@ let cart = [];
             const np = deliveryData.data.np;
             const tg = deliveryData.data.tg;
 
-            if (!fio || !phone || !/^\d{12}$/.test(phone) || !np) {
+            if (!fio || !phone || phone.length < 10 || !np) {
                 btn.innerText = payLabel;
                 btn.disabled = false;
                 return showToast(msgErrUa);
