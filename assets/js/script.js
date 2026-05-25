@@ -209,6 +209,245 @@ let cart = [];
         }
     }
 }
+
+    const ORDER_PHONE_MASK_TEMPLATE = '38 (0__) ___-__-__';
+    const ORDER_PHONE_MASK_SLOTS = Array.from(ORDER_PHONE_MASK_TEMPLATE)
+        .map((char, index) => (char === '_' ? index : -1))
+        .filter((index) => index >= 0);
+
+    function getOrderPhoneLocalDigits(value) {
+        const digits = String(value || '').replace(/\D/g, '');
+        if (!digits) return '';
+
+        if (digits.startsWith('380')) return digits.slice(3, 12);
+        if (digits.startsWith('80')) return digits.slice(2, 11);
+        if (digits.startsWith('0')) return digits.slice(1, 10);
+
+        return digits.slice(0, ORDER_PHONE_MASK_SLOTS.length);
+    }
+
+    function formatOrderPhoneWithMask(localDigitsRaw) {
+        const localDigits = String(localDigitsRaw || '')
+            .replace(/\D/g, '')
+            .slice(0, ORDER_PHONE_MASK_SLOTS.length);
+        const chars = ORDER_PHONE_MASK_TEMPLATE.split('');
+        for (let i = 0; i < ORDER_PHONE_MASK_SLOTS.length; i += 1) {
+            chars[ORDER_PHONE_MASK_SLOTS[i]] = localDigits[i] || '_';
+        }
+        return chars.join('');
+    }
+
+    function isOrderPhoneComplete(value) {
+        return getOrderPhoneLocalDigits(value).length === ORDER_PHONE_MASK_SLOTS.length;
+    }
+
+    function normalizeOrderPhone(value) {
+        const localDigits = getOrderPhoneLocalDigits(value);
+        return localDigits ? `380${localDigits}` : '';
+    }
+
+    function setupDeliveryPhoneMask() {
+        const input = document.getElementById('orderPhone');
+        if (!input) return;
+
+        const activeColor = '#fff';
+        const idleColor = '#7a7a7a';
+        const slotCount = ORDER_PHONE_MASK_SLOTS.length;
+
+        function slotIndexAtOrAfter(position) {
+            for (let i = 0; i < slotCount; i += 1) {
+                if (ORDER_PHONE_MASK_SLOTS[i] >= position) return i;
+            }
+            return slotCount;
+        }
+
+        function slotIndexBefore(position) {
+            for (let i = slotCount - 1; i >= 0; i -= 1) {
+                if (ORDER_PHONE_MASK_SLOTS[i] < position) return i;
+            }
+            return -1;
+        }
+
+        function setCaretBySlot(slotIndex) {
+            const clamped = Math.max(0, Math.min(slotIndex, slotCount));
+            const target = clamped >= slotCount
+                ? ORDER_PHONE_MASK_SLOTS[slotCount - 1] + 1
+                : ORDER_PHONE_MASK_SLOTS[clamped];
+            input.setSelectionRange(target, target);
+        }
+
+        function snapCaretToNearestSlot(position) {
+            const first = ORDER_PHONE_MASK_SLOTS[0];
+            const last = ORDER_PHONE_MASK_SLOTS[slotCount - 1];
+
+            if (position <= first) {
+                input.setSelectionRange(first, first);
+                return;
+            }
+
+            if (position > last) {
+                input.setSelectionRange(last, last);
+                return;
+            }
+
+            let target = first;
+            for (const slotPos of ORDER_PHONE_MASK_SLOTS) {
+                if (slotPos <= position) {
+                    target = slotPos;
+                } else {
+                    break;
+                }
+            }
+
+            input.setSelectionRange(target, target);
+        }
+
+        function updateTone(localDigits = getOrderPhoneLocalDigits(input.value)) {
+            const isFocused = document.activeElement === input;
+            input.style.color = (isFocused || localDigits.length > 0) ? activeColor : idleColor;
+        }
+
+        function render(localDigits) {
+            input.value = formatOrderPhoneWithMask(localDigits);
+            updateTone(localDigits);
+        }
+
+        input.setAttribute('inputmode', 'numeric');
+        input.setAttribute('autocomplete', 'tel');
+        render('');
+        let pointerDownFocus = false;
+
+        input.addEventListener('mousedown', () => {
+            pointerDownFocus = true;
+        });
+
+        input.addEventListener('focus', () => {
+            updateTone();
+            requestAnimationFrame(() => {
+                if (pointerDownFocus) {
+                    snapCaretToNearestSlot(input.selectionStart || 0);
+                } else {
+                    setCaretBySlot(getOrderPhoneLocalDigits(input.value).length);
+                }
+                pointerDownFocus = false;
+            });
+        });
+
+        input.addEventListener('blur', () => {
+            updateTone();
+        });
+
+        input.addEventListener('click', () => {
+            requestAnimationFrame(() => {
+                snapCaretToNearestSlot(input.selectionStart || 0);
+            });
+        });
+
+        input.addEventListener('paste', (event) => {
+            event.preventDefault();
+            const text = event.clipboardData?.getData('text') || '';
+            let digits = text.replace(/\D/g, '');
+            if (digits.startsWith('380')) digits = digits.slice(3);
+            if (digits.length === 10 && digits.startsWith('0')) digits = digits.slice(1);
+            render(digits);
+            setCaretBySlot(getOrderPhoneLocalDigits(input.value).length);
+        });
+
+        input.addEventListener('keydown', (event) => {
+            if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+            const key = event.key;
+            const start = input.selectionStart || 0;
+            const end = input.selectionEnd || start;
+
+            if (key === 'Tab') return;
+
+            if (key === 'ArrowLeft' || key === 'ArrowRight' || key === 'Home' || key === 'End') {
+                requestAnimationFrame(() => {
+                    snapCaretToNearestSlot(input.selectionStart || 0);
+                });
+                return;
+            }
+
+            if (key === 'Backspace' || key === 'Delete') {
+                event.preventDefault();
+                let digits = getOrderPhoneLocalDigits(input.value);
+                const hasSelection = end > start;
+
+                if (hasSelection) {
+                    const removeStart = slotIndexAtOrAfter(start);
+                    const removeEnd = slotIndexAtOrAfter(end);
+                    if (removeEnd > removeStart) {
+                        digits = digits.slice(0, removeStart) + digits.slice(removeEnd);
+                        render(digits);
+                        setCaretBySlot(removeStart);
+                        return;
+                    }
+                }
+
+                if (key === 'Backspace') {
+                    const removeIndex = slotIndexBefore(start);
+                    if (removeIndex >= 0 && removeIndex < digits.length) {
+                        digits = digits.slice(0, removeIndex) + digits.slice(removeIndex + 1);
+                        render(digits);
+                        setCaretBySlot(removeIndex);
+                    } else {
+                        setCaretBySlot(Math.max(0, removeIndex));
+                    }
+                    return;
+                }
+
+                const removeIndex = slotIndexAtOrAfter(start);
+                if (removeIndex < digits.length) {
+                    digits = digits.slice(0, removeIndex) + digits.slice(removeIndex + 1);
+                    render(digits);
+                    setCaretBySlot(removeIndex);
+                } else {
+                    setCaretBySlot(removeIndex);
+                }
+                return;
+            }
+
+            if (/^\d$/.test(key)) {
+                event.preventDefault();
+                let digits = getOrderPhoneLocalDigits(input.value);
+                let insertIndex = slotIndexAtOrAfter(start);
+                if (insertIndex >= slotCount) {
+                    insertIndex = Math.min(digits.length, slotCount - 1);
+                }
+
+                if (end > start) {
+                    const removeStart = slotIndexAtOrAfter(start);
+                    const removeEnd = slotIndexAtOrAfter(end);
+                    digits = digits.slice(0, removeStart) + digits.slice(removeEnd);
+                    insertIndex = removeStart;
+                }
+
+                if (insertIndex < digits.length) {
+                    digits = digits.slice(0, insertIndex) + key + digits.slice(insertIndex + 1);
+                } else {
+                    digits = digits.slice(0, insertIndex) + key + digits.slice(insertIndex);
+                }
+
+                digits = digits.slice(0, slotCount);
+                render(digits);
+                setCaretBySlot(insertIndex + 1);
+                return;
+            }
+
+            if (key.length === 1) {
+                event.preventDefault();
+            }
+        });
+
+        input.addEventListener('input', () => {
+            const digits = getOrderPhoneLocalDigits(input.value);
+            render(digits);
+            if (document.activeElement === input) {
+                setCaretBySlot(digits.length);
+            }
+        });
+    }
     function getGalleryPoint(event) {
         if (event.touches && event.touches.length) {
             return { x: event.touches[0].clientX, y: event.touches[0].clientY };
@@ -681,6 +920,7 @@ let cart = [];
             </div>
         `;
         document.getElementById('orderModal').style.display = 'flex';
+        if (orderRegion === 'ua') setupDeliveryPhoneMask();
     }
 
     function proceedToPayment() {
@@ -689,11 +929,11 @@ let cart = [];
 
         const fio = document.getElementById('orderFIO').value;
         const phoneRaw = document.getElementById('orderPhone').value;
-        const phone = phoneRaw.replace(/\D/g, '');
+        const phone = normalizeOrderPhone(phoneRaw);
         const np = document.getElementById('orderNP').value;
         const tg = document.getElementById('orderTG').value;
 
-        if (!fio || phone.length < 10 || !np) return showToast(msgErrUa);
+        if (!fio || !isOrderPhoneComplete(phoneRaw) || !np) return showToast(msgErrUa);
 
         deliveryData = {
             region: orderRegion,
