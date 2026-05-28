@@ -1,5 +1,31 @@
 window.PRODUCTS_DATA = [
   {
+    "id": 31,
+    "slug": "hardcore-cap-hardcore-cap",
+    "category": "кепки",
+    "isNew": true,
+    "isPreorder": true,
+    "title": "HARDCORE CAP",
+    "descUa": "Холодний силует, темний камуфляж і символіка без зайвих слів. Це про нічні вулиці, закриті обличчя, важкий саунд і настрій, який не потребує пояснень.",
+    "descEng": "A cold silhouette, dark camouflage, and symbolism without extra words. It is about night streets, covered faces, heavy sound, and a mood that needs no explanation.",
+    "image": "images/IMG_8127.JPG",
+    "imageAlt": "images/IMG_8128.JPG",
+    "gallery": [
+      "images/IMG_8127.JPG",
+      "images/IMG_8128.JPG",
+      "images/IMG_8129.JPG",
+      "images/IMG_8130.JPG"
+    ],
+    "priceUahLabel": "1500₴",
+    "priceUsdLabel": "30€",
+    "priceUah": 1500,
+    "priceUsd": 30,
+    "sizeId": "size-cap1",
+    "cartName": "HARDCORE CAP",
+    "cartSizeId": "size-cap1",
+    "seoKeywords": "HARDCORE CAP, кепка, бейсболка, hardcore division, streetwear, ukraine brand"
+  },
+  {
     "id": 30,
     "slug": "hardcore-longsleeve-hardcore-longsleeve-sweatshirt",
     "category": "світшоти",
@@ -16,7 +42,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_7916.JPG"
     ],
     "priceUahLabel": "1550₴",
-    "priceUsdLabel": "35$",
+    "priceUsdLabel": "35€",
     "priceUah": 1550,
     "priceUsd": 35,
     "sizeId": "size-sw1",
@@ -41,7 +67,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_7857.JPG"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f16",
@@ -66,7 +92,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_7512.JPG"
     ],
     "priceUahLabel": "1050₴",
-    "priceUsdLabel": "25$",
+    "priceUsdLabel": "25€",
     "priceUah": 1050,
     "priceUsd": 25,
     "sizeId": "size-f13",
@@ -88,7 +114,7 @@ window.PRODUCTS_DATA = [
       "images/photo_2025-12-31_17-17-18.jpg"
     ],
     "priceUahLabel": "1750₴",
-    "priceUsdLabel": "40$",
+    "priceUsdLabel": "40€",
     "priceUah": 1750,
     "priceUsd": 40,
     "sizeId": "size-1",
@@ -110,7 +136,7 @@ window.PRODUCTS_DATA = [
       "images/photo_2026-01-03_10-19-49.jpg"
     ],
     "priceUahLabel": "1750₴",
-    "priceUsdLabel": "40$",
+    "priceUsdLabel": "40€",
     "priceUah": 1750,
     "priceUsd": 40,
     "sizeId": "size-2",
@@ -132,7 +158,7 @@ window.PRODUCTS_DATA = [
       "images/zenzura2.jpg"
     ],
     "priceUahLabel": "1850₴",
-    "priceUsdLabel": "45$",
+    "priceUsdLabel": "45€",
     "priceUah": 1850,
     "priceUsd": 45,
     "sizeId": "size-3",
@@ -156,7 +182,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_6731.JPEG"
     ],
     "priceUahLabel": "1750₴",
-    "priceUsdLabel": "40$",
+    "priceUsdLabel": "40€",
     "priceUah": 1750,
     "priceUsd": 40,
     "sizeId": "size-4",
@@ -180,7 +206,7 @@ window.PRODUCTS_DATA = [
       "images/photo_4_2026-03-06_19-48-26.jpg"
     ],
     "priceUahLabel": "1750₴",
-    "priceUsdLabel": "40$",
+    "priceUsdLabel": "40€",
     "priceUah": 1750,
     "priceUsd": 40,
     "sizeId": "size-5",
@@ -203,7 +229,7 @@ window.PRODUCTS_DATA = [
       "images/photo_3_2026-03-06_19-49-05.jpg"
     ],
     "priceUahLabel": "1850₴",
-    "priceUsdLabel": "45$",
+    "priceUsdLabel": "45€",
     "priceUah": 1850,
     "priceUsd": 45,
     "sizeId": "size-6",
@@ -227,7 +253,7 @@ window.PRODUCTS_DATA = [
       "images/photo_4_2026-03-06_19-49-15.jpg"
     ],
     "priceUahLabel": "1750₴",
-    "priceUsdLabel": "40$",
+    "priceUsdLabel": "40€",
     "priceUah": 1750,
     "priceUsd": 40,
     "sizeId": "size-7",
@@ -249,7 +275,7 @@ window.PRODUCTS_DATA = [
       "images/photo_2_2026-03-06_19-49-25.jpg"
     ],
     "priceUahLabel": "1750₴",
-    "priceUsdLabel": "40$",
+    "priceUsdLabel": "40€",
     "priceUah": 1750,
     "priceUsd": 40,
     "sizeId": "size-8",
@@ -273,7 +299,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_7278.JPG"
     ],
     "priceUahLabel": "1750₴",
-    "priceUsdLabel": "40$",
+    "priceUsdLabel": "40€",
     "priceUah": 1750,
     "priceUsd": 40,
     "sizeId": "size-11",
@@ -297,7 +323,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_7270.JPEG"
     ],
     "priceUahLabel": "1850₴",
-    "priceUsdLabel": "45$",
+    "priceUsdLabel": "45€",
     "priceUah": 1850,
     "priceUsd": 45,
     "sizeId": "size-12",
@@ -319,7 +345,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_7290.JPEG"
     ],
     "priceUahLabel": "1750₴",
-    "priceUsdLabel": "40$",
+    "priceUsdLabel": "40€",
     "priceUah": 1750,
     "priceUsd": 40,
     "sizeId": "size-13",
@@ -342,7 +368,7 @@ window.PRODUCTS_DATA = [
       "images/photo_3_2026-03-06_19-49-30.jpg"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-9",
@@ -364,7 +390,7 @@ window.PRODUCTS_DATA = [
       "images/photo_2_2026-03-06_19-49-40.jpg"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-10",
@@ -386,7 +412,7 @@ window.PRODUCTS_DATA = [
       "images/photo_14_2026-03-07_08-39-14.jpg"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f1",
@@ -408,7 +434,7 @@ window.PRODUCTS_DATA = [
       "images/photo_4_2026-03-07_08-39-14.jpg"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f2",
@@ -430,7 +456,7 @@ window.PRODUCTS_DATA = [
       "images/photo_6_2026-03-07_08-39-14.jpg"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f3",
@@ -452,7 +478,7 @@ window.PRODUCTS_DATA = [
       "images/photo_8_2026-03-07_08-39-14.jpg"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f4",
@@ -474,7 +500,7 @@ window.PRODUCTS_DATA = [
       "images/photo_2026-03-12_14-59-12.jpg"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f5",
@@ -496,7 +522,7 @@ window.PRODUCTS_DATA = [
       "images/photo_12_2026-03-07_08-39-14.jpg"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f6",
@@ -518,7 +544,7 @@ window.PRODUCTS_DATA = [
       "images/photo_18_2026-03-07_08-39-14.jpg"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f7",
@@ -540,7 +566,7 @@ window.PRODUCTS_DATA = [
       "images/photozenzura1.jpg"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f9",
@@ -564,7 +590,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_7246.JPG"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f10",
@@ -586,7 +612,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_7288.JPEG"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f11",
@@ -608,7 +634,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_7294.JPEG"
     ],
     "priceUahLabel": "950₴",
-    "priceUsdLabel": "20$",
+    "priceUsdLabel": "20€",
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f12",
@@ -631,7 +657,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_7813.JPEG"
     ],
     "priceUahLabel": "2000₴",
-    "priceUsdLabel": "50$",
+    "priceUsdLabel": "50€",
     "priceUah": 2000,
     "priceUsd": 50,
     "sizeId": "size-h14",
@@ -654,7 +680,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_7811.JPEG"
     ],
     "priceUahLabel": "1050₴",
-    "priceUsdLabel": "25$",
+    "priceUsdLabel": "25€",
     "priceUah": 1050,
     "priceUsd": 25,
     "sizeId": "size-f14",
@@ -677,7 +703,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_7809.JPEG"
     ],
     "priceUahLabel": "1050₴",
-    "priceUsdLabel": "25$",
+    "priceUsdLabel": "25€",
     "priceUah": 1050,
     "priceUsd": 25,
     "sizeId": "size-f15",
@@ -686,3 +712,4 @@ window.PRODUCTS_DATA = [
     "seoKeywords": "TURBOHARDCORE T-SHIRT WHITE, TURBOHARDCORE, футболка, hardcore division, turboskin, streetwear, ukraine brand"
   }
 ];
+
