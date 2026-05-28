@@ -417,10 +417,11 @@ let cart = [];
     updateCartCount();
     const list = document.getElementById('cartItemsList');
     const totalEl = document.getElementById('cartTotal');
+    const suggestionEl = document.getElementById('cartSuggestion');
     if (!list || !totalEl) return;
     const lang = localStorage.getItem('preferred_lang') || 'ua';
     const totalText = lang === 'ua' ? 'Всього' : 'Total';
-    const currency = lang === 'ua' ? '₴' : '$';
+    const currency = lang === 'ua' ? '₴' : '€';
     let total = 0;
     
     list.innerHTML = cart.map((item, idx) => {
@@ -430,6 +431,78 @@ let cart = [];
     }).join('');
 
     totalEl.innerText = `${totalText}: ${total}${currency}`;
+
+    if (!suggestionEl) return;
+    const products = Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : [];
+    const preorderProduct = products.find((p) => Boolean(p && p.isPreorder));
+    if (!preorderProduct) {
+        suggestionEl.innerHTML = '';
+        return;
+    }
+    const normalize = (value) => String(value || '').trim().toLowerCase();
+    const preorderNameNorm = normalize(preorderProduct.cartName || preorderProduct.title);
+    const alreadyInCart = cart.some((item) => {
+        const itemNorm = normalize(item && item.name);
+        return itemNorm === preorderNameNorm || itemNorm === normalize(preorderProduct.title);
+    });
+    if (alreadyInCart) {
+        suggestionEl.innerHTML = '';
+        return;
+    }
+
+    const recommendationTitle = lang === 'ua' ? 'Рекомендуємо додати' : 'Recommended to add';
+    const addBtnLabel = lang === 'ua' ? 'Додати' : 'Add';
+    const preorderPrice = lang === 'ua'
+        ? `${preorderProduct.priceUah}₴`
+        : `${preorderProduct.priceUsd}€`;
+    const preorderImage = preorderProduct.image || (Array.isArray(preorderProduct.gallery) ? preorderProduct.gallery[0] : '');
+    const preorderLink = `/pages/product.html?product=${encodeURIComponent(String(preorderProduct.slug || ''))}`;
+
+    suggestionEl.innerHTML = `
+        <div class="cart-suggestion">
+            <p class="cart-suggestion-label">${recommendationTitle}</p>
+            <div class="cart-suggestion-card">
+                <a class="cart-suggestion-link" href="${preorderLink}">
+                    <img class="cart-suggestion-thumb" src="${preorderImage}" alt="${preorderProduct.title}">
+                    <div>
+                        <p class="cart-suggestion-title">${preorderProduct.title}</p>
+                        <p class="cart-suggestion-price">${preorderPrice}</p>
+                    </div>
+                </a>
+                <button class="buy-btn cart-suggestion-add-btn" onclick="addPreorderToCart('${String(preorderProduct.slug || '')}')">${addBtnLabel}</button>
+            </div>
+        </div>
+    `;
+}
+
+    function addPreorderToCart(slug) {
+    const products = Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : [];
+    const product = products.find((p) => String(p && p.slug ? p.slug : '') === String(slug || ''));
+    if (!product) return;
+
+    const normalize = (value) => String(value || '').trim().toLowerCase();
+    const productName = String(product.cartName || product.title || '').trim();
+    const alreadyInCart = cart.some((item) => normalize(item && item.name) === normalize(productName));
+    if (alreadyInCart) {
+        renderCart();
+        return;
+    }
+
+    const sizeSelect = product.sizeId ? document.getElementById(product.sizeId) : null;
+    const size = sizeSelect ? String(sizeSelect.value || '').trim() : 'ONE SIZE';
+    cart.push({
+        name: productName,
+        uah: Number(product.priceUah) || 0,
+        usd: Number(product.priceUsd) || 0,
+        size: size || 'ONE SIZE'
+    });
+    saveCartToStorage();
+    updateCartCount();
+    renderCart();
+
+    const lang = localStorage.getItem('preferred_lang') || 'ua';
+    const msg = lang === 'ua' ? 'ДОДАНО В КОШИК 💀' : 'ADDED TO CART 💀';
+    showToast(msg);
 }
 
     // Новая функция для toggle FAQ
@@ -478,7 +551,7 @@ let cart = [];
         }
 
         const total = cart.reduce((sum, i) => sum + (lang === 'ua' ? i.uah : i.usd), 0);
-        const currency = lang === 'ua' ? '₴' : '$';
+        const currency = lang === 'ua' ? '₴' : '€';
 
         const t = {
             title: lang === 'ua' ? 'ПОВНА ОПЛАТА' : 'FULL PAYMENT',
@@ -862,7 +935,7 @@ let cart = [];
         btn.innerText = msgWait;
         btn.disabled = true;
 
-        const currency = lang === 'ua' ? '₴' : '$';
+        const currency = lang === 'ua' ? '₴' : '€';
         let total = cart.reduce((sum, i) => sum + (lang === 'ua' ? i.uah : i.usd), 0);
         let itemsInfo = cart.map((item, idx) => `${idx + 1}. ${item.name} (${item.size}) — ${lang === 'ua' ? item.uah : item.usd}${currency}`).join('\n');
         const orderVisualItems = buildOrderTelegramVisualItems(lang);
@@ -956,7 +1029,7 @@ let cart = [];
 
     function buildOrderTelegramVisualItems(lang) {
         const products = Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : [];
-        const currency = lang === 'ua' ? '₴' : '$';
+        const currency = lang === 'ua' ? '₴' : '€';
         const grouped = buildOrderItemsPayload(lang);
         const normalize = (value) => String(value || '').trim().toLowerCase();
 
