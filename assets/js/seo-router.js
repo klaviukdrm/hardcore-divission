@@ -65,6 +65,9 @@
     function inferTypeName(product) {
         const category = String(product && product.category ? product.category : "").toLowerCase();
         const cartName = String(product && product.cartName ? product.cartName : "");
+        if (category.includes("кепк") || /cap/i.test(cartName)) {
+            return "Cap";
+        }
         if (category === "світшоти" || /sweatshirt|longsleeve|longlsleeve/i.test(cartName)) {
             return "Sweatshirt";
         }
@@ -74,12 +77,13 @@
     function getSizeGuideImage(product) {
         const type = inferTypeName(product);
         if (type === "T-Shirt") return "images/Screenshot_198.png";
+        if (type === "Cap") return "images/Screenshot_198.png";
         if (type === "Sweatshirt") return "images/ChatGPT Image.png";
         return "images/Screenshot_197.png";
     }
 
     function formatPriceLabel(product, lang) {
-        return lang === "ua" ? `${product.priceUah}\u20B4` : `${product.priceUsd}$`;
+        return lang === "ua" ? `${product.priceUah}\u20B4` : `${product.priceUsd}\u20AC`;
     }
 
     function updateProductDetailPricePreview(product) {
@@ -97,7 +101,7 @@
         if (lang === "ua") {
             priceEl.textContent = `${product.priceUah + surchargeUah}\u20B4`;
         } else {
-            priceEl.textContent = `${product.priceUsd}$`;
+            priceEl.textContent = `${product.priceUsd}\u20AC`;
         }
     }
 
@@ -107,6 +111,10 @@
 
     function getNewBadgeText() {
         return getLang() === "eng" ? "NEW" : "НОВЕ";
+    }
+
+    function getPreorderBadgeText() {
+        return getLang() === "eng" ? "PREORDER" : "ПЕРЕДЗАМОВЛЕННЯ";
     }
 
     function buildProductSeoCopy(product) {
@@ -190,6 +198,20 @@
                 existingImageBadge.remove();
             }
 
+            const isCapPreorder = Boolean(product && product.isPreorder);
+            const existingPreorderBadge = imgContainer ? imgContainer.querySelector(".product-preorder-badge") : null;
+            if (isCapPreorder && imgContainer && !existingPreorderBadge) {
+                const preorderBadge = document.createElement("span");
+                preorderBadge.className = "product-preorder-badge product-preorder-badge-corner";
+                preorderBadge.setAttribute("data-ua", "ПЕРЕДЗАМОВЛЕННЯ");
+                preorderBadge.setAttribute("data-eng", "PREORDER");
+                preorderBadge.textContent = getPreorderBadgeText();
+                imgContainer.appendChild(preorderBadge);
+            }
+            if (!isCapPreorder && existingPreorderBadge) {
+                existingPreorderBadge.remove();
+            }
+
             if (!card.querySelector(".product-seo-hidden")) {
                 const hidden = document.createElement("p");
                 hidden.className = "seo-hidden product-seo-hidden";
@@ -219,6 +241,9 @@
                 return a.index - b.index;
             };
 
+            const caps = cardItems
+                .filter((item) => inferTypeName(item.product) === "Cap")
+                .sort(byHash);
             const sweatshirts = cardItems
                 .filter((item) => inferTypeName(item.product) === "Sweatshirt")
                 .sort(byHash);
@@ -229,7 +254,7 @@
                 .filter((item) => inferTypeName(item.product) === "Hoodie")
                 .sort(byHash);
 
-            const sorted = [...sweatshirts];
+            const sorted = [...caps, ...sweatshirts];
             const initialTshirts = Math.min(2, tshirts.length);
             for (let i = 0; i < initialTshirts; i += 1) {
                 sorted.push(tshirts.shift());
@@ -250,6 +275,12 @@
 
             // Requested manual swap in catalog order.
             swapByTitle("HARDCORE JUGEND", "TURBOHARDCORE");
+
+            const capIndex = sorted.findIndex((item) => item.product && item.product.title === "HARDCORE CAP");
+            if (capIndex > 0) {
+                const [capItem] = sorted.splice(capIndex, 1);
+                sorted.unshift(capItem);
+            }
 
             const changedOrder = sorted.some((item, idx) => item !== cardItems[idx]);
             if (changedOrder) {
@@ -321,12 +352,20 @@
         const mainImg = imageGallery.length ? imageGallery[0] : product.image;
         const desc = lang === "ua" ? (product.descUa || product.descEng) : (product.descEng || product.descUa);
         const typeName = inferTypeName(product);
+        const isCap = typeName === "Cap";
+        const capLimitNote = isCap
+            ? (lang === "ua" ? "Кількість обмежена — лише 30 кепок" : "Limited quantity — only 30 caps")
+            : "";
+        const productDescBlock = capLimitNote ? `${desc}<br><br>${capLimitNote}` : desc;
         const addLabel = lang === "ua" ? "\u0414\u041E\u0414\u0410\u0422\u0418 \u0412 \u041A\u041E\u0428\u0418\u041A" : "ADD TO CART";
         const backLabel = lang === "ua" ? "\u041D\u0430\u0437\u0430\u0434 \u0434\u043E \u043A\u0430\u0442\u0430\u043B\u043E\u0433\u0443" : "Back to catalog";
         const sizeGuideLabel = lang === "ua" ? "\u0420\u043E\u0437\u043C\u0456\u0440\u043D\u0430 \u0441\u0456\u0442\u043A\u0430" : "Size guide";
         const slugLabel = lang === "ua" ? "\u0410\u0440\u0442\u0438\u043A\u0443\u043B" : "SKU";
         const seoKeywords = buildSeoLine(product);
         const productSeoCopy = buildProductSeoCopy(product);
+        const preorderBadge = product.isPreorder
+            ? `<span class="product-preorder-badge product-preorder-badge-corner" data-ua="ПЕРЕДЗАМОВЛЕННЯ" data-eng="PREORDER">${getPreorderBadgeText()}</span>`
+            : "";
         const newBadge = product.isNew
             ? `<span class="product-new-badge product-new-badge-corner product-new-badge-detail-corner" data-ua="НОВЕ" data-eng="NEW">${getNewBadgeText(product)}</span>`
             : "";
@@ -334,6 +373,19 @@
         const thumbs = imageGallery.map((img, idx) =>
             `<img src="${img}" alt="${product.title} view ${idx + 1}" data-idx="${idx}" loading="lazy" decoding="async">`
         ).join("");
+        const sizeOptions = isCap
+            ? `<option value="ONE SIZE">SIZE: ONE SIZE</option>`
+            : `
+                            <option value="S">SIZE: S</option>
+                            <option value="M">SIZE: M</option>
+                            <option value="L">SIZE: L</option>
+                            <option value="XL">SIZE: XL</option>
+                            <option value="2XL">SIZE: 2XL</option>
+                            <option value="3XL">SIZE: 3XL</option>
+                        `;
+        const sizeGuideButton = isCap
+            ? ""
+            : `<button class="buy-btn size-guide-btn" id="sizeGuideBtn">${sizeGuideLabel}</button>`;
 
         mount.innerHTML = `
             <style>
@@ -372,6 +424,7 @@
             <article class="product-detail-card">
                 <div class="product-detail-media">
                     ${newBadge}
+                    ${preorderBadge}
                     <img src="${mainImg}" id="productMainImage" class="product-detail-main-img" alt="${product.title} ${typeName}" loading="eager" decoding="async">
                     <div class="product-detail-thumbs">${thumbs}</div>
                 </div>
@@ -379,19 +432,14 @@
                     <a href="/pages/index.html" class="product-detail-back">${backLabel}</a>
                     <h1 class="product-detail-title">${product.title}</h1>
                     <p class="product-detail-meta"><strong>${slugLabel}:</strong> ${product.slug}</p>
-                    <p class="product-detail-desc">${desc}</p>
-                    <div class="price" id="productPrice" data-uah="${product.priceUah}\u20B4" data-usd="${product.priceUsd}$">${formatPriceLabel(product, lang)}</div>
+                    <p class="product-detail-desc">${productDescBlock}</p>
+                    <div class="price" id="productPrice" data-uah="${product.priceUah}\u20B4" data-usd="${product.priceUsd}\u20AC">${formatPriceLabel(product, lang)}</div>
                     <div class="product-detail-actions">
                         <select id="product-size">
-                            <option value="S">SIZE: S</option>
-                            <option value="M">SIZE: M</option>
-                            <option value="L">SIZE: L</option>
-                            <option value="XL">SIZE: XL</option>
-                            <option value="2XL">SIZE: 2XL</option>
-                            <option value="3XL">SIZE: 3XL</option>
+                            ${sizeOptions}
                         </select>
                         <button class="buy-btn" id="addProductBtn">${addLabel}</button>
-                        <button class="buy-btn size-guide-btn" id="sizeGuideBtn">${sizeGuideLabel}</button>
+                        ${sizeGuideButton}
                     </div>
                     <div class="product-detail-filler-art" aria-hidden="true">
                         <img src="images/photo_2026-03-13_20-42-54.png" alt="">
