@@ -82,7 +82,8 @@
         <div id="cartItemsList"></div>
         
         <div id="cartTotal" style="font-weight: bold; font-size: 1.1rem; margin: 20px 0;">Всього: 0&#8372;</div>
-        
+        <div id="cartSuggestion"></div>
+
         <!-- Новая кнопка FAQ -->
         <button class="faq-btn" data-ua="ЧАСТІ ЗАПИТАННЯ" data-eng="FAQ" onclick="toggleFAQ()">ЧАСТІ ЗАПИТАННЯ</button>
         
@@ -178,6 +179,7 @@
     <button class="filter-btn" data-ua="ХУДІ" data-eng="HOODIE" onclick="filterProducts('худі')">ХУДІ</button>
     <button class="filter-btn" data-ua="ФУТБОЛКИ" data-eng="T-SHIRTS" onclick="filterProducts('футболка')">ФУТБОЛКИ</button>
     <button class="filter-btn" data-ua="ЛОНГСЛІВИ" data-eng="LONGSLEEVES" onclick="filterProducts('світшоти')">ЛОНГСЛІВИ</button>
+    <button class="filter-btn" data-ua="КЕПКИ" data-eng="CAPS" onclick="filterProducts('кепки')">КЕПКИ</button>
     <div class="catalog-search-wrap">
         <div class="catalog-search-shell">
             <span class="catalog-search-icon" aria-hidden="true">
@@ -193,6 +195,23 @@
 
 <div class="shop-grid">
     
+    <div class="product-card" data-category="кепки">
+        <div class="product-img-container" onclick="openGallery(['images/IMG_8127.JPG', 'images/IMG_8128.JPG', 'images/IMG_8129.JPG', 'images/IMG_8130.JPG'])">
+            <img src="images/IMG_8127.JPG" class="product-img" loading="lazy" decoding="async" alt="Hardcore Division product image">
+            <img src="images/IMG_8128.JPG" class="product-img-alt" loading="lazy" decoding="async" alt="Hardcore Division product image alternate view">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">HARDCORE CAP</h3><p class="product-desc" data-ua="Холодний силует, темний камуфляж і символіка без зайвих слів. Це про нічні вулиці, закриті обличчя, важкий саунд і настрій, який не потребує пояснень." data-eng="A cold silhouette, dark camouflage, and symbolism without extra words. It is about night streets, covered faces, heavy sound, and a mood that needs no explanation.">Холодний силует, темний камуфляж і символіка без зайвих слів. Це про нічні вулиці, закриті обличчя, важкий саунд і настрій, який не потребує пояснень.</p></div>
+            <div>
+                <div class="price" data-uah="1500₴" data-usd="30€"></div>
+                <select id="size-cap1">
+                    <option value="ONE SIZE">SIZE: ONE SIZE</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE CAP', 1500, 30, 'size-cap1')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
     <div class="product-card" data-category="світшоти">
         <div class="product-img-container" onclick="openGallery(['images/IMG_7913.JPG', 'images/IMG_7914.JPG', 'images/IMG_7915.JPG', 'images/IMG_7916.JPG'])">
             <img src="images/IMG_7913.JPG" class="product-img" loading="lazy" decoding="async" alt="Hardcore Division product image">
@@ -201,7 +220,7 @@
         <div class="product-info">
             <div><h3 class="product-title">HARDCORE LONGLSLEEVE</h3><p class="product-desc" data-ua="Це про дисципліну, агресію та андеграундний дух. Холодні вулиці, гучна музика, безсонні ночі та покоління, яке відмовляється ставати слабким." data-eng="This is about discipline, aggression, and underground spirit. Cold streets, loud music, sleepless nights, and a generation that refuses to become weak.">Це про дисципліну, агресію та андеграундний дух. Холодні вулиці, гучна музика, безсонні ночі та покоління, яке відмовляється ставати слабким.</p></div>
             <div>
-                <div class="price" data-uah="1550₴" data-usd="35$"></div>
+                <div class="price" data-uah="1550₴" data-usd="35€"></div>
                 <select id="size-sw1">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -220,7 +239,7 @@
         <div class="product-info">
             <div><h3 class="product-title">HARDCORE JUGEND</h3><p class="product-desc" data-ua="Це про дисципліну, агресію та андеграундний дух. Холодні вулиці, гучна музика, безсонні ночі та покоління, яке відмовляється ставати слабким." data-eng="This is about discipline, aggression, and underground spirit. Cold streets, loud music, sleepless nights, and a generation that refuses to become weak.">Це про дисципліну, агресію та андеграундний дух. Холодні вулиці, гучна музика, безсонні ночі та покоління, яке відмовляється ставати слабким.</p></div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-f16">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -239,7 +258,7 @@
         <div class="product-info">
             <div><h3 class="product-title">Timur Mutsuraev</h3><p class="product-desc" data-ua="Колекція про чеченського барда, який у своїх піснях виражав боротьбу за свободу, віру та любов до рідної землі." data-eng="A collection about the Chechen bard who expressed in his songs the struggle for freedom, faith, and love for his homeland.">Колекція про чеченського барда, який у своїх піснях виражав боротьбу за свободу, віру та любов до рідної землі.</p></div>
             <div>
-                <div class="price" data-uah="1050₴" data-usd="25$"></div>
+                <div class="price" data-uah="1050₴" data-usd="25€"></div>
                 <select id="size-f13">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -261,7 +280,7 @@
                 <p class="product-desc" data-ua="Для тих, хто йде до цілі і не відступає. Характер замість шуму." data-eng="For those who pursue their goal and never back down. Character over noise.">Для тих, хто йде до цілі і не відступає. Характер замість шуму.</p>
             </div>
             <div>
-                <div class="price" data-uah="1750₴" data-usd="40$"></div>
+                <div class="price" data-uah="1750₴" data-usd="40€"></div>
                 <select id="size-1">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -283,7 +302,7 @@
                 <p class="product-desc" data-ua="Для тих, у кого кров кипить не від слів, а від дій. Повна відмова від компромісів." data-eng="For those whose blood boils from actions, not words. Complete refusal of compromises.">Для тих, у кого кров кипить не від слів, а від дій. Повна відмова від компромісів.</p>
             </div>
             <div>
-                <div class="price" data-uah="1750₴" data-usd="40$"></div>
+                <div class="price" data-uah="1750₴" data-usd="40€"></div>
                 <select id="size-2">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -305,7 +324,7 @@
                 <p class="product-desc" data-ua="Класичний символ бунту та вільної душі. Виразний стиль для тих, хто цінує традиції спротиву." data-eng="A classic symbol of rebellion and a free soul. Bold style for those who value traditions of resistance.">Класичний символ бунту та вільної душі. Виразний стиль для тих, хто цінує традиції спротиву.</p>
             </div>
             <div>
-                <div class="price" data-uah="1850₴" data-usd="45$"></div>
+                <div class="price" data-uah="1850₴" data-usd="45€"></div>
                 <select id="size-3">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -328,7 +347,7 @@
                 <p class="product-desc" data-ua="Сміливе поєднання сучасної культури та жорсткого вуличному стилю." data-eng="A bold fusion of modern culture and hardcore street style.">Сміливе поєднання сучасної культури та жорсткого вуличному стилю.</p>
             </div>
             <div>
-                <div class="price" data-uah="1750₴" data-usd="40$"></div>
+                <div class="price" data-uah="1750₴" data-usd="40€"></div>
                 <select id="size-4">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -350,7 +369,7 @@
                 <p class="product-desc" data-ua="Про тих, кого не зламали обставини. Загартоване тиском та боротьбою." data-eng="About those not broken by circumstances. Tempered by pressure and struggle.">Про тих, кого не зламали обставини. Загартоване тиском та боротьбою.</p>
             </div>
             <div>
-                <div class="price" data-uah="1750₴" data-usd="40$"></div>
+                <div class="price" data-uah="1750₴" data-usd="40€"></div>
                 <select id="size-5">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -372,7 +391,7 @@
                 <p class="product-desc" data-ua="Худі, яке б’є по слабкості. Грубе по характеру, надійне по відчуттях." data-eng="A hoodie that strikes at weakness. Tough in character, reliable in feel.">Худі, яке б’є по слабкості. Грубе по характеру, надійне по відчуттях.</p>
             </div>
             <div>
-                <div class="price" data-uah="1850₴" data-usd="45$"></div>
+                <div class="price" data-uah="1850₴" data-usd="45€"></div>
                 <select id="size-6">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -394,7 +413,7 @@
                 <p class="product-desc" data-ua="Для тих, хто мислить як боєць. Річ, яка працює разом з тобою." data-eng="For those who think like a warrior. Gear that works with you.">Для тих, хто мислить як боєць. Річ, яка працює разом з тобою.</p>
             </div>
             <div>
-                <div class="price" data-uah="1750₴" data-usd="40$"></div>
+                <div class="price" data-uah="1750₴" data-usd="40€"></div>
                 <select id="size-7">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -416,7 +435,7 @@
                 <p class="product-desc" data-ua="Дистанція та стиль. Для тих, хто окремо від натовпу." data-eng="Distance and style. For those who stand apart from the crowd.">Дистанція та стиль. Для тих, хто окремо від натовпу.</p>
             </div>
             <div>
-                <div class="price" data-uah="1750₴" data-usd="40$"></div>
+                <div class="price" data-uah="1750₴" data-usd="40€"></div>
                 <select id="size-8">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -438,7 +457,7 @@
                 <p class="product-desc" data-ua="Форма внутрішньої фортеці. Для тих, хто тримає лінію навіть під максимальним тиском." data-eng="The uniform of an inner fortress. For those who hold the line even under maximum pressure.">Форма внутрішньої фортеці. Для тих, хто тримає лінію навіть під максимальним тиском.</p>
             </div>
             <div>
-                <div class="price" data-uah="1750₴" data-usd="40$"></div>
+                <div class="price" data-uah="1750₴" data-usd="40€"></div>
                 <select id="size-11">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -460,7 +479,7 @@
                 <p class="product-desc" data-ua="Символ темної волі та холодної витримки. Для тих, хто тримає контроль, коли інші здаються." data-eng="A symbol of dark will and cold endurance. For those who stay in control when others give up.">Символ темної волі та холодної витримки. Для тих, хто тримає контроль, коли інші здаються.</p>
             </div>
             <div>
-                <div class="price" data-uah="1850₴" data-usd="45$"></div>
+                <div class="price" data-uah="1850₴" data-usd="45€"></div>
                 <select id="size-12">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -482,7 +501,7 @@
                 <p class="product-desc" data-ua="Темна естетика для тих, хто тримає стрій зсередини. Жорстка форма характеру, що не визнає компромісів." data-eng="Dark aesthetics for those who hold the line from within. A hard shape of character that recognizes no compromises.">Темна естетика для тих, хто тримає стрій зсередини. Жорстка форма характеру, що не визнає компромісів.</p>
             </div>
             <div>
-                <div class="price" data-uah="1750₴" data-usd="40$"></div>
+                <div class="price" data-uah="1750₴" data-usd="40€"></div>
                 <select id="size-13">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -504,7 +523,7 @@
                 <p class="product-desc" data-ua="Для стійких духом, хто не ламається під тиском. Жодних компромісів." data-eng="For the strong-willed who don't break under pressure. No compromises.">Для стійких духом, хто не ламається під тиском. Жодних компромісів.</p>
             </div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-9">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -526,7 +545,7 @@
                 <p class="product-desc" data-ua="Класика бренду. Мінімалізм та характер." data-eng="Brand classic. Minimalism and character.">Класика бренду. Мінімалізм та характер. &#11036;&#11035;</p>
             </div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-10">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -545,7 +564,7 @@
         <div class="product-info">
             <div><h3 class="product-title">Hardcore Hentai</h3><p class="product-desc" data-ua="Стиль та провокація." data-eng="Style and provocation.">Стиль та провокація.</p></div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-f1">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -564,7 +583,7 @@
         <div class="product-info">
             <div><h3 class="product-title">Militant Pro</h3><p class="product-desc" data-ua="Дисципліна та професіоналізм." data-eng="Discipline and professionalism.">Дисципліна та професіоналізм.</p></div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-f2">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -583,7 +602,7 @@
         <div class="product-info">
             <div><h3 class="product-title">BLOOD ON MY KNIFE</h3><p class="product-desc" data-ua="Результат понад усе." data-eng="Result above all else.">Результат понад усе.</p></div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-f3">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -602,7 +621,7 @@
         <div class="product-info">
             <div><h3 class="product-title">Misantrop</h3><p class="product-desc" data-ua="Твоя дистанція від світу." data-eng="Your distance from the world.">Твоя дистанція від світу.</p></div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-f4">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -621,7 +640,7 @@
         <div class="product-info">
             <div><h3 class="product-title">Idea of Nation</h3><p class="product-desc" data-ua="Ідейний фундамент." data-eng="Ideological foundation.">Ідейний фундамент.</p></div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-f5">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -640,7 +659,7 @@
         <div class="product-info">
             <div><h3 class="product-title">Hardcore Hammer</h3><p class="product-desc" data-ua="Важкий аргумент." data-eng="A heavy argument.">Важкий аргумент.</p></div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-f6">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -659,7 +678,7 @@
         <div class="product-info">
             <div><h3 class="product-title">ONLY BLOOD</h3><p class="product-desc" data-ua="Твій основний підрозділ." data-eng="Your main unit.">Твій основний підрозділ.</p></div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-f7">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -678,7 +697,7 @@
         <div class="product-info">
             <div><h3 class="product-title">Hardcore Confederates</h3><p class="product-desc" data-ua="Дух свободи." data-eng="The spirit of freedom.">Дух свободи.</p></div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-f9">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -697,7 +716,7 @@
         <div class="product-info">
             <div><h3 class="product-title">HARDCORE SATANIC DIVISION</h3><p class="product-desc" data-ua="Темна естетика та жорстка дисципліна. Для тих, хто не грає за чужими правилами." data-eng="Dark aesthetics and hard discipline. For those who do not play by someone else's rules.">Темна естетика та жорстка дисципліна. Для тих, хто не грає за чужими правилами.</p></div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-f10">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -716,7 +735,7 @@
         <div class="product-info">
             <div><h3 class="product-title">HARDCORE SATANIC</h3><p class="product-desc" data-ua="Лаконічний ударний дизайн без зайвого шуму. Для тих, хто говорить вчинками, а не декораціями." data-eng="A concise impact design with no extra noise. For those who speak through actions, not decoration.">Лаконічний ударний дизайн без зайвого шуму. Для тих, хто говорить вчинками, а не декораціями.</p></div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-f11">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -735,7 +754,7 @@
         <div class="product-info">
             <div><h3 class="product-title">HARDCORE CITADEL</h3><p class="product-desc" data-ua="Сувора класика для тих, хто тримає свою лінію. Чистий стиль і міцний характер без зайвих деталей." data-eng="Strict classic for those who hold their line. Clean style and strong character without extra details.">Сувора класика для тих, хто тримає свою лінію. Чистий стиль і міцний характер без зайвих деталей.</p></div>
             <div>
-                <div class="price" data-uah="950₴" data-usd="20$"></div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
                 <select id="size-f12">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -754,7 +773,7 @@
         <div class="product-info">
             <div><h3 class="product-title">TURBOHARDCORE</h3><p class="product-desc" data-ua="Колаборація TURBOSKIN x HARDCORE DIVISION в дусі важкого стрітвиру щільний силует, жорсткий настрій і впізнаваний вуличний характер." data-eng="A TURBOSKIN x HARDCORE DIVISION collaboration in heavy streetwear spirit with a dense silhouette, hard mood, and unmistakable street character.">Колаборація TURBOSKIN x HARDCORE DIVISION в дусі важкого стрітвиру щільний силует, жорсткий настрій і впізнаваний вуличний характер.</p></div>
             <div>
-                <div class="price" data-uah="2000₴" data-usd="50$"></div>
+                <div class="price" data-uah="2000₴" data-usd="50€"></div>
                 <select id="size-h14">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -773,7 +792,7 @@
         <div class="product-info">
             <div><h3 class="product-title">TURBOHARDCORE RED</h3><p class="product-desc" data-ua="Колаборація TURBOSKIN x HARDCORE DIVISION у червоному виконанні енергія тиску, контрасту та прямого меседжу без компромісів." data-eng="A TURBOSKIN x HARDCORE DIVISION collaboration in red execution with pressure, contrast, and a direct message with no compromises.">Колаборація TURBOSKIN x HARDCORE DIVISION у червоному виконанні енергія тиску, контрасту та прямого меседжу без компромісів.</p></div>
             <div>
-                <div class="price" data-uah="1050₴" data-usd="25$"></div>
+                <div class="price" data-uah="1050₴" data-usd="25€"></div>
                 <select id="size-f14">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -792,7 +811,7 @@
         <div class="product-info">
             <div><h3 class="product-title">TURBOHARDCORE WHITE</h3><p class="product-desc" data-ua="Колаборація TURBOSKIN x HARDCORE DIVISION у білому виконанні чиста база, різкий акцент і холодна брутальність у деталях." data-eng="A TURBOSKIN x HARDCORE DIVISION collaboration in white execution with a clean base, sharp accent, and cold brutality in the details.">Колаборація TURBOSKIN x HARDCORE DIVISION у білому виконанні чиста база, різкий акцент і холодна брутальність у деталях.</p></div>
             <div>
-                <div class="price" data-uah="1050₴" data-usd="25$"></div>
+                <div class="price" data-uah="1050₴" data-usd="25€"></div>
                 <select id="size-f15">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
                     <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
@@ -916,3 +935,4 @@
 
 </body>
 </html>
+
