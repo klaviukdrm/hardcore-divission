@@ -273,8 +273,7 @@
                 }
             };
 
-            // Requested manual swap in catalog order.
-            swapByTitle("HARDCORE JUGEND", "TURBOHARDCORE");
+            swapByTitle("Misanthrop Hoodie", "HARDCORE JUGEND");
 
             const capIndex = sorted.findIndex((item) => item.product && item.product.title === "HARDCORE CAP");
             if (capIndex > 0) {
