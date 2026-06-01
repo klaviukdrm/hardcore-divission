@@ -54,7 +54,7 @@ window.PRODUCTS_DATA = [
     "id": 29,
     "slug": "hardcore-jugend-hardcore-jugend-t-shirt",
     "category": "футболка",
-    "isNew": true,
+    "isNew": false,
     "title": "HARDCORE JUGEND",
     "descUa": "Це про дисципліну, агресію та андеграундний дух. Холодні вулиці, гучна музика, безсонні ночі та покоління, яке відмовляється ставати слабким.",
     "descEng": "This is about discipline, aggression, and underground spirit. Cold streets, loud music, sleepless nights, and a generation that refuses to become weak.",
@@ -712,4 +712,3 @@ window.PRODUCTS_DATA = [
     "seoKeywords": "TURBOHARDCORE T-SHIRT WHITE, TURBOHARDCORE, футболка, hardcore division, turboskin, streetwear, ukraine brand"
   }
 ];
-
