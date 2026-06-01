@@ -354,9 +354,9 @@
         const typeName = inferTypeName(product);
         const isCap = typeName === "Cap";
         const capLimitNote = isCap
-            ? (lang === "ua" ? "Кількість обмежена — лише 30 кепок" : "Limited quantity — only 30 caps")
+            ? (lang === "ua" ? "Виробництво стартує після бронювання 30 кепок. Мінімальний запуск можливий від 15 броней. Передзамовлення доступне обмежений час." : "Production starts after 30 caps are reserved. Minimum launch is possible from 15 reservations. Pre-order is available for a limited time.")
             : "";
-        const productDescBlock = capLimitNote ? `${desc}<br><br>${capLimitNote}` : desc;
+        const productDescBlock = capLimitNote ? `${desc} ${capLimitNote}` : desc;
         const addLabel = lang === "ua" ? "\u0414\u041E\u0414\u0410\u0422\u0418 \u0412 \u041A\u041E\u0428\u0418\u041A" : "ADD TO CART";
         const backLabel = lang === "ua" ? "\u041D\u0430\u0437\u0430\u0434 \u0434\u043E \u043A\u0430\u0442\u0430\u043B\u043E\u0433\u0443" : "Back to catalog";
         const sizeGuideLabel = lang === "ua" ? "\u0420\u043E\u0437\u043C\u0456\u0440\u043D\u0430 \u0441\u0456\u0442\u043A\u0430" : "Size guide";
