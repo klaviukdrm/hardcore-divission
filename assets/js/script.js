@@ -709,7 +709,7 @@ let cart = [];
         const t = {
             title: lang === 'ua' ? 'ДОСТАВКА' : 'DELIVERY',
             fio: lang === 'ua' ? 'ПІБ' : 'Full Name',
-            phone: lang === 'ua' ? 'Номер телефону' : 'Phone Number',
+            phone: '+38 (0__) ___-__-__',
             np: lang === 'ua' ? 'Місто та № відділення НП' : 'City & Nova Poshta Dept',
             tg: lang === 'ua' ? "Ваш Telegram (необов'язково)" : "Your Telegram (optional)",
             btn: lang === 'ua' ? 'ДАЛІ ДО ОПЛАТИ' : 'NEXT: PAYMENT',
@@ -754,6 +754,47 @@ let cart = [];
             </div>
         `;
         document.getElementById('orderModal').style.display = 'flex';
+
+        // Добавляем маску для номера телефона
+        const phoneInput = document.getElementById('orderPhone');
+        if (phoneInput && orderRegion === 'ua') {
+            phoneInput.addEventListener('input', function(e) {
+                let el = e.target;
+                if (!el.value) return;
+
+                let digits = el.value.replace(/\D/g, '');
+                
+                if (digits.startsWith('380')) digits = digits.substring(3);
+                else if (digits.startsWith('38')) digits = digits.substring(2);
+                else if (digits.startsWith('0')) digits = digits.substring(1);
+                
+                if (digits.length === 0) {
+                    if (!el.value.startsWith('+')) {
+                        el.value = '+38 (0';
+                        return;
+                    }
+                    if (el.value.length < 6) {
+                        el.value = '';
+                        return;
+                    }
+                }
+                
+                let match = digits.match(/^(\d{0,2})(\d{0,3})(\d{0,2})(\d{0,2})/);
+                if (!match) {
+                    el.value = '';
+                    return;
+                }
+                
+                
+                let out = '+38 (0';
+                if (match[1]) out += match[1];
+                if (match[2]) out += ') ' + match[2];
+                if (match[3]) out += '-' + match[3];
+                if (match[4]) out += '-' + match[4];
+                
+                el.value = out;
+            });
+        }
     }
 
     function proceedToPayment() {
@@ -762,15 +803,15 @@ let cart = [];
 
         const fio = document.getElementById('orderFIO').value;
         const phoneRaw = document.getElementById('orderPhone').value;
-        const phone = phoneRaw.replace(/\D/g, '');
+        const phoneDigits = phoneRaw.replace(/\D/g, '');
         const np = document.getElementById('orderNP').value;
         const tg = document.getElementById('orderTG').value;
 
-        if (!fio || phone.length < 10 || !np) return showToast(msgErrUa);
+        if (!fio || phoneDigits.length < 10 || !np) return showToast(msgErrUa);
 
         deliveryData = {
             region: orderRegion,
-            data: { fio, phone, np, tg }
+            data: { fio, phone: '+' + phoneDigits, np, tg }
         };
 
         renderOrderPayment();
