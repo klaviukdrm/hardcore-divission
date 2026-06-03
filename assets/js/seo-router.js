@@ -426,8 +426,8 @@
                 }
             </style>
             <div class="breadcrumbs">
-                <span class="bc-desktop"><a href="/pages/index.html">Catalog</a> / <span>${product.title}</span></span>
-                <a href="/pages/index.html" class="bc-mobile">&#8592; ${backLabel}</a>
+                <span class="bc-desktop"><a href="/pages/index.html#catalog">Catalog</a> / <span>${product.title}</span></span>
+                <a href="/pages/index.html#catalog" class="bc-mobile">&#8592; ${backLabel}</a>
             </div>
             <article class="product-detail-card">
                 <div class="product-detail-media">
@@ -437,7 +437,7 @@
                     <div class="product-detail-thumbs">${thumbs}</div>
                 </div>
                 <div class="product-detail-info">
-                    <a href="/pages/index.html" class="product-detail-back">${backLabel}</a>
+                    <a href="/pages/index.html#catalog" class="product-detail-back">${backLabel}</a>
                     <h1 class="product-detail-title">${product.title}</h1>
                     <p class="product-detail-meta"><strong>${slugLabel}:</strong> ${product.slug}</p>
                     <p class="product-detail-desc">${productDescBlock}</p>
@@ -574,7 +574,7 @@
                 <div>
                     <h1 class="product-detail-title">Product not found</h1>
                     <p class="product-detail-desc">The product link is invalid or no longer available.</p>
-                    <a class="product-detail-back" href="/pages/index.html">Back to catalog</a>
+                    <a class="product-detail-back" href="/pages/index.html#catalog">Back to catalog</a>
                 </div>
             </div>
         `;
