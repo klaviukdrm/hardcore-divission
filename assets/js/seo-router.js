@@ -198,9 +198,9 @@
                 existingImageBadge.remove();
             }
 
-            const isCapPreorder = Boolean(product && product.isPreorder);
+            const isPreorder = Boolean(product && product.isPreorder);
             const existingPreorderBadge = imgContainer ? imgContainer.querySelector(".product-preorder-badge") : null;
-            if (isCapPreorder && imgContainer && !existingPreorderBadge) {
+            if (isPreorder && imgContainer && !existingPreorderBadge) {
                 const preorderBadge = document.createElement("span");
                 preorderBadge.className = "product-preorder-badge product-preorder-badge-corner";
                 preorderBadge.setAttribute("data-ua", "ПЕРЕДЗАМОВЛЕННЯ");
@@ -208,7 +208,7 @@
                 preorderBadge.textContent = getPreorderBadgeText();
                 imgContainer.appendChild(preorderBadge);
             }
-            if (!isCapPreorder && existingPreorderBadge) {
+            if (!isPreorder && existingPreorderBadge) {
                 existingPreorderBadge.remove();
             }
 
@@ -273,12 +273,21 @@
                 }
             };
 
-            swapByTitle("Misanthrop Hoodie", "HARDCORE JUGEND");
+            const swapByCartName = (firstCartName, secondCartName) => {
+                const firstIndex = sorted.findIndex((item) => item.product && item.product.cartName === firstCartName);
+                const secondIndex = sorted.findIndex((item) => item.product && item.product.cartName === secondCartName);
+                if (firstIndex >= 0 && secondIndex >= 0 && firstIndex !== secondIndex) {
+                    [sorted[firstIndex], sorted[secondIndex]] = [sorted[secondIndex], sorted[firstIndex]];
+                }
+            };
 
-            const capIndex = sorted.findIndex((item) => item.product && item.product.title === "HARDCORE CAP");
-            if (capIndex > 0) {
-                const [capItem] = sorted.splice(capIndex, 1);
-                sorted.unshift(capItem);
+            swapByTitle("Misanthrop Hoodie", "HARDCORE JUGEND");
+            swapByCartName("Timur Mutsuraev T-Shirt", "HARDCORE CITADEL T-SHIRT");
+
+            const preorderItems = sorted.filter((item) => item.product && item.product.isPreorder);
+            if (preorderItems.length) {
+                const regularItems = sorted.filter((item) => !(item.product && item.product.isPreorder));
+                sorted.splice(0, sorted.length, ...preorderItems, ...regularItems);
             }
 
             const changedOrder = sorted.some((item, idx) => item !== cardItems[idx]);
