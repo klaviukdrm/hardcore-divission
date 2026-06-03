@@ -1,31 +1,5 @@
 window.PRODUCTS_DATA = [
   {
-    "id": 31,
-    "slug": "hardcore-cap-hardcore-cap",
-    "category": "кепки",
-    "isNew": true,
-    "isPreorder": true,
-    "title": "HARDCORE CAP",
-    "descUa": "Кепка на самопошиві з якісної тканини Black Multicam.Холодний силует, темний камуфляж і символіка без зайвих слів.",
-    "descEng": "Custom-sewn cap made from high-quality Black Multicam fabric.",
-    "image": "images/IMG_8127.JPG",
-    "imageAlt": "images/IMG_8128.JPG",
-    "gallery": [
-      "images/IMG_8127.JPG",
-      "images/IMG_8128.JPG",
-      "images/IMG_8129.JPG",
-      "images/IMG_8130.JPG"
-    ],
-    "priceUahLabel": "1500₴",
-    "priceUsdLabel": "30€",
-    "priceUah": 1500,
-    "priceUsd": 30,
-    "sizeId": "size-cap1",
-    "cartName": "HARDCORE CAP",
-    "cartSizeId": "size-cap1",
-    "seoKeywords": "HARDCORE CAP, кепка, бейсболка, hardcore division, streetwear, ukraine brand"
-  },
-  {
     "id": 30,
     "slug": "hardcore-longsleeve-hardcore-longsleeve-sweatshirt",
     "category": "світшоти",
