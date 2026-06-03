@@ -312,11 +312,13 @@ window.PRODUCTS_DATA = [
     "title": "HARDCORE SATANIC",
     "descUa": "Темна естетика для тих, хто тримає стрій зсередини. Жорстка форма характеру, що не визнає компромісів.",
     "descEng": "Dark aesthetics for those who hold the line from within. A hard shape of character that recognizes no compromises.",
-    "image": "images/IMG_7289.JPEG",
-    "imageAlt": "images/IMG_7290.JPEG",
+    "image": "images/IMG_8172.JPG",
+    "imageAlt": "images/IMG_8173.JPG",
     "gallery": [
-      "images/IMG_7289.JPEG",
-      "images/IMG_7290.JPEG"
+      "images/IMG_8172.JPG",
+      "images/IMG_8173.JPG",
+      "images/IMG_8171.JPG",
+      "images/IMG_8174.JPG"
     ],
     "priceUahLabel": "1750₴",
     "priceUsdLabel": "40€",
