@@ -1,12 +1,12 @@
 window.PRODUCTS_DATA = [
   {
     "id": 34,
-    "slug": "hardcore-hardcore-t-shirt",
+    "slug": "hardcore-oni-hardcore-oni-t-shirt",
     "category": "футболка",
     "isNew": true,
-    "title": "HARDCORE",
-    "descUa": "Базова футболка з прямим меседжем без зайвого шуму. Чистий HARDCORE на грудях, жорсткий настрій і впізнаваний дух вулиці.",
-    "descEng": "A basic T-shirt with a direct message and no extra noise. Clean HARDCORE on the chest, a hard mood, and a recognizable street spirit.",
+    "title": "HARDCORE ONI",
+    "descUa": "Базова футболка з прямим меседжем без зайвого шуму. Чистий HARDCORE ONI на грудях, жорсткий настрій і впізнаваний дух вулиці.",
+    "descEng": "A basic T-shirt with a direct message and no extra noise. Clean HARDCORE ONI on the chest, a hard mood, and a recognizable street spirit.",
     "image": "images/IMG_7641.JPG",
     "imageAlt": "images/IMG_7642.JPG",
     "gallery": [
@@ -18,9 +18,9 @@ window.PRODUCTS_DATA = [
     "priceUah": 950,
     "priceUsd": 20,
     "sizeId": "size-f17",
-    "cartName": "HARDCORE T-SHIRT",
+    "cartName": "HARDCORE ONI T-SHIRT",
     "cartSizeId": "size-f17",
-    "seoKeywords": "HARDCORE, HARDCORE T-SHIRT, футболка, hardcore division, streetwear, ukraine brand"
+    "seoKeywords": "HARDCORE ONI, HARDCORE ONI T-SHIRT, футболка, hardcore division, streetwear, ukraine brand"
   },
   {
     "id": 33,
