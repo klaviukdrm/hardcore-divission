@@ -178,7 +178,8 @@
     <button class="filter-btn active" data-ua="ВСЕ" data-eng="ALL" onclick="filterProducts('all')">ВСЕ</button>
     <button class="filter-btn" data-ua="ХУДІ" data-eng="HOODIE" onclick="filterProducts('худі')">ХУДІ</button>
     <button class="filter-btn" data-ua="ФУТБОЛКИ" data-eng="T-SHIRTS" onclick="filterProducts('футболка')">ФУТБОЛКИ</button>
-    <button class="filter-btn" data-ua="ЛОНГСЛІВИ" data-eng="LONGSLEEVES" onclick="filterProducts('світшоти')">ЛОНГСЛІВИ</button>
+    <button class="filter-btn" data-ua="ЛОНГСЛІВИ" data-eng="LONGSLEEVES" onclick="filterProducts('лонгсліви')">ЛОНГСЛІВИ</button>
+    <button class="filter-btn" data-ua="СВІТШОТИ" data-eng="SWEATSHIRTS" onclick="filterProducts('світшоти')">СВІТШОТИ</button>
     <div class="catalog-search-wrap">
         <div class="catalog-search-shell">
             <span class="catalog-search-icon" aria-hidden="true">
@@ -194,7 +195,83 @@
 
 <div class="shop-grid">
 
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/IMG_7641.JPG', 'images/IMG_7642.JPG'])">
+            <img src="images/IMG_7641.JPG" class="product-img" loading="lazy" decoding="async" alt="Hardcore Division product image">
+            <img src="images/IMG_7642.JPG" class="product-img-alt" loading="lazy" decoding="async" alt="Hardcore Division product image alternate view">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">HARDCORE</h3><p class="product-desc" data-ua="Базова футболка з прямим меседжем без зайвого шуму. Чистий HARDCORE на грудях, жорсткий настрій і впізнаваний дух вулиці." data-eng="A basic T-shirt with a direct message and no extra noise. Clean HARDCORE on the chest, a hard mood, and a recognizable street spirit.">Базова футболка з прямим меседжем без зайвого шуму. Чистий HARDCORE на грудях, жорсткий настрій і впізнаваний дух вулиці.</p></div>
+            <div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
+                <select id="size-f17">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE T-SHIRT', 950, 20, 'size-f17')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/IMG_7647.JPG', 'images/IMG_7648.JPG'])">
+            <img src="images/IMG_7647.JPG" class="product-img" loading="lazy" decoding="async" alt="Hardcore Division product image">
+            <img src="images/IMG_7648.JPG" class="product-img-alt" loading="lazy" decoding="async" alt="Hardcore Division product image alternate view">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">HARDCORE STURM JUGEND</h3><p class="product-desc" data-ua="Футболка з жорсткою енергією та прямим візуальним тиском. STURM JUGEND звучить як холодний маніфест дисципліни, руху і вуличного характеру." data-eng="A T-shirt with hard energy and direct visual pressure. STURM JUGEND feels like a cold manifesto of discipline, movement, and street character.">Футболка з жорсткою енергією та прямим візуальним тиском. STURM JUGEND звучить як холодний маніфест дисципліни, руху і вуличного характеру.</p></div>
+            <div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
+                <select id="size-f18">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE STURM JUGEND T-SHIRT', 950, 20, 'size-f18')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="футболка">
+        <div class="product-img-container" onclick="openGallery(['images/IMG_7649.JPG', 'images/IMG_7650.JPG'])">
+            <img src="images/IMG_7649.JPG" class="product-img" loading="lazy" decoding="async" alt="Hardcore Division product image">
+            <img src="images/IMG_7650.JPG" class="product-img-alt" loading="lazy" decoding="async" alt="Hardcore Division product image alternate view">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">KNIFE KULT</h3><p class="product-desc" data-ua="Для тих, кому ближче холодна естетика сталі, ніж порожні слова. KNIFE KULT тримає жорсткий образ і підкреслює вірність власному стилю." data-eng="For those who prefer the cold aesthetics of steel to empty words. KNIFE KULT keeps a hard image and underlines loyalty to your own style.">Для тих, кому ближче холодна естетика сталі, ніж порожні слова. KNIFE KULT тримає жорсткий образ і підкреслює вірність власному стилю.</p></div>
+            <div>
+                <div class="price" data-uah="950₴" data-usd="20€"></div>
+                <select id="size-f19">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('KNIFE KULT T-SHIRT', 950, 20, 'size-f19')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
     <div class="product-card" data-category="світшоти">
+        <div class="product-img-container" onclick="openGallery(['images/IMG_7644.JPG', 'images/IMG_7643.JPG'])">
+            <img src="images/IMG_7644.JPG" class="product-img" loading="lazy" decoding="async" alt="Hardcore Division product image">
+            <img src="images/IMG_7643.JPG" class="product-img-alt" loading="lazy" decoding="async" alt="Hardcore Division product image alternate view">
+        </div>
+        <div class="product-info">
+            <div><h3 class="product-title">HARDCORE SWEATSHIRT</h3><p class="product-desc" data-ua="Щільний світшот для холодних вулиць, тиску й щоденної витримки. Чистий HARDCORE без зайвого декору, тільки характер і форма." data-eng="A solid sweatshirt for cold streets, pressure, and everyday endurance. Clean HARDCORE with no extra decoration, only character and form.">Щільний світшот для холодних вулиць, тиску й щоденної витримки. Чистий HARDCORE без зайвого декору, тільки характер і форма.</p></div>
+            <div>
+                <div class="price" data-uah="1750₴" data-usd="40€"></div>
+                <select id="size-sw2">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>
+                <button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="addToCart('HARDCORE SWEATSHIRT', 1750, 40, 'size-sw2')">В КОШИК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-card" data-category="лонгсліви">
         <div class="product-img-container" onclick="openGallery(['images/IMG_7913.JPG', 'images/IMG_7914.JPG', 'images/IMG_7915.JPG', 'images/IMG_7916.JPG'])">
             <img src="images/IMG_7913.JPG" class="product-img" loading="lazy" decoding="async" alt="Hardcore Division product image">
             <img src="images/IMG_7914.JPG" class="product-img-alt" loading="lazy" decoding="async" alt="Hardcore Division product image alternate view">
