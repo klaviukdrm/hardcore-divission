@@ -1,9 +1,101 @@
 window.PRODUCTS_DATA = [
   {
-    "id": 30,
-    "slug": "hardcore-longsleeve-hardcore-longsleeve-sweatshirt",
+    "id": 34,
+    "slug": "hardcore-hardcore-t-shirt",
+    "category": "футболка",
+    "isNew": true,
+    "title": "HARDCORE",
+    "descUa": "Базова футболка з прямим меседжем без зайвого шуму. Чистий HARDCORE на грудях, жорсткий настрій і впізнаваний дух вулиці.",
+    "descEng": "A basic T-shirt with a direct message and no extra noise. Clean HARDCORE on the chest, a hard mood, and a recognizable street spirit.",
+    "image": "images/IMG_7641.JPG",
+    "imageAlt": "images/IMG_7642.JPG",
+    "gallery": [
+      "images/IMG_7641.JPG",
+      "images/IMG_7642.JPG"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f17",
+    "cartName": "HARDCORE T-SHIRT",
+    "cartSizeId": "size-f17",
+    "seoKeywords": "HARDCORE, HARDCORE T-SHIRT, футболка, hardcore division, streetwear, ukraine brand"
+  },
+  {
+    "id": 33,
+    "slug": "hardcore-sturm-jugend-hardcore-sturm-jugend-t-shirt",
+    "category": "футболка",
+    "isNew": true,
+    "title": "HARDCORE STURM JUGEND",
+    "descUa": "Футболка з жорсткою енергією та прямим візуальним тиском. STURM JUGEND звучить як холодний маніфест дисципліни, руху і вуличного характеру.",
+    "descEng": "A T-shirt with hard energy and direct visual pressure. STURM JUGEND feels like a cold manifesto of discipline, movement, and street character.",
+    "image": "images/IMG_7647.JPG",
+    "imageAlt": "images/IMG_7648.JPG",
+    "gallery": [
+      "images/IMG_7647.JPG",
+      "images/IMG_7648.JPG"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f18",
+    "cartName": "HARDCORE STURM JUGEND T-SHIRT",
+    "cartSizeId": "size-f18",
+    "seoKeywords": "HARDCORE STURM JUGEND, HARDCORE STURM JUGEND T-SHIRT, футболка, hardcore division, streetwear, ukraine brand"
+  },
+  {
+    "id": 32,
+    "slug": "knife-kult-knife-kult-t-shirt",
+    "category": "футболка",
+    "isNew": true,
+    "title": "KNIFE KULT",
+    "descUa": "Для тих, кому ближче холодна естетика сталі, ніж порожні слова. KNIFE KULT тримає жорсткий образ і підкреслює вірність власному стилю.",
+    "descEng": "For those who prefer the cold aesthetics of steel to empty words. KNIFE KULT keeps a hard image and underlines loyalty to your own style.",
+    "image": "images/IMG_7649.JPG",
+    "imageAlt": "images/IMG_7650.JPG",
+    "gallery": [
+      "images/IMG_7649.JPG",
+      "images/IMG_7650.JPG"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f19",
+    "cartName": "KNIFE KULT T-SHIRT",
+    "cartSizeId": "size-f19",
+    "seoKeywords": "KNIFE KULT, KNIFE KULT T-SHIRT, футболка, hardcore division, streetwear, ukraine brand"
+  },
+  {
+    "id": 31,
+    "slug": "hardcore-sweatshirt-hardcore-sweatshirt",
     "category": "світшоти",
     "isNew": true,
+    "title": "HARDCORE SWEATSHIRT",
+    "descUa": "Щільний світшот для холодних вулиць, тиску й щоденної витримки. Чистий HARDCORE без зайвого декору, тільки характер і форма.",
+    "descEng": "A solid sweatshirt for cold streets, pressure, and everyday endurance. Clean HARDCORE with no extra decoration, only character and form.",
+    "image": "images/IMG_7644.JPG",
+    "imageAlt": "images/IMG_7643.JPG",
+    "gallery": [
+      "images/IMG_7644.JPG",
+      "images/IMG_7643.JPG"
+    ],
+    "priceUahLabel": "1750₴",
+    "priceUsdLabel": "40€",
+    "priceUah": 1750,
+    "priceUsd": 40,
+    "sizeId": "size-sw2",
+    "cartName": "HARDCORE SWEATSHIRT",
+    "cartSizeId": "size-sw2",
+    "seoKeywords": "HARDCORE SWEATSHIRT, світшот, свитшот, hardcore division, streetwear, ukraine brand"
+  },
+  {
+    "id": 30,
+    "slug": "hardcore-longsleeve-hardcore-longsleeve-sweatshirt",
+    "category": "лонгсліви",
+    "isNew": false,
     "title": "HARDCORE LONGLSLEEVE",
     "descUa": "Це про дисципліну, агресію та андеграундний дух. Холодні вулиці, гучна музика, безсонні ночі та покоління, яке відмовляється ставати слабким.",
     "descEng": "This is about discipline, aggression, and underground spirit. Cold streets, loud music, sleepless nights, and a generation that refuses to become weak.",
@@ -22,7 +114,7 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-sw1",
     "cartName": "HARDCORE LONGLSLEEVE",
     "cartSizeId": "size-sw1",
-    "seoKeywords": "HARDCORE LONGLSLEEVE, світшот, свитшот, hardcore division, streetwear, ukraine brand"
+    "seoKeywords": "HARDCORE LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand"
   },
   {
     "id": 29,
