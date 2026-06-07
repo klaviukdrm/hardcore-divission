@@ -7,11 +7,13 @@ window.PRODUCTS_DATA = [
     "title": "HARDCORE ONI",
     "descUa": "Базова футболка з прямим меседжем без зайвого шуму. Чистий HARDCORE ONI на грудях, жорсткий настрій і впізнаваний дух вулиці.",
     "descEng": "A basic T-shirt with a direct message and no extra noise. Clean HARDCORE ONI on the chest, a hard mood, and a recognizable street spirit.",
-    "image": "images/IMG_7641.JPG",
-    "imageAlt": "images/IMG_7642.JPG",
+    "image": "images/IMG_8239.JPEG",
+    "imageAlt": "images/IMG_8240.JPEG",
     "gallery": [
-      "images/IMG_7641.JPG",
-      "images/IMG_7642.JPG"
+      "images/IMG_8239.JPEG",
+      "images/IMG_8240.JPEG",
+      "images/IMG_8241.JPEG",
+      "images/IMG_8242.JPEG"
     ],
     "priceUahLabel": "950₴",
     "priceUsdLabel": "20€",
