@@ -17,6 +17,15 @@
         return localStorage.getItem("preferred_lang") || "ua";
     }
 
+    function getDisplayProductTitle(product, lang) {
+        const title = String(product && product.title ? product.title : "");
+        const targetLang = lang || getLang();
+        if (targetLang === "eng") {
+            return title.replace("[2 КОЛОРА]", "[2 COLORS]");
+        }
+        return title.replace("[2 COLORS]", "[2 КОЛОРА]");
+    }
+
     function productUrl(slug) {
         return `/pages/product.html?product=${encodeURIComponent(slug)}`;
     }
@@ -86,6 +95,55 @@
         return "images/Screenshot_197.png";
     }
 
+    function getProductColorVariants(product) {
+        const hasColorMarker = String(product && product.title ? product.title : "").includes("[2 КОЛОРА]");
+        if (!hasColorMarker || !Array.isArray(product && product.colorVariants)) return [];
+        return product.colorVariants.filter((variant) => Array.isArray(variant && variant.gallery) && variant.gallery.length);
+    }
+
+    function getColorVariantGallery(variant) {
+        return Array.isArray(variant && variant.gallery) ? variant.gallery.filter(Boolean) : [];
+    }
+
+    function buildProductThumbs(product, gallery) {
+        return gallery.map((img, idx) =>
+            `<img src="${img}" alt="${product.title} view ${idx + 1}" data-idx="${idx}" loading="lazy" decoding="async">`
+        ).join("");
+    }
+
+    function buildColorOptions(colorVariants, lang) {
+        const colorLabel = lang === "ua" ? "КОЛОР" : "COLOR";
+        return colorVariants.map((variant, index) => {
+            const variantValue = variant && variant.value ? String(variant.value) : String(index);
+            const variantLabel = lang === "ua"
+                ? (variant.labelUa || variant.labelEng || variantValue)
+                : (variant.labelEng || variant.labelUa || variantValue);
+            return `<option value="${variantValue}">${colorLabel}: ${variantLabel}</option>`;
+        }).join("");
+    }
+
+    function buildColorVariantCartName(product, variant) {
+        const baseCartName = String(product && product.cartName ? product.cartName : product && product.title ? product.title : "").trim();
+        const colorLabel = String(variant && (variant.labelEng || variant.value) ? (variant.labelEng || variant.value) : "").trim().toUpperCase();
+        if (!baseCartName || !colorLabel) return baseCartName;
+        const strippedBase = baseCartName.replace(/\s+(black|white|red)$/i, "").trim();
+        return `${strippedBase} ${colorLabel}`.trim();
+    }
+
+    function buildCatalogAddToCartOnClick(product, sizeId) {
+        const colorVariants = getProductColorVariants(product);
+        const defaultVariant = colorVariants.length ? colorVariants[0] : null;
+        const defaultGallery = defaultVariant ? getColorVariantGallery(defaultVariant) : [];
+        const cartName = defaultVariant ? buildColorVariantCartName(product, defaultVariant) : product.cartName;
+        const meta = {
+            image: defaultGallery[0] || product.image || "",
+            productSlug: product.slug || "",
+            color: defaultVariant && defaultVariant.value ? String(defaultVariant.value) : ""
+        };
+
+        return `addToCart(${JSON.stringify(cartName)}, ${Number(product.priceUah) || 0}, ${Number(product.priceUsd) || 0}, ${JSON.stringify(sizeId)}, ${JSON.stringify(meta)})`;
+    }
+
     function formatPriceLabel(product, lang) {
         return lang === "ua" ? `${product.priceUah}\u20B4` : `${product.priceUsd}\u20AC`;
     }
@@ -139,31 +197,131 @@
         };
     }
 
+    function normalizeLookupText(value) {
+        return String(value || "")
+            .toLowerCase()
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    function normalizeLookupPath(value) {
+        return String(value || "")
+            .replace(/\\/g, "/")
+            .replace(/^\.?\//, "")
+            .split("?")[0]
+            .toLowerCase()
+            .trim();
+    }
+
+    function addLookupValue(map, key, product) {
+        if (!key) return;
+        if (!map.has(key)) {
+            map.set(key, []);
+        }
+        map.get(key).push(product);
+    }
+
+    function createProductLookup(items) {
+        const lookup = new Map();
+
+        items.forEach((product) => {
+            addLookupValue(lookup, `slug:${normalizeLookupText(product.slug)}`, product);
+            addLookupValue(lookup, `title:${normalizeLookupText(product.title)}`, product);
+            addLookupValue(lookup, `cart:${normalizeLookupText(product.cartName)}`, product);
+            addLookupValue(lookup, `size:${normalizeLookupText(product.sizeId)}`, product);
+            addLookupValue(lookup, `size:${normalizeLookupText(product.cartSizeId)}`, product);
+
+            [product.image, product.imageAlt]
+                .filter(Boolean)
+                .forEach((imagePath) => {
+                    const normalizedPath = normalizeLookupPath(imagePath);
+                    const imageName = normalizedPath.split("/").pop();
+                    addLookupValue(lookup, `image:${normalizedPath}`, product);
+                    addLookupValue(lookup, `image:${imageName}`, product);
+                });
+
+            (Array.isArray(product.gallery) ? product.gallery : [])
+                .filter(Boolean)
+                .forEach((imagePath) => {
+                    const normalizedPath = normalizeLookupPath(imagePath);
+                    const imageName = normalizedPath.split("/").pop();
+                    addLookupValue(lookup, `gallery:${normalizedPath}`, product);
+                    addLookupValue(lookup, `gallery:${imageName}`, product);
+                });
+        });
+
+        return lookup;
+    }
+
+    function takeFirstAvailableProduct(candidates, usedProductIds) {
+        if (!Array.isArray(candidates) || !candidates.length) return null;
+        return candidates.find((product) => !usedProductIds.has(product.id)) || null;
+    }
+
+    function resolveCardProduct(card, lookup, usedProductIds) {
+        const titleEl = card.querySelector(".product-title");
+        const primaryImg = card.querySelector(".product-img");
+        const altImg = card.querySelector(".product-img-alt");
+        const buyBtn = card.querySelector(".buy-btn");
+        const sizeSelect = card.querySelector("select");
+        const productSlug = card.getAttribute("data-product-slug");
+        const buyBtnOnClick = String(buyBtn ? buyBtn.getAttribute("onclick") || "" : "");
+        const cartNameMatch = buyBtnOnClick.match(/addToCart\('([^']+)'/);
+
+        const lookupKeys = [
+            `slug:${normalizeLookupText(productSlug)}`,
+            `cart:${normalizeLookupText(cartNameMatch ? cartNameMatch[1] : "")}`,
+            `size:${normalizeLookupText(sizeSelect ? sizeSelect.id : "")}`,
+            `image:${normalizeLookupPath(primaryImg ? primaryImg.getAttribute("src") : "")}`,
+            `image:${normalizeLookupPath(altImg ? altImg.getAttribute("src") : "")}`,
+            `gallery:${normalizeLookupPath(primaryImg ? primaryImg.getAttribute("src") : "")}`,
+            `gallery:${normalizeLookupPath(altImg ? altImg.getAttribute("src") : "")}`,
+            `title:${normalizeLookupText(titleEl ? titleEl.textContent : "")}`
+        ];
+
+        for (const key of lookupKeys) {
+            if (!key || key.endsWith(":")) continue;
+            const product = takeFirstAvailableProduct(lookup.get(key), usedProductIds);
+            if (product) {
+                usedProductIds.add(product.id);
+                return product;
+            }
+        }
+
+        return null;
+    }
+
     function enhanceCatalogCards() {
         const grid = document.querySelector(".shop-grid");
         const cards = Array.from(document.querySelectorAll(".shop-grid .product-card"));
         const lang = getLang();
+        const lookup = createProductLookup(products);
+        const usedProductIds = new Set();
         const cardItems = [];
 
         cards.forEach((card, index) => {
-            const product = products[index];
+            const product = resolveCardProduct(card, lookup, usedProductIds);
             if (!product) return;
             cardItems.push({ card, product, index });
 
             const url = productUrl(product.slug);
             card.setAttribute("data-product-slug", product.slug);
+            if (product.category) {
+                card.setAttribute("data-category", product.category);
+            }
 
             const imgContainer = card.querySelector(".product-img-container");
             if (imgContainer) {
                 imgContainer.removeAttribute("onclick");
-                if (!imgContainer.closest("a.product-link")) {
-                    const link = document.createElement("a");
+                let link = imgContainer.closest("a.product-link");
+                if (!link) {
+                    link = document.createElement("a");
                     link.className = "product-link";
-                    link.href = url;
-                    link.setAttribute("aria-label", `Open ${product.title}`);
                     imgContainer.parentNode.insertBefore(link, imgContainer);
                     link.appendChild(imgContainer);
                 }
+                link.href = url;
+                link.setAttribute("aria-label", `Open ${product.title}`);
             }
 
             const primaryImg = card.querySelector(".product-img");
@@ -182,10 +340,16 @@
                     title.textContent = "";
                     link = document.createElement("a");
                     link.className = "product-title-link";
-                    link.href = url;
                     title.appendChild(link);
                 }
-                link.textContent = product.title;
+                link.href = url;
+                link.textContent = getDisplayProductTitle(product, lang);
+            }
+
+            const buyBtn = card.querySelector(".buy-btn");
+            const sizeSelect = card.querySelector("select");
+            if (buyBtn && sizeSelect && sizeSelect.id) {
+                buyBtn.setAttribute("onclick", buildCatalogAddToCartOnClick(product, sizeSelect.id));
             }
 
             const oldInfoBadge = card.querySelector(".product-info .product-new-badge");
@@ -220,12 +384,13 @@
                 existingPreorderBadge.remove();
             }
 
-            if (!card.querySelector(".product-seo-hidden")) {
-                const hidden = document.createElement("p");
+            let hidden = card.querySelector(".product-seo-hidden");
+            if (!hidden) {
+                hidden = document.createElement("p");
                 hidden.className = "seo-hidden product-seo-hidden";
-                hidden.textContent = buildSeoLine(product);
                 card.appendChild(hidden);
             }
+            hidden.textContent = buildSeoLine(product);
         });
 
         if (grid && cardItems.length > 1) {
@@ -315,6 +480,13 @@
         const title = "HARDCORE DIVISION | ONLY BLOOD";
         const description = "Hardcore Division — правий мерч Україна: мілітарі одяг, худі та футболки у стилі streetwear.";
         const image = absUrl("images/photo_2026-03-07_18-15-01.jpg");
+        const catalogProducts = Array.from(document.querySelectorAll(".shop-grid .product-card"))
+            .map((card) => {
+                const slug = String(card.getAttribute("data-product-slug") || "").trim();
+                if (!slug) return null;
+                return products.find((product) => product && product.slug === slug) || null;
+            })
+            .filter(Boolean);
 
         document.title = title;
         setCanonical("/");
@@ -353,8 +525,8 @@
             "name": "Hardcore Division Catalog",
             "description": "Правий мерч Україна, мілітарі одяг, худі та футболки Hardcore Division.",
             "itemListOrder": "https://schema.org/ItemListOrderAscending",
-            "numberOfItems": products.length,
-            "itemListElement": products.map((product, index) => ({
+            "numberOfItems": catalogProducts.length,
+            "itemListElement": catalogProducts.map((product, index) => ({
                 "@type": "ListItem",
                 "position": index + 1,
                 "name": product.title,
@@ -368,8 +540,11 @@
         if (!mount) return;
 
         const lang = getLang();
-        const imageGallery = Array.isArray(product.gallery) ? product.gallery : [];
-        const mainImg = imageGallery.length ? imageGallery[0] : product.image;
+        const displayTitle = getDisplayProductTitle(product, lang);
+        const imageGallery = Array.isArray(product.gallery) ? product.gallery.filter(Boolean) : [];
+        const colorVariants = getProductColorVariants(product);
+        const initialGallery = colorVariants.length ? getColorVariantGallery(colorVariants[0]) : imageGallery;
+        const mainImg = initialGallery.length ? initialGallery[0] : product.image;
         const desc = lang === "ua" ? (product.descUa || product.descEng) : (product.descEng || product.descUa);
         const typeName = inferTypeName(product);
         const isCap = typeName === "Cap";
@@ -390,9 +565,7 @@
             ? `<span class="product-new-badge product-new-badge-corner product-new-badge-detail-corner" data-ua="НОВЕ" data-eng="NEW">${getNewBadgeText(product)}</span>`
             : "";
 
-        const thumbs = imageGallery.map((img, idx) =>
-            `<img src="${img}" alt="${product.title} view ${idx + 1}" data-idx="${idx}" loading="lazy" decoding="async">`
-        ).join("");
+        const thumbs = buildProductThumbs(product, initialGallery);
         const sizeOptions = isCap
             ? `<option value="ONE SIZE">SIZE: ONE SIZE</option>`
             : `
@@ -406,6 +579,9 @@
         const sizeGuideButton = isCap
             ? ""
             : `<button class="buy-btn size-guide-btn" id="sizeGuideBtn">${sizeGuideLabel}</button>`;
+        const colorSelect = colorVariants.length
+            ? `<select id="product-color">${buildColorOptions(colorVariants, lang)}</select>`
+            : "";
 
         mount.innerHTML = `
             <style>
@@ -438,7 +614,7 @@
                 }
             </style>
             <div class="breadcrumbs">
-                <span class="bc-desktop"><a href="/pages/index.html#catalog">Catalog</a> / <span>${product.title}</span></span>
+                <span class="bc-desktop"><a href="/pages/index.html#catalog">Catalog</a> / <span>${displayTitle}</span></span>
                 <a href="/pages/index.html#catalog" class="bc-mobile">&#8592; ${backLabel}</a>
             </div>
             <article class="product-detail-card">
@@ -450,7 +626,7 @@
                 </div>
                 <div class="product-detail-info">
                     <a href="/pages/index.html#catalog" class="product-detail-back">${backLabel}</a>
-                    <h1 class="product-detail-title">${product.title}</h1>
+                    <h1 class="product-detail-title">${displayTitle}</h1>
                     <p class="product-detail-meta"><strong>${slugLabel}:</strong> ${product.slug}</p>
                     <p class="product-detail-desc">${productDescBlock}</p>
                     <div class="price" id="productPrice" data-uah="${product.priceUah}\u20B4" data-usd="${product.priceUsd}\u20AC">${formatPriceLabel(product, lang)}</div>
@@ -458,6 +634,7 @@
                         <select id="product-size">
                             ${sizeOptions}
                         </select>
+                        ${colorSelect}
                         <button class="buy-btn" id="addProductBtn">${addLabel}</button>
                         ${sizeGuideButton}
                     </div>
@@ -466,7 +643,7 @@
                     </div>
                 </div>
                 <section class="seo-hidden" aria-label="Product search keywords">
-                    <h2>${product.title} Hardcore Division</h2>
+                    <h2>${displayTitle} Hardcore Division</h2>
                     <p>${productSeoCopy.ua}</p>
                     <p>${productSeoCopy.ru}</p>
                     <p>${productSeoCopy.eng}</p>
@@ -478,7 +655,14 @@
         const btn = document.getElementById("addProductBtn");
         if (btn) {
             btn.addEventListener("click", function () {
-                addToCart(product.cartName, product.priceUah, product.priceUsd, "product-size");
+                const selectedCartName = currentColorVariant
+                    ? buildColorVariantCartName(product, currentColorVariant)
+                    : product.cartName;
+                addToCart(selectedCartName, product.priceUah, product.priceUsd, "product-size", {
+                    image: currentGallery[0] || product.image,
+                    productSlug: product.slug,
+                    color: currentColorVariant && currentColorVariant.value ? String(currentColorVariant.value) : ""
+                });
             });
         }
 
@@ -492,10 +676,36 @@
         updateProductDetailPricePreview(product);
 
         const mainImageNode = document.getElementById("productMainImage");
+        const thumbsWrap = mount.querySelector(".product-detail-thumbs");
+        let currentGallery = initialGallery.length ? initialGallery.slice() : imageGallery.slice();
+        let currentColorVariant = colorVariants.length ? colorVariants[0] : null;
+
+        const bindThumbClicks = () => {
+            const thumbNodes = mount.querySelectorAll(".product-detail-thumbs img");
+            thumbNodes.forEach((thumb) => {
+                thumb.addEventListener("click", function () {
+                    if (!mainImageNode) return;
+                    mainImageNode.src = thumb.getAttribute("src");
+                });
+            });
+        };
+
+        const renderGallerySet = (gallery) => {
+            currentGallery = Array.isArray(gallery) && gallery.length ? gallery.slice() : imageGallery.slice();
+            if (mainImageNode) {
+                mainImageNode.src = currentGallery[0] || product.image;
+                mainImageNode.alt = `${product.title} ${typeName}`;
+            }
+            if (thumbsWrap) {
+                thumbsWrap.innerHTML = buildProductThumbs(product, currentGallery);
+                bindThumbClicks();
+            }
+        };
+
         if (mainImageNode) {
             mainImageNode.addEventListener("click", function () {
                 if (typeof openGallery === "function") {
-                    openGallery(imageGallery);
+                    openGallery(currentGallery.length ? currentGallery : imageGallery);
                 }
             });
         }
@@ -509,17 +719,24 @@
             });
         }
 
-        const thumbNodes = mount.querySelectorAll(".product-detail-thumbs img");
-        thumbNodes.forEach((thumb) => {
-            thumb.addEventListener("click", function () {
-                if (!mainImageNode) return;
-                mainImageNode.src = thumb.getAttribute("src");
+        const colorSelectNode = document.getElementById("product-color");
+        if (colorSelectNode) {
+            colorSelectNode.addEventListener("change", function () {
+                const selectedVariant = colorVariants.find((variant, index) => {
+                    const variantValue = variant && variant.value ? String(variant.value) : String(index);
+                    return variantValue === String(colorSelectNode.value || "");
+                });
+                currentColorVariant = selectedVariant || currentColorVariant;
+                renderGallerySet(getColorVariantGallery(selectedVariant));
             });
-        });
+        }
+
+        bindThumbClicks();
     }
 
     function setupProductSeo(product) {
-        const title = `${product.title} | Hardcore Division`;
+        const displayTitle = getDisplayProductTitle(product, getLang());
+        const title = `${displayTitle} | Hardcore Division`;
         const description = (product.descEng || product.descUa || product.title).slice(0, 180);
         const image = absUrl((product.gallery && product.gallery[0]) || product.image);
         const pageLink = productUrl(product.slug);
@@ -527,7 +744,7 @@
         document.title = title;
         setCanonical(pageLink);
         setMetaName("description", description);
-        setMetaName("keywords", `${product.seoKeywords}, buy ${product.title}, hardcore division ${inferTypeName(product).toLowerCase()}`);
+        setMetaName("keywords", `${product.seoKeywords}, buy ${displayTitle}, hardcore division ${inferTypeName(product).toLowerCase()}`);
         setMetaName("robots", "index, follow, max-image-preview:large");
         setMetaProperty("og:type", "product");
         setMetaProperty("og:title", title);
@@ -556,7 +773,7 @@
         setJsonLd("catalog-jsonld", {
             "@context": "https://schema.org",
             "@type": "Product",
-            "name": product.title,
+            "name": displayTitle,
             "sku": product.slug,
             "description": product.descEng || product.descUa || product.title,
             "image": (product.gallery || [product.image]).map(absUrl),
@@ -625,8 +842,14 @@
     }
 
     document.addEventListener("languageChanged", function () {
+        if (page === "catalog") {
+            enhanceCatalogCards();
+            setupCatalogSeo();
+            return;
+        }
         if (page === "product" && activeProduct) {
             renderProduct(activeProduct);
+            setupProductSeo(activeProduct);
         }
     });
 
