@@ -427,7 +427,7 @@ window.PRODUCTS_DATA = [
     "id": 9,
     "slug": "hardcore-division-black-division-t-shirt-black",
     "category": "футболка",
-    "title": "Hardcore Division Black",
+    "title": "Hardcore Division [2 КОЛОРА]",
     "descUa": "Для стійких духом, хто не ламається під тиском. Жодних компромісів.",
     "descEng": "For the strong-willed who don't break under pressure. No compromises.",
     "image": "images/thumbs/photo_1_2026-03-06_19-49-30.jpg",
@@ -435,7 +435,30 @@ window.PRODUCTS_DATA = [
     "gallery": [
       "images/photo_1_2026-03-06_19-49-30.jpg",
       "images/photo_2_2026-03-06_19-49-30.jpg",
-      "images/photo_3_2026-03-06_19-49-30.jpg"
+      "images/photo_3_2026-03-06_19-49-30.jpg",
+      "images/photo_1_2026-03-06_19-49-40.jpg",
+      "images/photo_2_2026-03-06_19-49-40.jpg"
+    ],
+    "colorVariants": [
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "gallery": [
+          "images/photo_1_2026-03-06_19-49-30.jpg",
+          "images/photo_2_2026-03-06_19-49-30.jpg",
+          "images/photo_3_2026-03-06_19-49-30.jpg"
+        ]
+      },
+      {
+        "value": "white",
+        "labelUa": "БІЛИЙ",
+        "labelEng": "WHITE",
+        "gallery": [
+          "images/photo_1_2026-03-06_19-49-40.jpg",
+          "images/photo_2_2026-03-06_19-49-40.jpg"
+        ]
+      }
     ],
     "priceUahLabel": "950₴",
     "priceUsdLabel": "20€",
@@ -740,14 +763,36 @@ window.PRODUCTS_DATA = [
     "slug": "turbohardcore-red-turbohardcore-t-shirt-red",
     "category": "футболка",
     "isNew": false,
-    "title": "TURBOHARDCORE RED",
-    "descUa": "Колаборація TURBOSKIN x HARDCORE DIVISION у червоному виконанні енергія тиску, контрасту та прямого меседжу без компромісів.",
-    "descEng": "A TURBOSKIN x HARDCORE DIVISION collaboration in red execution with pressure, contrast, and a direct message with no compromises.",
+    "title": "TURBOHARDCORE [2 КОЛОРА]",
+    "descUa": "Колаборація TURBOSKIN x HARDCORE DIVISION з енергією тиску, контрасту та прямого меседжу без компромісів.",
+    "descEng": "A TURBOSKIN x HARDCORE DIVISION collaboration with pressure, contrast, and a direct message with no compromises.",
     "image": "images/IMG_7810.JPEG",
     "imageAlt": "images/IMG_7811.JPEG",
     "gallery": [
       "images/IMG_7810.JPEG",
-      "images/IMG_7811.JPEG"
+      "images/IMG_7811.JPEG",
+      "images/IMG_7806.JPEG",
+      "images/IMG_7809.JPEG"
+    ],
+    "colorVariants": [
+      {
+        "value": "red",
+        "labelUa": "ЧЕРВОНИЙ",
+        "labelEng": "RED",
+        "gallery": [
+          "images/IMG_7810.JPEG",
+          "images/IMG_7811.JPEG"
+        ]
+      },
+      {
+        "value": "white",
+        "labelUa": "БІЛИЙ",
+        "labelEng": "WHITE",
+        "gallery": [
+          "images/IMG_7806.JPEG",
+          "images/IMG_7809.JPEG"
+        ]
+      }
     ],
     "priceUahLabel": "1050₴",
     "priceUsdLabel": "25€",
