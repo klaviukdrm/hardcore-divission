@@ -33,7 +33,10 @@ let cart = [];
         const uah = Number(item.uah);
         const usd = Number(item.usd);
         if (!name || !size || !Number.isFinite(uah) || !Number.isFinite(usd)) return null;
-        return { name, uah, usd, size };
+        const image = String(item.image || '').trim();
+        const productSlug = String(item.productSlug || '').trim();
+        const color = String(item.color || '').trim();
+        return { name, uah, usd, size, image, productSlug, color };
     }
 
     function loadCartFromStorage() {
@@ -396,11 +399,20 @@ let cart = [];
         modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
         renderCart();
     }
-    function addToCart(name, uah, usd, sizeId) {
+    function addToCart(name, uah, usd, sizeId, meta) {
     const size = document.getElementById(sizeId).value;
     const lang = localStorage.getItem('preferred_lang') || 'ua';
     const sizeSurchargeUah = size === '3XL' ? tshirt3xlSurchargeUah : 0;
-    cart.push({name, uah: uah + sizeSurchargeUah, usd, size});
+    const options = meta && typeof meta === 'object' ? meta : {};
+    cart.push({
+        name,
+        uah: uah + sizeSurchargeUah,
+        usd,
+        size,
+        image: String(options.image || '').trim(),
+        productSlug: String(options.productSlug || '').trim(),
+        color: String(options.color || '').trim()
+    });
     saveCartToStorage();
     updateCartCount();
     
@@ -1061,7 +1073,10 @@ let cart = [];
                 size: item.size,
                 price: unitPrice,
                 quantity: 1,
-                product_id: null
+                product_id: null,
+                image: String(item.image || '').trim(),
+                productSlug: String(item.productSlug || '').trim(),
+                color: String(item.color || '').trim()
             });
         });
 
@@ -1077,11 +1092,15 @@ let cart = [];
         return grouped.map((item, idx) => {
             const itemTitleNorm = normalize(item.title);
             const product = products.find((p) => {
+                const slugNorm = normalize(item.productSlug);
+                if (slugNorm && normalize(p?.slug) === slugNorm) {
+                    return true;
+                }
                 const cartNameNorm = normalize(p?.cartName);
                 const titleNorm = normalize(p?.title);
                 return cartNameNorm === itemTitleNorm || titleNorm === itemTitleNorm;
             });
-            const imagePath = product?.image || (product?.gallery && product.gallery[0]) || '';
+            const imagePath = String(item.image || '').trim() || product?.image || (product?.gallery && product.gallery[0]) || '';
 
             const line = `${idx + 1}. ${item.title} (${item.size}) x${item.quantity} - ${item.price}${currency}`;
             return {
