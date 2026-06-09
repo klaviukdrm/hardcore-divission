@@ -4,7 +4,7 @@ window.PRODUCTS_DATA = [
     "slug": "hardcore-oni-hardcore-oni-t-shirt",
     "category": "футболка",
     "isNew": true,
-    "title": "HARDCORE ONI",
+    "title": "HARDCORE ONI [2 КОЛОРА]",
     "descUa": "Базова футболка з прямим меседжем без зайвого шуму. Чистий HARDCORE ONI на грудях, жорсткий настрій і впізнаваний дух вулиці.",
     "descEng": "A basic T-shirt with a direct message and no extra noise. Clean HARDCORE ONI on the chest, a hard mood, and a recognizable street spirit.",
     "image": "images/IMG_8239.JPEG",
@@ -14,6 +14,28 @@ window.PRODUCTS_DATA = [
       "images/IMG_8240.JPEG",
       "images/IMG_8241.JPEG",
       "images/IMG_8242.JPEG"
+    ],
+    "colorVariants": [
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "gallery": [
+          "images/IMG_8239.JPEG",
+          "images/IMG_8240.JPEG",
+          "images/IMG_8241.JPEG",
+          "images/IMG_8242.JPEG"
+        ]
+      },
+      {
+        "value": "white",
+        "labelUa": "БІЛИЙ",
+        "labelEng": "WHITE",
+        "gallery": [
+          "images/photo_2026-06-09_21-07-36.jpg",
+          "images/photo_2026-06-09_21-07-36 (2).jpg"
+        ]
+      }
     ],
     "priceUahLabel": "950₴",
     "priceUsdLabel": "20€",
@@ -191,6 +213,7 @@ window.PRODUCTS_DATA = [
         "labelUa": "БІЛИЙ",
         "labelEng": "WHITE",
         "gallery": [
+          "images/photo_2026-06-09_21-19-10.jpg",
           "images/photo_2026-06-09_20-52-04.jpg",
           "images/photo_2026-06-09_20-55-49.jpg"
         ]
@@ -210,7 +233,7 @@ window.PRODUCTS_DATA = [
     "slug": "timur-mutsuraev-timur-mutsuraev-t-shirt",
     "category": "футболка",
     "isNew": false,
-    "title": "Timur Mutsuraev",
+    "title": "Timur Mutsuraev [2 КОЛОРА]",
     "descUa": "Колекція про чеченського барда, який у своїх піснях виражав боротьбу за свободу, віру та любов до рідної землі.",
     "descEng": "A collection about the Chechen bard who expressed in his songs the struggle for freedom, faith, and love for his homeland.",
     "image": "images/IMG_7515.JPG",
@@ -220,6 +243,28 @@ window.PRODUCTS_DATA = [
       "images/IMG_7514.JPG",
       "images/IMG_7513.JPG",
       "images/IMG_7512.JPG"
+    ],
+    "colorVariants": [
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "gallery": [
+          "images/IMG_7515.JPG",
+          "images/IMG_7514.JPG",
+          "images/IMG_7513.JPG",
+          "images/IMG_7512.JPG"
+        ]
+      },
+      {
+        "value": "white",
+        "labelUa": "БІЛИЙ",
+        "labelEng": "WHITE",
+        "gallery": [
+          "images/photo_2026-06-09_21-32-17.jpg",
+          "images/photo_2026-06-09_21-32-17 (2).jpg"
+        ]
+      }
     ],
     "priceUahLabel": "1050₴",
     "priceUsdLabel": "25€",
@@ -733,7 +778,7 @@ window.PRODUCTS_DATA = [
     "id": 19,
     "slug": "hardcore-satanic-division-hardcore-satanic-division-t-shirt",
     "category": "футболка",
-    "title": "HARDCORE SATANIC DIVISION",
+    "title": "HARDCORE SATANIC DIVISION [2 КОЛОРА]",
     "descUa": "Темна естетика та жорстка дисципліна. Для тих, хто не грає за чужими правилами.",
     "descEng": "Dark aesthetics and hard discipline. For those who do not play by someone else's rules.",
     "image": "images/IMG_7276.JPG",
@@ -743,6 +788,28 @@ window.PRODUCTS_DATA = [
       "images/IMG_7282.JPG",
       "images/IMG_7275.JPEG",
       "images/IMG_7246.JPG"
+    ],
+    "colorVariants": [
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "gallery": [
+          "images/IMG_7276.JPG",
+          "images/IMG_7282.JPG",
+          "images/IMG_7275.JPEG",
+          "images/IMG_7246.JPG"
+        ]
+      },
+      {
+        "value": "white",
+        "labelUa": "БІЛИЙ",
+        "labelEng": "WHITE",
+        "gallery": [
+          "images/photo_2026-06-09_21-25-36.jpg",
+          "images/photo_2026-06-09_21-25-37.jpg"
+        ]
+      }
     ],
     "priceUahLabel": "950₴",
     "priceUsdLabel": "20€",
