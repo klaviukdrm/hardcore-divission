@@ -214,7 +214,6 @@ window.PRODUCTS_DATA = [
         "labelEng": "WHITE",
         "gallery": [
           "images/photo_2026-06-09_21-19-10.jpg",
-          "images/photo_2026-06-09_20-52-04.jpg",
           "images/photo_2026-06-09_20-55-49.jpg"
         ]
       }
