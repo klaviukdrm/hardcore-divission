@@ -29,7 +29,7 @@ window.PRODUCTS_DATA = [
     "slug": "hardcore-sturm-jugend-hardcore-sturm-jugend-t-shirt",
     "category": "футболка",
     "isNew": true,
-    "title": "HARDCORE STURM JUGEND",
+    "title": "HARDCORE STURM JUGEND [2 КОЛОРА]",
     "descUa": "Футболка з жорсткою енергією та прямим візуальним тиском. STURM JUGEND звучить як холодний маніфест дисципліни, руху і вуличного характеру.",
     "descEng": "A T-shirt with hard energy and direct visual pressure. STURM JUGEND feels like a cold manifesto of discipline, movement, and street character.",
     "image": "images/IMG_7647.JPG",
@@ -37,6 +37,26 @@ window.PRODUCTS_DATA = [
     "gallery": [
       "images/IMG_7647.JPG",
       "images/IMG_7648.JPG"
+    ],
+    "colorVariants": [
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "gallery": [
+          "images/IMG_7647.JPG",
+          "images/IMG_7648.JPG"
+        ]
+      },
+      {
+        "value": "white",
+        "labelUa": "БІЛИЙ",
+        "labelEng": "WHITE",
+        "gallery": [
+          "images/photo_2026-06-09_20-53-45.jpg",
+          "images/photo_2026-06-09_20-53-46.jpg"
+        ]
+      }
     ],
     "priceUahLabel": "950₴",
     "priceUsdLabel": "20€",
@@ -52,7 +72,7 @@ window.PRODUCTS_DATA = [
     "slug": "knife-kult-knife-kult-t-shirt",
     "category": "футболка",
     "isNew": true,
-    "title": "KNIFE KULT",
+    "title": "KNIFE KULT [2 КОЛОРА]",
     "descUa": "Для тих, кому ближче холодна естетика сталі, ніж порожні слова. KNIFE KULT тримає жорсткий образ і підкреслює вірність власному стилю.",
     "descEng": "For those who prefer the cold aesthetics of steel to empty words. KNIFE KULT keeps a hard image and underlines loyalty to your own style.",
     "image": "images/IMG_7649.JPG",
@@ -60,6 +80,26 @@ window.PRODUCTS_DATA = [
     "gallery": [
       "images/IMG_7649.JPG",
       "images/IMG_7650.JPG"
+    ],
+    "colorVariants": [
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "gallery": [
+          "images/IMG_7649.JPG",
+          "images/IMG_7650.JPG"
+        ]
+      },
+      {
+        "value": "white",
+        "labelUa": "БІЛИЙ",
+        "labelEng": "WHITE",
+        "gallery": [
+          "images/photo_2026-06-09_20-53-46 (2).jpg",
+          "images/photo_2026-06-09_20-53-46 (3).jpg"
+        ]
+      }
     ],
     "priceUahLabel": "950₴",
     "priceUsdLabel": "20€",
@@ -123,7 +163,7 @@ window.PRODUCTS_DATA = [
     "slug": "hardcore-jugend-hardcore-jugend-t-shirt",
     "category": "футболка",
     "isNew": false,
-    "title": "HARDCORE JUGEND",
+    "title": "HARDCORE JUGEND [2 КОЛОРА]",
     "descUa": "Це про дисципліну, агресію та андеграундний дух. Холодні вулиці, гучна музика, безсонні ночі та покоління, яке відмовляється ставати слабким.",
     "descEng": "This is about discipline, aggression, and underground spirit. Cold streets, loud music, sleepless nights, and a generation that refuses to become weak.",
     "image": "images/IMG_7848.JPG",
@@ -133,6 +173,28 @@ window.PRODUCTS_DATA = [
       "images/IMG_7849.JPG",
       "images/IMG_7850.JPG",
       "images/IMG_7857.JPG"
+    ],
+    "colorVariants": [
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "gallery": [
+          "images/IMG_7848.JPG",
+          "images/IMG_7849.JPG",
+          "images/IMG_7850.JPG",
+          "images/IMG_7857.JPG"
+        ]
+      },
+      {
+        "value": "white",
+        "labelUa": "БІЛИЙ",
+        "labelEng": "WHITE",
+        "gallery": [
+          "images/photo_2026-06-09_20-52-04.jpg",
+          "images/photo_2026-06-09_20-55-49.jpg"
+        ]
+      }
     ],
     "priceUahLabel": "950₴",
     "priceUsdLabel": "20€",
