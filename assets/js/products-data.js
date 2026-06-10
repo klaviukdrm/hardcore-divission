@@ -97,11 +97,12 @@ window.PRODUCTS_DATA = [
     "title": "KNIFE KULT [2 КОЛОРА]",
     "descUa": "Для тих, кому ближче холодна естетика сталі, ніж порожні слова. KNIFE KULT тримає жорсткий образ і підкреслює вірність власному стилю.",
     "descEng": "For those who prefer the cold aesthetics of steel to empty words. KNIFE KULT keeps a hard image and underlines loyalty to your own style.",
-    "image": "images/IMG_7649.JPG",
-    "imageAlt": "images/IMG_7650.JPG",
+    "image": "images/IMG_8318.JPG",
+    "imageAlt": "images/IMG_8319.JPG",
     "gallery": [
-      "images/IMG_7649.JPG",
-      "images/IMG_7650.JPG"
+      "images/IMG_8318.JPG",
+      "images/IMG_8319.JPG",
+      "images/IMG_8320.JPG"
     ],
     "colorVariants": [
       {
@@ -109,8 +110,9 @@ window.PRODUCTS_DATA = [
         "labelUa": "ЧОРНИЙ",
         "labelEng": "BLACK",
         "gallery": [
-          "images/IMG_7649.JPG",
-          "images/IMG_7650.JPG"
+          "images/IMG_8318.JPG",
+          "images/IMG_8319.JPG",
+          "images/IMG_8320.JPG"
         ]
       },
       {
