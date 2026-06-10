@@ -617,7 +617,7 @@
                 <span class="bc-desktop"><a href="/pages/index.html#catalog">Catalog</a> / <span>${displayTitle}</span></span>
                 <a href="/pages/index.html#catalog" class="bc-mobile">&#8592; ${backLabel}</a>
             </div>
-            <article class="product-detail-card">
+            <article class="product-detail-card${colorVariants.length ? " product-detail-card-has-colors" : ""}">
                 <div class="product-detail-media">
                     ${newBadge}
                     ${preorderBadge}
