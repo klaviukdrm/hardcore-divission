@@ -695,6 +695,9 @@
                 pointer-events: none;
                 z-index: 0;
             }
+            .product-detail-card.product-detail-card-has-colors .product-detail-info::after {
+                top: calc(clamp(620px, 70vh, 860px) + clamp(32px, 2.2vw, 56px));
+            }
             .product-detail-info .product-detail-filler-art {
                 display: none;
             }
