@@ -142,7 +142,7 @@ window.PRODUCTS_DATA = [
     "id": 31,
     "slug": "hardcore-sweatshirt-hardcore-sweatshirt",
     "category": "світшоти",
-    "isNew": true,
+    "isNew": false,
     "title": "HARDCORE SWEATSHIRT",
     "descUa": "Щільний світшот для холодних вулиць, тиску й щоденної витримки. Чистий HARDCORE без зайвого декору, тільки характер і форма.",
     "descEng": "A solid sweatshirt for cold streets, pressure, and everyday endurance. Clean HARDCORE with no extra decoration, only character and form.",
