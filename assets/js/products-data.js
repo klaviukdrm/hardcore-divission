@@ -54,11 +54,13 @@ window.PRODUCTS_DATA = [
     "title": "HARDCORE STURM JUGEND [2 КОЛОРА]",
     "descUa": "Футболка з жорсткою енергією та прямим візуальним тиском. STURM JUGEND звучить як холодний маніфест дисципліни, руху і вуличного характеру.",
     "descEng": "A T-shirt with hard energy and direct visual pressure. STURM JUGEND feels like a cold manifesto of discipline, movement, and street character.",
-    "image": "images/IMG_7647.JPG",
-    "imageAlt": "images/IMG_7648.JPG",
+    "image": "images/IMG_8421.JPG",
+    "imageAlt": "images/IMG_8422.JPG",
     "gallery": [
-      "images/IMG_7647.JPG",
-      "images/IMG_7648.JPG"
+      "images/IMG_8421.JPG",
+      "images/IMG_8422.JPG",
+      "images/IMG_8423.JPG",
+      "images/IMG_8424.JPG"
     ],
     "colorVariants": [
       {
@@ -66,8 +68,10 @@ window.PRODUCTS_DATA = [
         "labelUa": "ЧОРНИЙ",
         "labelEng": "BLACK",
         "gallery": [
-          "images/IMG_7647.JPG",
-          "images/IMG_7648.JPG"
+          "images/IMG_8421.JPG",
+          "images/IMG_8422.JPG",
+          "images/IMG_8423.JPG",
+          "images/IMG_8424.JPG"
         ]
       },
       {
