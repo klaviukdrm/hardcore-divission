@@ -136,16 +136,10 @@ function formatCreatedMessage({ orderId, amount, currency, customer, items }) {
             return `${index + 1}. ${escapeHtml(item.title)}${sizeLabel} x${item.quantity} - ${escapeHtml(formatAmount(lineTotal, currency))}`;
         })
         .join('\n');
-    const city = String(customer.city || '').trim();
     const delivery = String(customer.delivery || '').trim();
-    const normalizedCity = city.toLowerCase();
-    const normalizedDelivery = delivery.toLowerCase();
-    const cityLine = city && !normalizedDelivery.includes(normalizedCity)
-        ? `🏙️ <b>Місто:</b> ${escapeHtml(city)}`
-        : '';
     const tgLine = customer.tg
         ? `💬 <b>TG / Коментар:</b> ${escapeHtml(customer.tg)}`
-        : '';
+        : null;
 
     return [
         '<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>',
@@ -153,7 +147,6 @@ function formatCreatedMessage({ orderId, amount, currency, customer, items }) {
         `🆔 <b>Номер:</b> ${escapeHtml(orderId)}`,
         `👤 <b>ПІБ:</b> ${escapeHtml(customer.fio)}`,
         `📞 <b>Тел:</b> ${escapeHtml(customer.phone)}`,
-        cityLine,
         `📦 <b>Доставка:</b> ${escapeHtml(delivery)}`,
         tgLine,
         '',
