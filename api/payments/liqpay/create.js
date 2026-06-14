@@ -156,6 +156,7 @@ function formatCreatedMessage({ orderId, amount, currency, customer, items }) {
         cityLine,
         `📦 <b>Доставка:</b> ${escapeHtml(delivery)}`,
         tgLine,
+        '',
         '🛒 <b>Товари:</b>',
         itemsBlock || '-',
         '',
