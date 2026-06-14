@@ -156,9 +156,9 @@ function formatCreatedMessage({ orderId, amount, currency, customer, items }) {
         cityLine,
         `📦 <b>Доставка:</b> ${escapeHtml(delivery)}`,
         tgLine,
-        '',
         '🛒 <b>Товари:</b>',
         itemsBlock || '-',
+        '',
         '💳 <b>Оплата:</b> Google Pay / Apple Pay (LiqPay)',
         '📌 <b>Статус:</b> created',
         `<b>💰 СУМА: ${escapeHtml(formatAmount(amount, currency))}</b>`
