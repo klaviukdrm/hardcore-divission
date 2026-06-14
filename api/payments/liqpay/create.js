@@ -162,7 +162,7 @@ function formatCreatedMessage({ orderId, amount, currency, customer, items }) {
         '💳 <b>Оплата:</b> Google Pay / Apple Pay (LiqPay)',
         '📌 <b>Статус:</b> created',
         `<b>💰 СУМА: ${escapeHtml(formatAmount(amount, currency))}</b>`
-    ].filter(Boolean).join('\n');
+    ].filter((line) => line !== null && line !== undefined).join('\n');
 }
 
 async function saveOrderForAuthenticatedUser(req, amount, items) {
