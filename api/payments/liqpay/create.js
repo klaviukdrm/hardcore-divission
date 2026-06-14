@@ -19,10 +19,11 @@ function normalizeCustomer(customer) {
     const phone = String(customer.phone || '').trim();
     const city = String(customer.city || '').trim();
     const delivery = String(customer.delivery || '').trim();
+    const tg = String(customer.tg || '').trim().slice(0, 100);
 
     if (!fio || !phone || !city || !delivery) return null;
 
-    return { fio, phone, city, delivery };
+    return { fio, phone, city, delivery, tg };
 }
 
 function normalizeItems(items) {
@@ -135,6 +136,16 @@ function formatCreatedMessage({ orderId, amount, currency, customer, items }) {
             return `${index + 1}. ${escapeHtml(item.title)}${sizeLabel} x${item.quantity} - ${escapeHtml(formatAmount(lineTotal, currency))}`;
         })
         .join('\n');
+    const city = String(customer.city || '').trim();
+    const delivery = String(customer.delivery || '').trim();
+    const normalizedCity = city.toLowerCase();
+    const normalizedDelivery = delivery.toLowerCase();
+    const cityLine = city && !normalizedDelivery.includes(normalizedCity)
+        ? `🏙️ <b>Місто:</b> ${escapeHtml(city)}`
+        : '';
+    const tgLine = customer.tg
+        ? `💬 <b>TG / Коментар:</b> ${escapeHtml(customer.tg)}`
+        : '';
 
     return [
         '<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>',
@@ -142,15 +153,16 @@ function formatCreatedMessage({ orderId, amount, currency, customer, items }) {
         `🆔 <b>Номер:</b> ${escapeHtml(orderId)}`,
         `👤 <b>ПІБ:</b> ${escapeHtml(customer.fio)}`,
         `📞 <b>Тел:</b> ${escapeHtml(customer.phone)}`,
-        `🏙️ <b>Місто:</b> ${escapeHtml(customer.city)}`,
-        `📦 <b>Доставка:</b> ${escapeHtml(customer.delivery)}`,
+        cityLine,
+        `📦 <b>Доставка:</b> ${escapeHtml(delivery)}`,
+        tgLine,
         '',
         '🛒 <b>Товари:</b>',
         itemsBlock || '-',
         '💳 <b>Оплата:</b> Google Pay / Apple Pay (LiqPay)',
         '📌 <b>Статус:</b> created',
         `<b>💰 СУМА: ${escapeHtml(formatAmount(amount, currency))}</b>`
-    ].join('\n');
+    ].filter(Boolean).join('\n');
 }
 
 async function saveOrderForAuthenticatedUser(req, amount, items) {
