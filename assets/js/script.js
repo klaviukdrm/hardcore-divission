@@ -723,7 +723,7 @@ let cart = [];
             fio: lang === 'ua' ? 'ПІБ' : 'Full Name',
             phone: '+38 (0__) ___-__-__',
             np: lang === 'ua' ? 'Місто та № відділення НП' : 'City & Nova Poshta Dept',
-            tg: lang === 'ua' ? "Ваш Telegram (необов'язково)" : "Your Telegram (optional)",
+            tg: lang === 'ua' ? "Ваш Telegram / коментар (необов'язково)" : "Your Telegram / comment (optional)",
             btn: lang === 'ua' ? 'ДАЛІ ДО ОПЛАТИ' : 'NEXT: PAYMENT',
             worldInfo: lang === 'ua'
                 ? 'Для замовлення в іншу країну зверніться в Telegram-бот для уточнення замовлення:'
@@ -737,7 +737,7 @@ let cart = [];
             <input type="text" id="orderFIO" placeholder="${t.fio}">
             <input type="text" id="orderPhone" placeholder="${t.phone}">
             <input type="text" id="orderNP" placeholder="${t.np}">
-            <input type="text" id="orderTG" placeholder="${t.tg}">
+            <input type="text" id="orderTG" placeholder="${t.tg}" maxlength="100">
         `;
 
         const worldFields = `
@@ -817,7 +817,7 @@ let cart = [];
         const phoneRaw = document.getElementById('orderPhone').value;
         const phoneDigits = phoneRaw.replace(/\D/g, '');
         const np = document.getElementById('orderNP').value;
-        const tg = document.getElementById('orderTG').value;
+        const tg = String(document.getElementById('orderTG').value || '').trim().slice(0, 100);
 
         if (!fio || phoneDigits.length < 10 || !np) return showToast(msgErrUa);
 
@@ -880,7 +880,8 @@ let cart = [];
                         fio: String(deliveryData?.data?.fio || '').trim(),
                         phone: String(deliveryData?.data?.phone || '').trim(),
                         city,
-                        delivery: shippingRaw || '-'
+                        delivery: shippingRaw || '-',
+                        tg: String(deliveryData?.data?.tg || '').trim()
                     },
                     items,
                     orderItems: orderVisualItems
@@ -1007,7 +1008,7 @@ let cart = [];
                 return showToast(msgErrUa);
             }
 
-            let tgText = tg ? `\n✈️ <b>TG:</b> ${tg}` : "";
+            let tgText = tg ? `\n💬 <b>TG / Коментар:</b> ${tg}` : "";
             messageText = `<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>\n\n🆔 <b>Номер:</b> ${publicOrderCode}\n👤 <b>ПІБ:</b> ${fio}\n📞 <b>Тел:</b> ${phone}${tgText}\n📦 <b>НП:</b> ${np}\n\n${itemsInfo}\n💳 <b>Оплата:</b> Оплата по реквізитам\n📌 <b>Статус:</b> created\n<b>💰 СУМА: ${total}${currency}</b>`;
         }
 
