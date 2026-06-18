@@ -74,6 +74,9 @@
     function inferTypeName(product) {
         const category = String(product && product.category ? product.category : "").toLowerCase();
         const cartName = String(product && product.cartName ? product.cartName : "");
+        if (category.includes("патч") || /patch/i.test(cartName)) {
+            return "Patch";
+        }
         if (category.includes("кепк") || /cap/i.test(cartName)) {
             return "Cap";
         }
@@ -84,6 +87,35 @@
             return "Sweatshirt";
         }
         return /t-?shirt/i.test(cartName) ? "T-Shirt" : "Hoodie";
+    }
+
+    function isContactOnlyProduct(product) {
+        return Boolean(product && product.contactUrl);
+    }
+
+    function shouldHideProductPrice(product) {
+        return Boolean(product && product.transparentPrice);
+    }
+
+    function getPriceClass(product) {
+        return shouldHideProductPrice(product) ? "price price-transparent" : "price";
+    }
+
+    function getContactButtonLabel(lang) {
+        return lang === "ua" ? "НАПИСАТИ ДЛЯ ЗАМОВЛЕННЯ" : "WRITE TO ORDER";
+    }
+
+    function escapeHtml(value) {
+        return String(value || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    function escapeAttr(value) {
+        return escapeHtml(value);
     }
 
     function getSizeGuideImage(product) {
@@ -291,8 +323,71 @@
         return null;
     }
 
+    function buildDefaultSizeSelect(sizeId) {
+        if (!sizeId) return "";
+        return `
+                <select id="${escapeAttr(sizeId)}">
+                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
+                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
+                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                </select>`;
+    }
+
+    function buildCatalogCardButton(product, lang) {
+        if (isContactOnlyProduct(product)) {
+            const label = getContactButtonLabel(lang);
+            return `<button class="buy-btn" data-ua="НАПИСАТИ ДЛЯ ЗАМОВЛЕННЯ" data-eng="WRITE TO ORDER" onclick="window.location.href='${escapeAttr(product.contactUrl)}'">${escapeHtml(label)}</button>`;
+        }
+
+        const sizeId = product.sizeId || product.cartSizeId;
+        if (!sizeId) return "";
+        return `<button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="${escapeAttr(buildCatalogAddToCartOnClick(product, sizeId))}">В КОШИК</button>`;
+    }
+
+    function buildCatalogCard(product, lang) {
+        const gallery = Array.isArray(product.gallery) ? product.gallery.filter(Boolean) : [];
+        const primaryImage = product.image || gallery[0] || "";
+        const altImage = product.imageAlt || gallery[1] || primaryImage;
+        const displayTitle = getDisplayProductTitle(product, lang);
+        const descUa = product.descUa || product.descEng || "";
+        const descEng = product.descEng || product.descUa || "";
+        const sizeId = product.noSize || isContactOnlyProduct(product) ? "" : (product.sizeId || product.cartSizeId);
+
+        return `
+    <div class="product-card" data-category="${escapeAttr(product.category || "")}" data-product-slug="${escapeAttr(product.slug || "")}">
+        <a class="product-link" href="${escapeAttr(productUrl(product.slug || ""))}" aria-label="Open ${escapeAttr(product.title || "")}">
+            <div class="product-img-container">
+                <img src="${escapeAttr(primaryImage)}" class="product-img" loading="lazy" decoding="async" alt="${escapeAttr(product.title || "Hardcore Division product")}">
+                <img src="${escapeAttr(altImage)}" class="product-img-alt" loading="lazy" decoding="async" alt="${escapeAttr(product.title || "Hardcore Division product")} alternate view">
+            </div>
+        </a>
+        <div class="product-info">
+            <div><h3 class="product-title">${escapeHtml(displayTitle)}</h3><p class="product-desc" data-ua="${escapeAttr(descUa)}" data-eng="${escapeAttr(descEng)}">${escapeHtml(descUa)}</p></div>
+            <div>
+                <div class="${getPriceClass(product)}" data-uah="${Number(product.priceUah) || 0}₴" data-usd="${Number(product.priceUsd) || 0}€"></div>
+                ${buildDefaultSizeSelect(sizeId)}
+                ${buildCatalogCardButton(product, lang)}
+            </div>
+        </div>
+    </div>`;
+    }
+
+    function createDynamicCatalogCards(grid, lang) {
+        if (!grid) return;
+        products
+            .filter((product) => product && product.renderInCatalog)
+            .forEach((product) => {
+                const slug = String(product.slug || "");
+                const alreadyRendered = Array.from(grid.querySelectorAll(".product-card"))
+                    .some((card) => String(card.getAttribute("data-product-slug") || "") === slug);
+                if (!slug || alreadyRendered) return;
+                grid.insertAdjacentHTML("beforeend", buildCatalogCard(product, lang));
+            });
+    }
+
     function enhanceCatalogCards() {
         const grid = document.querySelector(".shop-grid");
+        createDynamicCatalogCards(grid, getLang());
         const cards = Array.from(document.querySelectorAll(".shop-grid .product-card"));
         const lang = getLang();
         const lookup = createProductLookup(products);
@@ -348,8 +443,18 @@
 
             const buyBtn = card.querySelector(".buy-btn");
             const sizeSelect = card.querySelector("select");
-            if (buyBtn && sizeSelect && sizeSelect.id) {
+            if (buyBtn && isContactOnlyProduct(product)) {
+                buyBtn.setAttribute("onclick", `window.location.href='${product.contactUrl}'`);
+                buyBtn.setAttribute("data-ua", "НАПИСАТИ ДЛЯ ЗАМОВЛЕННЯ");
+                buyBtn.setAttribute("data-eng", "WRITE TO ORDER");
+                buyBtn.textContent = getContactButtonLabel(lang);
+            } else if (buyBtn && sizeSelect && sizeSelect.id) {
                 buyBtn.setAttribute("onclick", buildCatalogAddToCartOnClick(product, sizeSelect.id));
+            }
+
+            const price = card.querySelector(".price");
+            if (price) {
+                price.classList.toggle("price-transparent", shouldHideProductPrice(product));
             }
 
             const oldInfoBadge = card.querySelector(".product-info .product-new-badge");
@@ -370,7 +475,7 @@
                 existingImageBadge.remove();
             }
 
-            const isPreorder = Boolean(product && product.isPreorder);
+            const isPreorder = Boolean(product && (product.isPreorder || product.visualPreorder));
             const existingPreorderBadge = imgContainer ? imgContainer.querySelector(".product-preorder-badge") : null;
             if (isPreorder && imgContainer && !existingPreorderBadge) {
                 const preorderBadge = document.createElement("span");
@@ -417,6 +522,9 @@
             const caps = cardItems
                 .filter((item) => inferTypeName(item.product) === "Cap")
                 .sort(byHash);
+            const patches = cardItems
+                .filter((item) => inferTypeName(item.product) === "Patch")
+                .sort(byHash);
             const longsleeves = cardItems
                 .filter((item) => inferTypeName(item.product) === "Longsleeve")
                 .sort(byHash);
@@ -430,7 +538,7 @@
                 .filter((item) => inferTypeName(item.product) === "Hoodie")
                 .sort(byHash);
 
-            const sorted = [...caps, ...longsleeves, ...sweatshirts];
+            const sorted = [...patches, ...caps, ...longsleeves, ...sweatshirts];
             const initialTshirts = Math.min(2, tshirts.length);
             for (let i = 0; i < initialTshirts; i += 1) {
                 sorted.push(tshirts.shift());
@@ -552,13 +660,15 @@
             ? (lang === "ua" ? "Виробництво стартує після бронювання 30 кепок. Мінімальний запуск можливий від 15 броней. Передзамовлення доступне обмежений час. Час виробництва — 4 тижні." : "Production starts after 30 caps are reserved. Minimum launch is possible from 15 reservations. Pre-order is available for a limited time. Production time — 4 weeks.")
             : "";
         const productDescBlock = capLimitNote ? `${desc}<br>${capLimitNote}` : desc;
-        const addLabel = lang === "ua" ? "\u0414\u041E\u0414\u0410\u0422\u0418 \u0412 \u041A\u041E\u0428\u0418\u041A" : "ADD TO CART";
+        const contactOnly = isContactOnlyProduct(product);
+        const hasSize = !product.noSize && !contactOnly;
+        const addLabel = contactOnly ? getContactButtonLabel(lang) : (lang === "ua" ? "\u0414\u041E\u0414\u0410\u0422\u0418 \u0412 \u041A\u041E\u0428\u0418\u041A" : "ADD TO CART");
         const backLabel = lang === "ua" ? "\u041D\u0430\u0437\u0430\u0434 \u0434\u043E \u043A\u0430\u0442\u0430\u043B\u043E\u0433\u0443" : "Back to catalog";
         const sizeGuideLabel = lang === "ua" ? "\u0420\u043E\u0437\u043C\u0456\u0440\u043D\u0430 \u0441\u0456\u0442\u043A\u0430" : "Size guide";
         const slugLabel = lang === "ua" ? "\u0410\u0440\u0442\u0438\u043A\u0443\u043B" : "SKU";
         const seoKeywords = buildSeoLine(product);
         const productSeoCopy = buildProductSeoCopy(product);
-        const preorderBadge = product.isPreorder
+        const preorderBadge = product.isPreorder || product.visualPreorder
             ? `<span class="product-preorder-badge product-preorder-badge-corner" data-ua="ПЕРЕДЗАМОВЛЕННЯ" data-eng="PREORDER">${getPreorderBadgeText()}</span>`
             : "";
         const newBadge = product.isNew
@@ -576,9 +686,17 @@
                             <option value="2XL">SIZE: 2XL</option>
                             <option value="3XL">SIZE: 3XL</option>
                         `;
-        const sizeGuideButton = isCap
+        const sizeSelectMarkup = hasSize
+            ? `<select id="product-size">
+                            ${sizeOptions}
+                        </select>`
+            : "";
+        const sizeGuideButton = !hasSize || isCap
             ? ""
             : `<button class="buy-btn size-guide-btn" id="sizeGuideBtn">${sizeGuideLabel}</button>`;
+        const actionButton = contactOnly
+            ? `<button class="buy-btn" id="contactProductBtn" onclick="window.location.href='${product.contactUrl}'">${addLabel}</button>`
+            : `<button class="buy-btn" id="addProductBtn">${addLabel}</button>`;
         const colorSelect = colorVariants.length
             ? `<select id="product-color">${buildColorOptions(colorVariants, lang)}</select>`
             : "";
@@ -629,13 +747,11 @@
                     <h1 class="product-detail-title">${displayTitle}</h1>
                     <p class="product-detail-meta"><strong>${slugLabel}:</strong> ${product.slug}</p>
                     <p class="product-detail-desc">${productDescBlock}</p>
-                    <div class="price" id="productPrice" data-uah="${product.priceUah}\u20B4" data-usd="${product.priceUsd}\u20AC">${formatPriceLabel(product, lang)}</div>
+                    <div class="${getPriceClass(product)}" id="productPrice" data-uah="${product.priceUah}\u20B4" data-usd="${product.priceUsd}\u20AC">${formatPriceLabel(product, lang)}</div>
                     <div class="product-detail-actions">
-                        <select id="product-size">
-                            ${sizeOptions}
-                        </select>
+                        ${sizeSelectMarkup}
                         ${colorSelect}
-                        <button class="buy-btn" id="addProductBtn">${addLabel}</button>
+                        ${actionButton}
                         ${sizeGuideButton}
                     </div>
                     <div class="product-detail-filler-art" aria-hidden="true">
@@ -653,7 +769,7 @@
         `;
 
         const btn = document.getElementById("addProductBtn");
-        if (btn) {
+        if (btn && !contactOnly) {
             btn.addEventListener("click", function () {
                 const selectedCartName = currentColorVariant
                     ? buildColorVariantCartName(product, currentColorVariant)
