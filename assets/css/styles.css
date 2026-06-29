@@ -333,6 +333,13 @@
         }
         .product-title { font-size: 1.6rem; margin-bottom: 10px; color: var(--blood); text-transform: uppercase; }
         .product-desc { font-size: 0.85rem; line-height: 1.5; margin-bottom: 15px; color: #bbb; }
+        .product-detail-note {
+            margin: -4px 0 15px;
+            color: #d7d7d7;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            text-transform: none;
+        }
         .price { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; color: #fff; }
         .price-transparent {
             opacity: 0;
