@@ -323,8 +323,14 @@
         return null;
     }
 
-    function buildDefaultSizeSelect(sizeId) {
-        if (!sizeId) return "";
+    function buildDefaultSizeSelect(sizeId, product) {
+        if (!sizeId && !(product && product.noSize)) return "";
+        if (product && product.noSize) {
+            return `
+                <select id="${escapeAttr(sizeId || `size-${product.id || "one-size"}`)}">
+                    <option value="ONE SIZE">SIZE: ONE SIZE</option>
+                </select>`;
+        }
         return `
                 <select id="${escapeAttr(sizeId)}">
                     <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
@@ -365,7 +371,7 @@
             <div><h3 class="product-title">${escapeHtml(displayTitle)}</h3><p class="product-desc" data-ua="${escapeAttr(descUa)}" data-eng="${escapeAttr(descEng)}">${escapeHtml(descUa)}</p></div>
             <div>
                 <div class="${getPriceClass(product)}" data-uah="${Number(product.priceUah) || 0}₴" data-usd="${Number(product.priceUsd) || 0}€"></div>
-                ${buildDefaultSizeSelect(sizeId)}
+                ${buildDefaultSizeSelect(sizeId, product)}
                 ${buildCatalogCardButton(product, lang)}
             </div>
         </div>
@@ -656,6 +662,7 @@
         const desc = lang === "ua" ? (product.descUa || product.descEng) : (product.descEng || product.descUa);
         const typeName = inferTypeName(product);
         const isCap = typeName === "Cap";
+        const pageNote = lang === "ua" ? (product.pageNoteUa || "") : (product.pageNoteEng || "");
         const capLimitNote = isCap
             ? (lang === "ua" ? "Виробництво стартує після бронювання 30 кепок. Мінімальний запуск можливий від 15 броней. Передзамовлення доступне обмежений час. Час виробництва — 4 тижні." : "Production starts after 30 caps are reserved. Minimum launch is possible from 15 reservations. Pre-order is available for a limited time. Production time — 4 weeks.")
             : "";
@@ -686,12 +693,16 @@
                             <option value="2XL">SIZE: 2XL</option>
                             <option value="3XL">SIZE: 3XL</option>
                         `;
-        const sizeSelectMarkup = hasSize
+        const sizeSelectMarkup = product.noSize
             ? `<select id="product-size">
+                            <option value="ONE SIZE">SIZE: ONE SIZE</option>
+                        </select>`
+            : (hasSize
+                ? `<select id="product-size">
                             ${sizeOptions}
                         </select>`
-            : "";
-        const sizeGuideButton = !hasSize || isCap
+                : "");
+        const sizeGuideButton = !hasSize || isCap || product.noSize
             ? ""
             : `<button class="buy-btn size-guide-btn" id="sizeGuideBtn">${sizeGuideLabel}</button>`;
         const actionButton = contactOnly
@@ -747,6 +758,7 @@
                     <h1 class="product-detail-title">${displayTitle}</h1>
                     <p class="product-detail-meta"><strong>${slugLabel}:</strong> ${product.slug}</p>
                     <p class="product-detail-desc">${productDescBlock}</p>
+                    ${pageNote ? `<p class="product-detail-note">${escapeHtml(pageNote)}</p>` : ""}
                     <div class="${getPriceClass(product)}" id="productPrice" data-uah="${product.priceUah}\u20B4" data-usd="${product.priceUsd}\u20AC">${formatPriceLabel(product, lang)}</div>
                     <div class="product-detail-actions">
                         ${sizeSelectMarkup}
