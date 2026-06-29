@@ -6,24 +6,25 @@ window.PRODUCTS_DATA = [
     "isNew": true,
     "visualPreorder": true,
     "renderInCatalog": true,
-    "transparentPrice": true,
     "noSize": true,
     "contactUrl": "https://t.me/lol148899",
-    "title": "Патчі HARDOCRE DIVISION [2]",
-    "descUa": "ПВХ патчі HARDOCRE DIVISION для тих, хто тримає свій знак при собі. Жорсткий рельєф, щільна форма і характер, який чіпляється до рюкзака, плитоноски чи куртки без зайвих слів.",
-    "descEng": "HARDOCRE DIVISION PVC patches for those who carry their mark with them. A hard relief, dense form, and character for a backpack, carrier, or jacket with no extra words.",
-    "image": "images/photo_2026-06-18_18-58-06.jpg",
-    "imageAlt": "images/photo_2026-06-18_18-58-07.jpg",
+    "title": "Патч HARDOCRE DIVISION",
+    "descUa": "ПВХ патч HARDOCRE DIVISION для тих, хто тримає свій знак при собі. Жорсткий рельєф, щільна форма і характер, який чіпляється до рюкзака, плитоноски чи куртки без зайвих слів.",
+    "descEng": "HARDOCRE DIVISION PVC patch for those who carry their mark with them. A hard relief, dense form, and character for a backpack, carrier, or jacket with no extra words.",
+    "pageNoteUa": "Лімітована версія з 25 штук.",
+    "pageNoteEng": "Limited edition of 25 pieces.",
+    "image": "images/photo_2026-06-29_12-49-40.jpg",
+    "imageAlt": "images/photo_2026-06-29_12-49-40 (2).jpg",
     "gallery": [
-      "images/photo_2026-06-18_18-58-06.jpg",
-      "images/photo_2026-06-18_18-58-07.jpg"
+      "images/photo_2026-06-29_12-49-40.jpg",
+      "images/photo_2026-06-29_12-49-40 (2).jpg"
     ],
-    "priceUahLabel": "950₴",
+    "priceUahLabel": "350₴",
     "priceUsdLabel": "20€",
-    "priceUah": 950,
+    "priceUah": 350,
     "priceUsd": 20,
-    "cartName": "Патчі HARDOCRE DIVISION [2]",
-    "seoKeywords": "Патчі HARDOCRE DIVISION, ПВХ патчі, patches, hardcore division, streetwear, ukraine brand"
+    "cartName": "Патч HARDOCRE DIVISION",
+    "seoKeywords": "Патч HARDOCRE DIVISION, ПВХ патч, patches, hardcore division, streetwear, ukraine brand"
   },
   {
     "id": 34,
