@@ -105,6 +105,10 @@
         return lang === "ua" ? "НАПИСАТИ ДЛЯ ЗАМОВЛЕННЯ" : "WRITE TO ORDER";
     }
 
+    function getUnavailableButtonLabel(lang) {
+        return lang === "ua" ? "Немає в наявності" : "OUT OF STOCK";
+    }
+
     function escapeHtml(value) {
         return String(value || "")
             .replace(/&/g, "&amp;")
@@ -340,6 +344,10 @@
     }
 
     function buildCatalogCardButton(product, lang) {
+        if (Boolean(product && product.soldOut)) {
+            const label = getUnavailableButtonLabel(lang);
+            return `<button class="buy-btn" data-ua="Немає в наявності" data-eng="OUT OF STOCK" disabled aria-disabled="true">${escapeHtml(label)}</button>`;
+        }
         if (isContactOnlyProduct(product)) {
             const label = getContactButtonLabel(lang);
             return `<button class="buy-btn" data-ua="НАПИСАТИ ДЛЯ ЗАМОВЛЕННЯ" data-eng="WRITE TO ORDER" onclick="window.location.href='${escapeAttr(product.contactUrl)}'">${escapeHtml(label)}</button>`;
@@ -449,7 +457,15 @@
 
             const buyBtn = card.querySelector(".buy-btn");
             const sizeSelect = card.querySelector("select");
-            if (buyBtn && isContactOnlyProduct(product)) {
+            if (buyBtn && product.soldOut) {
+                const label = getUnavailableButtonLabel(lang);
+                buyBtn.removeAttribute("onclick");
+                buyBtn.setAttribute("disabled", "disabled");
+                buyBtn.setAttribute("aria-disabled", "true");
+                buyBtn.setAttribute("data-ua", "Немає в наявності");
+                buyBtn.setAttribute("data-eng", "OUT OF STOCK");
+                buyBtn.textContent = label;
+            } else if (buyBtn && isContactOnlyProduct(product)) {
                 buyBtn.setAttribute("onclick", `window.location.href='${product.contactUrl}'`);
                 buyBtn.setAttribute("data-ua", "НАПИСАТИ ДЛЯ ЗАМОВЛЕННЯ");
                 buyBtn.setAttribute("data-eng", "WRITE TO ORDER");
@@ -667,9 +683,12 @@
             ? (lang === "ua" ? "Виробництво стартує після бронювання 30 кепок. Мінімальний запуск можливий від 15 броней. Передзамовлення доступне обмежений час. Час виробництва — 4 тижні." : "Production starts after 30 caps are reserved. Minimum launch is possible from 15 reservations. Pre-order is available for a limited time. Production time — 4 weeks.")
             : "";
         const productDescBlock = capLimitNote ? `${desc}<br>${capLimitNote}` : desc;
-        const contactOnly = isContactOnlyProduct(product);
+        const soldOut = Boolean(product && product.soldOut);
+        const contactOnly = isContactOnlyProduct(product) && !soldOut;
         const hasSize = !product.noSize && !contactOnly;
-        const addLabel = contactOnly ? getContactButtonLabel(lang) : (lang === "ua" ? "\u0414\u041E\u0414\u0410\u0422\u0418 \u0412 \u041A\u041E\u0428\u0418\u041A" : "ADD TO CART");
+        const addLabel = soldOut
+            ? getUnavailableButtonLabel(lang)
+            : (contactOnly ? getContactButtonLabel(lang) : (lang === "ua" ? "\u0414\u041E\u0414\u0410\u0422\u0418 \u0412 \u041A\u041E\u0428\u0418\u041A" : "ADD TO CART"));
         const backLabel = lang === "ua" ? "\u041D\u0430\u0437\u0430\u0434 \u0434\u043E \u043A\u0430\u0442\u0430\u043B\u043E\u0433\u0443" : "Back to catalog";
         const sizeGuideLabel = lang === "ua" ? "\u0420\u043E\u0437\u043C\u0456\u0440\u043D\u0430 \u0441\u0456\u0442\u043A\u0430" : "Size guide";
         const slugLabel = lang === "ua" ? "\u0410\u0440\u0442\u0438\u043A\u0443\u043B" : "SKU";
@@ -705,9 +724,11 @@
         const sizeGuideButton = !hasSize || isCap || product.noSize
             ? ""
             : `<button class="buy-btn size-guide-btn" id="sizeGuideBtn">${sizeGuideLabel}</button>`;
-        const actionButton = contactOnly
-            ? `<button class="buy-btn" id="contactProductBtn" onclick="window.location.href='${product.contactUrl}'">${addLabel}</button>`
-            : `<button class="buy-btn" id="addProductBtn">${addLabel}</button>`;
+        const actionButton = soldOut
+            ? `<button class="buy-btn" id="contactProductBtn" data-ua="Немає в наявності" data-eng="OUT OF STOCK" disabled aria-disabled="true">${addLabel}</button>`
+            : (contactOnly
+                ? `<button class="buy-btn" id="contactProductBtn" onclick="window.location.href='${product.contactUrl}'">${addLabel}</button>`
+                : `<button class="buy-btn" id="addProductBtn">${addLabel}</button>`);
         const colorSelect = colorVariants.length
             ? `<select id="product-color">${buildColorOptions(colorVariants, lang)}</select>`
             : "";
