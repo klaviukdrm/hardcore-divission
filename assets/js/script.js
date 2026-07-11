@@ -1260,9 +1260,16 @@ function setCardVisibility(card, isVisible) {
     }, 400);
 }
 
+function setCatalogEmptyState(isEmpty) {
+    const emptyState = document.getElementById('catalogEmptyState');
+    if (!emptyState) return;
+    emptyState.hidden = !isEmpty;
+}
+
 function applyCatalogFilters() {
     const cards = document.querySelectorAll('.product-card');
     const search = String(catalogSearchQuery || '').trim().toLowerCase();
+    let visibleCount = 0;
 
     cards.forEach(card => {
         const cardCategory = String(card.getAttribute('data-category') || '');
@@ -1271,8 +1278,15 @@ function applyCatalogFilters() {
 
         const categoryMatch = activeCatalogCategory === 'all' || cardCategory === activeCatalogCategory;
         const searchMatch = !search || titleText.includes(search);
-        setCardVisibility(card, categoryMatch && searchMatch);
+        const isVisible = categoryMatch && searchMatch;
+        setCardVisibility(card, isVisible);
+        if (isVisible) {
+            visibleCount += 1;
+        }
     });
+
+    const shouldShowEmpty = visibleCount === 0 && (search.length > 0 || activeCatalogCategory !== 'all' || cards.length === 0);
+    setCatalogEmptyState(shouldShowEmpty);
 }
 
 function filterProducts(category) {
