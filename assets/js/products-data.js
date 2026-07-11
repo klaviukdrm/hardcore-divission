@@ -445,52 +445,6 @@ window.PRODUCTS_DATA = [
     "seoKeywords": "HARDCORE HAMMER, HARDCORE HAMMER HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
   },
   {
-    "id": 7,
-    "slug": "militant-pro-militant-pro-hoodie",
-    "category": "худі",
-    "title": "MILITANT PRO",
-    "descUa": "Для тих, хто мислить як боєць. Річ, яка працює разом з тобою.",
-    "descEng": "For those who think like a warrior. Gear that works with you.",
-    "image": "images/thumbs/photo_1_2026-03-06_19-49-15.jpg",
-    "imageAlt": "images/thumbs/photo_2_2026-03-06_19-49-15.jpg",
-    "gallery": [
-      "images/photo_1_2026-03-06_19-49-15.jpg",
-      "images/photo_2_2026-03-06_19-49-15.jpg",
-      "images/photo_3_2026-03-06_19-49-15.jpg",
-      "images/photo_4_2026-03-06_19-49-15.jpg"
-    ],
-    "priceUahLabel": "1750₴",
-    "priceUsdLabel": "40€",
-    "priceUah": 1750,
-    "priceUsd": 40,
-    "sizeId": "size-7",
-    "cartName": "MILITANT PRO HOODIE",
-    "cartSizeId": "size-7",
-    "seoKeywords": "MILITANT PRO, MILITANT PRO HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
-  },
-  {
-    "id": 8,
-    "slug": "misanthrop-hoodie-misanthrop-hoodie",
-    "category": "худі",
-    "title": "Misanthrop Hoodie",
-    "descUa": "Дистанція та стиль. Для тих, хто окремо від натовпу.",
-    "descEng": "Distance and style. For those who stand apart from the crowd.",
-    "image": "images/thumbs/photo_1_2026-03-06_19-49-25.jpg",
-    "imageAlt": "images/thumbs/photo_2_2026-03-06_19-49-25.jpg",
-    "gallery": [
-      "images/photo_1_2026-03-06_19-49-25.jpg",
-      "images/photo_2_2026-03-06_19-49-25.jpg"
-    ],
-    "priceUahLabel": "1750₴",
-    "priceUsdLabel": "40€",
-    "priceUah": 1750,
-    "priceUsd": 40,
-    "sizeId": "size-8",
-    "cartName": "Misanthrop Hoodie",
-    "cartSizeId": "size-8",
-    "seoKeywords": "Misanthrop Hoodie, Misanthrop Hoodie, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
-  },
-  {
     "id": 20,
     "slug": "hardcore-citadel-hardcore-citadel-hoodie",
     "category": "худі",
@@ -653,28 +607,6 @@ window.PRODUCTS_DATA = [
     "seoKeywords": "Hardcore Hentai, Hardcore Hentai T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
   },
   {
-    "id": 12,
-    "slug": "militant-pro-militant-pro-t-shirt",
-    "category": "футболка",
-    "title": "Militant Pro",
-    "descUa": "Дисципліна та професіоналізм.",
-    "descEng": "Discipline and professionalism.",
-    "image": "images/thumbs/photo_3_2026-03-07_08-39-14.jpg",
-    "imageAlt": "images/thumbs/photo_4_2026-03-07_08-39-14.jpg",
-    "gallery": [
-      "images/photo_3_2026-03-07_08-39-14.jpg",
-      "images/photo_4_2026-03-07_08-39-14.jpg"
-    ],
-    "priceUahLabel": "950₴",
-    "priceUsdLabel": "20€",
-    "priceUah": 950,
-    "priceUsd": 20,
-    "sizeId": "size-f2",
-    "cartName": "Militant Pro T-Shirt",
-    "cartSizeId": "size-f2",
-    "seoKeywords": "Militant Pro, Militant Pro T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
-  },
-  {
     "id": 13,
     "slug": "blood-on-my-knife-blood-on-my-knife-t-shirt",
     "category": "футболка",
@@ -695,28 +627,6 @@ window.PRODUCTS_DATA = [
     "cartName": "Blood on my knife T-Shirt",
     "cartSizeId": "size-f3",
     "seoKeywords": "BLOOD ON MY KNIFE, Blood on my knife T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
-  },
-  {
-    "id": 14,
-    "slug": "misantrop-misantrop-t-shirt",
-    "category": "футболка",
-    "title": "Misantrop",
-    "descUa": "Твоя дистанція від світу.",
-    "descEng": "Your distance from the world.",
-    "image": "images/thumbs/photo_7_2026-03-07_08-39-14.jpg",
-    "imageAlt": "images/thumbs/photo_8_2026-03-07_08-39-14.jpg",
-    "gallery": [
-      "images/photo_7_2026-03-07_08-39-14.jpg",
-      "images/photo_8_2026-03-07_08-39-14.jpg"
-    ],
-    "priceUahLabel": "950₴",
-    "priceUsdLabel": "20€",
-    "priceUah": 950,
-    "priceUsd": 20,
-    "sizeId": "size-f4",
-    "cartName": "Misantrop T-Shirt",
-    "cartSizeId": "size-f4",
-    "seoKeywords": "Misantrop, Misantrop T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
   },
   {
     "id": 15,
