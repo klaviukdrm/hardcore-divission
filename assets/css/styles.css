@@ -232,6 +232,27 @@
             }
         }
 
+        .catalog-empty-state {
+            margin: 28px 0 10px;
+            padding: 8px 0 6px;
+            border: 0;
+            background: transparent;
+            color: #cfcfcf;
+            text-align: center;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .catalog-empty-state[hidden] {
+            display: none !important;
+        }
+
+        .catalog-empty-state:not([hidden]) {
+            display: block;
+        }
+
         .product-card {
             background: var(--gray); border: 1px solid #333; transition: 0.3s;
             position: relative; overflow: hidden; display: flex; flex-direction: column;
