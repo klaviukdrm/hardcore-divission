@@ -6,7 +6,6 @@ window.PRODUCTS_DATA = [
     "isNew": true,
     "renderInCatalog": true,
     "noSize": true,
-    "soldOut": true,
     "contactUrl": "https://t.me/lol148899",
     "title": "Патч HARDOCRE DIVISION",
     "descUa": "ПВХ патч HARDOCRE DIVISION для тих, хто тримає свій знак при собі. Жорсткий рельєф, щільна форма і характер, який чіпляється до рюкзака, плитоноски чи куртки без зайвих слів.",
