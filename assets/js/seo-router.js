@@ -102,7 +102,7 @@
     }
 
     function getContactButtonLabel(lang) {
-        return lang === "ua" ? "НАПИСАТИ ДЛЯ ЗАМОВЛЕННЯ" : "WRITE TO ORDER";
+        return lang === "ua" ? "Написати" : "Write";
     }
 
     function getUnavailableButtonLabel(lang) {
@@ -350,7 +350,7 @@
         }
         if (isContactOnlyProduct(product)) {
             const label = getContactButtonLabel(lang);
-            return `<button class="buy-btn" data-ua="НАПИСАТИ ДЛЯ ЗАМОВЛЕННЯ" data-eng="WRITE TO ORDER" onclick="window.location.href='${escapeAttr(product.contactUrl)}'">${escapeHtml(label)}</button>`;
+            return `<button class="buy-btn" data-ua="Написати" data-eng="Write" onclick="window.location.href='${escapeAttr(product.contactUrl)}'">${escapeHtml(label)}</button>`;
         }
 
         const sizeId = product.sizeId || product.cartSizeId;
@@ -467,8 +467,8 @@
                 buyBtn.textContent = label;
             } else if (buyBtn && isContactOnlyProduct(product)) {
                 buyBtn.setAttribute("onclick", `window.location.href='${product.contactUrl}'`);
-                buyBtn.setAttribute("data-ua", "НАПИСАТИ ДЛЯ ЗАМОВЛЕННЯ");
-                buyBtn.setAttribute("data-eng", "WRITE TO ORDER");
+                buyBtn.setAttribute("data-ua", "Написати");
+                buyBtn.setAttribute("data-eng", "Write");
                 buyBtn.textContent = getContactButtonLabel(lang);
             } else if (buyBtn && sizeSelect && sizeSelect.id) {
                 buyBtn.setAttribute("onclick", buildCatalogAddToCartOnClick(product, sizeSelect.id));
