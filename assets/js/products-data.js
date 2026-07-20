@@ -23,7 +23,8 @@ window.PRODUCTS_DATA = [
     "priceUah": 350,
     "priceUsd": 20,
     "cartName": "Патч HARDOCRE DIVISION",
-    "seoKeywords": "Патч HARDOCRE DIVISION, ПВХ патч, patches, hardcore division, streetwear, ukraine brand"
+    "seoKeywords": "Патч HARDOCRE DIVISION, ПВХ патч, patches, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 1
   },
   {
     "id": 34,
@@ -70,7 +71,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f17",
     "cartName": "HARDCORE ONI T-SHIRT",
     "cartSizeId": "size-f17",
-    "seoKeywords": "HARDCORE ONI, HARDCORE ONI T-SHIRT, футболка, hardcore division, streetwear, ukraine brand"
+    "seoKeywords": "HARDCORE ONI, HARDCORE ONI T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 39
   },
   {
     "id": 33,
@@ -117,7 +119,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f18",
     "cartName": "HARDCORE STURM JUGEND T-SHIRT",
     "cartSizeId": "size-f18",
-    "seoKeywords": "HARDCORE STURM JUGEND, HARDCORE STURM JUGEND T-SHIRT, футболка, hardcore division, streetwear, ukraine brand"
+    "seoKeywords": "HARDCORE STURM JUGEND, HARDCORE STURM JUGEND T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 5
   },
   {
     "id": 32,
@@ -162,7 +165,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f19",
     "cartName": "KNIFE KULT T-SHIRT",
     "cartSizeId": "size-f19",
-    "seoKeywords": "KNIFE KULT, KNIFE KULT T-SHIRT, футболка, hardcore division, streetwear, ukraine brand"
+    "seoKeywords": "KNIFE KULT, KNIFE KULT T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 16
   },
   {
     "id": 31,
@@ -185,7 +189,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-sw2",
     "cartName": "HARDCORE SWEATSHIRT",
     "cartSizeId": "size-sw2",
-    "seoKeywords": "HARDCORE SWEATSHIRT, світшот, свитшот, hardcore division, streetwear, ukraine brand"
+    "seoKeywords": "HARDCORE SWEATSHIRT, світшот, свитшот, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 8
   },
   {
     "id": 30,
@@ -210,7 +215,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-sw1",
     "cartName": "HARDCORE LONGLSLEEVE",
     "cartSizeId": "size-sw1",
-    "seoKeywords": "HARDCORE LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand"
+    "seoKeywords": "HARDCORE LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 3
   },
   {
     "id": 29,
@@ -257,7 +263,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f16",
     "cartName": "HARDCORE JUGEND T-SHIRT",
     "cartSizeId": "size-f16",
-    "seoKeywords": "HARDCORE JUGEND, HARDCORE JUGEND T-SHIRT, футболка, hardcore division, streetwear, ukraine brand"
+    "seoKeywords": "HARDCORE JUGEND, HARDCORE JUGEND T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 6
   },
   {
     "id": 25,
@@ -304,7 +311,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f13",
     "cartName": "Timur Mutsuraev T-Shirt",
     "cartSizeId": "size-f13",
-    "seoKeywords": "Timur Mutsuraev, Timur Mutsuraev T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "Timur Mutsuraev, Timur Mutsuraev T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 28
   },
   {
     "id": 1,
@@ -326,7 +334,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-1",
     "cartName": "BLOOD ON MY KNIFE HOODIE",
     "cartSizeId": "size-1",
-    "seoKeywords": "BLOOD ON MY KNIFE, BLOOD ON MY KNIFE HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "BLOOD ON MY KNIFE, BLOOD ON MY KNIFE HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 19
   },
   {
     "id": 2,
@@ -348,7 +357,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-2",
     "cartName": "HARDCORE ONLY BLOOD HOODIE",
     "cartSizeId": "size-2",
-    "seoKeywords": "HARDCORE ONLY BLOOD, HARDCORE ONLY BLOOD HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "HARDCORE ONLY BLOOD, HARDCORE ONLY BLOOD HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 33
   },
   {
     "id": 3,
@@ -370,7 +380,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-3",
     "cartName": "Confederates Hoodie",
     "cartSizeId": "size-3",
-    "seoKeywords": "Hardcore Confederates, Confederates Hoodie, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "Hardcore Confederates, Confederates Hoodie, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 25
   },
   {
     "id": 4,
@@ -394,7 +405,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-4",
     "cartName": "Hentai Hoodie",
     "cartSizeId": "size-4",
-    "seoKeywords": "Hardcore Hentai, Hentai Hoodie, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "Hardcore Hentai, Hentai Hoodie, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 27
   },
   {
     "id": 5,
@@ -418,7 +430,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-5",
     "cartName": "HARDCORE NATION HOODIE",
     "cartSizeId": "size-5",
-    "seoKeywords": "HARDCORE NATION, HARDCORE NATION HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "HARDCORE NATION, HARDCORE NATION HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 7
   },
   {
     "id": 6,
@@ -441,7 +454,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-6",
     "cartName": "HARDCORE HAMMER HOODIE",
     "cartSizeId": "size-6",
-    "seoKeywords": "HARDCORE HAMMER, HARDCORE HAMMER HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "HARDCORE HAMMER, HARDCORE HAMMER HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 15
   },
   {
     "id": 20,
@@ -465,7 +479,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-11",
     "cartName": "HARDCORE CITADEL HOODIE",
     "cartSizeId": "size-11",
-    "seoKeywords": "HARDCORE CITADEL, HARDCORE CITADEL HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "HARDCORE CITADEL, HARDCORE CITADEL HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 35
   },
   {
     "id": 21,
@@ -489,7 +504,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-12",
     "cartName": "HARDCORE SATANIC DIVISION HOODIE",
     "cartSizeId": "size-12",
-    "seoKeywords": "HARDCORE SATANIC DIVISION, HARDCORE SATANIC DIVISION HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "HARDCORE SATANIC DIVISION, HARDCORE SATANIC DIVISION HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 17
   },
   {
     "id": 22,
@@ -513,7 +529,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-13",
     "cartName": "HARDCORE SATANIC HOODIE",
     "cartSizeId": "size-13",
-    "seoKeywords": "HARDCORE SATANIC, HARDCORE SATANIC HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "HARDCORE SATANIC, HARDCORE SATANIC HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 29
   },
   {
     "id": 9,
@@ -559,7 +576,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-9",
     "cartName": "Division T-Shirt Black",
     "cartSizeId": "size-9",
-    "seoKeywords": "Hardcore Division Black, Division T-Shirt Black, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "Hardcore Division Black, Division T-Shirt Black, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 41
   },
   {
     "id": 10,
@@ -581,7 +599,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-10",
     "cartName": "Division T-Shirt White",
     "cartSizeId": "size-10",
-    "seoKeywords": "Hardcore Division White, Division T-Shirt White, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "Hardcore Division White, Division T-Shirt White, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 36
   },
   {
     "id": 11,
@@ -603,7 +622,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f1",
     "cartName": "Hardcore Hentai T-Shirt",
     "cartSizeId": "size-f1",
-    "seoKeywords": "Hardcore Hentai, Hardcore Hentai T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "Hardcore Hentai, Hardcore Hentai T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 38
   },
   {
     "id": 13,
@@ -625,7 +645,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f3",
     "cartName": "Blood on my knife T-Shirt",
     "cartSizeId": "size-f3",
-    "seoKeywords": "BLOOD ON MY KNIFE, Blood on my knife T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "BLOOD ON MY KNIFE, Blood on my knife T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 24
   },
   {
     "id": 15,
@@ -647,7 +668,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f5",
     "cartName": "Idea of Nation T-Shirt",
     "cartSizeId": "size-f5",
-    "seoKeywords": "Idea of Nation, Idea of Nation T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "Idea of Nation, Idea of Nation T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 40
   },
   {
     "id": 16,
@@ -669,7 +691,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f6",
     "cartName": "Hammer T-Shirt",
     "cartSizeId": "size-f6",
-    "seoKeywords": "Hardcore Hammer, Hammer T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "Hardcore Hammer, Hammer T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 26
   },
   {
     "id": 17,
@@ -691,7 +714,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f7",
     "cartName": "Only Blood T-Shirt",
     "cartSizeId": "size-f7",
-    "seoKeywords": "ONLY BLOOD, Only Blood T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "ONLY BLOOD, Only Blood T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 18
   },
   {
     "id": 18,
@@ -713,7 +737,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f9",
     "cartName": "Confederates T-Shirt",
     "cartSizeId": "size-f9",
-    "seoKeywords": "Hardcore Confederates, Confederates T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "Hardcore Confederates, Confederates T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 12
   },
   {
     "id": 19,
@@ -759,7 +784,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f10",
     "cartName": "HARDCORE SATANIC DIVISION T-SHIRT",
     "cartSizeId": "size-f10",
-    "seoKeywords": "HARDCORE SATANIC DIVISION, HARDCORE SATANIC DIVISION T-SHIRT, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "HARDCORE SATANIC DIVISION, HARDCORE SATANIC DIVISION T-SHIRT, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 22
   },
   {
     "id": 23,
@@ -781,7 +807,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f11",
     "cartName": "HARDCORE SATANIC T-SHIRT",
     "cartSizeId": "size-f11",
-    "seoKeywords": "HARDCORE SATANIC, HARDCORE SATANIC T-SHIRT, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "HARDCORE SATANIC, HARDCORE SATANIC T-SHIRT, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 34
   },
   {
     "id": 24,
@@ -803,7 +830,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f12",
     "cartName": "HARDCORE CITADEL T-SHIRT",
     "cartSizeId": "size-f12",
-    "seoKeywords": "HARDCORE CITADEL, HARDCORE CITADEL T-SHIRT, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand"
+    "seoKeywords": "HARDCORE CITADEL, HARDCORE CITADEL T-SHIRT, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
+    "catalogOrder": 2
   },
   {
     "id": 26,
@@ -826,7 +854,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-h14",
     "cartName": "TURBOHARDCORE HOODIE",
     "cartSizeId": "size-h14",
-    "seoKeywords": "TURBOHARDCORE, TURBOHARDCORE HOODIE, худі, hardcore division, turboskin, streetwear, ukraine brand"
+    "seoKeywords": "TURBOHARDCORE, TURBOHARDCORE HOODIE, худі, hardcore division, turboskin, streetwear, ukraine brand",
+    "catalogOrder": 11
   },
   {
     "id": 27,
@@ -871,7 +900,8 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f14",
     "cartName": "TURBOHARDCORE T-SHIRT RED",
     "cartSizeId": "size-f14",
-    "seoKeywords": "TURBOHARDCORE T-SHIRT RED, TURBOHARDCORE, футболка, hardcore division, turboskin, streetwear, ukraine brand"
+    "seoKeywords": "TURBOHARDCORE T-SHIRT RED, TURBOHARDCORE, футболка, hardcore division, turboskin, streetwear, ukraine brand",
+    "catalogOrder": 32
   },
   {
     "id": 28,
@@ -894,6 +924,257 @@ window.PRODUCTS_DATA = [
     "sizeId": "size-f15",
     "cartName": "TURBOHARDCORE T-SHIRT WHITE",
     "cartSizeId": "size-f15",
-    "seoKeywords": "TURBOHARDCORE T-SHIRT WHITE, TURBOHARDCORE, футболка, hardcore division, turboskin, streetwear, ukraine brand"
+    "seoKeywords": "TURBOHARDCORE T-SHIRT WHITE, TURBOHARDCORE, футболка, hardcore division, turboskin, streetwear, ukraine brand",
+    "catalogOrder": 37
+  },
+  {
+    "id": 36,
+    "slug": "turbonasillia-turbonasillia-hoodie",
+    "category": "худі",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "ТУРБОНАСИЛЛЯ",
+    "descUa": "Принт, що виглядає як попередження. Оскалений летеринг спереду, хижий скорпіон на всю спину. Б’є ще до того, як ти встигнеш відвести погляд.",
+    "descEng": "Turbonasillia is a print that looks like a warning. Snarling lettering on the front, a predatory scorpion across the back. It hits before you even manage to look away.",
+    "image": "images/photo_1_2026-07-20_17-41-04.jpg",
+    "imageAlt": "images/photo_2_2026-07-20_17-41-04.jpg",
+    "gallery": [
+      "images/photo_1_2026-07-20_17-41-04.jpg",
+      "images/photo_2_2026-07-20_17-41-04.jpg"
+    ],
+    "priceUahLabel": "1900₴",
+    "priceUsdLabel": "45€",
+    "priceUah": 1900,
+    "priceUsd": 45,
+    "sizeId": "size-h15",
+    "cartName": "TURBONASILLIA HOODIE",
+    "cartSizeId": "size-h15",
+    "seoKeywords": "ТУРБОНАСИЛЛЯ, TURBONASILLIA HOODIE, худі, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 9
+  },
+  {
+    "id": 37,
+    "slug": "turbonasillia-turbonasillia-t-shirt",
+    "category": "футболка",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "ТУРБОНАСИЛЛЯ",
+    "descUa": "Принт, що виглядає як попередження. Оскалений летеринг спереду, хижий скорпіон на спині. Легка форма, але той самий удар ще до того, як ти встигнеш відвести погляд.",
+    "descEng": "Turbonasillia is a print that looks like a warning. Snarling lettering on the front, a predatory scorpion on the back. Light in form, but it still hits before you can look away.",
+    "image": "images/photo_3_2026-07-20_17-41-04.jpg",
+    "imageAlt": "images/photo_4_2026-07-20_17-41-04.jpg",
+    "gallery": [
+      "images/photo_3_2026-07-20_17-41-04.jpg",
+      "images/photo_4_2026-07-20_17-41-04.jpg"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f20",
+    "cartName": "TURBONASILLIA T-SHIRT",
+    "cartSizeId": "size-f20",
+    "seoKeywords": "ТУРБОНАСИЛЛЯ, TURBONASILLIA T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 30
+  },
+  {
+    "id": 38,
+    "slug": "trbskn-gen1-trbskn-gen1-hoodie",
+    "category": "худі",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "ТРБСКН GEN1",
+    "descUa": "Дизайн, побудований на контрасті хаосу й простоти. Гострий логотип спереду та великий череп позаду створюють впізнаваний силует.",
+    "descEng": "TURBOSKIN GEN1 is a design built on the contrast between chaos and simplicity. A sharp logo on the front and a large skull on the back create a recognizable silhouette.",
+    "image": "images/photo_5_2026-07-20_17-41-04.jpg",
+    "imageAlt": "images/photo_6_2026-07-20_17-41-04.jpg",
+    "gallery": [
+      "images/photo_5_2026-07-20_17-41-04.jpg",
+      "images/photo_6_2026-07-20_17-41-04.jpg"
+    ],
+    "priceUahLabel": "1900₴",
+    "priceUsdLabel": "45€",
+    "priceUah": 1900,
+    "priceUsd": 45,
+    "sizeId": "size-h16",
+    "cartName": "TRBSKN GEN1 HOODIE",
+    "cartSizeId": "size-h16",
+    "seoKeywords": "ТРБСКН GEN1, TRBSKN GEN1 HOODIE, худі, turboskin, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 13
+  },
+  {
+    "id": 39,
+    "slug": "trbskn-gen1-trbskn-gen1-t-shirt",
+    "category": "футболка",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "ТРБСКН GEN1",
+    "descUa": "Дизайн, побудований на контрасті хаосу й простоти. Гострий логотип спереду та великий череп позаду створюють впізнаваний силует навіть на футболці.",
+    "descEng": "TURBOSKIN GEN1 is a design built on the contrast between chaos and simplicity. A sharp logo on the front and a large skull on the back create a recognizable silhouette even on a T-shirt.",
+    "image": "images/photo_7_2026-07-20_17-41-04.jpg",
+    "imageAlt": "images/photo_8_2026-07-20_17-41-04.jpg",
+    "gallery": [
+      "images/photo_7_2026-07-20_17-41-04.jpg",
+      "images/photo_8_2026-07-20_17-41-04.jpg"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f21",
+    "cartName": "TRBSKN GEN1 T-SHIRT",
+    "cartSizeId": "size-f21",
+    "seoKeywords": "ТРБСКН GEN1, TRBSKN GEN1 T-SHIRT, футболка, turboskin, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 14
+  },
+  {
+    "id": 40,
+    "slug": "nlyl-nlyl-hoodie",
+    "category": "худі",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "NLYL",
+    "descUa": "Нагадування не втратити найважливіше. Агресивний летеринг, червоне серце та павутина поєднують жорстку естетику з простою ідеєю: що б не сталося — не втрачай свою любов.",
+    "descEng": "Never Lose Your Love is a reminder not to lose what matters most. Aggressive lettering, a red heart, and webbing combine a harsh aesthetic with a simple idea: no matter what happens, never lose your love.",
+    "image": "images/photo_9_2026-07-20_17-41-04.jpg",
+    "imageAlt": "images/photo_10_2026-07-20_17-41-04.jpg",
+    "gallery": [
+      "images/photo_9_2026-07-20_17-41-04.jpg",
+      "images/photo_10_2026-07-20_17-41-04.jpg"
+    ],
+    "priceUahLabel": "1900₴",
+    "priceUsdLabel": "45€",
+    "priceUah": 1900,
+    "priceUsd": 45,
+    "sizeId": "size-h17",
+    "cartName": "NLYL HOODIE",
+    "cartSizeId": "size-h17",
+    "seoKeywords": "NLYL, NLYL HOODIE, худі, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 23
+  },
+  {
+    "id": 41,
+    "slug": "nlyl-nlyl-t-shirt",
+    "category": "футболка",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "NLYL",
+    "descUa": "Нагадування не втратити найважливіше. Агресивний летеринг, червоне серце та павутина роблять футболку жорсткою зовні, але з простою ідеєю всередині: що б не сталося — не втрачай свою любов.",
+    "descEng": "Never Lose Your Love is a reminder not to lose what matters most. Aggressive lettering, a red heart, and webbing make the T-shirt hard on the outside, but carry a simple idea inside: no matter what happens, never lose your love.",
+    "image": "images/photo_11_2026-07-20_17-41-04.jpg",
+    "imageAlt": "images/photo_12_2026-07-20_17-41-04.jpg",
+    "gallery": [
+      "images/photo_11_2026-07-20_17-41-04.jpg",
+      "images/photo_12_2026-07-20_17-41-04.jpg"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f22",
+    "cartName": "NLYL T-SHIRT",
+    "cartSizeId": "size-f22",
+    "seoKeywords": "NLYL, NLYL T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 10
+  },
+  {
+    "id": 42,
+    "slug": "protect-your-karma-protect-your-karma-hoodie",
+    "category": "худі",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "Protect your Karma",
+    "descUa": "Protect Your Karma — вогняне колесо Дгарми, летеринг в стилі санскриту і рукави, доповнені символічною графікою. Баланс між дисципліною та хаосом.",
+    "descEng": "Protect Your Karma features a fiery Dharmachakra, Sanskrit-style lettering, and sleeves finished with symbolic graphics. A balance between discipline and chaos.",
+    "image": "images/photo_1_2026-07-20_17-50-56.jpg",
+    "imageAlt": "images/photo_2_2026-07-20_17-50-56.jpg",
+    "gallery": [
+      "images/photo_1_2026-07-20_17-50-56.jpg",
+      "images/photo_2_2026-07-20_17-50-56.jpg"
+    ],
+    "priceUahLabel": "1900₴",
+    "priceUsdLabel": "45€",
+    "priceUah": 1900,
+    "priceUsd": 45,
+    "sizeId": "size-h18",
+    "cartName": "PROTECT YOUR KARMA HOODIE",
+    "cartSizeId": "size-h18",
+    "seoKeywords": "Protect your Karma, PROTECT YOUR KARMA HOODIE, худі, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 31
+  },
+  {
+    "id": 43,
+    "slug": "protect-your-karma-protect-your-karma-t-shirt",
+    "category": "футболка",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "Protect your Karma",
+    "descUa": "Protect Your Karma — вогняне колесо Дгарми, летеринг в стилі санскриту й символічна графіка створюють жорсткий, але зібраний образ. Баланс між дисципліною та хаосом.",
+    "descEng": "Protect Your Karma uses a fiery Dharmachakra, Sanskrit-style lettering, and symbolic graphics to create a hard but focused image. A balance between discipline and chaos.",
+    "image": "images/photo_3_2026-07-20_17-50-56.jpg",
+    "imageAlt": "images/photo_4_2026-07-20_17-50-56.jpg",
+    "gallery": [
+      "images/photo_3_2026-07-20_17-50-56.jpg",
+      "images/photo_4_2026-07-20_17-50-56.jpg"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f23",
+    "cartName": "PROTECT YOUR KARMA T-SHIRT",
+    "cartSizeId": "size-f23",
+    "seoKeywords": "Protect your Karma, PROTECT YOUR KARMA T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 20
+  },
+  {
+    "id": 44,
+    "slug": "trbskn-gen2-trbskn-gen2-hoodie",
+    "category": "худі",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "ТРБСКН GEN2",
+    "descUa": "Принт, що виглядає як мітка тих, хто не відступає. Спереду — хаотичний летеринг, позаду — череп із кістками як знак повної зневаги до будь-яких меж.",
+    "descEng": "TURBOSKIN GEN2 is a print that looks like a mark of those who never step back. Chaotic lettering on the front, and a skull with bones on the back as a sign of total disregard for any limits.",
+    "image": "images/photo_1_2026-07-20_17-51-15.jpg",
+    "imageAlt": "images/photo_2_2026-07-20_17-51-15.jpg",
+    "gallery": [
+      "images/photo_1_2026-07-20_17-51-15.jpg",
+      "images/photo_2_2026-07-20_17-51-15.jpg"
+    ],
+    "priceUahLabel": "1950₴",
+    "priceUsdLabel": "50€",
+    "priceUah": 1950,
+    "priceUsd": 50,
+    "sizeId": "size-h19",
+    "cartName": "TRBSKN GEN2 HOODIE",
+    "cartSizeId": "size-h19",
+    "seoKeywords": "ТРБСКН GEN2, TRBSKN GEN2 HOODIE, худі, turboskin, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 21
+  },
+  {
+    "id": 45,
+    "slug": "trbskn-gen2-trbskn-gen2-t-shirt",
+    "category": "футболка",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "ТРБСКН GEN2",
+    "descUa": "Принт, що виглядає як мітка тих, хто не відступає. Спереду — хаотичний летеринг, позаду — череп із кістками як знак повної зневаги до будь-яких меж.",
+    "descEng": "TURBOSKIN GEN2 is a print that looks like a mark of those who never step back. Chaotic lettering on the front, and a skull with bones on the back as a sign of total disregard for any limits.",
+    "image": "images/photo_3_2026-07-20_17-51-15.jpg",
+    "imageAlt": "images/photo_4_2026-07-20_17-51-15.jpg",
+    "gallery": [
+      "images/photo_3_2026-07-20_17-51-15.jpg",
+      "images/photo_4_2026-07-20_17-51-15.jpg"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f24",
+    "cartName": "TRBSKN GEN2 T-SHIRT",
+    "cartSizeId": "size-f24",
+    "seoKeywords": "ТРБСКН GEN2, TRBSKN GEN2 T-SHIRT, футболка, turboskin, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 4
   }
 ];
