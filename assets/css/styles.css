@@ -411,7 +411,12 @@
             position: fixed; bottom: 20px; right: 20px; background: var(--blood);
             width: 55px; height: 55px; border-radius: 50%; display: flex;
             align-items: center; justify-content: center; cursor: pointer; z-index: 1000;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            touch-action: manipulation;
+            user-select: none;
+            outline: none;
     }
         .cart-widget-icon {
             width: 24px;
@@ -419,6 +424,11 @@
             display: block;
             color: #fff;
             pointer-events: none;
+        }
+        .cart-widget:focus,
+        .cart-widget:focus-visible,
+        .cart-widget:active {
+            outline: none;
         }
     .cart-widget:hover {
         transform: scale(1.1);
