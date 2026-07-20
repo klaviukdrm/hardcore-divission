@@ -530,7 +530,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE SATANIC HOODIE",
     "cartSizeId": "size-13",
     "seoKeywords": "HARDCORE SATANIC, HARDCORE SATANIC HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 29
+    "catalogOrder": 21
   },
   {
     "id": 9,
@@ -1150,7 +1150,7 @@ window.PRODUCTS_DATA = [
     "cartName": "TRBSKN GEN2 HOODIE",
     "cartSizeId": "size-h19",
     "seoKeywords": "ТРБСКН GEN2, TRBSKN GEN2 HOODIE, худі, turboskin, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 21
+    "catalogOrder": 29
   },
   {
     "id": 45,
