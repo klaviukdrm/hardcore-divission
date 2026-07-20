@@ -207,6 +207,11 @@
         return `${product.title}. ${product.seoKeywords}. ${storeSeoKeywords}. Hardcore Division ${inferTypeName(product)} streetwear.`;
     }
 
+    function getCatalogOrder(product) {
+        const order = Number(product && product.catalogOrder);
+        return Number.isFinite(order) ? order : null;
+    }
+
     function getNewBadgeText() {
         return getLang() === "eng" ? "NEW" : "НОВЕ";
     }
@@ -521,81 +526,23 @@
         });
 
         if (grid && cardItems.length > 1) {
-            const hashText = (value) => {
-                const text = String(value || "");
-                let hash = 0;
-                for (let i = 0; i < text.length; i += 1) {
-                    hash = ((hash * 31) + text.charCodeAt(i)) >>> 0;
-                }
-                return hash;
-            };
-
-            const byHash = (a, b) => {
+            const compareCatalogItems = (a, b) => {
                 const aNew = Boolean(a.product && a.product.isNew);
                 const bNew = Boolean(b.product && b.product.isNew);
                 if (aNew !== bNew) return aNew ? -1 : 1;
 
-                const aHash = hashText(a.product && a.product.slug);
-                const bHash = hashText(b.product && b.product.slug);
-                if (aHash !== bHash) return aHash - bHash;
+                const aOrder = getCatalogOrder(a.product);
+                const bOrder = getCatalogOrder(b.product);
+                if (aOrder !== null || bOrder !== null) {
+                    if (aOrder === null) return 1;
+                    if (bOrder === null) return -1;
+                    if (aOrder !== bOrder) return aOrder - bOrder;
+                }
+
                 return a.index - b.index;
             };
 
-            const caps = cardItems
-                .filter((item) => inferTypeName(item.product) === "Cap")
-                .sort(byHash);
-            const patches = cardItems
-                .filter((item) => inferTypeName(item.product) === "Patch")
-                .sort(byHash);
-            const longsleeves = cardItems
-                .filter((item) => inferTypeName(item.product) === "Longsleeve")
-                .sort(byHash);
-            const sweatshirts = cardItems
-                .filter((item) => inferTypeName(item.product) === "Sweatshirt")
-                .sort(byHash);
-            const tshirts = cardItems
-                .filter((item) => inferTypeName(item.product) === "T-Shirt")
-                .sort(byHash);
-            const hoodies = cardItems
-                .filter((item) => inferTypeName(item.product) === "Hoodie")
-                .sort(byHash);
-
-            const sorted = [...patches, ...caps, ...longsleeves, ...sweatshirts];
-            const initialTshirts = Math.min(2, tshirts.length);
-            for (let i = 0; i < initialTshirts; i += 1) {
-                sorted.push(tshirts.shift());
-            }
-
-            while (hoodies.length || tshirts.length) {
-                if (hoodies.length) sorted.push(hoodies.shift());
-                if (tshirts.length) sorted.push(tshirts.shift());
-            }
-
-            const swapByTitle = (firstTitle, secondTitle) => {
-                const firstIndex = sorted.findIndex((item) => item.product && item.product.title === firstTitle);
-                const secondIndex = sorted.findIndex((item) => item.product && item.product.title === secondTitle);
-                if (firstIndex >= 0 && secondIndex >= 0 && firstIndex !== secondIndex) {
-                    [sorted[firstIndex], sorted[secondIndex]] = [sorted[secondIndex], sorted[firstIndex]];
-                }
-            };
-
-            const swapByCartName = (firstCartName, secondCartName) => {
-                const firstIndex = sorted.findIndex((item) => item.product && item.product.cartName === firstCartName);
-                const secondIndex = sorted.findIndex((item) => item.product && item.product.cartName === secondCartName);
-                if (firstIndex >= 0 && secondIndex >= 0 && firstIndex !== secondIndex) {
-                    [sorted[firstIndex], sorted[secondIndex]] = [sorted[secondIndex], sorted[firstIndex]];
-                }
-            };
-
-            swapByTitle("Misanthrop Hoodie", "HARDCORE JUGEND");
-            swapByCartName("Timur Mutsuraev T-Shirt", "HARDCORE CITADEL T-SHIRT");
-            swapByCartName("HARDCORE LONGLSLEEVE", "HARDCORE CITADEL T-SHIRT");
-
-            const preorderItems = sorted.filter((item) => item.product && item.product.isPreorder);
-            const nonPreorderItems = sorted.filter((item) => !(item.product && item.product.isPreorder));
-            const newItems = nonPreorderItems.filter((item) => item.product && item.product.isNew);
-            const regularItems = nonPreorderItems.filter((item) => !(item.product && item.product.isNew));
-            sorted.splice(0, sorted.length, ...preorderItems, ...newItems, ...regularItems);
+            const sorted = [...cardItems].sort(compareCatalogItems);
 
             const changedOrder = sorted.some((item, idx) => item !== cardItems[idx]);
             if (changedOrder) {
