@@ -413,6 +413,13 @@
             align-items: center; justify-content: center; cursor: pointer; z-index: 1000;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+        .cart-widget-icon {
+            width: 24px;
+            height: 24px;
+            display: block;
+            color: #fff;
+            pointer-events: none;
+        }
     .cart-widget:hover {
         transform: scale(1.1);
         box-shadow: 0 0 15px rgba(136, 8, 8, 0.6);
@@ -426,6 +433,10 @@
             font-size: 1.4rem;
             bottom: 25px;
             right: 25px;
+        }
+        .cart-widget-icon {
+            width: 28px;
+            height: 28px;
         }
         #cart-count {
             top: 6px;
