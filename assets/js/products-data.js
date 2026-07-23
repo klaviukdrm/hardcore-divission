@@ -1176,5 +1176,257 @@ window.PRODUCTS_DATA = [
     "cartSizeId": "size-f24",
     "seoKeywords": "ТРБСКН GEN2, TRBSKN GEN2 T-SHIRT, футболка, turboskin, hardcore division, streetwear, ukraine brand",
     "catalogOrder": 4
+  },
+  {
+    "id": 46,
+    "slug": "hardcore-or-die-hardcore-or-die-t-shirt",
+    "category": "футболка",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HARDCORE OR DIE [3 КОЛОРА]",
+    "descUa": "Футболка для тих, хто йде до кінця без знижок на характер. Три кольори, жорсткий меседж і чистий вуличний настрій.",
+    "descEng": "A T-shirt for those who go all the way without softening the character. Three colors, a hard message, and a clean street attitude.",
+    "image": "images/IMG_9088.JPEG",
+    "imageAlt": "images/IMG_9089.JPEG",
+    "gallery": [
+      "images/IMG_9088.JPEG",
+      "images/IMG_9089.JPEG",
+      "images/IMG_9090.JPEG",
+      "images/IMG_9091.JPEG",
+      "images/IMG_9092.JPEG",
+      "images/IMG_9091.JPEG"
+    ],
+    "colorVariants": [
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "gallery": [
+          "images/IMG_9088.JPEG",
+          "images/IMG_9089.JPEG"
+        ]
+      },
+      {
+        "value": "white",
+        "labelUa": "БІЛИЙ",
+        "labelEng": "WHITE",
+        "gallery": [
+          "images/IMG_9090.JPEG",
+          "images/IMG_9091.JPEG"
+        ]
+      },
+      {
+        "value": "green",
+        "labelUa": "ЗЕЛЕНИЙ",
+        "labelEng": "GREEN",
+        "gallery": [
+          "images/IMG_9092.JPEG",
+          "images/IMG_9091.JPEG"
+        ]
+      }
+    ],
+    "priceUahLabel": "1050₴",
+    "priceUsdLabel": "25€",
+    "priceUah": 1050,
+    "priceUsd": 25,
+    "sizeId": "size-f25",
+    "cartName": "HARDCORE OR DIE T-SHIRT",
+    "cartSizeId": "size-f25",
+    "seoKeywords": "HARDCORE OR DIE, HARDCORE OR DIE T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 2
+  },
+  {
+    "id": 47,
+    "slug": "hatecore-hatecore-t-shirt",
+    "category": "футболка",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HATECORE",
+    "descUa": "Жорстка футболка з холодним тоном і прямим характером. Мінімум слів, максимум тиску.",
+    "descEng": "A hard T-shirt with a cold tone and a direct character. Minimal words, maximum pressure.",
+    "image": "images/IMG_9095.JPEG",
+    "imageAlt": "images/IMG_9096.JPEG",
+    "gallery": [
+      "images/IMG_9095.JPEG",
+      "images/IMG_9096.JPEG"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f26",
+    "cartName": "HATECORE T-SHIRT",
+    "cartSizeId": "size-f26",
+    "seoKeywords": "HATECORE, HATECORE T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 3
+  },
+  {
+    "id": 48,
+    "slug": "hardcore-death-hardcore-death-t-shirt",
+    "category": "футболка",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HARDCORE DEATH",
+    "descUa": "Темна футболка для тих, хто не боїться різких форм і важкої атмосфери. Простий меседж з агресивним підтекстом.",
+    "descEng": "A dark T-shirt for those who are not afraid of sharp shapes and a heavy atmosphere. A simple message with an aggressive undertone.",
+    "image": "images/IMG_9098.JPEG",
+    "imageAlt": "images/IMG_9099.JPEG",
+    "gallery": [
+      "images/IMG_9098.JPEG",
+      "images/IMG_9099.JPEG"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f27",
+    "cartName": "HARDCORE DEATH T-SHIRT",
+    "cartSizeId": "size-f27",
+    "seoKeywords": "HARDCORE DEATH, HARDCORE DEATH T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 4
+  },
+  {
+    "id": 49,
+    "slug": "hardcore-crew-hardcore-crew-t-shirt",
+    "category": "футболка",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HARDCORE CREW",
+    "descUa": "Футболка для своєї команди, коли важливі ритм, лояльність і спільний характер. Чистий streetwear з відчуттям єдності.",
+    "descEng": "A T-shirt for the crew when rhythm, loyalty, and shared character matter. Clean streetwear with a sense of unity.",
+    "image": "images/IMG_9106.JPEG",
+    "imageAlt": "images/IMG_9107.JPEG",
+    "gallery": [
+      "images/IMG_9106.JPEG",
+      "images/IMG_9107.JPEG"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f28",
+    "cartName": "HARDCORE CREW T-SHIRT",
+    "cartSizeId": "size-f28",
+    "seoKeywords": "HARDCORE CREW, HARDCORE CREW T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 5
+  },
+  {
+    "id": 50,
+    "slug": "hardcore-hate-hardcore-hate-t-shirt",
+    "category": "футболка",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HARDCORE HATE",
+    "descUa": "Грубий меседж без зайвих прикрас. Для тих, хто носить напругу як частину свого стилю.",
+    "descEng": "A rough message with no extra decoration. For those who wear tension as part of their style.",
+    "image": "images/IMG_9109.JPEG",
+    "imageAlt": "images/IMG_9110.JPEG",
+    "gallery": [
+      "images/IMG_9109.JPEG",
+      "images/IMG_9110.JPEG"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f29",
+    "cartName": "HARDCORE HATE T-SHIRT",
+    "cartSizeId": "size-f29",
+    "seoKeywords": "HARDCORE HATE, HARDCORE HATE T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 6
+  },
+  {
+    "id": 51,
+    "slug": "hate-you-all-hate-you-all-t-shirt",
+    "category": "футболка",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HATE YOU ALL [2 КОЛОРА]",
+    "descUa": "Двоколірна футболка з чорним і білим варіантами. Холодний тон, прямий посил і нуль компромісів.",
+    "descEng": "A two-color T-shirt in black and white. Cold tone, direct message, and zero compromises.",
+    "image": "images/IMG_9114.JPEG",
+    "imageAlt": "images/IMG_9115.JPEG",
+    "gallery": [
+      "images/IMG_9114.JPEG",
+      "images/IMG_9115.JPEG",
+      "images/IMG_9117.JPEG",
+      "images/IMG_9118.JPEG"
+    ],
+    "colorVariants": [
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "gallery": [
+          "images/IMG_9114.JPEG",
+          "images/IMG_9115.JPEG"
+        ]
+      },
+      {
+        "value": "white",
+        "labelUa": "БІЛИЙ",
+        "labelEng": "WHITE",
+        "gallery": [
+          "images/IMG_9117.JPEG",
+          "images/IMG_9118.JPEG"
+        ]
+      }
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f30",
+    "cartName": "HATE YOU ALL T-SHIRT",
+    "cartSizeId": "size-f30",
+    "seoKeywords": "HATE YOU ALL, HATE YOU ALL T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 7
+  },
+  {
+    "id": 52,
+    "slug": "hardcore-division-crew-hardcore-division-crew-t-shirt",
+    "category": "футболка",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HARDCORE DIVISION CREW [2 КОЛОРА]",
+    "descUa": "Футболка для своєї команди: чорний по стандарту та червоний як акцент сили. Лаконічна форма і жорсткий характер.",
+    "descEng": "A T-shirt for the crew: black by default and red as the power accent. Clean form and a hard character.",
+    "image": "images/IMG_9121.JPEG",
+    "imageAlt": "images/IMG_9122.JPEG",
+    "gallery": [
+      "images/IMG_9121.JPEG",
+      "images/IMG_9122.JPEG",
+      "images/IMG_9123.JPEG",
+      "images/IMG_9124.JPEG"
+    ],
+    "colorVariants": [
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "gallery": [
+          "images/IMG_9121.JPEG",
+          "images/IMG_9122.JPEG"
+        ]
+      },
+      {
+        "value": "red",
+        "labelUa": "ЧЕРВОНИЙ",
+        "labelEng": "RED",
+        "gallery": [
+          "images/IMG_9123.JPEG",
+          "images/IMG_9124.JPEG"
+        ]
+      }
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f31",
+    "cartName": "HARDCORE DIVISION CREW T-SHIRT",
+    "cartSizeId": "size-f31",
+    "seoKeywords": "HARDCORE DIVISION CREW, HARDCORE DIVISION CREW T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 8
   }
 ];
