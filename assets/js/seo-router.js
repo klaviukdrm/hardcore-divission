@@ -21,9 +21,9 @@
         const title = String(product && product.title ? product.title : "");
         const targetLang = lang || getLang();
         if (targetLang === "eng") {
-            return title.replace("[2 КОЛОРА]", "[2 COLORS]");
+            return title.replace(/\[(\d+)\s+КОЛОРА\]/gi, "[$1 COLORS]");
         }
-        return title.replace("[2 COLORS]", "[2 КОЛОРА]");
+        return title.replace(/\[(\d+)\s+COLORS\]/gi, "[$1 КОЛОРА]");
     }
 
     function productUrl(slug) {
@@ -132,7 +132,7 @@
     }
 
     function getProductColorVariants(product) {
-        const hasColorMarker = String(product && product.title ? product.title : "").includes("[2 КОЛОРА]");
+        const hasColorMarker = /\[(\d+)\s+(КОЛОРА|COLORS)\]/i.test(String(product && product.title ? product.title : ""));
         if (!hasColorMarker || !Array.isArray(product && product.colorVariants)) return [];
         return product.colorVariants.filter((variant) => Array.isArray(variant && variant.gallery) && variant.gallery.length);
     }
@@ -162,7 +162,7 @@
         const baseCartName = String(product && product.cartName ? product.cartName : product && product.title ? product.title : "").trim();
         const colorLabel = String(variant && (variant.labelEng || variant.value) ? (variant.labelEng || variant.value) : "").trim().toUpperCase();
         if (!baseCartName || !colorLabel) return baseCartName;
-        const strippedBase = baseCartName.replace(/\s+(black|white|red)$/i, "").trim();
+        const strippedBase = baseCartName.replace(/\s+(black|white|red|green)$/i, "").trim();
         return `${strippedBase} ${colorLabel}`.trim();
     }
 
