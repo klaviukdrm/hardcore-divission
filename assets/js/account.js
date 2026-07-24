@@ -113,6 +113,11 @@ const ui = {
     }
 };
 
+ui.ua.orderPending = 'Замовлення оформлено, чекайте відправку протягом 2-3 робочих днів.';
+ui.ua.orderDone = 'Замовлення виконано.';
+ui.eng.orderPending = 'Order placed, please wait for shipment within 2-3 business days.';
+ui.eng.orderDone = 'Order completed.';
+
 function getLang() {
     const saved = localStorage.getItem('preferred_lang');
     return saved === 'eng' ? 'eng' : 'ua';
@@ -239,6 +244,18 @@ function formatDate(value) {
     return getLang() === 'ua' ? date.toLocaleString('uk-UA') : date.toLocaleString('en-GB');
 }
 
+function getOrderHistoryStatus(order) {
+    const createdAt = new Date(order?.created_at || 0);
+    const createdMs = createdAt.getTime();
+    const ageMs = Date.now() - createdMs;
+    const status = String(order?.status || '').trim().toLowerCase();
+    const isDone = status.includes('заверш') || status.includes('completed') || (Number.isFinite(createdMs) && ageMs >= 5 * 24 * 60 * 60 * 1000);
+
+    return isDone
+        ? { className: 'order-status--done', text: t('orderDone') }
+        : { className: 'order-status--pending', text: t('orderPending') };
+}
+
 function renderOrders(orders) {
     currentOrders = Array.isArray(orders) ? orders : [];
 
@@ -249,6 +266,7 @@ function renderOrders(orders) {
 
     ordersList.innerHTML = currentOrders.map((order) => {
         const items = Array.isArray(order.order_items) ? order.order_items : [];
+        const historyStatus = getOrderHistoryStatus(order);
         const rows = items.map((item) => {
             const sizeText = item.size ? `, size ${item.size}` : '';
             return `<li>${item.quantity} x ${item.title}${sizeText} - ${item.price}</li>`;
@@ -260,7 +278,7 @@ function renderOrders(orders) {
                     <strong>ID: ${order.id}</strong>
                     <span>${formatDate(order.created_at)}</span>
                 </div>
-                <div class="order-status">${ORDER_HISTORY_INFO_TEXT}</div>
+                <div class="order-status ${historyStatus.className}">${historyStatus.text}</div>
                 <div class="order-total">${t('total')}: ${order.total_price}</div>
                 <ul class="order-items">${rows}</ul>
             </article>
