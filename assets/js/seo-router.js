@@ -815,7 +815,7 @@
         if (mainImageNode) {
             mainImageNode.addEventListener("click", function () {
                 if (typeof openGallery === "function") {
-                    openGallery(currentGallery.length ? currentGallery : imageGallery);
+                    openGallery(currentGallery.length ? currentGallery : imageGallery, currentActiveThumbIndex);
                 }
             });
         }
