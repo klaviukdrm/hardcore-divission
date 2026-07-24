@@ -12,11 +12,12 @@ window.PRODUCTS_DATA = [
     "descEng": "HARDOCRE DIVISION PVC patch for those who carry their mark with them. A hard relief, dense form, and character for a backpack, carrier, or jacket with no extra words.",
     "pageNoteUa": "Лімітована версія з 25 штук.",
     "pageNoteEng": "Limited edition of 25 pieces.",
-    "image": "images/photo_2026-06-29_12-49-40.jpg",
-    "imageAlt": "images/photo_2026-06-29_12-49-40 (2).jpg",
+    "image": "images/photo_1_2026-07-25_00-04-57.jpg",
+    "imageAlt": "images/photo_2_2026-07-25_00-04-57.jpg",
     "gallery": [
-      "images/photo_2026-06-29_12-49-40.jpg",
-      "images/photo_2026-06-29_12-49-40 (2).jpg"
+      "images/photo_1_2026-07-25_00-04-57.jpg",
+      "images/photo_2_2026-07-25_00-04-57.jpg",
+      "images/photo_3_2026-07-25_00-04-57.jpg"
     ],
     "priceUahLabel": "350₴",
     "priceUsdLabel": "7€",
