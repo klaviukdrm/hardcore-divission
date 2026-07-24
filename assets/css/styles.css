@@ -1533,6 +1533,14 @@ body[data-page="catalog"] .size-btn {
     margin-bottom: 4px;
 }
 
+.order-status--pending {
+    color: #ff6a6a;
+}
+
+.order-status--done {
+    color: #4cd964;
+}
+
 .order-total {
     color: #b4b4b4;
     margin-bottom: 8px;
