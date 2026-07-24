@@ -585,7 +585,13 @@
             border: 1px solid #2a2a2a;
             cursor: pointer;
             opacity: 0.85;
-            transition: opacity 0.25s ease, border-color 0.25s ease;
+            transition: opacity 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+        }
+        .product-detail-thumbs img.is-active {
+            opacity: 1;
+            border-color: var(--blood);
+            box-shadow: 0 0 0 2px rgba(136, 8, 8, 0.45), 0 0 14px rgba(136, 8, 8, 0.18);
+            transform: translateY(-1px);
         }
         .product-detail-thumbs img:hover {
             opacity: 1;
@@ -654,7 +660,11 @@
                 border: none;
                 opacity: 0.9;
             }
-            .product-detail-thumbs img:hover {
+            .product-detail-thumbs img.is-active {
+                border-color: var(--blood);
+                box-shadow: 0 0 0 2px rgba(136, 8, 8, 0.5), 0 0 18px rgba(136, 8, 8, 0.22);
+            }
+            .product-detail-thumbs img:hover:not(.is-active) {
                 border-color: transparent;
             }
             .product-detail-title {
