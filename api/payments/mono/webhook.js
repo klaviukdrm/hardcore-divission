@@ -10,11 +10,16 @@ function escapeHtml(value) {
 
 function formatAmount(amount, currency) {
     const number = Number(amount);
-    const value = Number.isFinite(number) ? number : amount;
-    if (String(currency || '').toUpperCase() === 'UAH') {
-        return `${value}₴`;
+    const code = String(currency || '').toUpperCase();
+    const value = Number.isFinite(number) ? number : Number(amount) || 0;
+
+    if (code === 'UAH' || code === '980') {
+        const normalized = value / 100;
+        const display = Number.isInteger(normalized) ? String(normalized) : normalized.toFixed(2);
+        return `${display}₴`;
     }
-    return `${value} ${String(currency || '').toUpperCase()}`.trim();
+
+    return `${value} ${code}`.trim();
 }
 
 function formatKyivDate(rawValue) {
