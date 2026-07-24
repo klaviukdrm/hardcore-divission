@@ -583,30 +583,24 @@ let cart = [];
         if (orderRegion === 'ua') {
             const ibanText = lang === 'ua' ? '🪙 ФОП РАХУНОК (IBAN):' : '🪙 FOP ACCOUNT (IBAN):';
             const paypalText = lang === 'ua' ? '💸 PayPal:' : '💸 PayPal:';
-            const cardText = lang === 'ua' ? '💳 КАРТА ФОП РАХУНКУ:' : '💳 FOP CARD ACCOUNT:';
             const edrpouText = lang === 'ua' ? '🔢 ЄДРПОУ:' : '🔢 EDRPOU:';
-            const fopText = lang === 'ua' ? '👤 <b>ФОП:</b> Тарасов Олег Михайлович' : '👤 <b>FOP:</b> Tarasov Oleg Mykhailovych';
+            const fopText = lang === 'ua' ? '👤 <b>ФОП:</b> Максимова Анна Олегівна' : '👤 <b>FOP:</b> Maksimova Anna Olegivna';
 
             paymentBlock = `
                 <div style="background:#000; padding:15px; border:1px solid #222; font-size:0.85rem; color:#fff; line-height:1.6; text-align:left;">
                     <div style="margin-bottom:10px;">
                         <span style="color:#888;">${ibanText}</span><br>
-                        <div class="copy-line"><b>UA783220010000026002320017237</b> <button class="mini-copy-btn" onclick="copyVal('UA783220010000026002320017237')">Copy</button></div>
+                        <div class="copy-line"><b>UA623220010000026000380041193</b> <button class="mini-copy-btn" onclick="copyVal('UA623220010000026000380041193')">Copy</button></div>
                     </div>
 
                     <div style="margin-bottom:10px;">
                         <span style="color:#888;">${paypalText}</span><br>
-                        <div class="copy-line"><b>dreamprint777@ukr.net</b> <button class="mini-copy-btn" onclick="copyVal('dreamprint777@ukr.net')">Copy</button></div>
-                    </div>
-
-                    <div style="margin-bottom:10px;">
-                        <span style="color:#888;">${cardText}</span><br>
-                        <div class="copy-line"><b>4035200041301190</b> <button class="mini-copy-btn" onclick="copyVal('4035200041301190')">Copy</button></div>
+                        <div class="copy-line"><b>trbskn91@gmail.com (Serhii Danko)</b> <button class="mini-copy-btn" onclick="copyVal('trbskn91@gmail.com')">Copy</button></div>
                     </div>
 
                     <div style="margin-bottom:10px;">
                         <span style="color:#888;">${edrpouText}</span><br>
-                        <div class="copy-line"><b>3215715672</b> <button class="mini-copy-btn" onclick="copyVal('3215715672')">Copy</button></div>
+                        <div class="copy-line"><b>3952509287</b> <button class="mini-copy-btn" onclick="copyVal('3952509287')">Copy</button></div>
                     </div>
 
                     <div style="border-top:1px solid #222; padding-top:10px; margin-top:10px;">
@@ -1443,32 +1437,3 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('pageshow', () => {
     syncAccountButtonState();
 });
-
-/**
- * TEMPORARY: Shows a modal window about temporary service suspension.
- * To disable, just comment out or remove the showTemporaryClosureModal() call below.
- */
-function showTemporaryClosureModal() {
-    const modalId = 'temp-closure-modal';
-    if (document.getElementById(modalId)) {
-        return;
-    }
-
-    const modalOverlay = document.createElement('div');
-    modalOverlay.id = modalId;
-    modalOverlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; align-items: center; justify-content: center;';
-
-    modalOverlay.innerHTML = `
-        <div style="background: #0a0a0a; border: 1px solid #880808; padding: 30px 40px; text-align: center; max-width: 500px; margin: 20px; font-family: 'Oswald', sans-serif;">
-            <h3 style="color: #e0e0e0; margin-bottom: 15px; font-size: 1.2rem; line-height: 1.6;">
-                На даний момент не обробляємо нові замовлення, спробуйте ще раз через час, вибачте за труднощі.
-            </h3>
-            <p style="color: #b0b0b0; font-size: 1rem; line-height: 1.6;">
-                We are not processing new orders at the moment, please try again later, sorry for the inconvenience.
-            </p>
-        </div>
-    `;
-    document.body.appendChild(modalOverlay);
-}
-
-showTemporaryClosureModal();
