@@ -23,6 +23,7 @@ let cart = [];
     const tshirt3xlSurchargeUah = 200;
     const monoPaymentsEnabled = true; // Temporary kill-switch for the mono checkout block
     const cartStorageKey = 'hd_cart_v1';
+    const orderDraftStorageKey = 'hd_order_draft_v1';
     let activeCatalogCategory = 'all';
     let catalogSearchQuery = '';
 
@@ -50,6 +51,95 @@ let cart = [];
         } catch (e) {
             cart = [];
         }
+    }
+
+    function readOrderDraft() {
+        try {
+            const raw = localStorage.getItem(orderDraftStorageKey);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== 'object') return null;
+
+            const region = String(parsed.region || 'ua').trim() === 'world' ? 'world' : 'ua';
+            const step = String(parsed.step || 'delivery').trim() === 'payment' ? 'payment' : 'delivery';
+            const delivery = parsed.delivery && typeof parsed.delivery === 'object' ? parsed.delivery : {};
+
+            return {
+                region,
+                step,
+                delivery: {
+                    fio: String(delivery.fio || '').trim(),
+                    phone: String(delivery.phone || '').trim(),
+                    np: String(delivery.np || '').trim(),
+                    tg: String(delivery.tg || '').trim().slice(0, 100)
+                }
+            };
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function writeOrderDraft(draft) {
+        try {
+            localStorage.setItem(orderDraftStorageKey, JSON.stringify(draft));
+        } catch (e) {
+            // Ignore storage errors.
+        }
+    }
+
+    function clearOrderDraft() {
+        try {
+            localStorage.removeItem(orderDraftStorageKey);
+        } catch (e) {
+            // Ignore storage errors.
+        }
+    }
+
+    function getCheckoutFormValues() {
+        const fioInput = document.getElementById('orderFIO');
+        const phoneInput = document.getElementById('orderPhone');
+        const npInput = document.getElementById('orderNP');
+        const tgInput = document.getElementById('orderTG');
+
+        return {
+            fio: String(fioInput?.value || '').trim(),
+            phone: String(phoneInput?.value || '').trim(),
+            np: String(npInput?.value || '').trim(),
+            tg: String(tgInput?.value || '').trim().slice(0, 100)
+        };
+    }
+
+    function persistOrderDraft(step = orderStep) {
+        const formValues = getCheckoutFormValues();
+        const delivery = deliveryData?.data || {};
+        const mergedDelivery = {
+            fio: formValues.fio || String(delivery.fio || '').trim(),
+            phone: formValues.phone || String(delivery.phone || '').trim(),
+            np: formValues.np || String(delivery.np || '').trim(),
+            tg: formValues.tg || String(delivery.tg || '').trim().slice(0, 100)
+        };
+
+        const hasContent = Boolean(mergedDelivery.fio || mergedDelivery.phone || mergedDelivery.np || mergedDelivery.tg || deliveryData || step === 'payment');
+        if (!hasContent) return;
+
+        writeOrderDraft({
+            region: orderRegion === 'world' ? 'world' : 'ua',
+            step: step === 'payment' ? 'payment' : 'delivery',
+            delivery: mergedDelivery
+        });
+    }
+
+    function restoreOrderDraft() {
+        const draft = readOrderDraft();
+        if (!draft) return null;
+
+        orderRegion = draft.region;
+        orderStep = draft.step;
+        deliveryData = draft.delivery && (draft.delivery.fio || draft.delivery.phone || draft.delivery.np || draft.delivery.tg)
+            ? { region: draft.region, data: { ...draft.delivery } }
+            : null;
+
+        return draft;
     }
 
     function getCatalogProducts() {
@@ -240,6 +330,7 @@ let cart = [];
             paymentScreenshot = null;
             deliveryData = null;
             orderRegion = 'ua';
+            clearOrderDraft();
             renderOrderSuccess('mono');
             clearMonoReturnFlag();
             return true;
@@ -727,13 +818,27 @@ let cart = [];
     }
 
     function openOrderForm() {
-    const lang = localStorage.getItem('preferred_lang') || 'ua';
-    if (cart.length === 0) return showToast(lang === 'ua' ? 'КОШИК ПОРОЖНІЙ!' : 'CART IS EMPTY!');
-    document.getElementById('cartModal').style.display = 'none';
-    orderRegion = 'ua';
-    deliveryData = null;
-    renderDeliveryForm();
-}
+        const lang = localStorage.getItem('preferred_lang') || 'ua';
+        if (cart.length === 0) return showToast(lang === 'ua' ? 'КОШИК ПОРОЖНІЙ!' : 'CART IS EMPTY!');
+        document.getElementById('cartModal').style.display = 'none';
+
+        const draft = restoreOrderDraft();
+        if (draft && draft.region === 'world') {
+            renderDeliveryForm();
+            return;
+        }
+
+        if (draft && draft.step === 'payment') {
+            renderOrderPayment();
+            return;
+        }
+
+        orderRegion = 'ua';
+        deliveryData = draft && draft.delivery && (draft.delivery.fio || draft.delivery.phone || draft.delivery.np || draft.delivery.tg)
+            ? { region: 'ua', data: { ...draft.delivery } }
+            : null;
+        renderDeliveryForm();
+    }
 
     function compressImageDataUrl(dataUrl, maxSize, quality) {
         return new Promise((resolve) => {
@@ -877,8 +982,32 @@ let cart = [];
                 if (match[4]) out += '-' + match[4];
                 
                 el.value = out;
+                persistOrderDraft('delivery');
             });
         }
+
+        const draft = readOrderDraft();
+        if (draft && orderRegion === 'ua') {
+            const fioInput = document.getElementById('orderFIO');
+            const npInput = document.getElementById('orderNP');
+            const tgInput = document.getElementById('orderTG');
+            if (fioInput && draft.delivery.fio) fioInput.value = draft.delivery.fio;
+            if (phoneInput && draft.delivery.phone) phoneInput.value = draft.delivery.phone;
+            if (npInput && draft.delivery.np) npInput.value = draft.delivery.np;
+            if (tgInput && draft.delivery.tg) tgInput.value = draft.delivery.tg;
+        }
+
+        ['orderFIO', 'orderNP', 'orderTG'].forEach((fieldId) => {
+            const field = document.getElementById(fieldId);
+            if (!field) return;
+            field.addEventListener('input', () => persistOrderDraft('delivery'));
+        });
+
+        if (phoneInput) {
+            phoneInput.addEventListener('change', () => persistOrderDraft('delivery'));
+        }
+
+        persistOrderDraft('delivery');
     }
 
     function proceedToPayment() {
@@ -897,6 +1026,8 @@ let cart = [];
             region: orderRegion,
             data: { fio, phone: '+' + phoneDigits, np, tg }
         };
+
+        persistOrderDraft('payment');
 
         renderOrderPayment();
     }
@@ -940,7 +1071,7 @@ let cart = [];
             const items = buildOrderItemsPayload('ua');
             const orderVisualItems = buildOrderTelegramVisualItems('ua');
 
-            const response = await fetch('/api/payments/mono/create', {
+        const response = await fetch('/api/payments/mono/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -978,10 +1109,7 @@ let cart = [];
 
     function closeOrderForm() { 
         document.getElementById('orderModal').style.display = 'none'; 
-        paymentScreenshot = null; 
-        orderRegion = 'ua';
-        orderStep = 'payment';
-        deliveryData = null;
+        persistOrderDraft(orderStep);
     }
 
     function renderOrderSuccess(source = 'order') {
@@ -1011,6 +1139,7 @@ let cart = [];
             <button class="buy-btn" style="margin-top:20px;" onclick="closeOrderForm()">${t.btn}</button>
         `;
         document.getElementById('orderModal').style.display = 'flex';
+        persistOrderDraft('payment');
     }
 
     async function finalizeOrder() {
@@ -1106,6 +1235,7 @@ let cart = [];
             paymentScreenshot = null;
             deliveryData = null;
             orderRegion = 'ua';
+            clearOrderDraft();
             renderOrderSuccess();
         } catch (e) {
             showToast(msgFail);
