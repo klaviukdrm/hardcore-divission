@@ -506,10 +506,13 @@ let cart = [];
     window.addEventListener('touchend', stopGalleryDrag);
     window.addEventListener('touchcancel', stopGalleryDrag);
 
-    function openGallery(images) {
+    function openGallery(images, startIndex = 0) {
         currentGalleryImages = Array.isArray(images) ? images : [];
         if (!currentGalleryImages.length) return;
-        currentImgIndex = 0;
+        currentImgIndex = Number.isInteger(startIndex) && startIndex >= 0 ? startIndex : 0;
+        if (currentImgIndex >= currentGalleryImages.length) {
+            currentImgIndex = 0;
+        }
         galleryZoomed = false;
         galleryDragActive = false;
         galleryMovedWhileDragging = false;
@@ -520,7 +523,7 @@ let cart = [];
         const galleryImgEl = document.getElementById('galleryImg');
         if (!galleryEl || !galleryImgEl) return;
 
-        galleryImgEl.src = currentGalleryImages[0];
+        galleryImgEl.src = currentGalleryImages[currentImgIndex] || currentGalleryImages[0];
         galleryImgEl.onclick = toggleGalleryZoom;
         galleryImgEl.onmousedown = startGalleryDrag;
         galleryImgEl.ontouchstart = startGalleryDrag;
