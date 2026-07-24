@@ -46,9 +46,56 @@ let cart = [];
             const parsed = JSON.parse(raw);
             if (!Array.isArray(parsed)) return;
             cart = parsed.map(normalizeCartItem).filter(Boolean);
+            syncCartPricesFromCatalog();
         } catch (e) {
             cart = [];
         }
+    }
+
+    function getCatalogProducts() {
+        return Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : [];
+    }
+
+    function findCatalogProductForCartItem(item) {
+        const products = getCatalogProducts();
+        if (!products.length || !item) return null;
+
+        const normalize = (value) => String(value || '').trim().toLowerCase();
+        const itemSlug = normalize(item.productSlug);
+        const itemName = normalize(item.name);
+
+        return products.find((product) => {
+            if (!product) return false;
+
+            const productSlug = normalize(product.slug);
+            const productCartName = normalize(product.cartName || product.title);
+            const productTitle = normalize(product.title);
+
+            return Boolean(
+                (itemSlug && itemSlug === productSlug) ||
+                (itemName && (itemName === productCartName || itemName === productTitle))
+            );
+        }) || null;
+    }
+
+    function syncCartPricesFromCatalog() {
+        if (!Array.isArray(cart) || !cart.length) return;
+
+        cart = cart.map((item) => {
+            const product = findCatalogProductForCartItem(item);
+            if (!product) return item;
+
+            const size = String(item.size || '').trim().toUpperCase();
+            const sizeSurchargeUah = size === '3XL' ? tshirt3xlSurchargeUah : 0;
+
+            return {
+                ...item,
+                uah: (Number(product.priceUah) || 0) + sizeSurchargeUah,
+                usd: Number(product.priceUsd) || 0
+            };
+        });
+
+        saveCartToStorage();
     }
 
     function saveCartToStorage() {
@@ -456,6 +503,7 @@ let cart = [];
         renderCart();
     }
     function renderCart() {
+    syncCartPricesFromCatalog();
     updateCartCount();
     const list = document.getElementById('cartItemsList');
     const totalEl = document.getElementById('cartTotal');
