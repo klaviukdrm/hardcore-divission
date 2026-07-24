@@ -1194,7 +1194,7 @@ window.PRODUCTS_DATA = [
       "images/IMG_9090.JPEG",
       "images/IMG_9091.JPEG",
       "images/IMG_9092.JPEG",
-      "images/IMG_9091.JPEG"
+      "images/IMG_9093.JPEG"
     ],
     "colorVariants": [
       {
@@ -1221,7 +1221,7 @@ window.PRODUCTS_DATA = [
         "labelEng": "GREEN",
         "gallery": [
           "images/IMG_9092.JPEG",
-          "images/IMG_9091.JPEG"
+          "images/IMG_9093.JPEG"
         ]
       }
     ],
