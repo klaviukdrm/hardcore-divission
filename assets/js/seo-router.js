@@ -141,9 +141,9 @@
         return Array.isArray(variant && variant.gallery) ? variant.gallery.filter(Boolean) : [];
     }
 
-    function buildProductThumbs(product, gallery) {
+    function buildProductThumbs(product, gallery, activeIndex = 0) {
         return gallery.map((img, idx) =>
-            `<img src="${img}" alt="${product.title} view ${idx + 1}" data-idx="${idx}" loading="lazy" decoding="async">`
+            `<img src="${img}" alt="${product.title} view ${idx + 1}" data-idx="${idx}" class="${idx === activeIndex ? "is-active" : ""}" loading="lazy" decoding="async">`
         ).join("");
     }
 
@@ -775,26 +775,40 @@
         const thumbsWrap = mount.querySelector(".product-detail-thumbs");
         let currentGallery = initialGallery.length ? initialGallery.slice() : imageGallery.slice();
         let currentColorVariant = colorVariants.length ? colorVariants[0] : null;
+        let currentActiveThumbIndex = 0;
+
+        const setActiveThumb = (activeIndex) => {
+            currentActiveThumbIndex = Number.isInteger(activeIndex) && activeIndex >= 0 ? activeIndex : 0;
+            const thumbNodes = mount.querySelectorAll(".product-detail-thumbs img");
+            thumbNodes.forEach((thumb) => {
+                const thumbIndex = Number(thumb.getAttribute("data-idx"));
+                thumb.classList.toggle("is-active", thumbIndex === currentActiveThumbIndex);
+            });
+        };
 
         const bindThumbClicks = () => {
             const thumbNodes = mount.querySelectorAll(".product-detail-thumbs img");
             thumbNodes.forEach((thumb) => {
                 thumb.addEventListener("click", function () {
+                    const thumbIndex = Number(this.getAttribute("data-idx"));
                     if (!mainImageNode) return;
-                    mainImageNode.src = thumb.getAttribute("src");
+                    mainImageNode.src = this.getAttribute("src");
+                    setActiveThumb(Number.isFinite(thumbIndex) ? thumbIndex : 0);
                 });
             });
         };
 
-        const renderGallerySet = (gallery) => {
+        const renderGallerySet = (gallery, activeIndex = 0) => {
             currentGallery = Array.isArray(gallery) && gallery.length ? gallery.slice() : imageGallery.slice();
+            currentActiveThumbIndex = Number.isInteger(activeIndex) && activeIndex >= 0 ? activeIndex : 0;
             if (mainImageNode) {
-                mainImageNode.src = currentGallery[0] || product.image;
+                mainImageNode.src = currentGallery[currentActiveThumbIndex] || currentGallery[0] || product.image;
                 mainImageNode.alt = `${product.title} ${typeName}`;
             }
             if (thumbsWrap) {
-                thumbsWrap.innerHTML = buildProductThumbs(product, currentGallery);
+                thumbsWrap.innerHTML = buildProductThumbs(product, currentGallery, currentActiveThumbIndex);
                 bindThumbClicks();
+                setActiveThumb(currentActiveThumbIndex);
             }
         };
 
@@ -823,7 +837,7 @@
                     return variantValue === String(colorSelectNode.value || "");
                 });
                 currentColorVariant = selectedVariant || currentColorVariant;
-                renderGallerySet(getColorVariantGallery(selectedVariant));
+                renderGallerySet(getColorVariantGallery(selectedVariant), 0);
             });
         }
 
