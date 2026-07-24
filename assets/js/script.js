@@ -1443,3 +1443,32 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('pageshow', () => {
     syncAccountButtonState();
 });
+
+/**
+ * TEMPORARY: Shows a modal window about temporary service suspension.
+ * To disable, just comment out or remove the showTemporaryClosureModal() call below.
+ */
+function showTemporaryClosureModal() {
+    const modalId = 'temp-closure-modal';
+    if (document.getElementById(modalId)) {
+        return;
+    }
+
+    const modalOverlay = document.createElement('div');
+    modalOverlay.id = modalId;
+    modalOverlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; align-items: center; justify-content: center;';
+
+    modalOverlay.innerHTML = `
+        <div style="background: #0a0a0a; border: 1px solid #880808; padding: 30px 40px; text-align: center; max-width: 500px; margin: 20px; font-family: 'Oswald', sans-serif;">
+            <h3 style="color: #e0e0e0; margin-bottom: 15px; font-size: 1.2rem; line-height: 1.6;">
+                На даний момент не обробляємо нові замовлення, спробуйте ще раз через час, вибачте за труднощі.
+            </h3>
+            <p style="color: #b0b0b0; font-size: 1rem; line-height: 1.6;">
+                We are not processing new orders at the moment, please try again later, sorry for the inconvenience.
+            </p>
+        </div>
+    `;
+    document.body.appendChild(modalOverlay);
+}
+
+showTemporaryClosureModal();
