@@ -109,7 +109,7 @@ let cart = [];
         };
     }
 
-    function persistOrderDraft(step = orderStep) {
+    function persistOrderDraft() {
         const formValues = getCheckoutFormValues();
         const delivery = deliveryData?.data || {};
         const mergedDelivery = {
@@ -119,12 +119,12 @@ let cart = [];
             tg: formValues.tg || String(delivery.tg || '').trim().slice(0, 100)
         };
 
-        const hasContent = Boolean(mergedDelivery.fio || mergedDelivery.phone || mergedDelivery.np || mergedDelivery.tg || deliveryData || step === 'payment');
+        const hasContent = Boolean(mergedDelivery.fio || mergedDelivery.phone || mergedDelivery.np || mergedDelivery.tg || deliveryData);
         if (!hasContent) return;
 
         writeOrderDraft({
             region: orderRegion === 'world' ? 'world' : 'ua',
-            step: step === 'payment' ? 'payment' : 'delivery',
+            step: 'delivery',
             delivery: mergedDelivery
         });
     }
@@ -828,11 +828,6 @@ let cart = [];
             return;
         }
 
-        if (draft && draft.step === 'payment') {
-            renderOrderPayment();
-            return;
-        }
-
         orderRegion = 'ua';
         deliveryData = draft && draft.delivery && (draft.delivery.fio || draft.delivery.phone || draft.delivery.np || draft.delivery.tg)
             ? { region: 'ua', data: { ...draft.delivery } }
@@ -1109,7 +1104,7 @@ let cart = [];
 
     function closeOrderForm() { 
         document.getElementById('orderModal').style.display = 'none'; 
-        persistOrderDraft(orderStep);
+        persistOrderDraft();
     }
 
     function renderOrderSuccess(source = 'order') {
