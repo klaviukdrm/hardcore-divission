@@ -19,9 +19,9 @@ window.PRODUCTS_DATA = [
       "images/photo_2026-06-29_12-49-40 (2).jpg"
     ],
     "priceUahLabel": "350₴",
-    "priceUsdLabel": "20€",
+    "priceUsdLabel": "7€",
     "priceUah": 350,
-    "priceUsd": 20,
+    "priceUsd": 7,
     "cartName": "Патч HARDOCRE DIVISION",
     "seoKeywords": "Патч HARDOCRE DIVISION, ПВХ патч, patches, hardcore division, streetwear, ukraine brand",
     "catalogOrder": 1
