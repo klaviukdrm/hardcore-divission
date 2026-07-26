@@ -150,26 +150,9 @@ let cart = [];
             .replace(/'/g, '&#39;');
     }
 
-    function readPromoState() {
+    function clearLegacyPromoStorage() {
         try {
-            const raw = localStorage.getItem(promoStorageKey);
-            if (!raw) return null;
-            const parsed = JSON.parse(raw);
-            if (!parsed || typeof parsed !== 'object') return null;
-
-            const code = normalizePromoCode(parsed.code);
-            const discountPercent = sanitizeDiscountPercent(parsed.discountPercent);
-            if (!code || !discountPercent) return null;
-
-            return { code, discountPercent };
-        } catch (e) {
-            return null;
-        }
-    }
-
-    function writePromoState(state) {
-        try {
-            localStorage.setItem(promoStorageKey, JSON.stringify(state));
+            localStorage.removeItem(promoStorageKey);
         } catch (e) {
             // Ignore storage errors.
         }
@@ -200,7 +183,6 @@ let cart = [];
             discountPercent: normalizedPercent
         };
         promoDraftCode = normalizedCode;
-        writePromoState(appliedPromo);
     }
 
     function getAppliedPromo() {
@@ -474,11 +456,7 @@ let cart = [];
     }
 
     loadCartFromStorage();
-    const storedPromo = readPromoState();
-    if (storedPromo) {
-        appliedPromo = storedPromo;
-        promoDraftCode = storedPromo.code;
-    }
+    clearLegacyPromoStorage();
 
     function isTshirtItem(name) {
         return /t-?shirt/i.test(String(name || ''));
@@ -1634,7 +1612,8 @@ let cart = [];
         }
 
         const subtotal = cart.reduce((sum, i) => sum + i.uah, 0);
-        const total = getPromoPricing(subtotal).total;
+        const promoPricing = getPromoPricing(subtotal);
+        const total = promoPricing.total;
         if (!Number.isFinite(total) || total <= 0) {
             return showToast(lang === 'ua' ? 'КОШИК ПОРОЖНІЙ!' : 'CART IS EMPTY!');
         }
@@ -1667,7 +1646,14 @@ let cart = [];
                         tg: String(deliveryData?.data?.tg || '').trim()
                     },
                     items,
-                    orderItems: orderVisualItems
+                    orderItems: orderVisualItems,
+                    promo: promoPricing.discountAmount > 0
+                        ? {
+                            code: promoPricing.code,
+                            discountPercent: promoPricing.discountPercent,
+                            discountAmount: promoPricing.discountAmount
+                        }
+                        : null
                 })
             });
 
@@ -1688,8 +1674,10 @@ let cart = [];
 
     function closeOrderForm() { 
         clearPaymentScreenshot();
+        clearAppliedPromo();
         document.getElementById('orderModal').style.display = 'none'; 
         persistOrderDraft();
+        renderCart();
     }
 
     function renderOrderSuccess(source = 'order') {
@@ -1853,6 +1841,7 @@ let cart = [];
             saveCartToStorage();
             updateCartCount();
             clearPaymentScreenshot();
+            clearAppliedPromo();
             deliveryData = null;
             deliveryRegion = 'ua';
             paymentRegion = 'ua';
