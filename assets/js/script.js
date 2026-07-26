@@ -1272,17 +1272,8 @@ let cart = [];
         clearPaymentScreenshot();
         document.getElementById('cartModal').style.display = 'none';
 
-        const draft = restoreOrderDraft();
-        if (draft && draft.step === 'payment') {
-            renderOrderPayment();
-            return;
-        }
-
-        if (draft && draft.region === 'world') {
-            renderDeliveryForm();
-            return;
-        }
-
+        const draft = readOrderDraft();
+        orderStep = 'delivery';
         deliveryRegion = 'ua';
         paymentRegion = 'ua';
         deliveryData = draft && draft.delivery && (draft.delivery.uaFio || draft.delivery.uaPhone || draft.delivery.np || draft.delivery.tg)
