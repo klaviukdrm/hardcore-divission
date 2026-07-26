@@ -25,8 +25,12 @@ let cart = [];
     const monoPaymentsEnabled = true; // Temporary kill-switch for the mono checkout block
     const cartStorageKey = 'hd_cart_v1';
     const orderDraftStorageKey = 'hd_order_draft_v1';
+    const promoStorageKey = 'hd_promo_v1';
     let activeCatalogCategory = 'all';
     let catalogSearchQuery = '';
+    let appliedPromo = { code: '', discountPercent: 0 };
+    let promoDraftCode = '';
+    let promoNotice = { text: '', type: 'neutral' };
 
     function normalizeCartItem(item) {
         if (!item || typeof item !== 'object') return null;
@@ -115,6 +119,111 @@ let cart = [];
         if (screenshotInput) {
             screenshotInput.value = '';
         }
+    }
+
+    function normalizePromoCode(value) {
+        return String(value || '').trim().toUpperCase();
+    }
+
+    function sanitizeDiscountPercent(value) {
+        const num = Number(value);
+        if (!Number.isFinite(num) || num <= 0) return 0;
+        return Math.min(100, Math.round(num * 100) / 100);
+    }
+
+    function roundCurrency(value) {
+        return Math.round((Number(value) || 0) * 100) / 100;
+    }
+
+    function formatCurrencyValue(value) {
+        const rounded = roundCurrency(value);
+        if (Number.isInteger(rounded)) return String(rounded);
+        return rounded.toFixed(2).replace(/\.?0+$/, '');
+    }
+
+    function escapeHtml(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function readPromoState() {
+        try {
+            const raw = localStorage.getItem(promoStorageKey);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== 'object') return null;
+
+            const code = normalizePromoCode(parsed.code);
+            const discountPercent = sanitizeDiscountPercent(parsed.discountPercent);
+            if (!code || !discountPercent) return null;
+
+            return { code, discountPercent };
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function writePromoState(state) {
+        try {
+            localStorage.setItem(promoStorageKey, JSON.stringify(state));
+        } catch (e) {
+            // Ignore storage errors.
+        }
+    }
+
+    function clearAppliedPromo() {
+        appliedPromo = { code: '', discountPercent: 0 };
+        promoDraftCode = '';
+        promoNotice = { text: '', type: 'neutral' };
+        try {
+            localStorage.removeItem(promoStorageKey);
+        } catch (e) {
+            // Ignore storage errors.
+        }
+    }
+
+    function setAppliedPromo(code, discountPercent) {
+        const normalizedCode = normalizePromoCode(code);
+        const normalizedPercent = sanitizeDiscountPercent(discountPercent);
+
+        if (!normalizedCode || !normalizedPercent) {
+            clearAppliedPromo();
+            return;
+        }
+
+        appliedPromo = {
+            code: normalizedCode,
+            discountPercent: normalizedPercent
+        };
+        promoDraftCode = normalizedCode;
+        writePromoState(appliedPromo);
+    }
+
+    function getAppliedPromo() {
+        if (!appliedPromo.code || !appliedPromo.discountPercent) {
+            return { code: '', discountPercent: 0 };
+        }
+        return appliedPromo;
+    }
+
+    function getPromoPricing(subtotal) {
+        const promo = getAppliedPromo();
+        const safeSubtotal = roundCurrency(subtotal);
+        const discountAmount = promo.discountPercent
+            ? roundCurrency(safeSubtotal * promo.discountPercent / 100)
+            : 0;
+
+        return {
+            code: promo.code,
+            discountPercent: promo.discountPercent,
+            subtotal: safeSubtotal,
+            discountAmount,
+            total: roundCurrency(Math.max(0, safeSubtotal - discountAmount))
+        };
     }
 
     function getCheckoutFormValues() {
@@ -365,6 +474,11 @@ let cart = [];
     }
 
     loadCartFromStorage();
+    const storedPromo = readPromoState();
+    if (storedPromo) {
+        appliedPromo = storedPromo;
+        promoDraftCode = storedPromo.code;
+    }
 
     function isTshirtItem(name) {
         return /t-?shirt/i.test(String(name || ''));
@@ -777,7 +891,58 @@ let cart = [];
         return `<div class="cart-item"><span>${item.name} (${item.size}) — ${itemPrice}${currency}</span><span class="remove-item" onclick="removeFromCart(${idx})">&#10005;</span></div>`;
     }).join('');
 
-    totalEl.innerText = `${totalText}: ${total}${currency}`;
+    const promoPricing = getPromoPricing(total);
+    const hasPromoDiscount = promoPricing.discountAmount > 0;
+    totalEl.innerHTML = hasPromoDiscount
+        ? `${totalText}: <span style="text-decoration:line-through; color:#707070;">${formatCurrencyValue(promoPricing.subtotal)}${currency}</span> <span style="color:var(--blood);">${formatCurrencyValue(promoPricing.total)}${currency}</span>`
+        : `${totalText}: ${formatCurrencyValue(total)}${currency}`;
+
+    let promoMount = document.getElementById('cartPromoMount');
+    if (!promoMount) {
+        promoMount = document.createElement('div');
+        promoMount.id = 'cartPromoMount';
+        totalEl.insertAdjacentElement('afterend', promoMount);
+    }
+
+    const promoTitle = lang === 'ua' ? 'Маєте промокод?' : 'Have a promo code?';
+    const promoPlaceholder = lang === 'ua' ? 'Введіть промокод' : 'Enter promo code';
+    const promoInputText = promoNotice.text || '';
+    const promoInputValue = promoInputText || promoDraftCode || getAppliedPromo().code;
+    const promoInputColor = promoNotice.type === 'error'
+        ? '#ff6b6b'
+        : ((promoNotice.type === 'success' || hasPromoDiscount) ? '#39ff14' : '#fff');
+    const promoInputBorder = promoNotice.type === 'error'
+        ? '#7a2a2a'
+        : ((promoNotice.type === 'success' || hasPromoDiscount) ? '#1f5c27' : '#333');
+
+    promoMount.innerHTML = `
+        <div style="margin:14px 0 2px; text-align:left;">
+            <label for="cartPromoInput" style="display:block; margin-bottom:6px; color:#ccc; font-size:0.82rem;">${promoTitle}</label>
+            <input type="text" id="cartPromoInput" placeholder="${promoPlaceholder}" value="${escapeHtml(promoInputValue)}" style="width:100%; background:#050505; color:${promoInputColor}; border:1px solid ${promoInputBorder}; padding:12px 14px; font-size:0.92rem; outline:none; box-sizing:border-box;">
+        </div>
+    `;
+
+    const promoInput = document.getElementById('cartPromoInput');
+    if (promoInput) {
+        promoInput.addEventListener('focus', () => {
+            if (!promoNotice.text) return;
+            promoInput.value = promoDraftCode || getAppliedPromo().code || '';
+            promoInput.style.color = '#fff';
+            promoInput.style.borderColor = '#333';
+        });
+        promoInput.addEventListener('input', (event) => {
+            promoDraftCode = String(event.target.value || '');
+            promoNotice = { text: '', type: 'neutral' };
+        });
+        promoInput.addEventListener('keydown', (event) => {
+            if (event.key !== 'Enter') return;
+            event.preventDefault();
+            applyPromoCode(promoInput.value);
+        });
+        promoInput.addEventListener('blur', () => {
+            applyPromoCode(promoInput.value);
+        });
+    }
 
     if (!suggestionEl) return;
     const products = Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : [];
@@ -820,6 +985,59 @@ let cart = [];
             </div>
         </div>
     `;
+}
+
+    async function applyPromoCode(rawCode) {
+    const lang = localStorage.getItem('preferred_lang') || 'ua';
+    const normalizedCode = normalizePromoCode(rawCode);
+
+    if (!normalizedCode) {
+        clearAppliedPromo();
+        renderCart();
+        return;
+    }
+
+    const currentPromo = getAppliedPromo();
+    if (currentPromo.code === normalizedCode) {
+        promoDraftCode = normalizedCode;
+        promoNotice = { text: '', type: 'neutral' };
+        renderCart();
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'validatePromo', code: normalizedCode })
+        });
+        const payload = await response.json().catch(() => null);
+
+        if (!response.ok || !payload?.valid) {
+            clearAppliedPromo();
+            promoDraftCode = normalizedCode;
+            promoNotice = {
+                text: lang === 'ua' ? 'Промокод не знайдено' : 'Promo code not found',
+                type: 'error'
+            };
+            renderCart();
+            return;
+        }
+
+        setAppliedPromo(normalizedCode, payload.discountPercent);
+        promoNotice = {
+            text: lang === 'ua' ? `Промокод ${normalizedCode} застосовано` : `Promo code ${normalizedCode} applied`,
+            type: 'success'
+        };
+        renderCart();
+    } catch (e) {
+        promoDraftCode = normalizedCode;
+        promoNotice = {
+            text: lang === 'ua' ? 'Не вдалося перевірити промокод' : 'Failed to validate promo code',
+            type: 'error'
+        };
+        renderCart();
+    }
 }
 
     function addPreorderToCart(slug) {
@@ -904,7 +1122,9 @@ let cart = [];
             paymentRegion = 'ua';
         }
 
-        const itemTotal = cart.reduce((sum, i) => sum + (isWorldOrder ? i.usd : (lang === 'ua' ? i.uah : i.usd)), 0);
+        const itemSubtotal = cart.reduce((sum, i) => sum + (isWorldOrder ? i.usd : (lang === 'ua' ? i.uah : i.usd)), 0);
+        const promoPricing = getPromoPricing(itemSubtotal);
+        const itemTotal = promoPricing.total;
         const normalizedWorldCountry = String(deliveryData?.data?.country || '').trim().toLowerCase();
         const specialWorldCountries = new Set(['slovakia', 'slovak republic', 'словаччина', 'germany', 'німеччина', 'poland', 'польща']);
         const shippingBase = specialWorldCountries.has(normalizedWorldCountry) ? 20 : 25;
@@ -1413,7 +1633,8 @@ let cart = [];
             return;
         }
 
-        const total = cart.reduce((sum, i) => sum + i.uah, 0);
+        const subtotal = cart.reduce((sum, i) => sum + i.uah, 0);
+        const total = getPromoPricing(subtotal).total;
         if (!Number.isFinite(total) || total <= 0) {
             return showToast(lang === 'ua' ? 'КОШИК ПОРОЖНІЙ!' : 'CART IS EMPTY!');
         }
@@ -1538,11 +1759,23 @@ let cart = [];
 
         const orderLang = isWorldwideOrder ? 'eng' : lang;
         const currency = isWorldwideOrder ? '€' : (lang === 'ua' ? '₴' : '€');
-        let total = cart.reduce((sum, i) => sum + (isWorldwideOrder ? i.usd : (lang === 'ua' ? i.uah : i.usd)), 0);
+        const subtotal = cart.reduce((sum, i) => sum + (isWorldwideOrder ? i.usd : (lang === 'ua' ? i.uah : i.usd)), 0);
+        const promoPricing = getPromoPricing(subtotal);
+        let total = promoPricing.total;
         let itemsInfo = cart.map((item, idx) => `${idx + 1}. ${item.name} (${item.size}) — ${isWorldwideOrder ? item.usd : (lang === 'ua' ? item.uah : item.usd)}${currency}`).join('\n');
         const orderVisualItems = buildOrderTelegramVisualItems(orderLang);
         let messageText = '';
         const publicOrderCode = generatePublicOrderCode();
+        const promoLine = promoPricing.discountAmount > 0
+            ? (isWorldwideOrder
+                ? `\n🏷 <b>Promo Code:</b> ${promoPricing.code} (-${promoPricing.discountPercent}%)\n💸 <b>Discount:</b> -${formatCurrencyValue(promoPricing.discountAmount)}${currency}`
+                : `\n🏷 <b>Промокод:</b> ${promoPricing.code} (-${promoPricing.discountPercent}%)\n💸 <b>Знижка:</b> -${formatCurrencyValue(promoPricing.discountAmount)}${currency}`)
+            : '';
+        const promoHeaderLine = promoPricing.discountAmount > 0
+            ? (isWorldwideOrder
+                ? `\n<b>APPLIED PROMO CODE</b>\n`
+                : `\n<b>ЗАСТОСОВАНО ПРОМОКОД</b>\n`)
+            : '\n';
 
         if (isWorldwideOrder) {
             const fio = String(deliveryData?.data?.fio || '').trim();
@@ -1569,7 +1802,7 @@ let cart = [];
                 return showToast(lang === 'ua' ? 'ЗАПОВНІТЬ УСІ ПОЛЯ WORLDWIDE ДОСТАВКИ!' : 'FILL IN WORLDWIDE DELIVERY DETAILS!');
             }
 
-            messageText = `<b>🌎 NEW WORLDWIDE ORDER 🌎</b>\n\n🆔 <b>Order:</b> ${publicOrderCode}\n👤 <b>Full Name:</b> ${fio}\n📞 <b>Phone:</b> ${phone}\n💬 <b>Telegram:</b> ${worldTg}\n📧 <b>Email:</b> ${email}\n🌍 <b>Country:</b> ${country}\n🗺 <b>State / Region:</b> ${regionName}\n📮 <b>Postal Code:</b> ${postalCode}\n🏙 <b>City:</b> ${city}\n📦 <b>Post Office:</b> ${postOfficeAddress}\n🏠 <b>Residence Address:</b> ${residenceAddress}\n\n🛒 <b>Items:</b>\n${itemsInfo}\n\n💳 <b>Payment:</b> Worldwide payment details\n🧾 <b>Goods Total:</b> ${goodsTotal}€\n🚚 <b>Shipping:</b> ${shippingTotal}€\n📌 <b>Status:</b> created\n<b>💰 TOTAL: ${total}€</b>`;
+            messageText = `<b>🌎 NEW WORLDWIDE ORDER 🌎</b>${promoHeaderLine}\n🆔 <b>Order:</b> ${publicOrderCode}\n👤 <b>Full Name:</b> ${fio}\n📞 <b>Phone:</b> ${phone}\n💬 <b>Telegram:</b> ${worldTg}\n📧 <b>Email:</b> ${email}\n🌍 <b>Country:</b> ${country}\n🗺 <b>State / Region:</b> ${regionName}\n📮 <b>Postal Code:</b> ${postalCode}\n🏙 <b>City:</b> ${city}\n📦 <b>Post Office:</b> ${postOfficeAddress}\n🏠 <b>Residence Address:</b> ${residenceAddress}\n\n🛒 <b>Items:</b>\n${itemsInfo}${promoLine}\n\n💳 <b>Payment:</b> Worldwide payment details\n🧾 <b>Goods Total:</b> ${formatCurrencyValue(goodsTotal)}€\n🚚 <b>Shipping:</b> ${formatCurrencyValue(shippingTotal)}€\n📌 <b>Status:</b> created\n<b>💰 TOTAL: ${formatCurrencyValue(total)}€</b>`;
         } else if (paymentRegion === 'ua') {
             const fio = deliveryData.data.fio;
             const phone = deliveryData.data.phone;
@@ -1583,7 +1816,7 @@ let cart = [];
             }
 
             let tgText = tg ? `\n💬 <b>TG / Коментар:</b> ${tg}` : "";
-            messageText = `<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>\n\n🆔 <b>Номер:</b> ${publicOrderCode}\n👤 <b>ПІБ:</b> ${fio}\n📞 <b>Тел:</b> ${phone}${tgText}\n📦 <b>НП:</b> ${np}\n\n🛒 <b>Товари:</b>\n${itemsInfo}\n\n💳 <b>Оплата:</b> Оплата по реквізитам\n📌 <b>Статус:</b> created\n<b>💰 СУМА: ${total}${currency}</b>`;
+            messageText = `<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>${promoHeaderLine}\n🆔 <b>Номер:</b> ${publicOrderCode}\n👤 <b>ПІБ:</b> ${fio}\n📞 <b>Тел:</b> ${phone}${tgText}\n📦 <b>НП:</b> ${np}\n\n🛒 <b>Товари:</b>\n${itemsInfo}${promoLine}\n\n💳 <b>Оплата:</b> Оплата по реквізитам\n📌 <b>Статус:</b> created\n<b>💰 СУМА: ${formatCurrencyValue(total)}${currency}</b>`;
         }
 
         try {
