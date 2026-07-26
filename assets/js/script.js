@@ -582,6 +582,7 @@ let cart = [];
             saveCartToStorage();
             updateCartCount();
             clearPaymentScreenshot();
+            clearAppliedPromo();
             deliveryData = null;
             deliveryRegion = 'ua';
             paymentRegion = 'ua';
@@ -820,9 +821,24 @@ let cart = [];
         galleryPanY = 0;
         applyGalleryZoomState();
     }
+    function closeCartModal() {
+        const modal = document.getElementById('cartModal');
+        if (!modal) return;
+        modal.style.display = 'none';
+        clearAppliedPromo();
+        renderCart();
+    }
+
     function toggleCart() {
         const modal = document.getElementById('cartModal');
-        modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+        if (!modal) return;
+
+        if (modal.style.display === 'flex') {
+            closeCartModal();
+            return;
+        }
+
+        modal.style.display = 'flex';
         renderCart();
     }
     function addToCart(name, uah, usd, sizeId, meta) {
