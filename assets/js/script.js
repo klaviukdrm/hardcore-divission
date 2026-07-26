@@ -15,7 +15,8 @@ let cart = [];
     const galleryZoomMax = 3;
     const galleryZoomStep = 0.2;
     let paymentScreenshot = null;
-    let orderRegion = 'ua';
+    let deliveryRegion = 'ua';
+    let paymentRegion = 'ua';
     let orderStep = 'payment';
     let deliveryData = null;
     let lastScrollTop = 0;
@@ -70,8 +71,21 @@ let cart = [];
                 delivery: {
                     fio: String(delivery.fio || '').trim(),
                     phone: String(delivery.phone || '').trim(),
+                    uaFio: String(delivery.uaFio || (String(parsed.region || 'ua').trim() === 'ua' ? delivery.fio || '' : '')).trim(),
+                    uaPhone: String(delivery.uaPhone || (String(parsed.region || 'ua').trim() === 'ua' ? delivery.phone || '' : '')).trim(),
+                    worldFio: String(delivery.worldFio || (String(parsed.region || 'ua').trim() === 'world' ? delivery.fio || '' : '')).trim(),
+                    worldPhone: String(delivery.worldPhone || (String(parsed.region || 'ua').trim() === 'world' ? delivery.phone || '' : '')).trim(),
                     np: String(delivery.np || '').trim(),
-                    tg: String(delivery.tg || '').trim().slice(0, 100)
+                    tg: String(delivery.tg || '').trim().slice(0, 100),
+                    worldTg: String(delivery.worldTg || '').trim().slice(0, 100),
+                    country: String(delivery.country || '').trim(),
+                    regionName: String(delivery.regionName || '').trim(),
+                    city: String(delivery.city || '').trim(),
+                    address: String(delivery.address || '').trim(),
+                    postalCode: String(delivery.postalCode || '').trim(),
+                    email: String(delivery.email || '').trim(),
+                    postOfficeAddress: String(delivery.postOfficeAddress || '').trim(),
+                    residenceAddress: String(delivery.residenceAddress || '').trim()
                 }
             };
         } catch (e) {
@@ -95,36 +109,163 @@ let cart = [];
         }
     }
 
+    function clearPaymentScreenshot() {
+        paymentScreenshot = null;
+        const screenshotInput = document.getElementById('orderScreenshot');
+        if (screenshotInput) {
+            screenshotInput.value = '';
+        }
+    }
+
     function getCheckoutFormValues() {
-        const fioInput = document.getElementById('orderFIO');
-        const phoneInput = document.getElementById('orderPhone');
+        const uaFioInput = document.getElementById('orderFIO');
+        const uaPhoneInput = document.getElementById('orderPhone');
+        const worldFioInput = document.getElementById('orderWorldName');
+        const worldPhoneInput = document.getElementById('orderWorldPhone');
         const npInput = document.getElementById('orderNP');
         const tgInput = document.getElementById('orderTG');
+        const worldTgInput = document.getElementById('orderWorldTelegram');
+        const countryInput = document.getElementById('orderWorldCountry');
+        const regionInput = document.getElementById('orderWorldRegion');
+        const cityInput = document.getElementById('orderWorldCity');
+        const postalInput = document.getElementById('orderWorldPostal');
+        const emailInput = document.getElementById('orderWorldEmail');
+        const postOfficeInput = document.getElementById('orderWorldPostOffice');
+        const residenceInput = document.getElementById('orderWorldResidence');
 
         return {
-            fio: String(fioInput?.value || '').trim(),
-            phone: String(phoneInput?.value || '').trim(),
+            uaFio: String(uaFioInput?.value || '').trim(),
+            uaPhone: String(uaPhoneInput?.value || '').trim(),
+            worldFio: String(worldFioInput?.value || '').trim(),
+            worldPhone: String(worldPhoneInput?.value || '').trim(),
             np: String(npInput?.value || '').trim(),
-            tg: String(tgInput?.value || '').trim().slice(0, 100)
+            tg: String(tgInput?.value || '').trim().slice(0, 100),
+            worldTg: String(worldTgInput?.value || '').trim().slice(0, 100),
+            country: String(countryInput?.value || '').trim(),
+            regionName: String(regionInput?.value || '').trim(),
+            city: String(cityInput?.value || '').trim(),
+            address: '',
+            postalCode: String(postalInput?.value || '').trim(),
+            email: String(emailInput?.value || '').trim(),
+            postOfficeAddress: String(postOfficeInput?.value || '').trim(),
+            residenceAddress: String(residenceInput?.value || '').trim()
         };
     }
 
-    function persistOrderDraft() {
+    function persistOrderDraft(step = 'delivery') {
         const formValues = getCheckoutFormValues();
         const delivery = deliveryData?.data || {};
-        const mergedDelivery = {
-            fio: formValues.fio || String(delivery.fio || '').trim(),
-            phone: formValues.phone || String(delivery.phone || '').trim(),
-            np: formValues.np || String(delivery.np || '').trim(),
-            tg: formValues.tg || String(delivery.tg || '').trim().slice(0, 100)
-        };
+        const storedDraft = readOrderDraft();
+        const storedDelivery = storedDraft?.delivery || {};
+        const hasUaInputs = Boolean(
+            document.getElementById('orderFIO') ||
+            document.getElementById('orderPhone') ||
+            document.getElementById('orderNP') ||
+            document.getElementById('orderTG')
+        );
+        const hasWorldInputs = Boolean(
+            document.getElementById('orderWorldCountry') ||
+            document.getElementById('orderWorldRegion') ||
+            document.getElementById('orderWorldPostal') ||
+            document.getElementById('orderWorldCity') ||
+            document.getElementById('orderWorldPhone') ||
+            document.getElementById('orderWorldName') ||
+            document.getElementById('orderWorldEmail') ||
+            document.getElementById('orderWorldPostOffice') ||
+            document.getElementById('orderWorldResidence')
+        );
 
-        const hasContent = Boolean(mergedDelivery.fio || mergedDelivery.phone || mergedDelivery.np || mergedDelivery.tg || deliveryData);
-        if (!hasContent) return;
+        let mergedDelivery;
+        if (hasUaInputs) {
+            mergedDelivery = {
+                fio: '',
+                phone: '',
+                uaFio: formValues.uaFio,
+                uaPhone: formValues.uaPhone,
+                worldFio: String(storedDelivery.worldFio || (deliveryRegion === 'world' ? delivery.fio || '' : '')).trim(),
+                worldPhone: String(storedDelivery.worldPhone || (deliveryRegion === 'world' ? delivery.phone || '' : '')).trim(),
+                np: formValues.np,
+                tg: formValues.tg,
+                worldTg: String(storedDelivery.worldTg || '').trim().slice(0, 100),
+                country: '',
+                regionName: '',
+                city: '',
+                address: '',
+                postalCode: '',
+                email: '',
+                postOfficeAddress: '',
+                residenceAddress: ''
+            };
+        } else if (hasWorldInputs) {
+            mergedDelivery = {
+                fio: '',
+                phone: '',
+                uaFio: String(storedDelivery.uaFio || (deliveryRegion === 'ua' ? delivery.fio || '' : '')).trim(),
+                uaPhone: String(storedDelivery.uaPhone || (deliveryRegion === 'ua' ? delivery.phone || '' : '')).trim(),
+                worldFio: formValues.worldFio,
+                worldPhone: formValues.worldPhone,
+                np: '',
+                tg: String(storedDelivery.tg || '').trim().slice(0, 100),
+                worldTg: formValues.worldTg,
+                country: formValues.country,
+                regionName: formValues.regionName,
+                city: formValues.city,
+                address: '',
+                postalCode: formValues.postalCode,
+                email: formValues.email,
+                postOfficeAddress: formValues.postOfficeAddress,
+                residenceAddress: formValues.residenceAddress
+            };
+        } else {
+            mergedDelivery = {
+                fio: '',
+                phone: '',
+                uaFio: String(storedDelivery.uaFio || (deliveryRegion === 'ua' ? delivery.fio || '' : '')).trim(),
+                uaPhone: String(storedDelivery.uaPhone || (deliveryRegion === 'ua' ? delivery.phone || '' : '')).trim(),
+                worldFio: String(storedDelivery.worldFio || (deliveryRegion === 'world' ? delivery.fio || '' : '')).trim(),
+                worldPhone: String(storedDelivery.worldPhone || (deliveryRegion === 'world' ? delivery.phone || '' : '')).trim(),
+                np: String(delivery.np || '').trim(),
+                tg: String(delivery.tg || '').trim().slice(0, 100),
+                worldTg: String(delivery.worldTg || '').trim().slice(0, 100),
+                country: String(delivery.country || '').trim(),
+                regionName: String(delivery.regionName || '').trim(),
+                city: String(delivery.city || '').trim(),
+                address: String(delivery.address || '').trim(),
+                postalCode: String(delivery.postalCode || '').trim(),
+                email: String(delivery.email || '').trim(),
+                postOfficeAddress: String(delivery.postOfficeAddress || '').trim(),
+                residenceAddress: String(delivery.residenceAddress || '').trim()
+            };
+        }
+
+        const hasContent = Boolean(
+            mergedDelivery.fio ||
+            mergedDelivery.phone ||
+            mergedDelivery.uaFio ||
+            mergedDelivery.uaPhone ||
+            mergedDelivery.worldFio ||
+            mergedDelivery.worldPhone ||
+            mergedDelivery.np ||
+            mergedDelivery.tg ||
+            mergedDelivery.worldTg ||
+            mergedDelivery.country ||
+            mergedDelivery.regionName ||
+            mergedDelivery.city ||
+            mergedDelivery.address ||
+            mergedDelivery.postalCode ||
+            mergedDelivery.email ||
+            mergedDelivery.postOfficeAddress ||
+            mergedDelivery.residenceAddress ||
+            deliveryData
+        );
+        if (!hasContent) {
+            clearOrderDraft();
+            return;
+        }
 
         writeOrderDraft({
-            region: orderRegion === 'world' ? 'world' : 'ua',
-            step: 'delivery',
+            region: deliveryRegion === 'world' ? 'world' : 'ua',
+            step: step === 'payment' ? 'payment' : 'delivery',
             delivery: mergedDelivery
         });
     }
@@ -133,10 +274,31 @@ let cart = [];
         const draft = readOrderDraft();
         if (!draft) return null;
 
-        orderRegion = draft.region;
+        deliveryRegion = draft.region;
+        paymentRegion = draft.step === 'payment' ? draft.region : 'ua';
         orderStep = draft.step;
-        deliveryData = draft.delivery && (draft.delivery.fio || draft.delivery.phone || draft.delivery.np || draft.delivery.tg)
-            ? { region: draft.region, data: { ...draft.delivery } }
+        const branchDelivery = draft.region === 'world'
+            ? {
+                fio: String(draft.delivery.worldFio || '').trim(),
+                phone: String(draft.delivery.worldPhone || '').trim(),
+                tg: String(draft.delivery.worldTg || '').trim().slice(0, 100),
+                country: String(draft.delivery.country || '').trim(),
+                regionName: String(draft.delivery.regionName || '').trim(),
+                city: String(draft.delivery.city || '').trim(),
+                address: String(draft.delivery.address || draft.delivery.residenceAddress || '').trim(),
+                postalCode: String(draft.delivery.postalCode || '').trim(),
+                email: String(draft.delivery.email || '').trim(),
+                postOfficeAddress: String(draft.delivery.postOfficeAddress || '').trim(),
+                residenceAddress: String(draft.delivery.residenceAddress || '').trim()
+            }
+            : {
+                fio: String(draft.delivery.uaFio || '').trim(),
+                phone: String(draft.delivery.uaPhone || '').trim(),
+                np: String(draft.delivery.np || '').trim(),
+                tg: String(draft.delivery.tg || '').trim().slice(0, 100)
+            };
+        deliveryData = Object.values(branchDelivery).some(Boolean)
+            ? { region: draft.region, data: branchDelivery }
             : null;
 
         return draft;
@@ -327,9 +489,10 @@ let cart = [];
             cart = [];
             saveCartToStorage();
             updateCartCount();
-            paymentScreenshot = null;
+            clearPaymentScreenshot();
             deliveryData = null;
-            orderRegion = 'ua';
+            deliveryRegion = 'ua';
+            paymentRegion = 'ua';
             clearOrderDraft();
             renderOrderSuccess('mono');
             clearMonoReturnFlag();
@@ -697,11 +860,12 @@ let cart = [];
 
     function renderRegionSwitch(lang, mode = 'payment') {
         const isDelivery = mode === 'delivery';
+        const activeRegion = isDelivery ? deliveryRegion : paymentRegion;
         const uaLabel = isDelivery
             ? (lang === 'ua' ? 'УКРАЇНА' : 'UKRAINE')
             : (lang === 'ua' ? 'ОПЛАТА ПО РЕКВІЗИТАМ' : 'BANK DETAILS');
 
-        if (!monoPaymentsEnabled && !isDelivery) {
+        if (!monoPaymentsEnabled && !isDelivery && deliveryData?.region !== 'world') {
             return `
                 <div class="region-switch">
                     <button class="region-btn active">${uaLabel}</button>
@@ -709,33 +873,45 @@ let cart = [];
             `;
         }
 
-        const worldLabel = isDelivery ? 'WORLDWIDE' : 'MONO CHECKOUT';
+        const worldLabel = isDelivery ? 'WORLDWIDE' : (lang === 'ua' ? 'ШВИДКА ОПЛАТА' : 'QUICK PAYMENT');
         return `
             <div class="region-switch">
-                <button class="region-btn ${orderRegion === 'ua' ? 'active' : ''}" onclick="setOrderRegion('ua')">${uaLabel}</button>
-                <button class="region-btn ${orderRegion === 'world' ? 'active' : ''}" onclick="setOrderRegion('world')">${worldLabel}</button>
+                <button class="region-btn ${activeRegion === 'ua' ? 'active' : ''}" onclick="setOrderRegion('ua', '${mode}')">${uaLabel}</button>
+                <button class="region-btn ${activeRegion === 'world' ? 'active' : ''}" onclick="setOrderRegion('world', '${mode}')">${worldLabel}</button>
             </div>
         `;
     }
 
-    function setOrderRegion(region) {
-        orderRegion = (!monoPaymentsEnabled && orderStep === 'payment') ? 'ua' : region;
-        if (orderStep === 'payment') {
+    function setOrderRegion(region, mode = orderStep) {
+        if (mode === 'payment') {
+            if (paymentRegion !== region) {
+                clearPaymentScreenshot();
+            }
+            paymentRegion = monoPaymentsEnabled ? region : 'ua';
             renderOrderPayment();
-        } else if (orderStep === 'delivery') {
+        } else if (mode === 'delivery') {
+            deliveryRegion = region;
             renderDeliveryForm();
         }
     }
 
     function renderOrderPayment() {
         const lang = localStorage.getItem('preferred_lang') || 'ua';
+        const isWorldOrder = deliveryData?.region === 'world';
+        const isWorldPayment = isWorldOrder && paymentRegion === 'world';
         orderStep = 'payment';
-        if (!monoPaymentsEnabled) {
-            orderRegion = 'ua';
+        if (!monoPaymentsEnabled && !isWorldOrder) {
+            paymentRegion = 'ua';
         }
 
-        const total = cart.reduce((sum, i) => sum + (lang === 'ua' ? i.uah : i.usd), 0);
-        const currency = lang === 'ua' ? '₴' : '€';
+        const itemTotal = cart.reduce((sum, i) => sum + (isWorldOrder ? i.usd : (lang === 'ua' ? i.uah : i.usd)), 0);
+        const normalizedWorldCountry = String(deliveryData?.data?.country || '').trim().toLowerCase();
+        const specialWorldCountries = new Set(['slovakia', 'slovak republic', 'словаччина', 'germany', 'німеччина', 'poland', 'польща']);
+        const shippingBase = specialWorldCountries.has(normalizedWorldCountry) ? 20 : 25;
+        const shippingStep = Math.max(0, Math.ceil(cart.length / 3) - 1) * 5;
+        const shippingTotal = isWorldPayment ? shippingBase + shippingStep : 0;
+        const total = isWorldPayment ? itemTotal + shippingTotal : itemTotal;
+        const currency = isWorldOrder ? '€' : (lang === 'ua' ? '₴' : '€');
 
         const t = {
             title: lang === 'ua' ? 'ПОВНА ОПЛАТА' : 'FULL PAYMENT',
@@ -745,14 +921,23 @@ let cart = [];
             monoHint: lang === 'ua'
                 ? 'Оплата карткою через mono (Google Pay / Apple Pay).'
                 : 'Card payment via mono (Google Pay / Apple Pay).',
-            monoBtn: lang === 'ua' ? 'ПЕРЕЙТИ ДО MONO' : 'GO TO MONO CHECKOUT',
+            monoBtn: lang === 'ua' ? 'ШВИДКА ОПЛАТА' : 'QUICK PAYMENT',
             monoBtnLoading: lang === 'ua' ? 'ФОРМУЮ MONO ПЛАТІЖ...' : 'PREPARING MONO CHECKOUT...'
         };
 
-        const regionSwitch = renderRegionSwitch(lang, 'payment');
+        if (isWorldPayment) {
+            t.title = 'WORLDWIDE PAYMENT';
+            t.screenshot = lang === 'ua' ? 'ДОДАТИ СКРІНШОТ ОПЛАТИ:' : 'ADD PAYMENT SCREENSHOT:';
+            t.btn = lang === 'ua' ? 'Я ОПЛАТИВ' : 'I PAID';
+            t.worldReference = 'PAYMENT REFERENCE';
+            t.goodsPrice = lang === 'ua' ? 'Ціна за товар' : 'Product Price';
+            t.shippingPrice = lang === 'ua' ? 'Ціна за доставку' : 'Shipping Price';
+        }
+
+        const regionSwitch = isWorldOrder ? '' : renderRegionSwitch(lang, 'payment');
 
         let paymentBlock = '';
-        if (orderRegion === 'ua') {
+        if (paymentRegion === 'ua') {
             const ibanText = lang === 'ua' ? '🪙 ФОП РАХУНОК (IBAN):' : '🪙 FOP ACCOUNT (IBAN):';
             const paypalText = lang === 'ua' ? '💸 PayPal:' : '💸 PayPal:';
             const edrpouText = lang === 'ua' ? '🔢 ЄДРПОУ:' : '🔢 EDRPOU:';
@@ -777,6 +962,9 @@ let cart = [];
 
                     <div style="border-top:1px solid #222; padding-top:10px; margin-top:10px;">
                         ${fopText}
+                        <div style="margin-top:8px; color:#cfcfcf;">
+                            У описі платежу вкажіть: сплата за товар.
+                        </div>
                     </div>
 
                     <div style="margin-top:15px; padding-top:10px; border-top:1px dashed #444;">
@@ -785,6 +973,46 @@ let cart = [];
                 </div>
             `;
         } else {
+            if (isWorldPayment) {
+                const worldName = String(deliveryData?.data?.fio || '').trim() || 'WORLDWIDE CLIENT';
+                const worldCountry = String(deliveryData?.data?.country || '').trim() || 'COUNTRY';
+                const worldReference = `${worldName} / ${worldCountry}`;
+
+                paymentBlock = `
+                    <div style="background:#000; padding:15px; border:1px solid #222; font-size:0.9rem; color:#fff; line-height:1.6; text-align:left;">
+                        <div style="margin-bottom:10px;">
+                            <span style="color:#888;">🏦 IBAN:</span><br>
+                            <div class="copy-line"><b>GB91CLJU00997192141301</b> <button class="mini-copy-btn" onclick="copyVal('GB91CLJU00997192141301')">Copy</button></div>
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <span style="color:#888;">🔐 BIC code:</span><br>
+                            <div class="copy-line"><b>CLJUGB21</b> <button class="mini-copy-btn" onclick="copyVal('CLJUGB21')">Copy</button></div>
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <span style="color:#888;">👤 Receiver:</span><br>
+                            <div class="copy-line"><b>MAKSYMOVA ANNA</b> <button class="mini-copy-btn" onclick="copyVal('MAKSYMOVA ANNA')">Copy</button></div>
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <span style="color:#888;">💸 PayPal:</span><br>
+                            <div class="copy-line"><b>trbskn91@gmail.com (Serhii Danko)</b> <button class="mini-copy-btn" onclick="copyVal('trbskn91@gmail.com (Serhii Danko)')">Copy</button></div>
+                        </div>
+                        <div style="margin-bottom:8px;">
+                            🛒 ${t.goodsPrice}: <span style="color:#fff; font-weight:bold;">${itemTotal}${currency}</span>
+                        </div>
+                        <div style="margin-bottom:8px;">
+                            🚚 ${t.shippingPrice}: <span style="color:#fff; font-weight:bold;">${shippingTotal}${currency}</span>
+                        </div>
+                        <div style="margin-top:6px; padding-top:10px; border-top:1px dashed #444;">
+                            💰 ${t.sum}: <span style="color:var(--blood); font-weight:bold; font-size:1.1rem;">${total}${currency}</span>
+                        </div>
+                        <p style="margin:8px 0 0; color:#9a9a9a; font-size:0.78rem; line-height:1.4;">
+                            ${lang === 'ua'
+                                ? 'Якщо хочете уточнити або не згодні з вартістю доставки, напишіть у підтримку.'
+                                : 'If you want to clarify the shipping cost or disagree with it, contact support.'}
+                        </p>
+                    </div>
+                `;
+            } else {
             paymentBlock = `
                 <div style="background:#000; padding:15px; border:1px solid #222; font-size:0.9rem; color:#fff; line-height:1.6; text-align:left;">
                     <p style="margin:0 0 12px; color:#c9c9c9;">${t.monoHint}</p>
@@ -794,6 +1022,7 @@ let cart = [];
                     </div>
                 </div>
             `;
+            }
         }
 
         document.getElementById('orderModalContent').innerHTML = `
@@ -802,7 +1031,7 @@ let cart = [];
             ${regionSwitch}
             ${paymentBlock}
 
-            ${orderRegion === 'ua' ? `
+            ${(paymentRegion === 'ua' || isWorldPayment) ? `
                 <div style="margin-top:15px;">
                      <label style="display:block; color:var(--blood); font-size:0.75rem; margin-bottom:5px; text-transform:uppercase; letter-spacing:1px;">${t.screenshot}</label>
                      <input type="file" id="orderScreenshot" accept="image/*" style="width:100%; font-size:0.8rem; color:#ccc;" onchange="handleFileSelect(event)">
@@ -823,17 +1052,32 @@ let cart = [];
     function openOrderForm() {
         const lang = localStorage.getItem('preferred_lang') || 'ua';
         if (cart.length === 0) return showToast(lang === 'ua' ? 'КОШИК ПОРОЖНІЙ!' : 'CART IS EMPTY!');
+        clearPaymentScreenshot();
         document.getElementById('cartModal').style.display = 'none';
 
         const draft = restoreOrderDraft();
+        if (draft && draft.step === 'payment') {
+            renderOrderPayment();
+            return;
+        }
+
         if (draft && draft.region === 'world') {
             renderDeliveryForm();
             return;
         }
 
-        orderRegion = 'ua';
-        deliveryData = draft && draft.delivery && (draft.delivery.fio || draft.delivery.phone || draft.delivery.np || draft.delivery.tg)
-            ? { region: 'ua', data: { ...draft.delivery } }
+        deliveryRegion = 'ua';
+        paymentRegion = 'ua';
+        deliveryData = draft && draft.delivery && (draft.delivery.uaFio || draft.delivery.uaPhone || draft.delivery.np || draft.delivery.tg)
+            ? {
+                region: 'ua',
+                data: {
+                    fio: String(draft.delivery.uaFio || '').trim(),
+                    phone: String(draft.delivery.uaPhone || '').trim(),
+                    np: String(draft.delivery.np || '').trim(),
+                    tg: String(draft.delivery.tg || '').trim().slice(0, 100)
+                }
+            }
             : null;
         renderDeliveryForm();
     }
@@ -915,20 +1159,62 @@ let cart = [];
             <input type="text" id="orderTG" placeholder="${t.tg}" maxlength="100">
         `;
 
+        const worldCountries = [
+            { ua: 'Австрія', eng: 'Austria' },
+            { ua: 'Бельгія', eng: 'Belgium' },
+            { ua: 'Болгарія', eng: 'Bulgaria' },
+            { ua: 'Хорватія', eng: 'Croatia' },
+            { ua: 'Кіпр', eng: 'Cyprus' },
+            { ua: 'Чехія', eng: 'Czech Republic' },
+            { ua: 'Данія', eng: 'Denmark' },
+            { ua: 'Естонія', eng: 'Estonia' },
+            { ua: 'Фінляндія', eng: 'Finland' },
+            { ua: 'Франція', eng: 'France' },
+            { ua: 'Німеччина', eng: 'Germany' },
+            { ua: 'Греція', eng: 'Greece' },
+            { ua: 'Угорщина', eng: 'Hungary' },
+            { ua: 'Ірландія', eng: 'Ireland' },
+            { ua: 'Італія', eng: 'Italy' },
+            { ua: 'Латвія', eng: 'Latvia' },
+            { ua: 'Литва', eng: 'Lithuania' },
+            { ua: 'Люксембург', eng: 'Luxembourg' },
+            { ua: 'Мальта', eng: 'Malta' },
+            { ua: 'Нідерланди', eng: 'Netherlands' },
+            { ua: 'Польща', eng: 'Poland' },
+            { ua: 'Португалія', eng: 'Portugal' },
+            { ua: 'Румунія', eng: 'Romania' },
+            { ua: 'Словаччина', eng: 'Slovakia' },
+            { ua: 'Словенія', eng: 'Slovenia' },
+            { ua: 'Іспанія', eng: 'Spain' },
+            { ua: 'Швеція', eng: 'Sweden' },
+            { ua: 'США', eng: 'United States' },
+            { ua: 'Канада', eng: 'Canada' }
+        ];
+        const worldCountryOptions = worldCountries.map((country) => {
+            const label = lang === 'ua' ? country.ua : country.eng;
+            return `<option value="${label}">${label}</option>`;
+        }).join('');
+
         const worldFields = `
             <p style="color:#c8c8c8; font-size:0.95rem; line-height:1.5; margin:10px 0 14px;">
-                ${t.worldInfo}
-                <b style="color:#fff;">@Hardcore_Division_bot</b>
+                ${lang === 'ua'
+                    ? 'ТЕСТОВИЙ ФОРМАТ. Заповніть дані для worldwide-доставки та переходьте до оплати.'
+                    : 'TEST FORMAT. Fill in the worldwide delivery details below and continue to payment.'}
             </p>
-            <a
-                class="buy-btn"
-                href="https://t.me/Hardcore_Division_bot"
-                target="_blank"
-                rel="noopener noreferrer"
-                style="display:inline-block; text-decoration:none; text-align:center;"
-            >
-                ${t.worldBtn}
-            </a>
+            <select id="orderWorldCountry">
+                <option value="" disabled selected hidden>${lang === 'ua' ? 'Країна' : 'Country'}</option>
+                ${worldCountryOptions}
+            </select>
+            <input type="text" id="orderWorldRegion" placeholder="${lang === 'ua' ? 'Штат/регіон' : 'State / Region'}">
+            <input type="text" id="orderWorldPostal" placeholder="${lang === 'ua' ? 'Поштовий індекс' : 'Postal Code'}">
+            <input type="text" id="orderWorldCity" placeholder="${lang === 'ua' ? 'Населений пункт' : 'Locality'}">
+            <input type="text" id="orderWorldPhone" placeholder="${lang === 'ua' ? 'Мобільний номер місцевого оператора' : 'Local Mobile Number'}">
+            <input type="text" id="orderWorldName" placeholder="${lang === 'ua' ? 'ПІБ латиницею' : 'Full Name (Latin)'}">
+            <input type="email" id="orderWorldEmail" placeholder="${lang === 'ua' ? 'Email на Gmail' : 'Gmail Address'}">
+            <input type="text" id="orderWorldTelegram" placeholder="${lang === 'ua' ? 'Ваш @Telegram юзер' : 'Your @Telegram username'}" maxlength="100">
+            <input type="text" id="orderWorldPostOffice" placeholder="${lang === 'ua' ? 'Адреса і номер відділення пошти' : 'Post Office Address and Branch Number'}">
+            <input type="text" id="orderWorldResidence" placeholder="${lang === 'ua' ? 'Адреса фактичного проживання' : 'Residential Address'}">
+            <button class="buy-btn" id="confirmWorldBtn" onclick="proceedToPayment()">${lang === 'ua' ? 'ДАЛІ ДО ОПЛАТИ' : 'NEXT: PAYMENT'}</button>
         `;
 
         document.getElementById('orderModalContent').innerHTML = `
@@ -936,15 +1222,15 @@ let cart = [];
             <h2 style="color: var(--blood); margin-bottom: 15px;">${t.title}</h2>
             ${regionSwitch}
             <div class="order-form">
-                ${orderRegion === 'ua' ? uaFields : worldFields}
-                ${orderRegion === 'ua' ? `<button class="buy-btn" id="confirmBtn" onclick="proceedToPayment()">${t.btn}</button>` : ''}
+                ${deliveryRegion === 'ua' ? uaFields : worldFields}
+                ${deliveryRegion === 'ua' ? `<button class="buy-btn" id="confirmBtn" onclick="proceedToPayment()">${t.btn}</button>` : ''}
             </div>
         `;
         document.getElementById('orderModal').style.display = 'flex';
 
         // Добавляем маску для номера телефона
         const phoneInput = document.getElementById('orderPhone');
-        if (phoneInput && orderRegion === 'ua') {
+        if (phoneInput && deliveryRegion === 'ua') {
             phoneInput.addEventListener('input', function(e) {
                 let el = e.target;
                 if (!el.value) return;
@@ -985,17 +1271,47 @@ let cart = [];
         }
 
         const draft = readOrderDraft();
-        if (draft && orderRegion === 'ua') {
+        if (draft && deliveryRegion === 'ua') {
             const fioInput = document.getElementById('orderFIO');
             const npInput = document.getElementById('orderNP');
             const tgInput = document.getElementById('orderTG');
-            if (fioInput && draft.delivery.fio) fioInput.value = draft.delivery.fio;
-            if (phoneInput && draft.delivery.phone) phoneInput.value = draft.delivery.phone;
+            if (fioInput && draft.delivery.uaFio) fioInput.value = draft.delivery.uaFio;
+            if (phoneInput && draft.delivery.uaPhone) phoneInput.value = draft.delivery.uaPhone;
             if (npInput && draft.delivery.np) npInput.value = draft.delivery.np;
             if (tgInput && draft.delivery.tg) tgInput.value = draft.delivery.tg;
         }
 
+        if (draft && deliveryRegion === 'world') {
+            const worldCountryInput = document.getElementById('orderWorldCountry');
+            const worldRegionInput = document.getElementById('orderWorldRegion');
+            const worldPostalInput = document.getElementById('orderWorldPostal');
+            const worldCityInput = document.getElementById('orderWorldCity');
+            const worldPhoneInput = document.getElementById('orderWorldPhone');
+            const worldNameInput = document.getElementById('orderWorldName');
+            const worldEmailInput = document.getElementById('orderWorldEmail');
+            const worldTelegramInput = document.getElementById('orderWorldTelegram');
+            const worldPostOfficeInput = document.getElementById('orderWorldPostOffice');
+            const worldResidenceInput = document.getElementById('orderWorldResidence');
+
+            if (worldCountryInput && draft.delivery.country) worldCountryInput.value = draft.delivery.country;
+            if (worldRegionInput && draft.delivery.regionName) worldRegionInput.value = draft.delivery.regionName;
+            if (worldPostalInput && draft.delivery.postalCode) worldPostalInput.value = draft.delivery.postalCode;
+            if (worldCityInput && draft.delivery.city) worldCityInput.value = draft.delivery.city;
+            if (worldPhoneInput && draft.delivery.worldPhone) worldPhoneInput.value = draft.delivery.worldPhone;
+            if (worldNameInput && draft.delivery.worldFio) worldNameInput.value = draft.delivery.worldFio;
+            if (worldEmailInput && draft.delivery.email) worldEmailInput.value = draft.delivery.email;
+            if (worldTelegramInput && draft.delivery.worldTg) worldTelegramInput.value = draft.delivery.worldTg;
+            if (worldPostOfficeInput && draft.delivery.postOfficeAddress) worldPostOfficeInput.value = draft.delivery.postOfficeAddress;
+            if (worldResidenceInput && draft.delivery.residenceAddress) worldResidenceInput.value = draft.delivery.residenceAddress;
+        }
+
         ['orderFIO', 'orderNP', 'orderTG'].forEach((fieldId) => {
+            const field = document.getElementById(fieldId);
+            if (!field) return;
+            field.addEventListener('input', () => persistOrderDraft('delivery'));
+        });
+
+        ['orderWorldCountry', 'orderWorldRegion', 'orderWorldPostal', 'orderWorldCity', 'orderWorldPhone', 'orderWorldName', 'orderWorldEmail', 'orderWorldTelegram', 'orderWorldPostOffice', 'orderWorldResidence'].forEach((fieldId) => {
             const field = document.getElementById(fieldId);
             if (!field) return;
             field.addEventListener('input', () => persistOrderDraft('delivery'));
@@ -1012,6 +1328,51 @@ let cart = [];
         const lang = localStorage.getItem('preferred_lang') || 'ua';
         const msgErrUa = lang === 'ua' ? 'ПЕРЕВІРТЕ ДАНІ ТА НОМЕР!' : 'CHECK DATA & NUMBER!';
 
+        if (deliveryRegion === 'world') {
+            const country = String(document.getElementById('orderWorldCountry')?.value || '').trim();
+            const regionName = String(document.getElementById('orderWorldRegion')?.value || '').trim();
+            const postalCode = String(document.getElementById('orderWorldPostal')?.value || '').trim();
+            const city = String(document.getElementById('orderWorldCity')?.value || '').trim();
+            const phone = String(document.getElementById('orderWorldPhone')?.value || '').trim();
+            const fio = String(document.getElementById('orderWorldName')?.value || '').trim();
+            const email = String(document.getElementById('orderWorldEmail')?.value || '').trim();
+            const worldTg = String(document.getElementById('orderWorldTelegram')?.value || '').trim().slice(0, 100);
+            const postOfficeAddress = String(document.getElementById('orderWorldPostOffice')?.value || '').trim();
+            const residenceAddress = String(document.getElementById('orderWorldResidence')?.value || '').trim();
+            const isGmail = /@gmail\.com$/i.test(email);
+
+            if (!country || !regionName || !postalCode || !city || !phone || !fio || !email || !worldTg || !postOfficeAddress || !residenceAddress) {
+                return showToast(lang === 'ua' ? 'ЗАПОВНІТЬ УСІ ПОЛЯ WORLDWIDE ДОСТАВКИ!' : 'FILL IN WORLDWIDE DELIVERY DETAILS!');
+            }
+
+            if (!isGmail) {
+                return showToast(lang === 'ua' ? 'ВИКОРИСТОВУЙТЕ GMAIL-АДРЕСУ!' : 'USE A GMAIL ADDRESS!');
+            }
+
+            deliveryData = {
+                region: 'world',
+                data: {
+                    fio,
+                    phone,
+                    tg: worldTg,
+                    worldTg,
+                    country,
+                    regionName,
+                    city,
+                    address: residenceAddress,
+                    postalCode,
+                    email,
+                    postOfficeAddress,
+                    residenceAddress
+                }
+            };
+
+            paymentRegion = 'world';
+            persistOrderDraft('payment');
+            renderOrderPayment();
+            return;
+        }
+
         const fio = document.getElementById('orderFIO').value;
         const phoneRaw = document.getElementById('orderPhone').value;
         const phoneDigits = phoneRaw.replace(/\D/g, '');
@@ -1021,10 +1382,11 @@ let cart = [];
         if (!fio || phoneDigits.length < 10 || !np) return showToast(msgErrUa);
 
         deliveryData = {
-            region: orderRegion,
+            region: deliveryRegion,
             data: { fio, phone: '+' + phoneDigits, np, tg }
         };
 
+        paymentRegion = 'ua';
         persistOrderDraft('payment');
 
         renderOrderPayment();
@@ -1036,7 +1398,7 @@ let cart = [];
 
         const msgNeedDelivery = lang === 'ua' ? 'СПОЧАТКУ ЗАПОВНІТЬ ДОСТАВКУ!' : 'FILL DELIVERY FIRST!';
         const msgPreparing = lang === 'ua' ? 'ФОРМУЮ MONO ПЛАТІЖ...' : 'PREPARING MONO CHECKOUT...';
-        const msgAction = lang === 'ua' ? 'ПЕРЕЙТИ ДО MONO' : 'GO TO MONO CHECKOUT';
+        const msgAction = lang === 'ua' ? 'ШВИДКА ОПЛАТА' : 'QUICK PAYMENT';
         const msgFail = lang === 'ua' ? 'НЕ ВДАЛОСЯ ВІДКРИТИ MONO' : 'FAILED TO OPEN MONO';
 
         const hasDeliveryData = Boolean(
@@ -1065,7 +1427,7 @@ let cart = [];
 
         try {
             const shippingRaw = String(deliveryData?.data?.np || '').trim();
-            const city = shippingRaw.split(',')[0].split('№')[0].trim() || '-';
+            const city = shippingRaw.split(',')[0].split('в„–')[0].trim() || '-';
             const items = buildOrderItemsPayload('ua');
             const orderVisualItems = buildOrderTelegramVisualItems('ua');
 
@@ -1106,6 +1468,7 @@ let cart = [];
     }
 
     function closeOrderForm() { 
+        clearPaymentScreenshot();
         document.getElementById('orderModal').style.display = 'none'; 
         persistOrderDraft();
     }
@@ -1143,6 +1506,7 @@ let cart = [];
     async function finalizeOrder() {
         const lang = localStorage.getItem('preferred_lang') || 'ua';
         const btn = document.getElementById('payBtn');
+        const isWorldwideOrder = paymentRegion === 'world' && deliveryData?.region === 'world';
 
         const msgErrUa = lang === 'ua' ? 'ПЕРЕВІРТЕ ДАНІ ТА НОМЕР!' : 'CHECK DATA & NUMBER!';
         const msgNeedScreenshot = lang === 'ua' ? 'ДОДАЙ СКРІНШОТ!' : 'ADD SCREENSHOT!';
@@ -1158,14 +1522,14 @@ let cart = [];
             ? 'Замовлення збережено в історії, але повідомлення оператору не надіслано.'
             : 'Order was saved to history, but operator notification failed.';
 
-        if (orderRegion !== 'ua') {
+        if (paymentRegion !== 'ua' && !isWorldwideOrder) {
             return showToast(lang === 'ua'
                 ? 'Для цього методу використовуйте mono checkout.'
                 : 'Use mono checkout for this method.');
         }
 
         if (!paymentScreenshot) return showToast(msgNeedScreenshot);
-        if (!deliveryData || deliveryData.region !== orderRegion) {
+        if (!deliveryData || (isWorldwideOrder ? deliveryData.region !== 'world' : deliveryData.region !== 'ua')) {
             showToast(msgNeedDelivery);
             renderDeliveryForm();
             return;
@@ -1174,14 +1538,41 @@ let cart = [];
         btn.innerText = msgWait;
         btn.disabled = true;
 
-        const currency = lang === 'ua' ? '₴' : '€';
-        let total = cart.reduce((sum, i) => sum + (lang === 'ua' ? i.uah : i.usd), 0);
-        let itemsInfo = cart.map((item, idx) => `${idx + 1}. ${item.name} (${item.size}) — ${lang === 'ua' ? item.uah : item.usd}${currency}`).join('\n');
-        const orderVisualItems = buildOrderTelegramVisualItems(lang);
+        const orderLang = isWorldwideOrder ? 'eng' : lang;
+        const currency = isWorldwideOrder ? '€' : (lang === 'ua' ? '₴' : '€');
+        let total = cart.reduce((sum, i) => sum + (isWorldwideOrder ? i.usd : (lang === 'ua' ? i.uah : i.usd)), 0);
+        let itemsInfo = cart.map((item, idx) => `${idx + 1}. ${item.name} (${item.size}) — ${isWorldwideOrder ? item.usd : (lang === 'ua' ? item.uah : item.usd)}${currency}`).join('\n');
+        const orderVisualItems = buildOrderTelegramVisualItems(orderLang);
         let messageText = '';
         const publicOrderCode = generatePublicOrderCode();
 
-        if (orderRegion === 'ua') {
+        if (isWorldwideOrder) {
+            const fio = String(deliveryData?.data?.fio || '').trim();
+            const phone = String(deliveryData?.data?.phone || '').trim();
+            const worldTg = String(deliveryData?.data?.worldTg || deliveryData?.data?.tg || '').trim();
+            const country = String(deliveryData?.data?.country || '').trim();
+            const regionName = String(deliveryData?.data?.regionName || '').trim();
+            const postalCode = String(deliveryData?.data?.postalCode || '').trim();
+            const city = String(deliveryData?.data?.city || '').trim();
+            const email = String(deliveryData?.data?.email || '').trim();
+            const postOfficeAddress = String(deliveryData?.data?.postOfficeAddress || '').trim();
+            const residenceAddress = String(deliveryData?.data?.residenceAddress || deliveryData?.data?.address || '').trim();
+            const normalizedWorldCountry = country.toLowerCase();
+            const specialWorldCountries = new Set(['slovakia', 'slovak republic', 'словаччина', 'germany', 'німеччина', 'poland', 'польща']);
+            const shippingBase = specialWorldCountries.has(normalizedWorldCountry) ? 20 : 25;
+            const shippingStep = Math.max(0, Math.ceil(cart.length / 3) - 1) * 5;
+            const shippingTotal = shippingBase + shippingStep;
+            const goodsTotal = total;
+            total = goodsTotal + shippingTotal;
+
+            if (!fio || !phone || !worldTg || !country || !regionName || !postalCode || !city || !email || !postOfficeAddress || !residenceAddress) {
+                btn.innerText = payLabel;
+                btn.disabled = false;
+                return showToast(lang === 'ua' ? 'ЗАПОВНІТЬ УСІ ПОЛЯ WORLDWIDE ДОСТАВКИ!' : 'FILL IN WORLDWIDE DELIVERY DETAILS!');
+            }
+
+            messageText = `<b>🌎 NEW WORLDWIDE ORDER 🌎</b>\n\n🆔 <b>Order:</b> ${publicOrderCode}\n👤 <b>Full Name:</b> ${fio}\n📞 <b>Phone:</b> ${phone}\n💬 <b>Telegram:</b> ${worldTg}\n📧 <b>Email:</b> ${email}\n🌍 <b>Country:</b> ${country}\n🗺 <b>State / Region:</b> ${regionName}\n📮 <b>Postal Code:</b> ${postalCode}\n🏙 <b>City:</b> ${city}\n📦 <b>Post Office:</b> ${postOfficeAddress}\n🏠 <b>Residence Address:</b> ${residenceAddress}\n\n🛒 <b>Items:</b>\n${itemsInfo}\n\n💳 <b>Payment:</b> Worldwide payment details\n🧾 <b>Goods Total:</b> ${goodsTotal}€\n🚚 <b>Shipping:</b> ${shippingTotal}€\n📌 <b>Status:</b> created\n<b>💰 TOTAL: ${total}€</b>`;
+        } else if (paymentRegion === 'ua') {
             const fio = deliveryData.data.fio;
             const phone = deliveryData.data.phone;
             const np = deliveryData.data.np;
@@ -1198,7 +1589,7 @@ let cart = [];
         }
 
         try {
-            await saveOrderForAccountHistory(lang, total);
+            await saveOrderForAccountHistory(orderLang, total);
         } catch (orderError) {
             showToast(msgHistoryFail);
             btn.innerText = payLabel;
@@ -1230,9 +1621,10 @@ let cart = [];
             cart = [];
             saveCartToStorage();
             updateCartCount();
-            paymentScreenshot = null;
+            clearPaymentScreenshot();
             deliveryData = null;
-            orderRegion = 'ua';
+            deliveryRegion = 'ua';
+            paymentRegion = 'ua';
             clearOrderDraft();
             renderOrderSuccess();
         } catch (e) {
