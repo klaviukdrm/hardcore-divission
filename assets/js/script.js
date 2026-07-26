@@ -980,6 +980,9 @@ let cart = [];
 
                 paymentBlock = `
                     <div style="background:#000; padding:15px; border:1px solid #222; font-size:0.9rem; color:#fff; line-height:1.6; text-align:left;">
+                        <div style="margin-bottom:10px; color:#cfcfcf;">
+                            ${lang === 'ua' ? 'Картка для оплати в євро' : 'Card for euro payments'}
+                        </div>
                         <div style="margin-bottom:10px;">
                             <span style="color:#888;">🏦 IBAN:</span><br>
                             <div class="copy-line"><b>GB91CLJU00997192141301</b> <button class="mini-copy-btn" onclick="copyVal('GB91CLJU00997192141301')">Copy</button></div>
@@ -1007,8 +1010,8 @@ let cart = [];
                         </div>
                         <p style="margin:8px 0 0; color:#9a9a9a; font-size:0.78rem; line-height:1.4;">
                             ${lang === 'ua'
-                                ? 'Якщо хочете уточнити або не згодні з вартістю доставки, напишіть у підтримку.'
-                                : 'If you want to clarify the shipping cost or disagree with it, contact support.'}
+                                ? 'Якщо хочете уточнити або не згодні з вартістю доставки, напишіть у <a href="https://t.me/Hardcore_Division_bot" target="_blank" style="color:#4da3ff; text-decoration:none;">підтримку</a>.'
+                                : 'If you want to clarify the shipping cost or disagree with it, contact <a href="https://t.me/Hardcore_Division_bot" target="_blank" style="color:#4da3ff; text-decoration:none;">support</a>.'}
                         </p>
                     </div>
                 `;
