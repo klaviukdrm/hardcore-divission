@@ -41,7 +41,15 @@ function normalizeItems(items) {
                 return null;
             }
 
-            return { product_id: productId || null, title, size, quantity, price, image: String(item?.image || '').trim(), productSlug: String(item?.productSlug || '').trim() };
+            return {
+                product_id: productId || null,
+                title,
+                size,
+                quantity,
+                price,
+                image: String(item?.image || '').trim(),
+                productSlug: String(item?.productSlug || '').trim()
+            };
         })
         .filter(Boolean);
 }
@@ -57,6 +65,24 @@ function normalizeVisualItems(items) {
             return { line, image };
         })
         .filter(Boolean);
+}
+
+function normalizePromo(promo) {
+    if (!promo || typeof promo !== 'object') return null;
+
+    const code = String(promo.code || '').trim().toUpperCase();
+    const discountPercent = Number(promo.discountPercent);
+    const discountAmount = Number(promo.discountAmount);
+
+    if (!code || !Number.isFinite(discountPercent) || discountPercent <= 0) {
+        return null;
+    }
+
+    return {
+        code,
+        discountPercent,
+        discountAmount: Number.isFinite(discountAmount) && discountAmount > 0 ? discountAmount : 0
+    };
 }
 
 async function insertOrderItemsWithFallback(orderId, items) {
@@ -142,7 +168,7 @@ function formatAmount(amount, currency) {
     return `${normalized} ${code}`.trim();
 }
 
-function formatCreatedMessage({ orderId, amount, currency, customer, items }) {
+function formatCreatedMessage({ orderId, amount, currency, customer, items, promo }) {
     const itemsBlock = items
         .map((item, index) => {
             const sizeLabel = item.size ? ` (${escapeHtml(item.size)})` : '';
@@ -154,9 +180,17 @@ function formatCreatedMessage({ orderId, amount, currency, customer, items }) {
     const tgLine = customer.tg
         ? `💬 <b>TG / Коментар:</b> ${escapeHtml(customer.tg)}`
         : null;
+    const promoHeaderLine = promo ? '<b>ЗАСТОСОВАНО ПРОМОКОД</b>' : null;
+    const promoCodeLine = promo
+        ? `🏷 <b>Промокод:</b> ${escapeHtml(promo.code)} (-${escapeHtml(String(promo.discountPercent))}%)`
+        : null;
+    const promoDiscountLine = promo && promo.discountAmount > 0
+        ? `💸 <b>Знижка:</b> -${escapeHtml(formatAmount(promo.discountAmount, currency))}`
+        : null;
 
     return [
         '<b>💀 НОВЕ ЗАМОВЛЕННЯ 💀</b>',
+        promoHeaderLine,
         '',
         `🆔 <b>Номер:</b> ${escapeHtml(orderId)}`,
         `👤 <b>ПІБ:</b> ${escapeHtml(customer.fio)}`,
@@ -166,6 +200,8 @@ function formatCreatedMessage({ orderId, amount, currency, customer, items }) {
         '',
         '🛒 <b>Товари:</b>',
         itemsBlock || '-',
+        promoCodeLine,
+        promoDiscountLine,
         '',
         '💳 <b>Оплата:</b> mono checkout',
         '📌 <b>Статус:</b> created',
@@ -226,6 +262,7 @@ export default async function handler(req, res) {
     const customer = normalizeCustomer(body.customer);
     const items = normalizeItems(body.items);
     const visualItems = resolveVisualItemsUrls(req, normalizeVisualItems(body.orderItems));
+    const promo = normalizePromo(body.promo);
     const config = getMonoConfig();
     const baseUrl = getBaseUrl(req);
     const redirectUrl = String(body.redirectUrl || config.redirectUrl || '').trim() || (baseUrl ? `${baseUrl}/pages/index.html` : '');
@@ -266,7 +303,8 @@ export default async function handler(req, res) {
             amount,
             currency,
             customer,
-            items
+            items,
+            promo
         });
 
         try {
