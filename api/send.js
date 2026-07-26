@@ -1,5 +1,22 @@
 import { sendTelegramMediaGroup } from '../lib/server/telegram.js';
 
+function normalizePromoCode(value) {
+    return String(value || '').trim().toUpperCase();
+}
+
+function getConfiguredPromoCodes() {
+    const rawCombined = [process.env.PROMO_CODES, process.env.PROMO_CODE]
+        .filter(Boolean)
+        .join(',');
+
+    return new Set(
+        String(rawCombined || '')
+            .split(/[\s,]+/)
+            .map((item) => normalizePromoCode(item))
+            .filter(Boolean)
+    );
+}
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method not allowed' });
@@ -9,8 +26,30 @@ export default async function handler(req, res) {
     const chatId = process.env.TELEGRAM_CHAT_ID;
     
     // Accept either `photo` or `image` from the client payload.
-    const { message, photo, image, orderItems } = req.body;
+    const { action, code, message, photo, image, orderItems } = req.body || {};
     const imageData = photo || image;
+
+    if (action === 'validatePromo') {
+        const normalizedCode = normalizePromoCode(code);
+        if (!normalizedCode) {
+            return res.status(400).json({ valid: false, error: 'Promo code is required' });
+        }
+
+        const codes = getConfiguredPromoCodes();
+        if (!codes.size) {
+            return res.status(200).json({ valid: false, configured: false });
+        }
+
+        if (!codes.has(normalizedCode)) {
+            return res.status(200).json({ valid: false, configured: true });
+        }
+
+        return res.status(200).json({
+            valid: true,
+            code: normalizedCode,
+            discountPercent: 10
+        });
+    }
 
     try {
         let response;
