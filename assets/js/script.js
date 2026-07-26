@@ -1196,11 +1196,6 @@ let cart = [];
         }).join('');
 
         const worldFields = `
-            <p style="color:#c8c8c8; font-size:0.95rem; line-height:1.5; margin:10px 0 14px;">
-                ${lang === 'ua'
-                    ? 'ТЕСТОВИЙ ФОРМАТ. Заповніть дані для worldwide-доставки та переходьте до оплати.'
-                    : 'TEST FORMAT. Fill in the worldwide delivery details below and continue to payment.'}
-            </p>
             <select id="orderWorldCountry">
                 <option value="" disabled selected hidden>${lang === 'ua' ? 'Країна' : 'Country'}</option>
                 ${worldCountryOptions}
