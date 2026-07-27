@@ -31,6 +31,8 @@ let cart = [];
     let appliedPromo = { code: '', discountPercent: 0 };
     let promoDraftCode = '';
     let promoNotice = { text: '', type: 'neutral' };
+    let promoInputExpanded = false;
+    let promoToggleIgnoreBlur = false;
 
     function normalizeCartItem(item) {
         if (!item || typeof item !== 'object') return null;
@@ -886,6 +888,7 @@ let cart = [];
     }).join('');
 
     const promoPricing = getPromoPricing(total);
+    const currentAppliedPromo = getAppliedPromo();
     const hasPromoDiscount = promoPricing.discountAmount > 0;
     totalEl.innerHTML = hasPromoDiscount
         ? `${totalText}: <span style="text-decoration:line-through; color:#707070;">${formatCurrencyValue(promoPricing.subtotal)}${currency}</span> <span style="color:var(--blood);">${formatCurrencyValue(promoPricing.total)}${currency}</span>`
@@ -901,22 +904,51 @@ let cart = [];
     const promoTitle = lang === 'ua' ? 'Маєте промокод?' : 'Have a promo code?';
     const promoPlaceholder = lang === 'ua' ? 'Введіть промокод' : 'Enter promo code';
     const promoInputText = promoNotice.text || '';
-    const promoInputValue = promoInputText || promoDraftCode || getAppliedPromo().code;
+    const promoInputValue = promoInputText || promoDraftCode || currentAppliedPromo.code;
     const promoInputColor = promoNotice.type === 'error'
         ? '#ff6b6b'
         : ((promoNotice.type === 'success' || hasPromoDiscount) ? '#39ff14' : '#fff');
     const promoInputBorder = promoNotice.type === 'error'
         ? '#7a2a2a'
         : ((promoNotice.type === 'success' || hasPromoDiscount) ? '#1f5c27' : '#333');
+    const showPromoInput = promoInputExpanded;
+    const promoToggleColor = promoInputExpanded ? '#f1f1f1' : '#ccc';
+    const promoToggleGlow = promoInputExpanded
+        ? '0 0 2px rgba(255, 255, 255, 0.55), 0 0 4px rgba(255, 255, 255, 0.18)'
+        : 'none';
 
     promoMount.innerHTML = `
         <div style="margin:14px 0 2px; text-align:left;">
-            <label for="cartPromoInput" style="display:block; margin-bottom:6px; color:#ccc; font-size:0.82rem;">${promoTitle}</label>
-            <input type="text" id="cartPromoInput" placeholder="${promoPlaceholder}" value="${escapeHtml(promoInputValue)}" style="width:100%; background:#050505; color:${promoInputColor}; border:1px solid ${promoInputBorder}; padding:12px 14px; font-size:0.92rem; outline:none; box-sizing:border-box;">
+            <button type="button" id="cartPromoToggle" aria-expanded="${showPromoInput ? 'true' : 'false'}" aria-pressed="${showPromoInput ? 'true' : 'false'}" style="display:inline-block; margin:0 0 6px; padding:0; background:none; border:none; color:${promoToggleColor}; font:inherit; font-size:0.82rem; text-shadow:${promoToggleGlow}; cursor:pointer; text-align:left; transition:color 0.2s ease, text-shadow 0.2s ease;">${promoTitle}</button>
+            <div id="cartPromoField" style="display:${showPromoInput ? 'block' : 'none'};">
+                <input type="text" id="cartPromoInput" placeholder="${promoPlaceholder}" value="${escapeHtml(promoInputValue)}" style="width:100%; background:#050505; color:${promoInputColor}; border:1px solid ${promoInputBorder}; padding:12px 14px; font-size:0.92rem; outline:none; box-sizing:border-box;">
+            </div>
         </div>
     `;
 
+    const promoToggle = document.getElementById('cartPromoToggle');
+    const promoField = document.getElementById('cartPromoField');
     const promoInput = document.getElementById('cartPromoInput');
+    if (promoToggle && promoField && promoInput) {
+        promoToggle.addEventListener('mousedown', () => {
+            if (!promoInputExpanded) return;
+            promoToggleIgnoreBlur = true;
+        });
+        promoToggle.addEventListener('click', () => {
+            promoInputExpanded = !promoInputExpanded;
+            promoField.style.display = promoInputExpanded ? 'block' : 'none';
+            promoToggle.setAttribute('aria-expanded', promoInputExpanded ? 'true' : 'false');
+            promoToggle.setAttribute('aria-pressed', promoInputExpanded ? 'true' : 'false');
+            promoToggle.style.color = promoInputExpanded ? '#f1f1f1' : '#ccc';
+            promoToggle.style.textShadow = promoInputExpanded
+                ? '0 0 2px rgba(255, 255, 255, 0.55), 0 0 4px rgba(255, 255, 255, 0.18)'
+                : 'none';
+            if (promoInputExpanded) {
+                promoInput.focus();
+            }
+            promoToggleIgnoreBlur = false;
+        });
+    }
     if (promoInput) {
         promoInput.addEventListener('focus', () => {
             if (!promoNotice.text) return;
@@ -934,6 +966,10 @@ let cart = [];
             applyPromoCode(promoInput.value);
         });
         promoInput.addEventListener('blur', () => {
+            if (promoToggleIgnoreBlur) {
+                promoToggleIgnoreBlur = false;
+                return;
+            }
             applyPromoCode(promoInput.value);
         });
     }
