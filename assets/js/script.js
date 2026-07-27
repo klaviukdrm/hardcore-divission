@@ -904,7 +904,6 @@ let cart = [];
 
     const promoTitle = lang === 'ua' ? 'Маєте промокод?' : 'Have a promo code?';
     const promoPlaceholder = lang === 'ua' ? 'Введіть промокод' : 'Enter promo code';
-    const promoEmptyMessage = lang === 'ua' ? 'Кошик порожній' : 'Cart is empty';
     const promoInputText = promoNotice.text || '';
     const promoInputValue = promoInputText || promoDraftCode || currentAppliedPromo.code;
     const promoInputColor = promoNotice.type === 'error'
@@ -918,14 +917,12 @@ let cart = [];
     const promoToggleGlow = promoInputExpanded
         ? '0 0 2px rgba(255, 255, 255, 0.55), 0 0 4px rgba(255, 255, 255, 0.18)'
         : 'none';
-    const showPromoEmptyMessage = cart.length === 0 && hasAppliedPromo;
 
     promoMount.innerHTML = `
         <div style="margin:14px 0 2px; text-align:left;">
             <button type="button" id="cartPromoToggle" aria-expanded="${showPromoInput ? 'true' : 'false'}" aria-pressed="${showPromoInput ? 'true' : 'false'}" style="display:inline-block; margin:0 0 6px; padding:0; background:none; border:none; color:${promoToggleColor}; font:inherit; font-size:0.82rem; text-shadow:${promoToggleGlow}; cursor:pointer; text-align:left; transition:color 0.2s ease, text-shadow 0.2s ease;">${promoTitle}</button>
             <div id="cartPromoField" style="display:${showPromoInput ? 'block' : 'none'};">
                 <input type="text" id="cartPromoInput" placeholder="${promoPlaceholder}" value="${escapeHtml(promoInputValue)}" style="width:100%; background:#050505; color:${promoInputColor}; border:1px solid ${promoInputBorder}; padding:12px 14px; font-size:0.92rem; outline:none; box-sizing:border-box;">
-                ${showPromoEmptyMessage ? `<div style="margin-top:8px; color:#bfbfbf; font-size:0.78rem;">${promoEmptyMessage}</div>` : ''}
             </div>
         </div>
     `;
@@ -1024,6 +1021,11 @@ let cart = [];
     async function applyPromoCode(rawCode) {
     const lang = localStorage.getItem('preferred_lang') || 'ua';
     const normalizedCode = normalizePromoCode(rawCode);
+    const emptyCartNotice = {
+        text: lang === 'ua' ? 'Кошик порожній' : 'Cart is empty',
+        type: 'error'
+    };
+    const isCartEmpty = cart.length === 0;
 
     if (!normalizedCode) {
         clearAppliedPromo();
@@ -1034,7 +1036,7 @@ let cart = [];
     const currentPromo = getAppliedPromo();
     if (currentPromo.code === normalizedCode) {
         promoDraftCode = normalizedCode;
-        promoNotice = { text: '', type: 'neutral' };
+        promoNotice = isCartEmpty ? emptyCartNotice : { text: '', type: 'neutral' };
         renderCart();
         return;
     }
@@ -1050,7 +1052,7 @@ let cart = [];
         if (!response.ok || !payload?.valid) {
             clearAppliedPromo();
             promoDraftCode = normalizedCode;
-            promoNotice = {
+            promoNotice = isCartEmpty ? emptyCartNotice : {
                 text: lang === 'ua' ? 'Промокод не знайдено' : 'Promo code not found',
                 type: 'error'
             };
@@ -1059,14 +1061,14 @@ let cart = [];
         }
 
         setAppliedPromo(normalizedCode, payload.discountPercent);
-        promoNotice = {
+        promoNotice = isCartEmpty ? emptyCartNotice : {
             text: lang === 'ua' ? `Промокод ${normalizedCode} застосовано` : `Promo code ${normalizedCode} applied`,
             type: 'success'
         };
         renderCart();
     } catch (e) {
         promoDraftCode = normalizedCode;
-        promoNotice = {
+        promoNotice = isCartEmpty ? emptyCartNotice : {
             text: lang === 'ua' ? 'Не вдалося перевірити промокод' : 'Failed to validate promo code',
             type: 'error'
         };
