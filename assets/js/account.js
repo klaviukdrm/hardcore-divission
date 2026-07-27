@@ -81,6 +81,7 @@ let currentOrders = [];
 let hasActiveSessionUI = false;
 const LAST_USER_PHONE_KEY = 'hd_last_user_phone';
 const ORDER_HISTORY_INFO_TEXT = 'Замовлення оформлено, очікуйте відправку протягом 2-3 робочих днів.';
+const ORDER_HISTORY_DONE_AFTER_DAYS = 8;
 
 const ui = {
     ua: {
@@ -249,7 +250,7 @@ function getOrderHistoryStatus(order) {
     const createdMs = createdAt.getTime();
     const ageMs = Date.now() - createdMs;
     const status = String(order?.status || '').trim().toLowerCase();
-    const isDone = status.includes('заверш') || status.includes('completed') || (Number.isFinite(createdMs) && ageMs >= 5 * 24 * 60 * 60 * 1000);
+    const isDone = status.includes('заверш') || status.includes('completed') || (Number.isFinite(createdMs) && ageMs >= ORDER_HISTORY_DONE_AFTER_DAYS * 24 * 60 * 60 * 1000);
 
     return isDone
         ? { className: 'order-status--done', text: t('orderDone') }
