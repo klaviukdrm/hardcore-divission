@@ -401,6 +401,67 @@ let cart = [];
         return Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : [];
     }
 
+    function extractCatalogCardCartName(card) {
+        const buyBtn = card ? card.querySelector('.buy-btn') : null;
+        const onclickValue = String(buyBtn ? buyBtn.getAttribute('onclick') || '' : '');
+        const match = onclickValue.match(/addToCart\('([^']+)'/);
+        return match ? String(match[1] || '').trim() : '';
+    }
+
+    function findCatalogProductForCard(card) {
+        const products = getCatalogProducts();
+        if (!products.length || !card) return null;
+
+        const normalize = (value) => String(value || '').trim().toLowerCase();
+        const cardCategory = normalize(card.getAttribute('data-category'));
+        const cardTitle = normalize(card.querySelector('.product-title') ? card.querySelector('.product-title').textContent : '');
+        const cardCartName = normalize(extractCatalogCardCartName(card));
+
+        return products.find((product) => {
+            if (!product) return false;
+
+            const productCategory = normalize(product.category);
+            const productTitle = normalize(product.title);
+            const productCartName = normalize(product.cartName || product.title);
+
+            return Boolean(
+                (!cardCategory || cardCategory === productCategory) &&
+                (
+                    (cardCartName && (cardCartName === productCartName || cardCartName === productTitle)) ||
+                    (cardTitle && (cardTitle === productTitle || cardTitle === productCartName))
+                )
+            );
+        }) || null;
+    }
+
+    function syncCatalogDescriptionsFromData() {
+        const products = getCatalogProducts();
+        if (!products.length) return;
+
+        const lang = localStorage.getItem('preferred_lang') || 'ua';
+        const cards = document.querySelectorAll('.shop-grid .product-card');
+
+        cards.forEach((card) => {
+            const descEl = card.querySelector('.product-desc');
+            if (!descEl) return;
+
+            const product = findCatalogProductForCard(card);
+            if (!product) return;
+
+            const descUa = String(product.descUa || '').trim();
+            const descEng = String(product.descEng || '').trim();
+            if (!descUa && !descEng) return;
+
+            if (descUa) descEl.setAttribute('data-ua', descUa);
+            if (descEng) descEl.setAttribute('data-eng', descEng);
+
+            const nextText = lang === 'ua' ? (descUa || descEng) : (descEng || descUa);
+            if (nextText) {
+                descEl.innerText = nextText;
+            }
+        });
+    }
+
     function findCatalogProductForCartItem(item) {
         const products = getCatalogProducts();
         if (!products.length || !item) return null;
@@ -2159,6 +2220,7 @@ function setLang(lang) {
     localStorage.setItem('preferred_lang', lang);
     document.body.classList.toggle('lang-ua', lang === 'ua');
     document.body.classList.toggle('lang-eng', lang === 'eng');
+    syncCatalogDescriptionsFromData();
     
     document.querySelectorAll('[data-ua]').forEach(el => {
         const translation = el.getAttribute('data-' + lang);
