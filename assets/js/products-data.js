@@ -1320,9 +1320,11 @@ window.PRODUCTS_DATA = [
     "title": "HARDCORE HATE",
     "descUa": "Грубий меседж без зайвих прикрас. Для тих, хто носить напругу як частину свого стилю.",
     "descEng": "A rough message with no extra decoration. For those who wear tension as part of their style.",
-    "image": "images/IMG_9109.JPEG",
-    "imageAlt": "images/IMG_9110.JPEG",
+    "image": "images/photo_2026-07-29_16-10-34.jpg",
+    "imageAlt": "images/photo_2026-07-29_16-12-41.jpg",
     "gallery": [
+      "images/photo_2026-07-29_16-10-34.jpg",
+      "images/photo_2026-07-29_16-12-41.jpg",
       "images/IMG_9109.JPEG",
       "images/IMG_9110.JPEG"
     ],
