@@ -1256,7 +1256,6 @@ let cart = [];
         let paymentBlock = '';
         if (paymentRegion === 'ua') {
             const ibanText = lang === 'ua' ? '🪙 ФОП РАХУНОК (IBAN):' : '🪙 FOP ACCOUNT (IBAN):';
-            const paypalText = lang === 'ua' ? '💸 PayPal:' : '💸 PayPal:';
             const edrpouText = lang === 'ua' ? '🔢 ЄДРПОУ:' : '🔢 EDRPOU:';
             const fopText = lang === 'ua' ? '👤 <b>ФОП:</b> Максимова Анна Олегівна' : '👤 <b>FOP:</b> Maksimova Anna Olegivna';
 
@@ -1265,11 +1264,6 @@ let cart = [];
                     <div style="margin-bottom:10px;">
                         <span style="color:#888;">${ibanText}</span><br>
                         <div class="copy-line"><b>UA623220010000026000380041193</b> <button class="mini-copy-btn" onclick="copyVal('UA623220010000026000380041193')">Copy</button></div>
-                    </div>
-
-                    <div style="margin-bottom:10px;">
-                        <span style="color:#888;">${paypalText}</span><br>
-                        <div class="copy-line"><b>trbskn91@gmail.com (Serhii Danko)</b> <button class="mini-copy-btn" onclick="copyVal('trbskn91@gmail.com')">Copy</button></div>
                     </div>
 
                     <div style="margin-bottom:10px;">
@@ -1311,10 +1305,6 @@ let cart = [];
                         <div style="margin-bottom:10px;">
                             <span style="color:#888;">👤 Receiver:</span><br>
                             <div class="copy-line"><b>MAKSYMOVA ANNA</b> <button class="mini-copy-btn" onclick="copyVal('MAKSYMOVA ANNA')">Copy</button></div>
-                        </div>
-                        <div style="margin-bottom:10px;">
-                            <span style="color:#888;">💸 PayPal:</span><br>
-                            <div class="copy-line"><b>trbskn91@gmail.com (Serhii Danko)</b> <button class="mini-copy-btn" onclick="copyVal('trbskn91@gmail.com (Serhii Danko)')">Copy</button></div>
                         </div>
                         <div style="margin-bottom:8px;">
                             🛒 ${t.goodsPrice}: <span style="color:#fff; font-weight:bold;">${itemTotal}${currency}</span>
