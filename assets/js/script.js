@@ -25,6 +25,7 @@ let cart = [];
     const monoPaymentsEnabled = true; // Temporary kill-switch for the mono checkout block
     const cartStorageKey = 'hd_cart_v1';
     const orderDraftStorageKey = 'hd_order_draft_v1';
+    const orderRegionPreferenceStorageKey = 'hd_order_region_pref_v1';
     const promoStorageKey = 'hd_promo_v1';
     let activeCatalogCategory = 'all';
     let catalogSearchQuery = '';
@@ -110,6 +111,23 @@ let cart = [];
     function clearOrderDraft() {
         try {
             localStorage.removeItem(orderDraftStorageKey);
+        } catch (e) {
+            // Ignore storage errors.
+        }
+    }
+
+    function readOrderRegionPreference() {
+        try {
+            const raw = String(localStorage.getItem(orderRegionPreferenceStorageKey) || '').trim();
+            return raw === 'world' ? 'world' : 'ua';
+        } catch (e) {
+            return 'ua';
+        }
+    }
+
+    function writeOrderRegionPreference(region) {
+        try {
+            localStorage.setItem(orderRegionPreferenceStorageKey, region === 'world' ? 'world' : 'ua');
         } catch (e) {
             // Ignore storage errors.
         }
@@ -586,13 +604,21 @@ let cart = [];
 
     window.onscroll = null;
 
-    function showToast(text) {
+    function showToast(text, duration = 3000) {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
         toast.className = 'toast';
         toast.innerText = text;
         container.appendChild(toast);
-        setTimeout(() => { toast.remove(); }, 3000);
+        setTimeout(() => { toast.remove(); }, Number(duration) || 3000);
+    }
+
+    function showWorldwideIbanHint() {
+        const lang = localStorage.getItem('preferred_lang') || 'ua';
+        const text = lang === 'ua'
+            ? 'Це банк Великобританії, тому вказуйте країну: Великобританія.'
+            : 'This is a UK bank, so set the country to United Kingdom.';
+        showToast(text, 7000);
     }
 
     function copyVal(val) {
@@ -1206,6 +1232,7 @@ let cart = [];
             renderOrderPayment();
         } else if (mode === 'delivery') {
             deliveryRegion = region;
+            writeOrderRegionPreference(region);
             renderDeliveryForm();
         }
     }
@@ -1257,7 +1284,8 @@ let cart = [];
         if (paymentRegion === 'ua') {
             const ibanText = lang === 'ua' ? '🪙 ФОП РАХУНОК (IBAN):' : '🪙 FOP ACCOUNT (IBAN):';
             const edrpouText = lang === 'ua' ? '🔢 ЄДРПОУ:' : '🔢 EDRPOU:';
-            const fopText = lang === 'ua' ? '👤 <b>ФОП:</b> Максимова Анна Олегівна' : '👤 <b>FOP:</b> Maksimova Anna Olegivna';
+            const fopText = lang === 'ua' ? '👤 ФОП:' : '👤 FOP:';
+            const fopName = lang === 'ua' ? 'Максимова Анна Олегівна' : 'Maksimova Anna Olegivna';
 
             paymentBlock = `
                 <div style="background:#000; padding:15px; border:1px solid #222; font-size:0.85rem; color:#fff; line-height:1.6; text-align:left;">
@@ -1271,8 +1299,9 @@ let cart = [];
                         <div class="copy-line"><b>3952509287</b> <button class="mini-copy-btn" onclick="copyVal('3952509287')">Copy</button></div>
                     </div>
 
-                    <div style="border-top:1px solid #222; padding-top:10px; margin-top:10px;">
-                        ${fopText}
+                    <div style="margin-top:10px;">
+                        <span style="color:#888;">${fopText}</span><br>
+                        <div class="copy-line"><b>${fopName}</b> <button class="mini-copy-btn" onclick="copyVal('${fopName}')">Copy</button></div>
                         <div style="margin-top:8px; color:#cfcfcf;">
                             У описі платежу вкажіть: сплата за товар.
                         </div>
@@ -1297,6 +1326,7 @@ let cart = [];
                         <div style="margin-bottom:10px;">
                             <span style="color:#888;">🏦 IBAN:</span><br>
                             <div class="copy-line"><b>GB91CLJU00997192141301</b> <button class="mini-copy-btn" onclick="copyVal('GB91CLJU00997192141301')">Copy</button></div>
+                            <button type="button" onclick="showWorldwideIbanHint()" style="margin-top:6px; padding:0; background:none; border:none; color:#4da3ff; font-size:0.78rem; cursor:pointer; text-decoration:underline;">${lang === 'ua' ? 'Замало цифр?' : 'Too few digits?'}</button>
                         </div>
                         <div style="margin-bottom:10px;">
                             <span style="color:#888;">🔐 BIC code:</span><br>
@@ -1305,12 +1335,16 @@ let cart = [];
                         <div style="margin-bottom:10px;">
                             <span style="color:#888;">👤 Receiver:</span><br>
                             <div class="copy-line"><b>MAKSYMOVA ANNA</b> <button class="mini-copy-btn" onclick="copyVal('MAKSYMOVA ANNA')">Copy</button></div>
+                            <div style="margin-top:6px; color:#9a9a9a; font-size:0.78rem;">${lang === 'ua' ? 'Країна отримувача: Великобританія' : 'Receiver country: United Kingdom'}</div>
                         </div>
                         <div style="margin-bottom:8px;">
                             🛒 ${t.goodsPrice}: <span style="color:#fff; font-weight:bold;">${itemTotal}${currency}</span>
                         </div>
                         <div style="margin-bottom:8px;">
                             🚚 ${t.shippingPrice}: <span style="color:#fff; font-weight:bold;">${shippingTotal}${currency}</span>
+                        </div>
+                        <div style="margin:6px 0 0; color:var(--blood); font-size:0.78rem; line-height:1.4;">
+                            ${lang === 'ua' ? 'У описі платежу вкажіть: сплата за товар.' : 'In the payment description, specify: payment for goods.'}
                         </div>
                         <div style="margin-top:6px; padding-top:10px; border-top:1px dashed #444;">
                             💰 ${t.sum}: <span style="color:var(--blood); font-weight:bold; font-size:1.1rem;">${total}${currency}</span>
@@ -1349,6 +1383,16 @@ let cart = [];
                 <button class="buy-btn" id="payBtn" style="margin-top:20px; opacity: 0.5;" onclick="finalizeOrder()" disabled>${t.btn}</button>
             ` : ''}
         `;
+        if (paymentRegion === 'ua') {
+            const copyLines = Array.from(document.querySelectorAll('#orderModalContent .copy-line'));
+            const paymentDescriptionHint = copyLines.length ? copyLines[copyLines.length - 1].nextElementSibling : null;
+            if (paymentDescriptionHint) {
+                paymentDescriptionHint.style.color = 'var(--blood)';
+                paymentDescriptionHint.innerText = lang === 'ua'
+                    ? 'У описі платежу вкажіть: сплата за товар.'
+                    : 'In the payment description, specify: payment for goods.';
+            }
+        }
         document.getElementById('orderModal').style.display = 'flex';
 
         const payBtn = document.getElementById('payBtn');
@@ -1365,21 +1409,13 @@ let cart = [];
         clearPaymentScreenshot();
         document.getElementById('cartModal').style.display = 'none';
 
-        const draft = readOrderDraft();
         orderStep = 'delivery';
-        deliveryRegion = 'ua';
+        const draft = restoreOrderDraft();
+        deliveryRegion = draft ? draft.region : readOrderRegionPreference();
         paymentRegion = 'ua';
-        deliveryData = draft && draft.delivery && (draft.delivery.uaFio || draft.delivery.uaPhone || draft.delivery.np || draft.delivery.tg)
-            ? {
-                region: 'ua',
-                data: {
-                    fio: String(draft.delivery.uaFio || '').trim(),
-                    phone: String(draft.delivery.uaPhone || '').trim(),
-                    np: String(draft.delivery.np || '').trim(),
-                    tg: String(draft.delivery.tg || '').trim().slice(0, 100)
-                }
-            }
-            : null;
+        if (!draft) {
+            deliveryData = null;
+        }
         renderDeliveryForm();
     }
 
@@ -2055,7 +2091,7 @@ function openPolicy(type) {
             delivery: {
                 title: 'Доставка і оплата',
                 paragraphs: [
-                    '• Відправка замовлень: 2-3 робочих днів після підтвердження.',
+                    '• Відправка замовлень: 3-5 робочих днів після підтвердження.',
                     '• Оплата: повна передплата.',
                     '• Доставка виконується по Україні та за кордон через доступні логістичні служби.'
                 ]
