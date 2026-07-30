@@ -1344,7 +1344,7 @@ let cart = [];
                             🚚 ${t.shippingPrice}: <span style="color:#fff; font-weight:bold;">${shippingTotal}${currency}</span>
                         </div>
                         <div style="margin:6px 0 0; color:var(--blood); font-size:0.78rem; line-height:1.4;">
-                            ${lang === 'ua' ? 'У описі платежу вкажіть: сплата за товар.' : 'In the payment description, specify: payment for goods.'}
+                            ${lang === 'ua' ? 'У описі платежу вкажіть: платіж за товар.' : 'In the payment description, specify: payment for the product.'}
                         </div>
                         <div style="margin-top:6px; padding-top:10px; border-top:1px dashed #444;">
                             💰 ${t.sum}: <span style="color:var(--blood); font-weight:bold; font-size:1.1rem;">${total}${currency}</span>
@@ -1389,8 +1389,8 @@ let cart = [];
             if (paymentDescriptionHint) {
                 paymentDescriptionHint.style.color = 'var(--blood)';
                 paymentDescriptionHint.innerText = lang === 'ua'
-                    ? 'У описі платежу вкажіть: сплата за товар.'
-                    : 'In the payment description, specify: payment for goods.';
+                    ? 'У описі платежу вкажіть: платіж за товар.'
+                    : 'In the payment description, specify: payment for the product.';
             }
         }
         document.getElementById('orderModal').style.display = 'flex';
