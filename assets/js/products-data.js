@@ -177,11 +177,11 @@ window.PRODUCTS_DATA = [
     "title": "HARDCORE SWEATSHIRT",
     "descUa": "Щільний світшот для холодних вулиць, тиску й щоденної витримки. Чистий HARDCORE без зайвого декору, тільки характер і форма.",
     "descEng": "A solid sweatshirt for cold streets, pressure, and everyday endurance. Clean HARDCORE with no extra decoration, only character and form.",
-    "image": "images/IMG_7644.JPG",
-    "imageAlt": "images/IMG_7643.JPG",
+    "image": "images/IMG_2539.JPEG",
+    "imageAlt": "images/IMG_2538.JPEG",
     "gallery": [
-      "images/IMG_7644.JPG",
-      "images/IMG_7643.JPG"
+      "images/IMG_2539.JPEG",
+      "images/IMG_2538.JPEG"
     ],
     "priceUahLabel": "1750₴",
     "priceUsdLabel": "40€",
@@ -1389,18 +1389,18 @@ window.PRODUCTS_DATA = [
     "id": 52,
     "slug": "hardcore-division-crew-hardcore-division-crew-t-shirt",
     "category": "футболка",
-    "isNew": false,
-    "renderInCatalog": false,
+    "isNew": true,
+    "renderInCatalog": true,
     "title": "HARDCORE DIVISION CREW [2 КОЛОРА]",
     "descUa": "Футболка для своєї команди: чорний по стандарту та червоний як акцент сили. Лаконічна форма і жорсткий характер.",
     "descEng": "A T-shirt for the crew: black by default and red as the power accent. Clean form and a hard character.",
     "image": "images/IMG_9121.JPEG",
-    "imageAlt": "images/IMG_9122.JPEG",
+    "imageAlt": "images/IMG_2532.JPEG",
     "gallery": [
       "images/IMG_9121.JPEG",
-      "images/IMG_9122.JPEG",
+      "images/IMG_2532.JPEG",
       "images/IMG_9123.JPEG",
-      "images/IMG_9124.JPEG"
+      "images/IMG_2531.JPEG"
     ],
     "colorVariants": [
       {
@@ -1409,7 +1409,7 @@ window.PRODUCTS_DATA = [
         "labelEng": "BLACK",
         "gallery": [
           "images/IMG_9121.JPEG",
-          "images/IMG_9122.JPEG"
+          "images/IMG_2532.JPEG"
         ]
       },
       {
@@ -1418,7 +1418,7 @@ window.PRODUCTS_DATA = [
         "labelEng": "RED",
         "gallery": [
           "images/IMG_9123.JPEG",
-          "images/IMG_9124.JPEG"
+          "images/IMG_2531.JPEG"
         ]
       }
     ],
@@ -1522,9 +1522,9 @@ window.PRODUCTS_DATA = [
       "images/IMG_9299.JPEG",
       "images/IMG_9300.JPEG"
     ],
-    "priceUahLabel": "1600₴",
+    "priceUahLabel": "1550₴",
     "priceUsdLabel": "35€",
-    "priceUah": 1600,
+    "priceUah": 1550,
     "priceUsd": 35,
     "sizeId": "size-sw3",
     "cartName": "HARDCORE NATION LONGLSLEEVE",
@@ -1547,9 +1547,9 @@ window.PRODUCTS_DATA = [
       "images/IMG_9301.JPEG",
       "images/IMG_9302.JPEG"
     ],
-    "priceUahLabel": "1800₴",
+    "priceUahLabel": "1750₴",
     "priceUsdLabel": "40€",
-    "priceUah": 1800,
+    "priceUah": 1750,
     "priceUsd": 40,
     "sizeId": "size-sw4",
     "cartName": "HARDCORE NATION SWEATSHIRT",
@@ -1572,14 +1572,161 @@ window.PRODUCTS_DATA = [
       "images/IMG_9311.JPEG",
       "images/IMG_9312.JPEG"
     ],
-    "priceUahLabel": "1750₴",
+    "priceUahLabel": "1650₴",
     "priceUsdLabel": "40€",
-    "priceUah": 1750,
+    "priceUah": 1650,
     "priceUsd": 40,
     "sizeId": "size-sw5",
     "cartName": "HATE YOU ALL SWEATSHIRT",
     "cartSizeId": "size-sw5",
     "seoKeywords": "HATE YOU ALL, HATE YOU ALL SWEATSHIRT, світшот, свитшот, hardcore division, streetwear, ukraine brand",
     "catalogOrder": 9
+  },
+  {
+    "id": 59,
+    "slug": "hardcore-or-die-hardcore-or-die-sweatshirt",
+    "category": "світшоти",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HARDCORE OR DIE SWEATSHIRT",
+    "descUa": "Світшот HARDCORE OR DIE для тих, хто не залишає собі запасного шляху. Щільна форма, прямий меседж і жорсткий настрій без компромісів.",
+    "descEng": "HARDCORE OR DIE sweatshirt for those who leave no backup route. Dense form, a direct message, and a hard mood with no compromises.",
+    "image": "images/IMG_2505.JPEG",
+    "imageAlt": "images/IMG_2501.JPEG",
+    "gallery": [
+      "images/IMG_2505.JPEG",
+      "images/IMG_2501.JPEG"
+    ],
+    "priceUahLabel": "1650₴",
+    "priceUsdLabel": "40€",
+    "priceUah": 1650,
+    "priceUsd": 40,
+    "sizeId": "size-sw6",
+    "cartName": "HARDCORE OR DIE SWEATSHIRT",
+    "cartSizeId": "size-sw6",
+    "seoKeywords": "HARDCORE OR DIE, HARDCORE OR DIE SWEATSHIRT, світшот, свитшот, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 10
+  },
+  {
+    "id": 60,
+    "slug": "hardcore-or-die-hardcore-or-die-longsleeve",
+    "category": "лонгсліви",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HARDCORE OR DIE LONGLSLEEVE",
+    "descUa": "Лонгслів HARDCORE OR DIE для руху без запасних варіантів. Легка форма, жорсткий посил і настрій, який не просить дозволу.",
+    "descEng": "HARDCORE OR DIE longsleeve for moving with no backup options. A light form, a hard message, and a mood that asks no permission.",
+    "image": "images/IMG_2506.JPEG",
+    "imageAlt": "images/IMG_2507.JPEG",
+    "gallery": [
+      "images/IMG_2506.JPEG",
+      "images/IMG_2507.JPEG"
+    ],
+    "priceUahLabel": "1500₴",
+    "priceUsdLabel": "35€",
+    "priceUah": 1500,
+    "priceUsd": 35,
+    "sizeId": "size-sw7",
+    "cartName": "HARDCORE OR DIE LONGLSLEEVE",
+    "cartSizeId": "size-sw7",
+    "seoKeywords": "HARDCORE OR DIE, HARDCORE OR DIE LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 11
+  },
+  {
+    "id": 61,
+    "slug": "hardcore-death-hardcore-death-longsleeve",
+    "category": "лонгсліви",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HARDCORE DEATH LONGLSLEEVE",
+    "descUa": "Лонгслів HARDCORE DEATH для тих, хто тримає темний тон і не боїться різких форм. Простий меседж, холодна подача і важка атмосфера без зайвого шуму.",
+    "descEng": "HARDCORE DEATH longsleeve for those who hold a dark tone and are not afraid of sharp shapes. A simple message, cold delivery, and heavy atmosphere without extra noise.",
+    "image": "images/IMG_2513.JPEG",
+    "imageAlt": "images/IMG_2514.JPEG",
+    "gallery": [
+      "images/IMG_2513.JPEG",
+      "images/IMG_2514.JPEG"
+    ],
+    "priceUahLabel": "1500₴",
+    "priceUsdLabel": "35€",
+    "priceUah": 1500,
+    "priceUsd": 35,
+    "sizeId": "size-sw8",
+    "cartName": "HARDCORE DEATH LONGLSLEEVE",
+    "cartSizeId": "size-sw8",
+    "seoKeywords": "HARDCORE DEATH, HARDCORE DEATH LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 12
+  },
+  {
+    "id": 62,
+    "slug": "hardcore-death-hardcore-death-sweatshirt",
+    "category": "світшоти",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HARDCORE DEATH SWEATSHIRT",
+    "descUa": "Світшот HARDCORE DEATH з темною енергією і прямим характером. Щільна форма для тих, хто носить важку атмосферу спокійно і без прикрас.",
+    "descEng": "HARDCORE DEATH sweatshirt with dark energy and direct character. A dense form for those who wear a heavy atmosphere calmly and without decoration.",
+    "image": "images/IMG_2515.JPEG",
+    "imageAlt": "images/IMG_2516.JPEG",
+    "gallery": [
+      "images/IMG_2515.JPEG",
+      "images/IMG_2516.JPEG"
+    ],
+    "priceUahLabel": "1650₴",
+    "priceUsdLabel": "40€",
+    "priceUah": 1650,
+    "priceUsd": 40,
+    "sizeId": "size-sw9",
+    "cartName": "HARDCORE DEATH SWEATSHIRT",
+    "cartSizeId": "size-sw9",
+    "seoKeywords": "HARDCORE DEATH, HARDCORE DEATH SWEATSHIRT, світшот, свитшот, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 13
+  },
+  {
+    "id": 63,
+    "slug": "hate-you-all-hate-you-all-longsleeve",
+    "category": "лонгсліви",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HATE YOU ALL LONGLSLEEVE [2 КОЛОРА]",
+    "descUa": "Двоколірний лонгслів HATE YOU ALL з холодним посилом і нульовою потребою подобатись усім. Чорний по дефолту, червоний як акцент тиску.",
+    "descEng": "A two-color HATE YOU ALL longsleeve with a cold message and zero need to please everyone. Black by default, red as a pressure accent.",
+    "image": "images/IMG_2526.JPEG",
+    "imageAlt": "images/IMG_2524.JPEG",
+    "gallery": [
+      "images/IMG_2526.JPEG",
+      "images/IMG_2524.JPEG",
+      "images/IMG_2527.JPEG",
+      "images/IMG_2525.JPEG"
+    ],
+    "colorVariants": [
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "gallery": [
+          "images/IMG_2526.JPEG",
+          "images/IMG_2524.JPEG"
+        ]
+      },
+      {
+        "value": "red",
+        "labelUa": "ЧЕРВОНИЙ",
+        "labelEng": "RED",
+        "gallery": [
+          "images/IMG_2527.JPEG",
+          "images/IMG_2525.JPEG"
+        ]
+      }
+    ],
+    "priceUahLabel": "1500₴",
+    "priceUsdLabel": "35€",
+    "priceUah": 1500,
+    "priceUsd": 35,
+    "sizeId": "size-sw10",
+    "cartName": "HATE YOU ALL LONGLSLEEVE",
+    "cartSizeId": "size-sw10",
+    "seoKeywords": "HATE YOU ALL, HATE YOU ALL LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 14
   }
 ];
