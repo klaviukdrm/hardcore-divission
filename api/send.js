@@ -4,17 +4,20 @@ function normalizePromoCode(value) {
     return String(value || '').trim().toUpperCase();
 }
 
-function getConfiguredPromoCodes() {
-    const rawCombined = [process.env.PROMO_CODES, process.env.PROMO_CODE]
+function addPromoCodes(target, rawCodes, discountPercent) {
+    String(rawCodes || '')
+        .split(/[\s,]+/)
+        .map((item) => normalizePromoCode(item))
         .filter(Boolean)
-        .join(',');
+        .forEach((code) => target.set(code, discountPercent));
+}
 
-    return new Set(
-        String(rawCombined || '')
-            .split(/[\s,]+/)
-            .map((item) => normalizePromoCode(item))
-            .filter(Boolean)
-    );
+function getConfiguredPromoCodes() {
+    const codes = new Map();
+    addPromoCodes(codes, process.env.PROMO_CODES, 10);
+    addPromoCodes(codes, process.env.PROMO_CODE, 10);
+    addPromoCodes(codes, process.env.PROMO_CODE2, 15);
+    return codes;
 }
 
 export default async function handler(req, res) {
@@ -40,14 +43,15 @@ export default async function handler(req, res) {
             return res.status(200).json({ valid: false, configured: false });
         }
 
-        if (!codes.has(normalizedCode)) {
+        const discountPercent = codes.get(normalizedCode);
+        if (!discountPercent) {
             return res.status(200).json({ valid: false, configured: true });
         }
 
         return res.status(200).json({
             valid: true,
             code: normalizedCode,
-            discountPercent: 10
+            discountPercent
         });
     }
 
