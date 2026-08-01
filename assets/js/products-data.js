@@ -1182,7 +1182,7 @@ window.PRODUCTS_DATA = [
     "id": 46,
     "slug": "hardcore-or-die-hardcore-or-die-t-shirt",
     "category": "футболка",
-    "isNew": false,
+    "isNew": true,
     "renderInCatalog": true,
     "title": "HARDCORE OR DIE [3 КОЛОРА]",
     "descUa": "Футболка для тих, хто йде до кінця без знижок на характер. Три кольори, жорсткий меседж і чистий вуличний настрій.",
