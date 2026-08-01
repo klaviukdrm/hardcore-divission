@@ -1271,10 +1271,10 @@ window.PRODUCTS_DATA = [
     "descUa": "Темна футболка для тих, хто не боїться різких форм і важкої атмосфери. Простий меседж з агресивним підтекстом.",
     "descEng": "A dark T-shirt for those who are not afraid of sharp shapes and a heavy atmosphere. A simple message with an aggressive undertone.",
     "image": "images/IMG_9098.JPEG",
-    "imageAlt": "images/IMG_9099.JPEG",
+    "imageAlt": "images/IMG_9349.JPEG",
     "gallery": [
       "images/IMG_9098.JPEG",
-      "images/IMG_9099.JPEG"
+      "images/IMG_9349.JPEG"
     ],
     "priceUahLabel": "950₴",
     "priceUsdLabel": "20€",
