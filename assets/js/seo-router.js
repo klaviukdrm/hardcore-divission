@@ -340,11 +340,12 @@
                     <option value="ONE SIZE">SIZE: ONE SIZE</option>
                 </select>`;
         }
+        const sizes = Array.isArray(product && product.sizes) && product.sizes.length
+            ? product.sizes.map((size) => String(size || "").trim()).filter(Boolean)
+            : ["S", "M", "L", "XL", "2XL", "3XL"];
         return `
                 <select id="${escapeAttr(sizeId)}">
-                    <option value="S">SIZE: S</option><option value="M">SIZE: M</option>
-                    <option value="L">SIZE: L</option><option value="XL">SIZE: XL</option>
-                    <option value="2XL">SIZE: 2XL</option><option value="3XL">SIZE: 3XL</option>
+                    ${sizes.map((size) => `<option value="${escapeAttr(size)}">SIZE: ${escapeHtml(size)}</option>`).join("")}
                 </select>`;
     }
 
@@ -651,14 +652,10 @@
         const thumbs = buildProductThumbs(product, initialGallery);
         const sizeOptions = isCap
             ? `<option value="ONE SIZE">SIZE: ONE SIZE</option>`
-            : `
-                            <option value="S">SIZE: S</option>
-                            <option value="M">SIZE: M</option>
-                            <option value="L">SIZE: L</option>
-                            <option value="XL">SIZE: XL</option>
-                            <option value="2XL">SIZE: 2XL</option>
-                            <option value="3XL">SIZE: 3XL</option>
-                        `;
+            : (Array.isArray(product && product.sizes) && product.sizes.length
+                ? product.sizes.map((size) => String(size || "").trim()).filter(Boolean)
+                : ["S", "M", "L", "XL", "2XL", "3XL"]
+            ).map((size) => `<option value="${escapeAttr(size)}">SIZE: ${escapeHtml(size)}</option>`).join("");
         const sizeSelectMarkup = product.noSize
             ? `<select id="product-size">
                             <option value="ONE SIZE">SIZE: ONE SIZE</option>
