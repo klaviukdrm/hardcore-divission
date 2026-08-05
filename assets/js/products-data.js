@@ -1728,5 +1728,67 @@ window.PRODUCTS_DATA = [
     "cartSizeId": "size-sw10",
     "seoKeywords": "HATE YOU ALL, HATE YOU ALL LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand",
     "catalogOrder": 14
+  },
+  {
+    "id": 64,
+    "slug": "militant-pro-militant-pro-hoodie",
+    "category": "худі",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "MILITANT PRO HOODIE",
+    "descUa": "Худі MILITANT PRO для холодного міста і людей, які тримають дисципліну без зайвих слів. Щільна форма, прямий силует і спокійний тиск у кожній деталі.",
+    "descEng": "MILITANT PRO hoodie for cold streets and people who hold discipline without extra words. Dense form, direct silhouette, and calm pressure in every detail.",
+    "image": "images/photo_2026-06-20_13-02-59 (2).jpg",
+    "imageAlt": "images/photo_2026-06-20_13-02-58.jpg",
+    "gallery": [
+      "images/photo_2026-06-20_13-02-59 (2).jpg",
+      "images/photo_2026-06-20_13-02-58.jpg"
+    ],
+    "priceUahLabel": "1750₴",
+    "priceUsdLabel": "40€",
+    "priceUah": 1750,
+    "priceUsd": 40,
+    "sizes": [
+      "L",
+      "XL",
+      "2XL",
+      "3XL"
+    ],
+    "sizeId": "size-h23",
+    "cartName": "MILITANT PRO HOODIE",
+    "cartSizeId": "size-h23",
+    "seoKeywords": "MILITANT PRO, MILITANT PRO HOODIE, худі, hardcore division, streetwear, hoodie, ukraine brand",
+    "catalogOrder": 46
+  },
+  {
+    "id": 65,
+    "slug": "militant-pro-militant-pro-t-shirt",
+    "category": "футболка",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "MILITANT PRO",
+    "descUa": "Футболка MILITANT PRO з чистим бойовим настроєм без декору заради декору. Лаконічний вигляд, жорсткий тон і характер для тих, хто тримає свій напрям.",
+    "descEng": "MILITANT PRO T-shirt with a clean militant mood and no decoration for decoration's sake. Laconic look, hard tone, and character for those who keep their direction.",
+    "image": "images/photo_2026-08-05_18-10-17.jpg",
+    "imageAlt": "images/Screenshot_17.png",
+    "gallery": [
+      "images/photo_2026-08-05_18-10-17.jpg",
+      "images/Screenshot_17.png"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizes": [
+      "L",
+      "XL",
+      "2XL",
+      "3XL"
+    ],
+    "sizeId": "size-f32",
+    "cartName": "MILITANT PRO T-SHIRT",
+    "cartSizeId": "size-f32",
+    "seoKeywords": "MILITANT PRO, MILITANT PRO T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 47
   }
 ];
