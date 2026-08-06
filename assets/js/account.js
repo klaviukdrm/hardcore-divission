@@ -80,7 +80,7 @@ const registerPhoneLocal = document.getElementById('registerPhoneLocal');
 let currentOrders = [];
 let hasActiveSessionUI = false;
 const LAST_USER_PHONE_KEY = 'hd_last_user_phone';
-const ORDER_HISTORY_INFO_TEXT = 'Замовлення оформлено, очікуйте відправку протягом 2-3 робочих днів.';
+const ORDER_HISTORY_INFO_TEXT = 'Замовлення оформлено, очікуйте відправку протягом 3-5 робочих днів.';
 const ORDER_HISTORY_DONE_AFTER_DAYS = 8;
 
 const ui = {
@@ -114,9 +114,9 @@ const ui = {
     }
 };
 
-ui.ua.orderPending = 'Замовлення оформлено, чекайте відправку протягом 2-3 робочих днів.';
+ui.ua.orderPending = 'Замовлення оформлено, чекайте відправку протягом 3-5 робочих днів.';
 ui.ua.orderDone = 'Замовлення виконано.';
-ui.eng.orderPending = 'Order placed, please wait for shipment within 2-3 business days.';
+ui.eng.orderPending = 'Order placed, please wait for shipment within 3-5 business days.';
 ui.eng.orderDone = 'Order completed.';
 
 function getLang() {
@@ -381,7 +381,7 @@ function openPolicy(type) {
             delivery: {
                 title: 'Доставка і оплата',
                 paragraphs: [
-                    '• Відправка замовлень: 2-3 робочих днів після підтвердження.',
+                    '• Відправка замовлень: 3-5 робочих днів після підтвердження.',
                     '• Оплата: повна передплата.',
                     '• Доставка виконується по Україні та за кордон через доступні логістичні служби.'
                 ]
