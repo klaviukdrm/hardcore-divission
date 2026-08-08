@@ -47,7 +47,7 @@ const PHONE_COUNTRIES = [
     { code: '995', label: 'Georgia', example: '555123456', stripLeadingZero: true }
 ].map((item) => ({
     localMin: 6,
-    localMax: 12,
+    localMax: 13,
     stripLeadingZero: true,
     ...item
 }));
@@ -135,6 +135,12 @@ function getCountryConfig(code) {
 
 function normalizeLocalDigits(value, countryConfig) {
     let digits = String(value || '').replace(/\D/g, '');
+    if (digits.startsWith('00')) {
+        digits = digits.slice(2);
+    }
+    if (countryConfig.code && digits.startsWith(countryConfig.code)) {
+        digits = digits.slice(countryConfig.code.length);
+    }
     if (countryConfig.stripLeadingZero && digits.startsWith('0')) {
         digits = digits.slice(1);
     }
