@@ -1051,7 +1051,7 @@ window.PRODUCTS_DATA = [
     "cartName": "NLYL HOODIE",
     "cartSizeId": "size-h17",
     "seoKeywords": "NLYL, NLYL HOODIE, худі, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 23
+    "catalogOrder": 49
   },
   {
     "id": 41,
@@ -1126,7 +1126,7 @@ window.PRODUCTS_DATA = [
     "cartName": "PROTECT YOUR KARMA T-SHIRT",
     "cartSizeId": "size-f23",
     "seoKeywords": "Protect your Karma, PROTECT YOUR KARMA T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 20
+    "catalogOrder": 48
   },
   {
     "id": 44,
@@ -1790,5 +1790,55 @@ window.PRODUCTS_DATA = [
     "cartSizeId": "size-f32",
     "seoKeywords": "MILITANT PRO, MILITANT PRO T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
     "catalogOrder": 47
+  },
+  {
+    "id": 66,
+    "slug": "turb8sk1n-httb-gen3-t-shirt",
+    "category": "футболка",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "ТУРБ8СК1N.HTTB.GEN3",
+    "descUa": "Футболка ТУРБ8СК1N.HTTB.GEN3 з технічним нервом і холодною вуличною подачею. Чистий силует, різкий графічний тон і настрій третьої хвилі без зайвого шуму.",
+    "descEng": "TURB8SK1N.HTTB.GEN3 T-shirt with a technical nerve and cold street delivery. Clean silhouette, sharp graphic tone, and a third-wave mood without extra noise.",
+    "image": "images/photo_1_2026-08-08_11-37-43.jpg",
+    "imageAlt": "images/photo_2_2026-08-08_11-37-43.jpg",
+    "gallery": [
+      "images/photo_1_2026-08-08_11-37-43.jpg",
+      "images/photo_2_2026-08-08_11-37-43.jpg"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-f33",
+    "cartName": "TURB8SK1N HTTB GEN3 T-SHIRT",
+    "cartSizeId": "size-f33",
+    "seoKeywords": "ТУРБ8СК1N.HTTB.GEN3, TURB8SK1N HTTB GEN3 T-SHIRT, футболка, turboskin, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 20
+  },
+  {
+    "id": 67,
+    "slug": "turb8sk1n-httb-gen3-hoodie",
+    "category": "худі",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "ТУРБ8СК1N.HTTB.GEN3",
+    "descUa": "Худі ТУРБ8СК1N.HTTB.GEN3 для важкого темпу і холодних вулиць. Щільна форма, агресивний цифровий характер і графіка, яка тримає напругу без пояснень.",
+    "descEng": "TURB8SK1N.HTTB.GEN3 hoodie for heavy tempo and cold streets. Dense form, aggressive digital character, and graphics that hold tension without explanation.",
+    "image": "images/photo_3_2026-08-08_11-37-43.jpg",
+    "imageAlt": "images/photo_4_2026-08-08_11-37-43.jpg",
+    "gallery": [
+      "images/photo_3_2026-08-08_11-37-43.jpg",
+      "images/photo_4_2026-08-08_11-37-43.jpg"
+    ],
+    "priceUahLabel": "1950₴",
+    "priceUsdLabel": "45€",
+    "priceUah": 1950,
+    "priceUsd": 45,
+    "sizeId": "size-h24",
+    "cartName": "TURB8SK1N HTTB GEN3 HOODIE",
+    "cartSizeId": "size-h24",
+    "seoKeywords": "ТУРБ8СК1N.HTTB.GEN3, TURB8SK1N HTTB GEN3 HOODIE, худі, turboskin, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 23
   }
 ];
