@@ -1183,15 +1183,16 @@ window.PRODUCTS_DATA = [
     "slug": "hardcore-or-die-hardcore-or-die-t-shirt",
     "category": "футболка",
     "isNew": true,
-    "renderInCatalog": false,
+    "renderInCatalog": true,
     "title": "HARDCORE OR DIE [3 КОЛОРА]",
     "descUa": "Футболка для тих, хто йде до кінця без знижок на характер. Три кольори, жорсткий меседж і чистий вуличний настрій.",
     "descEng": "A T-shirt for those who go all the way without softening the character. Three colors, a hard message, and a clean street attitude.",
-    "image": "images/IMG_9088.JPEG",
-    "imageAlt": "images/IMG_9089.JPEG",
+    "image": "images/photo_1_2026-08-09_16-39-27.jpg",
+    "imageAlt": "images/photo_2_2026-08-09_16-39-27.jpg",
     "gallery": [
-      "images/IMG_9088.JPEG",
-      "images/IMG_9089.JPEG",
+      "images/photo_1_2026-08-09_16-39-27.jpg",
+      "images/photo_2_2026-08-09_16-39-27.jpg",
+      "images/photo_3_2026-08-09_16-39-27.jpg",
       "images/IMG_9090.JPEG",
       "images/IMG_9091.JPEG",
       "images/IMG_9092.JPEG",
@@ -1203,8 +1204,9 @@ window.PRODUCTS_DATA = [
         "labelUa": "ЧОРНИЙ",
         "labelEng": "BLACK",
         "gallery": [
-          "images/IMG_9088.JPEG",
-          "images/IMG_9089.JPEG"
+          "images/photo_1_2026-08-09_16-39-27.jpg",
+          "images/photo_2_2026-08-09_16-39-27.jpg",
+          "images/photo_3_2026-08-09_16-39-27.jpg"
         ]
       },
       {
