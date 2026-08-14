@@ -129,6 +129,32 @@ function getBaseUrl(req) {
     return `${protocol}://${hostHeader}`;
 }
 
+function getRequestHost(req) {
+    return String(req.headers['x-forwarded-host'] || req.headers.host || '')
+        .split(',')[0]
+        .trim()
+        .toLowerCase();
+}
+
+function isSameSiteRequest(req) {
+    const host = getRequestHost(req);
+    if (!host) return false;
+
+    const candidates = [req.headers.origin, req.headers.referer]
+        .map((value) => String(value || '').trim())
+        .filter(Boolean);
+
+    if (!candidates.length) return false;
+
+    return candidates.some((value) => {
+        try {
+            return new URL(value).host.toLowerCase() === host;
+        } catch (e) {
+            return false;
+        }
+    });
+}
+
 function resolveVisualItemsUrls(req, items) {
     const baseUrl = getBaseUrl(req);
     if (!baseUrl) return items;
@@ -245,8 +271,12 @@ export default async function handler(req, res) {
         return methodNotAllowed(res, ['POST']);
     }
 
+    if (!isSameSiteRequest(req)) {
+        return json(res, 403, { error: 'Forbidden request origin' });
+    }
+
     const ip = getClientIp(req);
-    const rate = checkRateLimit(`mono:create:${ip}`, 25, 15 * 60 * 1000);
+    const rate = checkRateLimit(`mono:create:${ip}`, 5, 10 * 60 * 1000);
     if (!rate.allowed) {
         return json(res, 429, { error: 'Too many requests. Try again later.' });
     }
