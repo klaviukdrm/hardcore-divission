@@ -1,4 +1,6 @@
 import { json, methodNotAllowed, parseJsonBody } from '../../../lib/server/http.js';
+import { getMonoWebhookSecret } from '../../../lib/server/mono.js';
+import { safeStringEqual } from '../../../lib/server/security.js';
 import { sendTelegramMessage } from '../../../lib/server/telegram.js';
 
 function escapeHtml(value) {
@@ -46,6 +48,19 @@ function normalizeInvoice(body) {
     return body?.invoice || body?.data || body?.payment || body || {};
 }
 
+function getWebhookSecretFromRequest(req) {
+    const headerSecret = String(req.headers['x-mono-webhook-secret'] || '').trim();
+    if (headerSecret) return headerSecret;
+
+    try {
+        const host = String(req.headers['x-forwarded-host'] || req.headers.host || 'localhost').split(',')[0].trim();
+        const url = new URL(req.url || '', `https://${host}`);
+        return String(url.searchParams.get('secret') || '').trim();
+    } catch (e) {
+        return '';
+    }
+}
+
 function formatWebhookMessage(invoice) {
     const reference = escapeHtml(invoice.reference || invoice.invoiceId || invoice.orderId || '-');
     const invoiceId = escapeHtml(invoice.invoiceId || invoice.id || '-');
@@ -76,6 +91,15 @@ function formatWebhookMessage(invoice) {
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return methodNotAllowed(res, ['POST']);
+    }
+
+    const expectedSecret = getMonoWebhookSecret();
+    const actualSecret = getWebhookSecretFromRequest(req);
+    if (!expectedSecret) {
+        return json(res, 500, { error: 'Mono webhook secret is not configured' });
+    }
+    if (!actualSecret || !safeStringEqual(actualSecret, expectedSecret)) {
+        return json(res, 401, { error: 'Unauthorized webhook request' });
     }
 
     const body = parseJsonBody(req);
