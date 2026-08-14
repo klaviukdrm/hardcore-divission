@@ -1,4 +1,10 @@
 import { sendTelegramMediaGroup } from '../lib/server/telegram.js';
+import { checkRateLimit } from '../lib/server/rate-limit.js';
+import { getClientIp } from '../lib/server/http.js';
+
+const ORDER_MESSAGE_MIN_LENGTH = 120;
+const ORDER_MESSAGE_MAX_LENGTH = 6000;
+const PAYMENT_IMAGE_MAX_BYTES = 8 * 1024 * 1024;
 
 function normalizePromoCode(value) {
     return String(value || '').trim().toUpperCase();
@@ -20,11 +26,65 @@ function getConfiguredPromoCodes() {
     return codes;
 }
 
+function getRequestHost(req) {
+    return String(req.headers['x-forwarded-host'] || req.headers.host || '')
+        .split(',')[0]
+        .trim()
+        .toLowerCase();
+}
+
+function isSameSiteRequest(req) {
+    const host = getRequestHost(req);
+    if (!host) return false;
+
+    const candidates = [req.headers.origin, req.headers.referer]
+        .map((value) => String(value || '').trim())
+        .filter(Boolean);
+
+    if (!candidates.length) return false;
+
+    return candidates.some((value) => {
+        try {
+            return new URL(value).host.toLowerCase() === host;
+        } catch (e) {
+            return false;
+        }
+    });
+}
+
+function estimateBase64Bytes(rawBase64) {
+    const clean = String(rawBase64 || '').replace(/\s+/g, '');
+    if (!clean) return 0;
+    const padding = clean.endsWith('==') ? 2 : (clean.endsWith('=') ? 1 : 0);
+    return Math.floor(clean.length * 3 / 4) - padding;
+}
+
+function isValidOrderMessage(message) {
+    const text = String(message || '').trim();
+    if (text.length < ORDER_MESSAGE_MIN_LENGTH || text.length > ORDER_MESSAGE_MAX_LENGTH) return false;
+
+    const hasHtmlFormatting = text.includes('<b>') && text.includes('</b>');
+    const hasOrderCode = /[A-Z0-9]{7}/.test(text);
+    const hasCreatedStatus = /created/i.test(text);
+    const hasTotalLine = /TOTAL|СУМА|РЎРЈРњРђ/i.test(text);
+
+    return hasHtmlFormatting && hasOrderCode && hasCreatedStatus && hasTotalLine;
+}
+
+function isValidOrderItems(items) {
+    return Array.isArray(items) && items.length > 0 && items.length <= 30 && items.every((item) => {
+        const line = String(item?.line || '').trim();
+        const image = String(item?.image || '').trim();
+        return line.length >= 3 && line.length <= 500 && image.length >= 3 && image.length <= 1000;
+    });
+}
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method not allowed' });
     }
 
+    const ip = getClientIp(req);
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
     
@@ -33,6 +93,11 @@ export default async function handler(req, res) {
     const imageData = photo || image;
 
     if (action === 'validatePromo') {
+        const rate = checkRateLimit(`promo:${ip}`, 30, 60 * 1000);
+        if (!rate.allowed) {
+            return res.status(429).json({ valid: false, error: 'Too many requests' });
+        }
+
         const normalizedCode = normalizePromoCode(code);
         if (!normalizedCode) {
             return res.status(400).json({ valid: false, error: 'Promo code is required' });
@@ -53,6 +118,27 @@ export default async function handler(req, res) {
             code: normalizedCode,
             discountPercent
         });
+    }
+
+    const orderRate = checkRateLimit(`telegram-order:${ip}`, 5, 10 * 60 * 1000);
+    if (!orderRate.allowed) {
+        return res.status(429).json({ success: false, error: 'Too many requests' });
+    }
+
+    if (!botToken || !chatId) {
+        return res.status(500).json({ success: false, error: 'Telegram is not configured' });
+    }
+
+    if (!isSameSiteRequest(req)) {
+        return res.status(403).json({ success: false, error: 'Forbidden' });
+    }
+
+    if (!isValidOrderMessage(message) || !isValidOrderItems(orderItems)) {
+        return res.status(400).json({ success: false, error: 'Invalid order payload' });
+    }
+
+    if (!imageData || !String(imageData).includes('base64')) {
+        return res.status(400).json({ success: false, error: 'Payment screenshot is required' });
     }
 
     try {
@@ -95,6 +181,7 @@ export default async function handler(req, res) {
             const mimeType = String(match[1] || 'application/octet-stream').toLowerCase();
             const rawBase64 = String(match[2] || '').trim();
             if (!rawBase64) return null;
+            if (estimateBase64Bytes(rawBase64) > PAYMENT_IMAGE_MAX_BYTES) return null;
 
             return {
                 mimeType,
