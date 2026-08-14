@@ -1,6 +1,6 @@
 import { checkRateLimit } from '../../../lib/server/rate-limit.js';
 import { getClientIp, json, methodNotAllowed, parseJsonBody } from '../../../lib/server/http.js';
-import { buildMonoInvoicePayload, createMonoInvoice, generateMonoOrderCode, getMonoConfig } from '../../../lib/server/mono.js';
+import { appendMonoWebhookSecret, buildMonoInvoicePayload, createMonoInvoice, generateMonoOrderCode, getMonoConfig } from '../../../lib/server/mono.js';
 import { getUserSession } from '../../../lib/server/session.js';
 import { requireSupabaseConfig, supabaseRequest } from '../../../lib/server/supabase.js';
 import { sendTelegramMediaGroup, sendTelegramMessage } from '../../../lib/server/telegram.js';
@@ -266,7 +266,9 @@ export default async function handler(req, res) {
     const config = getMonoConfig();
     const baseUrl = getBaseUrl(req);
     const redirectUrl = String(body.redirectUrl || config.redirectUrl || '').trim() || (baseUrl ? `${baseUrl}/pages/index.html` : '');
-    const webHookUrl = String(config.webhookUrl || (baseUrl ? `${baseUrl}/api/payments/mono/webhook` : '')).trim();
+    const webHookUrl = appendMonoWebhookSecret(
+        String(config.webhookUrl || (baseUrl ? `${baseUrl}/api/payments/mono/webhook` : '')).trim()
+    );
 
     if (!Number.isFinite(amount) || amount <= 0) {
         return json(res, 400, { error: 'Invalid amount' });
