@@ -17,6 +17,7 @@ let cart = [];
     let paymentScreenshot = null;
     let deliveryRegion = 'ua';
     let paymentRegion = 'ua';
+    let worldPaymentMethod = 'europe';
     let orderStep = 'payment';
     let deliveryData = null;
     let lastScrollTop = 0;
@@ -1237,6 +1238,20 @@ let cart = [];
         }
     }
 
+    function renderWorldPaymentMethodSwitch() {
+        return `
+            <div class="region-switch world-payment-method-switch">
+                <button class="region-btn ${worldPaymentMethod === 'europe' ? 'active' : ''}" onclick="setWorldPaymentMethod('europe')">EUROPE</button>
+                <button class="region-btn ${worldPaymentMethod === 'swift' ? 'active' : ''}" onclick="setWorldPaymentMethod('swift')">SWIFT</button>
+            </div>
+        `;
+    }
+
+    function setWorldPaymentMethod(method) {
+        worldPaymentMethod = method === 'swift' ? 'swift' : 'europe';
+        renderOrderPayment();
+    }
+
     function renderOrderPayment() {
         const lang = localStorage.getItem('preferred_lang') || 'ua';
         const isWorldOrder = deliveryData?.region === 'world';
@@ -1273,7 +1288,6 @@ let cart = [];
             t.title = 'WORLDWIDE PAYMENT';
             t.screenshot = lang === 'ua' ? 'ДОДАТИ СКРІНШОТ ОПЛАТИ:' : 'ADD PAYMENT SCREENSHOT:';
             t.btn = lang === 'ua' ? 'Я ОПЛАТИВ' : 'I PAID';
-            t.worldReference = 'PAYMENT REFERENCE';
             t.goodsPrice = lang === 'ua' ? 'Ціна за товар' : 'Product Price';
             t.shippingPrice = lang === 'ua' ? 'Ціна за доставку' : 'Shipping Price';
         }
@@ -1314,29 +1328,54 @@ let cart = [];
             `;
         } else {
             if (isWorldPayment) {
-                const worldName = String(deliveryData?.data?.fio || '').trim() || 'WORLDWIDE CLIENT';
-                const worldCountry = String(deliveryData?.data?.country || '').trim() || 'COUNTRY';
-                const worldReference = `${worldName} / ${worldCountry}`;
+                const paymentMethodSwitch = renderWorldPaymentMethodSwitch();
+                const europeDetails = `
+                    <div style="margin-bottom:10px; color:#cfcfcf;">
+                        ${lang === 'ua' ? 'Картка для оплати в євро' : 'Card for euro payments'}
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span style="color:#888;">🏦 IBAN:</span><br>
+                        <div class="copy-line"><b>GB91CLJU00997192141301</b> <button class="mini-copy-btn" onclick="copyVal('GB91CLJU00997192141301')">Copy</button></div>
+                        <button type="button" onclick="showWorldwideIbanHint()" style="margin-top:6px; padding:0; background:none; border:none; color:#4da3ff; font-size:0.78rem; cursor:pointer; text-decoration:underline;">${lang === 'ua' ? 'Замало цифр?' : 'Too few digits?'}</button>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span style="color:#888;">🔐 BIC code:</span><br>
+                        <div class="copy-line"><b>CLJUGB21</b> <button class="mini-copy-btn" onclick="copyVal('CLJUGB21')">Copy</button></div>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span style="color:#888;">👤 Receiver:</span><br>
+                        <div class="copy-line"><b>MAKSYMOVA ANNA</b> <button class="mini-copy-btn" onclick="copyVal('MAKSYMOVA ANNA')">Copy</button></div>
+                        <div style="margin-top:6px; color:#9a9a9a; font-size:0.78rem;">${lang === 'ua' ? 'Країна отримувача: Великобританія' : 'Receiver country: United Kingdom'}</div>
+                    </div>
+                `;
+                const swiftAddress = '61001, Ukraine, reg. Kharkivska, c. Kharkiv, st. Bohdana Khmelnytskoho, build 32, fl. 409';
+                const swiftDetails = `
+                    <div style="margin-bottom:10px; color:#cfcfcf;">
+                        SWIFT
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span style="color:#888;">🏦 IBAN:</span><br>
+                        <div class="copy-line"><b>UA0432200100000026001380034831</b> <button class="mini-copy-btn" onclick="copyVal('UA0432200100000026001380034831')">Copy</button></div>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span style="color:#888;">🔐 SWIFT / BIC Code:</span><br>
+                        <div class="copy-line"><b>UNJSUAUKXXX</b> <button class="mini-copy-btn" onclick="copyVal('UNJSUAUKXXX')">Copy</button></div>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span style="color:#888;">👤 Receiver:</span><br>
+                        <div class="copy-line"><b>PE MAKSYMOVA ANNA</b> <button class="mini-copy-btn" onclick="copyVal('PE MAKSYMOVA ANNA')">Copy</button></div>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span style="color:#888;">📍 Address:</span><br>
+                        <div class="copy-line"><b>${swiftAddress}</b> <button class="mini-copy-btn" onclick="copyVal('${swiftAddress}')">Copy</button></div>
+                    </div>
+                `;
+                const activeWorldwideDetails = worldPaymentMethod === 'swift' ? swiftDetails : europeDetails;
 
                 paymentBlock = `
                     <div style="background:#000; padding:15px; border:1px solid #222; font-size:0.9rem; color:#fff; line-height:1.6; text-align:left;">
-                        <div style="margin-bottom:10px; color:#cfcfcf;">
-                            ${lang === 'ua' ? 'Картка для оплати в євро' : 'Card for euro payments'}
-                        </div>
-                        <div style="margin-bottom:10px;">
-                            <span style="color:#888;">🏦 IBAN:</span><br>
-                            <div class="copy-line"><b>GB91CLJU00997192141301</b> <button class="mini-copy-btn" onclick="copyVal('GB91CLJU00997192141301')">Copy</button></div>
-                            <button type="button" onclick="showWorldwideIbanHint()" style="margin-top:6px; padding:0; background:none; border:none; color:#4da3ff; font-size:0.78rem; cursor:pointer; text-decoration:underline;">${lang === 'ua' ? 'Замало цифр?' : 'Too few digits?'}</button>
-                        </div>
-                        <div style="margin-bottom:10px;">
-                            <span style="color:#888;">🔐 BIC code:</span><br>
-                            <div class="copy-line"><b>CLJUGB21</b> <button class="mini-copy-btn" onclick="copyVal('CLJUGB21')">Copy</button></div>
-                        </div>
-                        <div style="margin-bottom:10px;">
-                            <span style="color:#888;">👤 Receiver:</span><br>
-                            <div class="copy-line"><b>MAKSYMOVA ANNA</b> <button class="mini-copy-btn" onclick="copyVal('MAKSYMOVA ANNA')">Copy</button></div>
-                            <div style="margin-top:6px; color:#9a9a9a; font-size:0.78rem;">${lang === 'ua' ? 'Країна отримувача: Великобританія' : 'Receiver country: United Kingdom'}</div>
-                        </div>
+                        ${paymentMethodSwitch}
+                        ${activeWorldwideDetails}
                         <div style="margin-bottom:8px;">
                             🛒 ${t.goodsPrice}: <span style="color:#fff; font-weight:bold;">${itemTotal}${currency}</span>
                         </div>
