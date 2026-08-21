@@ -362,29 +362,6 @@ window.PRODUCTS_DATA = [
     "catalogOrder": 33
   },
   {
-    "id": 3,
-    "slug": "hardcore-confederates-confederates-hoodie",
-    "category": "худі",
-    "title": "Hardcore Confederates",
-    "descUa": "Класичний символ бунту та вільної душі. Виразний стиль для тих, хто цінує традиції спротиву.",
-    "descEng": "A classic symbol of rebellion and a free soul. Bold style for those who value traditions of resistance.",
-    "image": "images/thumbs/photo_1_2026-03-06_19-48-03.jpg",
-    "imageAlt": "images/zenzura2.jpg",
-    "gallery": [
-      "images/photo_1_2026-03-06_19-48-03.jpg",
-      "images/zenzura2.jpg"
-    ],
-    "priceUahLabel": "1850₴",
-    "priceUsdLabel": "45€",
-    "priceUah": 1850,
-    "priceUsd": 45,
-    "sizeId": "size-3",
-    "cartName": "Confederates Hoodie",
-    "cartSizeId": "size-3",
-    "seoKeywords": "Hardcore Confederates, Confederates Hoodie, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 25
-  },
-  {
     "id": 4,
     "slug": "hardcore-hentai-hentai-hoodie",
     "category": "худі",
@@ -717,29 +694,6 @@ window.PRODUCTS_DATA = [
     "cartSizeId": "size-f7",
     "seoKeywords": "ONLY BLOOD, Only Blood T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
     "catalogOrder": 18
-  },
-  {
-    "id": 18,
-    "slug": "hardcore-confederates-confederates-t-shirt",
-    "category": "футболка",
-    "title": "Hardcore Confederates",
-    "descUa": "Футболка з відчуттям свободи, бунту і вірності власній лінії. Класичний символ спротиву, перенесений у жорсткий streetwear-настрій.",
-    "descEng": "A T-shirt with the feeling of freedom, rebellion, and loyalty to your own line. A classic symbol of resistance translated into a hard streetwear mood.",
-    "image": "images/thumbs/photo_15_2026-03-07_08-39-14.jpg",
-    "imageAlt": "images/photozenzura1.jpg",
-    "gallery": [
-      "images/photo_15_2026-03-07_08-39-14.jpg",
-      "images/photozenzura1.jpg"
-    ],
-    "priceUahLabel": "950₴",
-    "priceUsdLabel": "20€",
-    "priceUah": 950,
-    "priceUsd": 20,
-    "sizeId": "size-f9",
-    "cartName": "Confederates T-Shirt",
-    "cartSizeId": "size-f9",
-    "seoKeywords": "Hardcore Confederates, Confederates T-Shirt, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 12
   },
   {
     "id": 19,
