@@ -404,8 +404,9 @@
         }
         .buy-btn:disabled { background: #444; cursor: not-allowed; }
 
-        .copy-line { display: flex; justify-content: space-between; align-items: center; background: #111; padding: 5px 10px; border: 1px solid #333; margin-top: 5px; }
-        .mini-copy-btn { background: var(--blood); color: white; border: none; padding: 3px 8px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; }
+        .copy-line { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: #111; padding: 5px 10px; border: 1px solid #333; margin-top: 5px; }
+        .copy-line b { min-width: 0; overflow-wrap: anywhere; }
+        .mini-copy-btn { flex: 0 0 auto; background: var(--blood); color: white; border: none; padding: 3px 8px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; }
 
         .cart-widget {
             position: fixed; bottom: 20px; right: 20px; background: var(--blood);
