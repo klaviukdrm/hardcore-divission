@@ -17,7 +17,7 @@ let cart = [];
     let paymentScreenshot = null;
     let deliveryRegion = 'ua';
     let paymentRegion = 'ua';
-    let worldPaymentMethod = 'europe';
+    let worldPaymentMethod = 'euro';
     let orderStep = 'payment';
     let deliveryData = null;
     let lastScrollTop = 0;
@@ -1241,14 +1241,15 @@ let cart = [];
     function renderWorldPaymentMethodSwitch() {
         return `
             <div class="region-switch world-payment-method-switch">
-                <button class="region-btn ${worldPaymentMethod === 'europe' ? 'active' : ''}" onclick="setWorldPaymentMethod('europe')">EUROPE</button>
+                <button class="region-btn ${worldPaymentMethod === 'euro' ? 'active' : ''}" onclick="setWorldPaymentMethod('euro')">EURO</button>
                 <button class="region-btn ${worldPaymentMethod === 'swift' ? 'active' : ''}" onclick="setWorldPaymentMethod('swift')">SWIFT</button>
+                <button class="region-btn ${worldPaymentMethod === 'usd' ? 'active' : ''}" onclick="setWorldPaymentMethod('usd')">USD</button>
             </div>
         `;
     }
 
     function setWorldPaymentMethod(method) {
-        worldPaymentMethod = method === 'swift' ? 'swift' : 'europe';
+        worldPaymentMethod = ['swift', 'usd'].includes(method) ? method : 'euro';
         renderOrderPayment();
     }
 
@@ -1329,7 +1330,7 @@ let cart = [];
         } else {
             if (isWorldPayment) {
                 const paymentMethodSwitch = renderWorldPaymentMethodSwitch();
-                const europeDetails = `
+                const euroDetails = `
                     <div style="margin-bottom:10px; color:#cfcfcf;">
                         ${lang === 'ua' ? 'Картка для оплати в євро' : 'Card for euro payments'}
                     </div>
@@ -1370,7 +1371,33 @@ let cart = [];
                         <div class="copy-line"><b>${swiftAddress}</b> <button class="mini-copy-btn" onclick="copyVal('${swiftAddress}')">Copy</button></div>
                     </div>
                 `;
-                const activeWorldwideDetails = worldPaymentMethod === 'swift' ? swiftDetails : europeDetails;
+                const usdDetails = `
+                    <div style="margin-bottom:10px; color:#cfcfcf;">
+                        USD
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span style="color:#888;">🏦 IBAN:</span><br>
+                        <div class="copy-line"><b>UA793220010000026000380051848</b> <button class="mini-copy-btn" onclick="copyVal('UA793220010000026000380051848')">Copy</button></div>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span style="color:#888;">🔐 SWIFT / BIC Code:</span><br>
+                        <div class="copy-line"><b>UNJSUAUKXXX</b> <button class="mini-copy-btn" onclick="copyVal('UNJSUAUKXXX')">Copy</button></div>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span style="color:#888;">👤 Receiver:</span><br>
+                        <div class="copy-line"><b>PE MAKSYMOVA ANNA</b> <button class="mini-copy-btn" onclick="copyVal('PE MAKSYMOVA ANNA')">Copy</button></div>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span style="color:#888;">📍 Address:</span><br>
+                        <div class="copy-line"><b>${swiftAddress}</b> <button class="mini-copy-btn" onclick="copyVal('${swiftAddress}')">Copy</button></div>
+                    </div>
+                `;
+                const worldwideDetailsByMethod = {
+                    euro: euroDetails,
+                    swift: swiftDetails,
+                    usd: usdDetails
+                };
+                const activeWorldwideDetails = worldwideDetailsByMethod[worldPaymentMethod] || euroDetails;
 
                 paymentBlock = `
                     <div style="background:#000; padding:15px; border:1px solid #222; font-size:0.9rem; color:#fff; line-height:1.6; text-align:left;">
