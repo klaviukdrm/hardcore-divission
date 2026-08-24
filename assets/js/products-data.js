@@ -1472,11 +1472,11 @@ window.PRODUCTS_DATA = [
     "title": "HARDCORE NATION LONGLSLEEVE",
     "descUa": "Лонгслів HARDCORE NATION для тих, кого не зламали обставини. Щільний силует, холодний ритм і стан, загартований тиском та боротьбою.",
     "descEng": "HARDCORE NATION longsleeve for those not broken by circumstances. A dense silhouette, cold rhythm, and a state tempered by pressure and struggle.",
-    "image": "images/IMG_9299.JPEG",
-    "imageAlt": "images/IMG_9300.JPEG",
+    "image": "images/photo_2026-08-21_07-22-19.jpg",
+    "imageAlt": "images/photo_2026-08-21_07-19-38.jpg",
     "gallery": [
-      "images/IMG_9299.JPEG",
-      "images/IMG_9300.JPEG"
+      "images/photo_2026-08-21_07-22-19.jpg",
+      "images/photo_2026-08-21_07-19-38.jpg"
     ],
     "priceUahLabel": "1550₴",
     "priceUsdLabel": "35€",
