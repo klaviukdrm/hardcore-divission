@@ -558,29 +558,6 @@ window.PRODUCTS_DATA = [
     "catalogOrder": 41
   },
   {
-    "id": 10,
-    "slug": "hardcore-division-white-division-t-shirt-white",
-    "category": "футболка",
-    "title": "Hardcore Division White",
-    "descUa": "Класика бренду для тих, хто цінує чисту форму без зайвого шуму. Мінімалізм, характер і впізнаваний настрій HARDCORE DIVISION в одному силуеті.",
-    "descEng": "A brand classic for those who value clean form without extra noise. Minimalism, character, and the recognizable HARDCORE DIVISION mood in one silhouette.",
-    "image": "images/thumbs/photo_1_2026-03-06_19-49-40.jpg",
-    "imageAlt": "images/thumbs/photo_2_2026-03-06_19-49-40.jpg",
-    "gallery": [
-      "images/photo_1_2026-03-06_19-49-40.jpg",
-      "images/photo_2_2026-03-06_19-49-40.jpg"
-    ],
-    "priceUahLabel": "950₴",
-    "priceUsdLabel": "20€",
-    "priceUah": 950,
-    "priceUsd": 20,
-    "sizeId": "size-10",
-    "cartName": "Division T-Shirt White",
-    "cartSizeId": "size-10",
-    "seoKeywords": "Hardcore Division White, Division T-Shirt White, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 36
-  },
-  {
     "id": 11,
     "slug": "hardcore-hentai-hardcore-hentai-t-shirt",
     "category": "футболка",
@@ -857,30 +834,6 @@ window.PRODUCTS_DATA = [
     "cartSizeId": "size-f14",
     "seoKeywords": "TURBOHARDCORE T-SHIRT RED, TURBOHARDCORE, футболка, hardcore division, turboskin, streetwear, ukraine brand",
     "catalogOrder": 32
-  },
-  {
-    "id": 28,
-    "slug": "turbohardcore-white-turbohardcore-t-shirt-white",
-    "category": "футболка",
-    "isNew": false,
-    "title": "TURBOHARDCORE WHITE",
-    "descUa": "Колаборація TURBOSKIN x HARDCORE DIVISION у білому виконанні чиста база, різкий акцент і холодна брутальність у деталях.",
-    "descEng": "A TURBOSKIN x HARDCORE DIVISION collaboration in white execution with a clean base, sharp accent, and cold brutality in the details.",
-    "image": "images/IMG_7806.JPEG",
-    "imageAlt": "images/IMG_7809.JPEG",
-    "gallery": [
-      "images/IMG_7806.JPEG",
-      "images/IMG_7809.JPEG"
-    ],
-    "priceUahLabel": "1050₴",
-    "priceUsdLabel": "25€",
-    "priceUah": 1050,
-    "priceUsd": 25,
-    "sizeId": "size-f15",
-    "cartName": "TURBOHARDCORE T-SHIRT WHITE",
-    "cartSizeId": "size-f15",
-    "seoKeywords": "TURBOHARDCORE T-SHIRT WHITE, TURBOHARDCORE, футболка, hardcore division, turboskin, streetwear, ukraine brand",
-    "catalogOrder": 37
   },
   {
     "id": 36,
@@ -1346,7 +1299,7 @@ window.PRODUCTS_DATA = [
     "slug": "hardcore-division-crew-hardcore-division-crew-t-shirt",
     "category": "футболка",
     "isNew": true,
-    "renderInCatalog": false,
+    "renderInCatalog": true,
     "title": "HARDCORE DIVISION CREW [2 КОЛОРА]",
     "descUa": "Футболка для своєї команди: чорний по стандарту та червоний як акцент сили. Лаконічна форма і жорсткий характер.",
     "descEng": "A T-shirt for the crew: black by default and red as the power accent. Clean form and a hard character.",
@@ -1715,37 +1668,6 @@ window.PRODUCTS_DATA = [
     "cartSizeId": "size-h23",
     "seoKeywords": "MILITANT PRO, MILITANT PRO HOODIE, худі, hardcore division, streetwear, hoodie, ukraine brand",
     "catalogOrder": 46
-  },
-  {
-    "id": 65,
-    "slug": "militant-pro-militant-pro-t-shirt",
-    "category": "футболка",
-    "isNew": false,
-    "renderInCatalog": false,
-    "title": "MILITANT PRO",
-    "descUa": "Футболка MILITANT PRO з чистим бойовим настроєм без декору заради декору. Лаконічний вигляд, жорсткий тон і характер для тих, хто тримає свій напрям.",
-    "descEng": "MILITANT PRO T-shirt with a clean militant mood and no decoration for decoration's sake. Laconic look, hard tone, and character for those who keep their direction.",
-    "image": "images/photo_2026-08-05_18-10-17.jpg",
-    "imageAlt": "images/Screenshot_17.png",
-    "gallery": [
-      "images/photo_2026-08-05_18-10-17.jpg",
-      "images/Screenshot_17.png"
-    ],
-    "priceUahLabel": "950₴",
-    "priceUsdLabel": "20€",
-    "priceUah": 950,
-    "priceUsd": 20,
-    "sizes": [
-      "L",
-      "XL",
-      "2XL",
-      "3XL"
-    ],
-    "sizeId": "size-f32",
-    "cartName": "MILITANT PRO T-SHIRT",
-    "cartSizeId": "size-f32",
-    "seoKeywords": "MILITANT PRO, MILITANT PRO T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 47
   },
   {
     "id": 66,
