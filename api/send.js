@@ -1,4 +1,4 @@
-import { sendTelegramMediaGroup } from '../lib/server/telegram.js';
+import { sendTelegramMediaGroup, sendTelegramMessage } from '../lib/server/telegram.js';
 import { checkRateLimit } from '../lib/server/rate-limit.js';
 import { getClientIp } from '../lib/server/http.js';
 
@@ -80,6 +80,13 @@ function isValidOrderItems(items) {
     });
 }
 
+function normalizeFinanceMessage(value) {
+    const message = String(value || '').trim();
+    if (!message || message.length > 1200) return '';
+    if (!message.includes('<b>СУММА</b>')) return '';
+    return message;
+}
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method not allowed' });
@@ -90,7 +97,7 @@ export default async function handler(req, res) {
     const chatId = process.env.TELEGRAM_CHAT_ID;
     
     // Accept either `photo` or `image` from the client payload.
-    const { action, code, message, photo, image, orderItems } = req.body || {};
+    const { action, code, message, photo, image, orderItems, financeMessage } = req.body || {};
     const imageData = photo || image;
 
     if (action === 'validatePromo') {
@@ -255,6 +262,11 @@ export default async function handler(req, res) {
         const result = await response.json();
 
         if (response.ok) {
+            const normalizedFinanceMessage = normalizeFinanceMessage(financeMessage);
+            if (normalizedFinanceMessage) {
+                await sendTelegramMessage(normalizedFinanceMessage);
+            }
+
             const resolvedItems = resolveOrderItems(orderItems);
             if (resolvedItems.length) {
                 await sendTelegramMediaGroup(resolvedItems);
