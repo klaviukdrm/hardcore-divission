@@ -1718,5 +1718,31 @@ window.PRODUCTS_DATA = [
     "cartSizeId": "size-h24",
     "seoKeywords": "ТУРБ8СК1N.HTTB.GEN3, TURB8SK1N HTTB GEN3 HOODIE, худі, turboskin, hardcore division, streetwear, ukraine brand",
     "catalogOrder": 23
+  },
+  {
+    "id": 68,
+    "slug": "hardcore-cap",
+    "category": "кепки",
+    "isNew": true,
+    "renderInCatalog": true,
+    "noSize": true,
+    "soldOut": true,
+    "transparentPrice": true,
+    "title": "HARDCORE CAP",
+    "descUa": "Кепка HARDCORE CAP з прямим характером Hardcore Division. Лаконічна форма, щільна посадка і холодний акцент для повсякденного комплекту.",
+    "descEng": "HARDCORE CAP with direct Hardcore Division character. A clean shape, solid fit, and cold accent for an everyday set.",
+    "image": "images/photo_3_2026-08-26_12-58-00.jpg",
+    "imageAlt": "images/photo_4_2026-08-26_12-58-00.jpg",
+    "gallery": [
+      "images/photo_3_2026-08-26_12-58-00.jpg",
+      "images/photo_4_2026-08-26_12-58-00.jpg"
+    ],
+    "priceUahLabel": "0₴",
+    "priceUsdLabel": "0€",
+    "priceUah": 0,
+    "priceUsd": 0,
+    "cartName": "HARDCORE CAP",
+    "seoKeywords": "HARDCORE CAP, кепка, cap, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 2
   }
 ];
