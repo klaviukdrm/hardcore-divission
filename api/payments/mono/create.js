@@ -85,6 +85,19 @@ function normalizePromo(promo) {
     };
 }
 
+function normalizeFinanceSummary(value) {
+    const summary = String(value || '').trim();
+    if (!summary || summary.length > 1200) return '';
+    return summary;
+}
+
+function addOrderIdToFinanceSummary(summary, orderId) {
+    const text = normalizeFinanceSummary(summary);
+    const code = escapeHtml(orderId);
+    if (!text || !code || text.includes('🆔 <b>Номер:</b>')) return text;
+    return text.replace('<b>СУММА</b>', `<b>СУММА</b>\n🆔 <b>Номер:</b> ${code}`);
+}
+
 async function insertOrderItemsWithFallback(orderId, items) {
     const itemRows = items.map((item) => ({
         order_id: orderId,
@@ -293,6 +306,7 @@ export default async function handler(req, res) {
     const items = normalizeItems(body.items);
     const visualItems = resolveVisualItemsUrls(req, normalizeVisualItems(body.orderItems));
     const promo = normalizePromo(body.promo);
+    const financeSummary = normalizeFinanceSummary(body.financeSummary);
     const config = getMonoConfig();
     const baseUrl = getBaseUrl(req);
     const redirectUrl = String(body.redirectUrl || config.redirectUrl || '').trim() || (baseUrl ? `${baseUrl}/pages/index.html` : '');
@@ -341,6 +355,10 @@ export default async function handler(req, res) {
 
         try {
             await sendTelegramMessage(createdMessage);
+            const financeSummaryWithOrderId = addOrderIdToFinanceSummary(financeSummary, orderId);
+            if (financeSummaryWithOrderId) {
+                await sendTelegramMessage(financeSummaryWithOrderId);
+            }
             if (visualItems.length) {
                 await sendTelegramMediaGroup(visualItems);
             }
