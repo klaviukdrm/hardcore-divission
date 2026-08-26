@@ -1439,7 +1439,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE NATION LONGLSLEEVE",
     "cartSizeId": "size-sw3",
     "seoKeywords": "HARDCORE NATION, HARDCORE NATION LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 6
+    "catalogOrder": 8
   },
   {
     "id": 57,
@@ -1454,7 +1454,9 @@ window.PRODUCTS_DATA = [
     "imageAlt": "images/photo_2026-08-21_07-19-38.jpg",
     "gallery": [
       "images/photo_2026-08-21_07-22-19.jpg",
-      "images/photo_2026-08-21_07-19-38.jpg"
+      "images/photo_2026-08-21_07-19-38.jpg",
+      "images/photo_2026-08-26_14-01-32.jpg",
+      "images/photo_2026-08-26_14-01-34.jpg"
     ],
     "priceUahLabel": "1750₴",
     "priceUsdLabel": "40€",
@@ -1464,7 +1466,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE NATION SWEATSHIRT",
     "cartSizeId": "size-sw4",
     "seoKeywords": "HARDCORE NATION, HARDCORE NATION SWEATSHIRT, світшот, свитшот, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 8
+    "catalogOrder": 6
   },
   {
     "id": 58,
