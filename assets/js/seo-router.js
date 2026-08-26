@@ -93,6 +93,34 @@
         return Boolean(product && product.contactUrl);
     }
 
+    const turboskinProductSlugs = new Set([
+        "turbohardcore-turbohardcore-hoodie",
+        "turbohardcore-red-turbohardcore-t-shirt-red",
+        "turbonasillia-turbonasillia-hoodie",
+        "turbonasillia-turbonasillia-t-shirt",
+        "trbskn-gen1-trbskn-gen1-hoodie",
+        "trbskn-gen1-trbskn-gen1-t-shirt",
+        "nlyl-nlyl-hoodie",
+        "nlyl-nlyl-t-shirt",
+        "protect-your-karma-protect-your-karma-hoodie",
+        "protect-your-karma-protect-your-karma-t-shirt",
+        "trbskn-gen2-trbskn-gen2-hoodie",
+        "trbskn-gen2-trbskn-gen2-t-shirt",
+        "turb8sk1n-httb-gen3-t-shirt",
+        "turb8sk1n-httb-gen3-hoodie"
+    ]);
+
+    function isTurboskinProduct(product) {
+        const slug = String(product && product.slug ? product.slug : "").trim().toLowerCase();
+        return turboskinProductSlugs.has(slug);
+    }
+
+    function getTurboskinProductNote(lang) {
+        return lang === "eng"
+            ? "This product belongs to Turboskin and is not affiliated with the Hardcore Division brand."
+            : "Цей товар належить до Turboskin і не має відношення до бренду Hardcore Division.";
+    }
+
     function shouldHideProductPrice(product) {
         return Boolean(product && product.transparentPrice);
     }
@@ -633,6 +661,9 @@
             ? (lang === "ua" ? "Виробництво стартує після бронювання 30 кепок. Мінімальний запуск можливий від 15 броней. Передзамовлення доступне обмежений час. Час виробництва — 4 тижні." : "Production starts after 30 caps are reserved. Minimum launch is possible from 15 reservations. Pre-order is available for a limited time. Production time — 4 weeks.")
             : "";
         const productDescBlock = capLimitNote ? `${desc}<br>${capLimitNote}` : desc;
+        const turboskinNote = isTurboskinProduct(product)
+            ? `<p class="product-detail-note product-turboskin-note">${escapeHtml(getTurboskinProductNote(lang))}</p>`
+            : "";
         const contactOnly = isContactOnlyProduct(product) && !soldOut;
         const hasSize = !product.noSize && !contactOnly;
         const addLabel = soldOut
@@ -726,6 +757,7 @@
                     <h1 class="product-detail-title">${displayTitle}</h1>
                     <p class="product-detail-meta"><strong>${slugLabel}:</strong> ${product.slug}</p>
                     <p class="product-detail-desc">${productDescBlock}</p>
+                    ${turboskinNote}
                     ${pageNote ? `<p class="product-detail-note">${escapeHtml(pageNote)}</p>` : ""}
                     <div class="${getPriceClass(product)}" id="productPrice" data-uah="${product.priceUah}\u20B4" data-usd="${product.priceUsd}\u20AC">${formatPriceLabel(product, lang)}</div>
                     <div class="product-detail-actions">
