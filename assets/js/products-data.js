@@ -610,11 +610,11 @@ window.PRODUCTS_DATA = [
     "title": "Idea of Nation",
     "descUa": "Футболка про ідейний фундамент, на якому тримається власна позиція. Чистий меседж, спокійна сила і характер, що не потребує зайвих пояснень.",
     "descEng": "A T-shirt about the ideological foundation that holds your own position in place. A clean message, calm strength, and character that needs no extra explanation.",
-    "image": "images/thumbs/photo_9_2026-03-07_08-39-14.jpg",
-    "imageAlt": "images/thumbs/photo_2026-03-12_14-59-12.jpg",
+    "image": "images/photo_2026-07-31_18-28-11.jpg",
+    "imageAlt": "images/photo_2026-07-31_18-33-52.jpg",
     "gallery": [
-      "images/photo_9_2026-03-07_08-39-14.jpg",
-      "images/photo_2026-03-12_14-59-12.jpg"
+      "images/photo_2026-07-31_18-28-11.jpg",
+      "images/photo_2026-07-31_18-33-52.jpg"
     ],
     "priceUahLabel": "950₴",
     "priceUsdLabel": "20€",
