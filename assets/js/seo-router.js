@@ -224,10 +224,10 @@
         const type = inferTypeName(product);
         const typeUa = type === "T-Shirt"
             ? "футболка"
-            : (type === "Longsleeve" ? "лонгслів" : (type === "Sweatshirt" ? "світшот" : "худі"));
+            : (type === "Longsleeve" ? "лонгслів" : (type === "Sweatshirt" ? "світшот" : (type === "Cap" ? "кепка" : "худі")));
         const typeRu = type === "T-Shirt"
             ? "футболка"
-            : (type === "Longsleeve" ? "лонгслив" : (type === "Sweatshirt" ? "свитшот" : "худи"));
+            : (type === "Longsleeve" ? "лонгслив" : (type === "Sweatshirt" ? "свитшот" : (type === "Cap" ? "кепка" : "худи")));
         const descUa = (product.descUa || product.descEng || product.title).trim();
         const descEng = (product.descEng || product.descUa || product.title).trim();
 
@@ -335,6 +335,7 @@
     function buildDefaultSizeSelect(sizeId, product) {
         if (!sizeId && !(product && product.noSize)) return "";
         if (product && product.noSize) {
+            if (product.soldOut || isContactOnlyProduct(product)) return "";
             return `
                 <select id="${escapeAttr(sizeId || `size-${product.id || "one-size"}`)}">
                     <option value="ONE SIZE">SIZE: ONE SIZE</option>
@@ -626,12 +627,12 @@
         const desc = lang === "ua" ? (product.descUa || product.descEng) : (product.descEng || product.descUa);
         const typeName = inferTypeName(product);
         const isCap = typeName === "Cap";
+        const soldOut = Boolean(product && product.soldOut);
         const pageNote = lang === "ua" ? (product.pageNoteUa || "") : (product.pageNoteEng || "");
-        const capLimitNote = isCap
+        const capLimitNote = isCap && !soldOut
             ? (lang === "ua" ? "Виробництво стартує після бронювання 30 кепок. Мінімальний запуск можливий від 15 броней. Передзамовлення доступне обмежений час. Час виробництва — 4 тижні." : "Production starts after 30 caps are reserved. Minimum launch is possible from 15 reservations. Pre-order is available for a limited time. Production time — 4 weeks.")
             : "";
         const productDescBlock = capLimitNote ? `${desc}<br>${capLimitNote}` : desc;
-        const soldOut = Boolean(product && product.soldOut);
         const contactOnly = isContactOnlyProduct(product) && !soldOut;
         const hasSize = !product.noSize && !contactOnly;
         const addLabel = soldOut
@@ -656,7 +657,9 @@
                 ? product.sizes.map((size) => String(size || "").trim()).filter(Boolean)
                 : ["S", "M", "L", "XL", "2XL", "3XL"]
             ).map((size) => `<option value="${escapeAttr(size)}">SIZE: ${escapeHtml(size)}</option>`).join("");
-        const sizeSelectMarkup = product.noSize
+        const sizeSelectMarkup = product.noSize && (soldOut || contactOnly)
+            ? ""
+            : product.noSize
             ? `<select id="product-size">
                             <option value="ONE SIZE">SIZE: ONE SIZE</option>
                         </select>`
@@ -893,7 +896,7 @@
                 "priceCurrency": "UAH",
                 "price": String(product.priceUah),
                 "url": productAbsUrl(product.slug),
-                "availability": "https://schema.org/InStock",
+                "availability": product.soldOut ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
                 "itemCondition": "https://schema.org/NewCondition"
             }
         });
