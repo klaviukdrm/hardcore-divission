@@ -229,6 +229,96 @@ let cart = [];
         };
     }
 
+    const turboShareProductSlugs = new Set([
+        'trbskn-gen1-trbskn-gen1-hoodie',
+        'trbskn-gen1-trbskn-gen1-t-shirt',
+        'turbonasillia-turbonasillia-hoodie',
+        'turbonasillia-turbonasillia-t-shirt',
+        'protect-your-karma-protect-your-karma-hoodie',
+        'protect-your-karma-protect-your-karma-t-shirt',
+        'trbskn-gen2-trbskn-gen2-hoodie',
+        'trbskn-gen2-trbskn-gen2-t-shirt',
+        'nlyl-nlyl-hoodie',
+        'nlyl-nlyl-t-shirt',
+        'turb8sk1n-httb-gen3-hoodie',
+        'turb8sk1n-httb-gen3-t-shirt'
+    ]);
+
+    function normalizeFinanceText(value) {
+        return String(value || '').trim().toLowerCase();
+    }
+
+    function isTurboShareProduct(product) {
+        const slug = normalizeFinanceText(product?.slug);
+        return turboShareProductSlugs.has(slug);
+    }
+
+    function getPrintShareUah(product, item) {
+        const category = normalizeFinanceText(product?.category);
+        const title = normalizeFinanceText(`${product?.cartName || ''} ${product?.title || ''} ${item?.name || ''}`);
+        const size = String(item?.size || '').trim().toUpperCase();
+        const sizeSurcharge = size === '3XL' ? tshirt3xlSurchargeUah : 0;
+        const productPrice = Number(product?.priceUah) || Math.max(0, (Number(item?.uah) || 0) - sizeSurcharge);
+        const isTurboProduct = isTurboShareProduct(product);
+        const hoodieSleeveThreshold = isTurboProduct ? 1950 : 1850;
+
+        if (category === 'футболка' || /t-?shirt/.test(title)) return 450 + sizeSurcharge;
+        if (category === 'лонгсліви' || /longsleeve|longlsleeve/.test(title)) return (productPrice >= 1550 ? 900 : 800) + sizeSurcharge;
+        if (category === 'худі' || /hoodie/.test(title)) return (productPrice >= hoodieSleeveThreshold ? 1200 : 1100) + sizeSurcharge;
+        if (category === 'світшоти' || /sweatshirt/.test(title)) return (productPrice >= 1750 ? 1100 : 1000) + sizeSurcharge;
+
+        return 0;
+    }
+
+    function buildOrderFinanceSummary(orderCode = '') {
+        const subtotalUah = roundCurrency(cart.reduce((sum, item) => sum + (Number(item.uah) || 0), 0));
+        if (!subtotalUah) return '';
+
+        let printTotal = 0;
+        let hdTotal = 0;
+        let turboTotal = 0;
+
+        cart.forEach((item) => {
+            const product = findCatalogProductForCartItem(item);
+            const itemTotal = Number(item.uah) || 0;
+            const printShare = getPrintShareUah(product, item);
+            const isTurboProduct = isTurboShareProduct(product);
+
+            printTotal += printShare;
+            if (isTurboProduct) {
+                hdTotal += 200;
+                turboTotal += Math.max(0, itemTotal - printShare - 200);
+            } else {
+                hdTotal += Math.max(0, itemTotal - printShare);
+            }
+        });
+
+        printTotal = roundCurrency(printTotal);
+        hdTotal = roundCurrency(hdTotal);
+        turboTotal = roundCurrency(turboTotal);
+
+        const promoPricingUah = getPromoPricing(subtotalUah);
+        const distributableTotal = promoPricingUah.total;
+        let remainingDiscount = promoPricingUah.discountAmount;
+        if (remainingDiscount > 0 && turboTotal > 0) {
+            const turboDiscount = Math.min(turboTotal, remainingDiscount);
+            turboTotal = roundCurrency(turboTotal - turboDiscount);
+            remainingDiscount = roundCurrency(remainingDiscount - turboDiscount);
+        }
+        if (remainingDiscount > 0 && hdTotal > 0) {
+            hdTotal = roundCurrency(Math.max(0, hdTotal - remainingDiscount));
+        }
+        const discountLine = promoPricingUah.discountAmount > 0
+            ? `\n🏷 <b>Знижка:</b> -${formatCurrencyValue(promoPricingUah.discountAmount)}₴`
+            : '';
+        const turboLine = turboTotal > 0
+            ? `\n⚡ <b>ТУРБО:</b> ${formatCurrencyValue(turboTotal)}₴`
+            : '';
+        const orderLine = orderCode ? `\n🆔 <b>Номер:</b> ${escapeHtml(orderCode)}` : '';
+
+        return `<b>СУММА</b>${orderLine}\n💰 <b>До розподілу:</b> ${formatCurrencyValue(distributableTotal)}₴${discountLine}\n🖨 <b>ПРІНТ:</b> ${formatCurrencyValue(printTotal)}₴\n🩸 <b>ХД:</b> ${formatCurrencyValue(hdTotal)}₴${turboLine}`;
+    }
+
     function getCheckoutFormValues() {
         const uaFioInput = document.getElementById('orderFIO');
         const uaPhoneInput = document.getElementById('orderPhone');
@@ -1830,8 +1920,9 @@ let cart = [];
             const city = shippingRaw.split(',')[0].split('в„–')[0].trim() || '-';
             const items = buildOrderItemsPayload('ua');
             const orderVisualItems = buildOrderTelegramVisualItems('ua');
+            const financeSummary = buildOrderFinanceSummary();
 
-        const response = await fetch('/api/payments/mono/create', {
+            const response = await fetch('/api/payments/mono/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -1849,6 +1940,7 @@ let cart = [];
                     },
                     items,
                     orderItems: orderVisualItems,
+                    financeSummary,
                     promo: promoPricing.discountAmount > 0
                         ? {
                             code: promoPricing.code,
@@ -1966,6 +2058,7 @@ let cart = [];
                 ? `\n<b>APPLIED PROMO CODE</b>\n`
                 : `\n<b>ЗАСТОСОВАНО ПРОМОКОД</b>\n`)
             : '\n';
+        const financeSummary = buildOrderFinanceSummary(publicOrderCode);
 
         if (isWorldwideOrder) {
             const fio = String(deliveryData?.data?.fio || '').trim();
@@ -2026,7 +2119,8 @@ let cart = [];
                 body: JSON.stringify({
                     message: messageText,
                     image: paymentScreenshot,
-                    orderItems: orderVisualItems
+                    orderItems: orderVisualItems,
+                    financeMessage: financeSummary
                 })
             });
             telegramSent = response.ok;
