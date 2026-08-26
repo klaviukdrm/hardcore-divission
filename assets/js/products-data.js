@@ -1450,12 +1450,12 @@ window.PRODUCTS_DATA = [
     "title": "HARDCORE NATION SWEATSHIRT",
     "descUa": "Світшот HARDCORE NATION для холодних вулиць і людей, які тримають свій напрям без пояснень. Чиста форма, важкий настрій і характер, загартований боротьбою.",
     "descEng": "HARDCORE NATION sweatshirt for cold streets and people who hold their direction without explanations. Clean form, a heavy mood, and character tempered by struggle.",
-    "image": "images/photo_2026-08-21_07-22-19.jpg",
+    "image": "images/photo_2026-08-26_14-01-32.jpg",
     "imageAlt": "images/photo_2026-08-21_07-19-38.jpg",
     "gallery": [
-      "images/photo_2026-08-21_07-22-19.jpg",
-      "images/photo_2026-08-21_07-19-38.jpg",
       "images/photo_2026-08-26_14-01-32.jpg",
+      "images/photo_2026-08-21_07-19-38.jpg",
+      "images/photo_2026-08-21_07-22-19.jpg",
       "images/photo_2026-08-26_14-01-34.jpg"
     ],
     "priceUahLabel": "1750₴",
