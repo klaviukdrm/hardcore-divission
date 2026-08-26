@@ -787,7 +787,7 @@ window.PRODUCTS_DATA = [
     "cartName": "TURBOHARDCORE HOODIE",
     "cartSizeId": "size-h14",
     "seoKeywords": "TURBOHARDCORE, TURBOHARDCORE HOODIE, худі, hardcore division, turboskin, streetwear, ukraine brand",
-    "catalogOrder": 11
+    "catalogOrder": 900
   },
   {
     "id": 27,
@@ -833,7 +833,7 @@ window.PRODUCTS_DATA = [
     "cartName": "TURBOHARDCORE T-SHIRT RED",
     "cartSizeId": "size-f14",
     "seoKeywords": "TURBOHARDCORE T-SHIRT RED, TURBOHARDCORE, футболка, hardcore division, turboskin, streetwear, ukraine brand",
-    "catalogOrder": 32
+    "catalogOrder": 901
   },
   {
     "id": 36,
@@ -858,7 +858,7 @@ window.PRODUCTS_DATA = [
     "cartName": "TURBONASILLIA HOODIE",
     "cartSizeId": "size-h15",
     "seoKeywords": "ТУРБОНАСИЛЛЯ, TURBONASILLIA HOODIE, худі, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 9
+    "catalogOrder": 902
   },
   {
     "id": 37,
@@ -883,7 +883,7 @@ window.PRODUCTS_DATA = [
     "cartName": "TURBONASILLIA T-SHIRT",
     "cartSizeId": "size-f20",
     "seoKeywords": "ТУРБОНАСИЛЛЯ, TURBONASILLIA T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 30
+    "catalogOrder": 903
   },
   {
     "id": 38,
@@ -908,7 +908,7 @@ window.PRODUCTS_DATA = [
     "cartName": "TRBSKN GEN1 HOODIE",
     "cartSizeId": "size-h16",
     "seoKeywords": "ТРБСКН GEN1, TRBSKN GEN1 HOODIE, худі, turboskin, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 13
+    "catalogOrder": 904
   },
   {
     "id": 39,
@@ -933,7 +933,7 @@ window.PRODUCTS_DATA = [
     "cartName": "TRBSKN GEN1 T-SHIRT",
     "cartSizeId": "size-f21",
     "seoKeywords": "ТРБСКН GEN1, TRBSKN GEN1 T-SHIRT, футболка, turboskin, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 14
+    "catalogOrder": 905
   },
   {
     "id": 40,
@@ -958,7 +958,7 @@ window.PRODUCTS_DATA = [
     "cartName": "NLYL HOODIE",
     "cartSizeId": "size-h17",
     "seoKeywords": "NLYL, NLYL HOODIE, худі, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 49
+    "catalogOrder": 906
   },
   {
     "id": 41,
@@ -983,7 +983,7 @@ window.PRODUCTS_DATA = [
     "cartName": "NLYL T-SHIRT",
     "cartSizeId": "size-f22",
     "seoKeywords": "NLYL, NLYL T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 10
+    "catalogOrder": 907
   },
   {
     "id": 42,
@@ -1008,7 +1008,7 @@ window.PRODUCTS_DATA = [
     "cartName": "PROTECT YOUR KARMA HOODIE",
     "cartSizeId": "size-h18",
     "seoKeywords": "Protect your Karma, PROTECT YOUR KARMA HOODIE, худі, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 31
+    "catalogOrder": 908
   },
   {
     "id": 43,
@@ -1033,7 +1033,7 @@ window.PRODUCTS_DATA = [
     "cartName": "PROTECT YOUR KARMA T-SHIRT",
     "cartSizeId": "size-f23",
     "seoKeywords": "Protect your Karma, PROTECT YOUR KARMA T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 48
+    "catalogOrder": 909
   },
   {
     "id": 44,
@@ -1058,7 +1058,7 @@ window.PRODUCTS_DATA = [
     "cartName": "TRBSKN GEN2 HOODIE",
     "cartSizeId": "size-h19",
     "seoKeywords": "ТРБСКН GEN2, TRBSKN GEN2 HOODIE, худі, turboskin, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 35
+    "catalogOrder": 910
   },
   {
     "id": 45,
@@ -1083,7 +1083,7 @@ window.PRODUCTS_DATA = [
     "cartName": "TRBSKN GEN2 T-SHIRT",
     "cartSizeId": "size-f24",
     "seoKeywords": "ТРБСКН GEN2, TRBSKN GEN2 T-SHIRT, футболка, turboskin, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 4
+    "catalogOrder": 911
   },
   {
     "id": 46,
@@ -1420,16 +1420,16 @@ window.PRODUCTS_DATA = [
     "id": 56,
     "slug": "hardcore-nation-hardcore-nation-longsleeve",
     "category": "лонгсліви",
-    "isNew": false,
+    "isNew": true,
     "renderInCatalog": true,
     "title": "HARDCORE NATION LONGLSLEEVE",
     "descUa": "Лонгслів HARDCORE NATION для тих, кого не зламали обставини. Щільний силует, холодний ритм і стан, загартований тиском та боротьбою.",
     "descEng": "HARDCORE NATION longsleeve for those not broken by circumstances. A dense silhouette, cold rhythm, and a state tempered by pressure and struggle.",
-    "image": "images/photo_2026-08-21_07-22-19.jpg",
-    "imageAlt": "images/photo_2026-08-21_07-19-38.jpg",
+    "image": "images/IMG_9299.JPEG",
+    "imageAlt": "images/IMG_9300.JPEG",
     "gallery": [
-      "images/photo_2026-08-21_07-22-19.jpg",
-      "images/photo_2026-08-21_07-19-38.jpg"
+      "images/IMG_9299.JPEG",
+      "images/IMG_9300.JPEG"
     ],
     "priceUahLabel": "1600₴",
     "priceUsdLabel": "35€",
@@ -1445,16 +1445,16 @@ window.PRODUCTS_DATA = [
     "id": 57,
     "slug": "hardcore-nation-hardcore-nation-sweatshirt",
     "category": "світшоти",
-    "isNew": false,
+    "isNew": true,
     "renderInCatalog": true,
     "title": "HARDCORE NATION SWEATSHIRT",
     "descUa": "Світшот HARDCORE NATION для холодних вулиць і людей, які тримають свій напрям без пояснень. Чиста форма, важкий настрій і характер, загартований боротьбою.",
     "descEng": "HARDCORE NATION sweatshirt for cold streets and people who hold their direction without explanations. Clean form, a heavy mood, and character tempered by struggle.",
-    "image": "images/IMG_9301.JPEG",
-    "imageAlt": "images/IMG_9302.JPEG",
+    "image": "images/photo_2026-08-21_07-22-19.jpg",
+    "imageAlt": "images/photo_2026-08-21_07-19-38.jpg",
     "gallery": [
-      "images/IMG_9301.JPEG",
-      "images/IMG_9302.JPEG"
+      "images/photo_2026-08-21_07-22-19.jpg",
+      "images/photo_2026-08-21_07-19-38.jpg"
     ],
     "priceUahLabel": "1750₴",
     "priceUsdLabel": "40€",
@@ -1692,7 +1692,7 @@ window.PRODUCTS_DATA = [
     "cartName": "TURB8SK1N HTTB GEN3 T-SHIRT",
     "cartSizeId": "size-f33",
     "seoKeywords": "ТУРБ8СК1N.HTTB.GEN3, TURB8SK1N HTTB GEN3 T-SHIRT, футболка, turboskin, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 20
+    "catalogOrder": 912
   },
   {
     "id": 67,
@@ -1717,13 +1717,13 @@ window.PRODUCTS_DATA = [
     "cartName": "TURB8SK1N HTTB GEN3 HOODIE",
     "cartSizeId": "size-h24",
     "seoKeywords": "ТУРБ8СК1N.HTTB.GEN3, TURB8SK1N HTTB GEN3 HOODIE, худі, turboskin, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 23
+    "catalogOrder": 913
   },
   {
     "id": 68,
     "slug": "hardcore-cap",
     "category": "кепки",
-    "isNew": true,
+    "isNew": false,
     "renderInCatalog": true,
     "noSize": true,
     "soldOut": true,
