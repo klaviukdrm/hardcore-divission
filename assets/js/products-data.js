@@ -209,9 +209,9 @@ window.PRODUCTS_DATA = [
       "images/IMG_7915.JPG",
       "images/IMG_7916.JPG"
     ],
-    "priceUahLabel": "1550₴",
+    "priceUahLabel": "1600₴",
     "priceUsdLabel": "35€",
-    "priceUah": 1550,
+    "priceUah": 1600,
     "priceUsd": 35,
     "sizeId": "size-sw1",
     "cartName": "HARDCORE LONGLSLEEVE",
@@ -1431,9 +1431,9 @@ window.PRODUCTS_DATA = [
       "images/photo_2026-08-21_07-22-19.jpg",
       "images/photo_2026-08-21_07-19-38.jpg"
     ],
-    "priceUahLabel": "1550₴",
+    "priceUahLabel": "1600₴",
     "priceUsdLabel": "35€",
-    "priceUah": 1550,
+    "priceUah": 1600,
     "priceUsd": 35,
     "sizeId": "size-sw3",
     "cartName": "HARDCORE NATION LONGLSLEEVE",
