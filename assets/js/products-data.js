@@ -6,7 +6,7 @@ window.PRODUCTS_DATA = [
     "isNew": false,
     "renderInCatalog": true,
     "noSize": true,
-    "contactUrl": "https://t.me/lol148899",
+    "contactUrl": "https://t.me/hardcore1499",
     "title": "Патч HARDOCRE DIVISION",
     "descUa": "ПВХ патч HARDOCRE DIVISION для тих, хто тримає свій знак при собі. Жорсткий рельєф, щільна форма і характер, який чіпляється до рюкзака, плитоноски чи куртки без зайвих слів.",
     "descEng": "HARDOCRE DIVISION PVC patch for those who carry their mark with them. A hard relief, dense form, and character for a backpack, carrier, or jacket with no extra words.",
