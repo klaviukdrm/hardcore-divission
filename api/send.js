@@ -23,7 +23,7 @@ function getConfiguredPromoCodes() {
     addPromoCodes(codes, process.env.PROMO_CODES, 10);
     addPromoCodes(codes, process.env.PROMO_CODE, 10);
     addPromoCodes(codes, process.env.PROMO_CODE2, 15);
-    addPromoCodes(codes, process.env.PROMO_CODE3, 5);
+    addPromoCodes(codes, process.env.PROMO_CODE3, 30);
     return codes;
 }
 
