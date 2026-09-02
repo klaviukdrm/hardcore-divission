@@ -253,9 +253,120 @@
             display: block;
         }
 
+        .catalog-pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 45px 0 25px;
+            padding: 10px 0;
+            user-select: none;
+        }
+
+        .catalog-pagination[hidden],
+        .catalog-pagination:empty {
+            display: none !important;
+        }
+
+        .catalog-page-btn {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            font-weight: bold;
+            min-width: 44px;
+            height: 44px;
+            padding: 0 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #111;
+            color: #aaa;
+            border: 1px solid #333;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.25s ease;
+            outline: none;
+        }
+
+        .catalog-page-btn:hover:not(:disabled):not(.active) {
+            background: #1c1c1c;
+            color: #fff;
+            border-color: var(--blood);
+            box-shadow: 0 0 12px rgba(136, 8, 8, 0.4);
+        }
+
+        .catalog-page-btn.active {
+            background: var(--blood) !important;
+            color: #fff !important;
+            border-color: var(--blood) !important;
+            box-shadow: 0 0 18px rgba(136, 8, 8, 0.7);
+            cursor: default;
+        }
+
+        .catalog-page-btn:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            border-color: #222;
+            color: #555;
+            pointer-events: none;
+        }
+
+        .catalog-page-btn.nav-btn {
+            font-size: 1.15rem;
+            padding: 0 16px;
+        }
+
+        .catalog-page-ellipsis {
+            color: #666;
+            font-size: 1.2rem;
+            min-width: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .catalog-pagination {
+                gap: 6px;
+                margin: 35px 0 15px;
+            }
+            .catalog-page-btn {
+                min-width: 38px;
+                height: 38px;
+                padding: 0 10px;
+                font-size: 0.92rem;
+            }
+            .catalog-page-btn.nav-btn {
+                padding: 0 12px;
+                font-size: 1.05rem;
+            }
+        }
+
+        @keyframes catalogFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .product-card {
-            background: var(--gray); border: 1px solid #333; transition: 0.3s;
-            position: relative; overflow: hidden; display: flex; flex-direction: column;
+            background: var(--gray);
+            border: 1px solid #333;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card.card-fade-in {
+            animation: catalogFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .product-card:hover { border-color: var(--blood); box-shadow: 0 0 20px rgba(136, 8, 8, 0.4); }
         .product-link {
