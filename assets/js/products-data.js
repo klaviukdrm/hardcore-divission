@@ -1746,5 +1746,55 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE CAP",
     "seoKeywords": "HARDCORE CAP, кепка, cap, hardcore division, streetwear, ukraine brand",
     "catalogOrder": 2
+  },
+  {
+    "id": 69,
+    "slug": "handofdust-support-gen1-t-shirt",
+    "category": "футболка",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "HANDOFDUST SUPPORT GEN1",
+    "descUa": "Футболка HANDOFDUST SUPPORT GEN1 у темній естетиці важкого андеграунду. Червона піксельна графіка HANDOFDUST спереду та масивний демонічний біомеханічний принт HNDS на спині.",
+    "descEng": "HANDOFDUST SUPPORT GEN1 T-shirt in heavy underground dark aesthetics. Red pixel HANDOFDUST graphic on the front and massive demonic biomechanical HNDS print on the back.",
+    "image": "images/photo_2026-09-02_14-26-01.jpg",
+    "imageAlt": "images/photo_2026-09-02_14-26-00.jpg",
+    "gallery": [
+      "images/photo_2026-09-02_14-26-01.jpg",
+      "images/photo_2026-09-02_14-26-00.jpg"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-d1",
+    "cartName": "HANDOFDUST SUPPORT GEN1 T-SHIRT",
+    "cartSizeId": "size-d1",
+    "seoKeywords": "HANDOFDUST SUPPORT GEN1, HANDOFDUST SUPPORT GEN1 T-SHIRT, футболка, handofdust, designer, streetwear, ukraine brand",
+    "catalogOrder": 998
+  },
+  {
+    "id": 70,
+    "slug": "handofdust-support-gen2-t-shirt",
+    "category": "футболка",
+    "isNew": false,
+    "renderInCatalog": true,
+    "title": "HANDOFDUST SUPPORT GEN2",
+    "descUa": "Футболка HANDOFDUST SUPPORT GEN2 з гострою агресивною графікою. Білий слем-логотип HANDOFDUST спереду та деталізований біомеханічний рогатий череп HNDS на спині.",
+    "descEng": "HANDOFDUST SUPPORT GEN2 T-shirt with sharp aggressive graphics. White slam-style HANDOFDUST logo on the front and detailed biomechanical horned skull HNDS on the back.",
+    "image": "images/photo_2026-09-02_14-26-01 (2).jpg",
+    "imageAlt": "images/photo_2026-09-02_14-26-00 (2).jpg",
+    "gallery": [
+      "images/photo_2026-09-02_14-26-01 (2).jpg",
+      "images/photo_2026-09-02_14-26-00 (2).jpg"
+    ],
+    "priceUahLabel": "950₴",
+    "priceUsdLabel": "20€",
+    "priceUah": 950,
+    "priceUsd": 20,
+    "sizeId": "size-d2",
+    "cartName": "HANDOFDUST SUPPORT GEN2 T-SHIRT",
+    "cartSizeId": "size-d2",
+    "seoKeywords": "HANDOFDUST SUPPORT GEN2, HANDOFDUST SUPPORT GEN2 T-SHIRT, футболка, handofdust, designer, streetwear, ukraine brand",
+    "catalogOrder": 999
   }
 ];
