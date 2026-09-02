@@ -110,15 +110,31 @@
         "turb8sk1n-httb-gen3-hoodie"
     ]);
 
+    const designerProductSlugs = new Set([
+        "handofdust-support-gen1-t-shirt",
+        "handofdust-support-gen2-t-shirt"
+    ]);
+
     function isTurboskinProduct(product) {
         const slug = String(product && product.slug ? product.slug : "").trim().toLowerCase();
         return turboskinProductSlugs.has(slug);
+    }
+
+    function isDesignerProduct(product) {
+        const slug = String(product && product.slug ? product.slug : "").trim().toLowerCase();
+        return designerProductSlugs.has(slug);
     }
 
     function getTurboskinProductNote(lang) {
         return lang === "eng"
             ? "This product belongs to Turboskin and is not affiliated with the Hardcore Division brand."
             : "Цей товар належить до Turboskin і не має відношення до бренду Hardcore Division.";
+    }
+
+    function getDesignerProductNote(lang) {
+        return lang === "eng"
+            ? "This product belongs to Designer (handofdust) and is not affiliated with the Hardcore Division brand."
+            : "Цей товар належить дизайнеру (handofdust) і не має відношення до бренду Hardcore Division.";
     }
 
     function shouldHideProductPrice(product) {
@@ -581,6 +597,10 @@
                 });
             }
         }
+
+        if (typeof window.applyCatalogFilters === "function") {
+            window.applyCatalogFilters(true);
+        }
     }
 
     function setupCatalogSeo() {
@@ -663,7 +683,9 @@
         const productDescBlock = capLimitNote ? `${desc}<br>${capLimitNote}` : desc;
         const turboskinNote = isTurboskinProduct(product)
             ? `<p class="product-detail-note product-turboskin-note">${escapeHtml(getTurboskinProductNote(lang))}</p>`
-            : "";
+            : (isDesignerProduct(product)
+                ? `<p class="product-detail-note product-designer-note">${escapeHtml(getDesignerProductNote(lang))}</p>`
+                : "");
         const contactOnly = isContactOnlyProduct(product) && !soldOut;
         const hasSize = !product.noSize && !contactOnly;
         const addLabel = soldOut
