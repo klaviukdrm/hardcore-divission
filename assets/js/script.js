@@ -30,6 +30,8 @@ let cart = [];
     const promoStorageKey = 'hd_promo_v1';
     let activeCatalogCategory = 'all';
     let catalogSearchQuery = '';
+    const CATALOG_ITEMS_PER_PAGE = 15;
+    let currentCatalogPage = 1;
     let appliedPromo = { code: '', discountPercent: 0 };
     let promoDraftCode = '';
     let promoNotice = { text: '', type: 'neutral' };
@@ -244,6 +246,11 @@ let cart = [];
         'turb8sk1n-httb-gen3-t-shirt'
     ]);
 
+    const designerShareProductSlugs = new Set([
+        'handofdust-support-gen1-t-shirt',
+        'handofdust-support-gen2-t-shirt'
+    ]);
+
     function normalizeFinanceText(value) {
         return String(value || '').trim().toLowerCase();
     }
@@ -253,14 +260,19 @@ let cart = [];
         return turboShareProductSlugs.has(slug);
     }
 
+    function isDesignerShareProduct(product) {
+        const slug = normalizeFinanceText(product?.slug);
+        return designerShareProductSlugs.has(slug);
+    }
+
     function getPrintShareUah(product, item) {
         const category = normalizeFinanceText(product?.category);
         const title = normalizeFinanceText(`${product?.cartName || ''} ${product?.title || ''} ${item?.name || ''}`);
         const size = String(item?.size || '').trim().toUpperCase();
         const sizeSurcharge = size === '3XL' ? tshirt3xlSurchargeUah : 0;
         const productPrice = Number(product?.priceUah) || Math.max(0, (Number(item?.uah) || 0) - sizeSurcharge);
-        const isTurboProduct = isTurboShareProduct(product);
-        const hoodieSleeveThreshold = isTurboProduct ? 1950 : 1850;
+        const isTurboOrDesigner = isTurboShareProduct(product) || isDesignerShareProduct(product);
+        const hoodieSleeveThreshold = isTurboOrDesigner ? 1950 : 1850;
 
         if (category === 'футболка' || /t-?shirt/.test(title)) return 450 + sizeSurcharge;
         if (category === 'лонгсліви' || /longsleeve|longlsleeve/.test(title)) return (productPrice >= 1550 ? 900 : 800) + sizeSurcharge;
@@ -277,17 +289,22 @@ let cart = [];
         let printTotal = 0;
         let hdTotal = 0;
         let turboTotal = 0;
+        let designerTotal = 0;
 
         cart.forEach((item) => {
             const product = findCatalogProductForCartItem(item);
             const itemTotal = Number(item.uah) || 0;
             const printShare = getPrintShareUah(product, item);
             const isTurboProduct = isTurboShareProduct(product);
+            const isDesignerProduct = isDesignerShareProduct(product);
 
             printTotal += printShare;
             if (isTurboProduct) {
                 hdTotal += 200;
                 turboTotal += Math.max(0, itemTotal - printShare - 200);
+            } else if (isDesignerProduct) {
+                hdTotal += 200;
+                designerTotal += Math.max(0, itemTotal - printShare - 200);
             } else {
                 hdTotal += Math.max(0, itemTotal - printShare);
             }
@@ -296,6 +313,7 @@ let cart = [];
         printTotal = roundCurrency(printTotal);
         hdTotal = roundCurrency(hdTotal);
         turboTotal = roundCurrency(turboTotal);
+        designerTotal = roundCurrency(designerTotal);
 
         const promoPricingUah = getPromoPricing(subtotalUah);
         const distributableTotal = promoPricingUah.total;
@@ -304,6 +322,11 @@ let cart = [];
             const turboDiscount = Math.min(turboTotal, remainingDiscount);
             turboTotal = roundCurrency(turboTotal - turboDiscount);
             remainingDiscount = roundCurrency(remainingDiscount - turboDiscount);
+        }
+        if (remainingDiscount > 0 && designerTotal > 0) {
+            const designerDiscount = Math.min(designerTotal, remainingDiscount);
+            designerTotal = roundCurrency(designerTotal - designerDiscount);
+            remainingDiscount = roundCurrency(remainingDiscount - designerDiscount);
         }
         if (remainingDiscount > 0 && hdTotal > 0) {
             hdTotal = roundCurrency(Math.max(0, hdTotal - remainingDiscount));
@@ -314,9 +337,12 @@ let cart = [];
         const turboLine = turboTotal > 0
             ? `\n⚡ <b>ТУРБО:</b> ${formatCurrencyValue(turboTotal)}₴`
             : '';
+        const designerLine = designerTotal > 0
+            ? `\n🎨 <b>ДИЗАЙНЕР:</b> ${formatCurrencyValue(designerTotal)}₴`
+            : '';
         const orderLine = orderCode ? `\n🆔 <b>Номер:</b> ${escapeHtml(orderCode)}` : '';
 
-        return `<b>СУММА</b>${orderLine}\n💰 <b>До розподілу:</b> ${formatCurrencyValue(distributableTotal)}₴${discountLine}\n🖨 <b>ПРІНТ:</b> ${formatCurrencyValue(printTotal)}₴\n🩸 <b>ХД:</b> ${formatCurrencyValue(hdTotal)}₴${turboLine}`;
+        return `<b>СУММА</b>${orderLine}\n💰 <b>До розподілу:</b> ${formatCurrencyValue(distributableTotal)}₴${discountLine}\n🖨 <b>ПРІНТ:</b> ${formatCurrencyValue(printTotal)}₴\n🩸 <b>ХД:</b> ${formatCurrencyValue(hdTotal)}₴${turboLine}${designerLine}`;
     }
 
     function getCheckoutFormValues() {
@@ -2339,19 +2365,19 @@ function updateSearchPlaceholder() {
 
 function setCardVisibility(card, isVisible) {
     if (isVisible) {
+        const wasHidden = card.style.display === 'none' || !card.style.display;
         card.style.display = 'flex';
-        setTimeout(() => {
-            card.classList.remove('hidden');
-        }, 10);
-        return;
-    }
-
-    card.classList.add('hidden');
-    setTimeout(() => {
-        if (card.classList.contains('hidden')) {
-            card.style.display = 'none';
+        if (wasHidden) {
+            card.classList.remove('card-fade-in');
+            // Microtask to trigger smooth animation
+            requestAnimationFrame(() => {
+                card.classList.add('card-fade-in');
+            });
         }
-    }, 400);
+    } else {
+        card.classList.remove('card-fade-in');
+        card.style.display = 'none';
+    }
 }
 
 function setCatalogEmptyState(isEmpty) {
@@ -2360,10 +2386,101 @@ function setCatalogEmptyState(isEmpty) {
     emptyState.hidden = !isEmpty;
 }
 
-function applyCatalogFilters() {
-    const cards = document.querySelectorAll('.product-card');
+function renderCatalogPagination(totalPages, totalItems) {
+    const paginationEl = document.getElementById('catalogPagination');
+    if (!paginationEl) return;
+
+    if (totalPages <= 1 || totalItems === 0) {
+        paginationEl.innerHTML = '';
+        paginationEl.hidden = true;
+        return;
+    }
+
+    paginationEl.hidden = false;
+    const lang = localStorage.getItem('preferred_lang') || 'ua';
+    const prevTitle = lang === 'ua' ? 'Попередня сторінка' : 'Previous page';
+    const nextTitle = lang === 'ua' ? 'Наступна сторінка' : 'Next page';
+    const pageLabel = lang === 'ua' ? 'Сторінка' : 'Page';
+
+    let html = '';
+
+    // Prev Button
+    const prevDisabled = currentCatalogPage <= 1;
+    html += `<button type="button" class="catalog-page-btn nav-btn prev-btn" aria-label="${prevTitle}" title="${prevTitle}" onclick="goToCatalogPage(${currentCatalogPage - 1})" ${prevDisabled ? 'disabled aria-disabled="true"' : ''}>&#10094;</button>`;
+
+    // Page Numbers
+    if (totalPages <= 7) {
+        for (let i = 1; i <= totalPages; i++) {
+            const isActive = i === currentCatalogPage;
+            html += `<button type="button" class="catalog-page-btn ${isActive ? 'active' : ''}" aria-label="${pageLabel} ${i}" ${isActive ? 'aria-current="page"' : `onclick="goToCatalogPage(${i})"`}>${i}</button>`;
+        }
+    } else {
+        const pages = [];
+        pages.push(1);
+
+        if (currentCatalogPage > 3) {
+            pages.push('...');
+        }
+
+        const start = Math.max(2, currentCatalogPage - 1);
+        const end = Math.min(totalPages - 1, currentCatalogPage + 1);
+
+        for (let i = start; i <= end; i++) {
+            if (!pages.includes(i)) {
+                pages.push(i);
+            }
+        }
+
+        if (currentCatalogPage < totalPages - 2) {
+            if (!pages.includes('...')) {
+                pages.push('...');
+            }
+        }
+
+        if (!pages.includes(totalPages)) {
+            pages.push(totalPages);
+        }
+
+        pages.forEach((p) => {
+            if (p === '...') {
+                html += `<span class="catalog-page-ellipsis" aria-hidden="true">&hellip;</span>`;
+            } else {
+                const isActive = p === currentCatalogPage;
+                html += `<button type="button" class="catalog-page-btn ${isActive ? 'active' : ''}" aria-label="${pageLabel} ${p}" ${isActive ? 'aria-current="page"' : `onclick="goToCatalogPage(${p})"`}>${p}</button>`;
+            }
+        });
+    }
+
+    // Next Button
+    const nextDisabled = currentCatalogPage >= totalPages;
+    html += `<button type="button" class="catalog-page-btn nav-btn next-btn" aria-label="${nextTitle}" title="${nextTitle}" onclick="goToCatalogPage(${currentCatalogPage + 1})" ${nextDisabled ? 'disabled aria-disabled="true"' : ''}>&#10095;</button>`;
+
+    paginationEl.innerHTML = html;
+}
+
+function goToCatalogPage(pageNumber, shouldScroll = true) {
+    if (pageNumber < 1 || pageNumber === currentCatalogPage) return;
+    currentCatalogPage = pageNumber;
+    applyCatalogFilters(true);
+
+    if (shouldScroll) {
+        const catalogAnchor = document.getElementById('catalog') || document.querySelector('.shop-grid');
+        if (catalogAnchor) {
+            const yOffset = -90;
+            const y = catalogAnchor.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+        }
+    }
+}
+
+function applyCatalogFilters(preservePage = false) {
+    if (!preservePage) {
+        currentCatalogPage = 1;
+    }
+
+    const cards = Array.from(document.querySelectorAll('.shop-grid .product-card'));
     const search = String(catalogSearchQuery || '').trim().toLowerCase();
-    let visibleCount = 0;
+    const matchingCards = [];
 
     cards.forEach(card => {
         const cardCategory = String(card.getAttribute('data-category') || '');
@@ -2372,21 +2489,34 @@ function applyCatalogFilters() {
 
         const categoryMatch = activeCatalogCategory === 'all' || cardCategory === activeCatalogCategory;
         const searchMatch = !search || titleText.includes(search);
-        const isVisible = categoryMatch && searchMatch;
-        setCardVisibility(card, isVisible);
-        if (isVisible) {
-            visibleCount += 1;
+        if (categoryMatch && searchMatch) {
+            matchingCards.push(card);
         }
     });
 
-    const shouldShowEmpty = visibleCount === 0 && (search.length > 0 || activeCatalogCategory !== 'all' || cards.length === 0);
+    const totalPages = Math.max(1, Math.ceil(matchingCards.length / CATALOG_ITEMS_PER_PAGE));
+    currentCatalogPage = Math.min(Math.max(1, currentCatalogPage), totalPages);
+
+    const startIndex = (currentCatalogPage - 1) * CATALOG_ITEMS_PER_PAGE;
+    const endIndex = startIndex + CATALOG_ITEMS_PER_PAGE;
+    const visibleCardsSet = new Set(matchingCards.slice(startIndex, endIndex));
+
+    cards.forEach(card => {
+        const isVisible = visibleCardsSet.has(card);
+        setCardVisibility(card, isVisible);
+    });
+
+    const shouldShowEmpty = matchingCards.length === 0 && (search.length > 0 || activeCatalogCategory !== 'all' || cards.length === 0);
     setCatalogEmptyState(shouldShowEmpty);
+
+    renderCatalogPagination(totalPages, matchingCards.length);
 }
 
 function filterProducts(category) {
     activeCatalogCategory = category;
     setFilterButtonState(category);
-    applyCatalogFilters();
+    currentCatalogPage = 1;
+    applyCatalogFilters(false);
 }
 
 function initCatalogSearch() {
@@ -2395,11 +2525,16 @@ function initCatalogSearch() {
 
     input.addEventListener('input', (event) => {
         catalogSearchQuery = String(event.target.value || '');
-        applyCatalogFilters();
+        currentCatalogPage = 1;
+        applyCatalogFilters(false);
     });
 
     updateSearchPlaceholder();
 }
+
+window.applyCatalogFilters = applyCatalogFilters;
+window.goToCatalogPage = goToCatalogPage;
+window.filterProducts = filterProducts;
 
 // Функция переключения языка
 function setLang(lang) {
@@ -2428,6 +2563,7 @@ function setLang(lang) {
     updatePrices(lang);
     updateContact();
     updateSearchPlaceholder();
+    applyCatalogFilters(true);
     document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
 }
 
