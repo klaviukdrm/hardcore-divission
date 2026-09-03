@@ -463,7 +463,12 @@
 
         cards.forEach((card, index) => {
             const product = resolveCardProduct(card, lookup, usedProductIds);
-            if (!product) return;
+            if (!product) {
+                if (window.__productsLoadedFromRemote) {
+                    card.remove();
+                }
+                return;
+            }
             cardItems.push({ card, product, index });
 
             const url = productUrl(product.slug);
@@ -1008,24 +1013,9 @@
             // Sort remote products by catalogOrder
             remoteProducts.sort((a, b) => (Number(a.catalogOrder || a.catalog_order) || 500) - (Number(b.catalogOrder || b.catalog_order) || 500));
 
-            const activeSlugs = new Set(remoteProducts.map((p) => p.slug).filter(Boolean));
+            window.__productsLoadedFromRemote = true;
 
-            // 1. Remove deleted cards from the catalog DOM
-            const grid = document.querySelector(".shop-grid");
-            if (grid) {
-                // Ensure initial cards have their slug attributes resolved
-                enhanceCatalogCards();
-
-                const existingCards = Array.from(grid.querySelectorAll(".product-card"));
-                existingCards.forEach((card) => {
-                    const slug = card.getAttribute("data-product-slug");
-                    if (slug && !activeSlugs.has(slug)) {
-                        card.remove(); // Removes deleted product card completely
-                    }
-                });
-            }
-
-            // 2. Synchronize main products array with Supabase DB
+            // 1. Synchronize main products array with Supabase DB
             products.length = 0;
             remoteProducts.forEach((rp) => products.push(rp));
             if (Array.isArray(window.PRODUCTS_DATA)) {
@@ -1033,7 +1023,7 @@
                 remoteProducts.forEach((rp) => window.PRODUCTS_DATA.push(rp));
             }
 
-            // 3. Re-render / enhance catalog
+            // 2. Re-render / enhance catalog (orphaned/deleted static cards will be automatically removed from DOM)
             if (page === "catalog") {
                 enhanceCatalogCards();
                 setupCatalogSeo();
