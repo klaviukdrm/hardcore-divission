@@ -48,39 +48,47 @@ export default async function handler(req, res) {
         }
 
         const rows = Array.isArray(result.data) ? result.data : [];
-        const formatted = rows.map((row) => ({
-            id: row.id,
-            slug: row.slug,
-            title: row.title,
-            category: row.category,
-            priceUah: Number(row.price_uah) || 0,
-            priceUsd: Number(row.price_usd) || 0,
-            price_uah: Number(row.price_uah) || 0,
-            price_usd: Number(row.price_usd) || 0,
-            priceUahLabel: `${row.price_uah}₴`,
-            priceUsdLabel: `${row.price_usd}€`,
-            descUa: row.desc_ua || '',
-            descEng: row.desc_eng || '',
-            desc_ua: row.desc_ua || '',
-            desc_eng: row.desc_eng || '',
-            image: row.image || '',
-            imageAlt: row.image_alt || row.image || '',
-            image_alt: row.image_alt || row.image || '',
-            gallery: Array.isArray(row.gallery) && row.gallery.length ? row.gallery : [row.image].filter(Boolean),
-            colorVariants: Array.isArray(row.color_variants) && row.color_variants.length ? row.color_variants : (row.colorVariants || []),
-            color_variants: Array.isArray(row.color_variants) && row.color_variants.length ? row.color_variants : (row.colorVariants || []),
-            isNew: Boolean(row.is_new),
-            is_new: Boolean(row.is_new),
-            isPreorder: Boolean(row.is_preorder),
-            is_preorder: Boolean(row.is_preorder),
-            soldOut: Boolean(row.sold_out),
-            sold_out: Boolean(row.sold_out),
-            catalogOrder: Number(row.catalog_order) || 500,
-            catalog_order: Number(row.catalog_order) || 500,
-            brand: row.brand || 'hd',
-            renderInCatalog: true,
-            cartName: row.title
-        }));
+        const formatted = rows.map((row) => {
+            const isPatch = row.category === 'патчи' || String(row.slug || '').includes('patch');
+            const isCap = row.category === 'кепки' || String(row.slug || '').includes('cap');
+
+            return {
+                id: row.id,
+                slug: row.slug,
+                title: row.title,
+                category: row.category,
+                priceUah: Number(row.price_uah) || 0,
+                priceUsd: Number(row.price_usd) || 0,
+                price_uah: Number(row.price_uah) || 0,
+                price_usd: Number(row.price_usd) || 0,
+                priceUahLabel: `${row.price_uah}₴`,
+                priceUsdLabel: `${row.price_usd}€`,
+                descUa: row.desc_ua || '',
+                descEng: row.desc_eng || '',
+                desc_ua: row.desc_ua || '',
+                desc_eng: row.desc_eng || '',
+                image: row.image || '',
+                imageAlt: row.image_alt || row.image || '',
+                image_alt: row.image_alt || row.image || '',
+                gallery: Array.isArray(row.gallery) && row.gallery.length ? row.gallery : [row.image].filter(Boolean),
+                colorVariants: Array.isArray(row.color_variants) && row.color_variants.length ? row.color_variants : (row.colorVariants || []),
+                color_variants: Array.isArray(row.color_variants) && row.color_variants.length ? row.color_variants : (row.colorVariants || []),
+                isNew: Boolean(row.is_new),
+                is_new: Boolean(row.is_new),
+                isPreorder: Boolean(row.is_preorder),
+                is_preorder: Boolean(row.is_preorder),
+                soldOut: Boolean(row.sold_out),
+                sold_out: Boolean(row.sold_out),
+                catalogOrder: Number(row.catalog_order) || 500,
+                catalog_order: Number(row.catalog_order) || 500,
+                brand: row.brand || 'hd',
+                renderInCatalog: true,
+                cartName: row.title,
+                noSize: isPatch || isCap,
+                contactUrl: isPatch ? 'https://t.me/hardcore1499' : undefined,
+                transparentPrice: isCap || Number(row.price_uah) <= 0
+            };
+        });
 
         return json(res, 200, {
             success: true,
