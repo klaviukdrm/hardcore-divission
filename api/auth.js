@@ -91,11 +91,12 @@ export default async function handler(req, res) {
         });
 
         if (!existing.ok) {
-            return json(res, 500, { error: 'Cannot check user uniqueness' });
+            const errorMsg = (existing.data && (existing.data.message || existing.data.error || existing.data.hint)) || 'Cannot check user uniqueness';
+            return json(res, 500, { error: errorMsg });
         }
 
         if (Array.isArray(existing.data) && existing.data.length > 0) {
-            return json(res, 409, { error: 'User with this phone already exists' });
+            return json(res, 409, { error: 'Користувач із таким номером телефону вже зареєстрований' });
         }
 
         const created = await supabaseRequest('users', {
@@ -109,7 +110,8 @@ export default async function handler(req, res) {
         });
 
         if (!created.ok || !Array.isArray(created.data) || created.data.length === 0) {
-            return json(res, 500, { error: 'Failed to create user' });
+            const createErrorMsg = (created.data && (created.data.message || created.data.error || created.data.hint)) || 'Не вдалося створити користувача в базі';
+            return json(res, 500, { error: createErrorMsg });
         }
 
         const user = {
