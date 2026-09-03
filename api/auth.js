@@ -6,38 +6,45 @@ import { requireSupabaseConfig, supabaseRequest } from '../lib/server/supabase.j
 
 export default async function handler(req, res) {
     const url = new URL(req.url, 'http://localhost');
-    const action = url.searchParams.get('action') || (req.url.includes('login') ? 'login' : (req.url.includes('register') ? 'register' : (req.url.includes('logout') ? 'logout' : (req.url.includes('me') ? 'me' : ''))));
+    const queryAction = url.searchParams.get('action');
+    let action = queryAction;
+    if (!action) {
+        if (req.url.includes('/login')) action = 'login';
+        else if (req.url.includes('/register')) action = 'register';
+        else if (req.url.includes('/logout')) action = 'logout';
+        else if (req.url.includes('/me')) action = 'me';
+    }
 
-    // GET /api/auth or /api/auth/me: Check current user session
-    if (req.method === 'GET' || action === 'me') {
+    // 1. Logout
+    if (action === 'logout') {
+        clearAllSessions(res);
+        return json(res, 200, { success: true });
+    }
+
+    // 2. Check Session (GET or action === 'me')
+    if (action === 'me' || req.method === 'GET') {
+        const userSession = getUserSession(req);
+        if (userSession?.sub) {
+            return json(res, 200, {
+                authenticated: true,
+                role: 'user',
+                user: {
+                    id: userSession.sub,
+                    phone: userSession.phone
+                }
+            });
+        }
+
         const adminSession = getAdminSession(req);
         if (adminSession?.role === 'admin') {
             return json(res, 200, { authenticated: true, role: 'admin' });
         }
 
-        const userSession = getUserSession(req);
-        if (!userSession?.sub) {
-            return json(res, 200, { authenticated: false });
-        }
-
-        return json(res, 200, {
-            authenticated: true,
-            role: 'user',
-            user: {
-                id: userSession.sub,
-                phone: userSession.phone
-            }
-        });
+        return json(res, 200, { authenticated: false });
     }
 
     if (req.method !== 'POST') {
         return methodNotAllowed(res, ['GET', 'POST']);
-    }
-
-    // POST /api/auth?action=logout: Clear user session
-    if (action === 'logout') {
-        clearAllSessions(res);
-        return json(res, 200, { success: true });
     }
 
     try {
