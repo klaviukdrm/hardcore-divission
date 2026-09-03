@@ -86,7 +86,9 @@ export default async function handler(req, res) {
                 cartName: row.title,
                 noSize: isPatch || isCap,
                 contactUrl: isPatch ? 'https://t.me/hardcore1499' : undefined,
-                transparentPrice: isCap || Number(row.price_uah) <= 0
+                transparentPrice: isCap || Number(row.price_uah) <= 0,
+                pageNoteUa: isPatch ? 'Лімітована версія з 25 штук.' : undefined,
+                pageNoteEng: isPatch ? 'Limited edition of 25 pieces.' : undefined
             };
         });
 
