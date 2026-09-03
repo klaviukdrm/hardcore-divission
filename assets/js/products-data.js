@@ -1641,37 +1641,6 @@ window.PRODUCTS_DATA = [
     "catalogOrder": 14
   },
   {
-    "id": 64,
-    "slug": "militant-pro-militant-pro-hoodie",
-    "category": "худі",
-    "isNew": false,
-    "renderInCatalog": false,
-    "title": "MILITANT PRO HOODIE",
-    "descUa": "Худі MILITANT PRO для холодного міста і людей, які тримають дисципліну без зайвих слів. Щільна форма, прямий силует і спокійний тиск у кожній деталі.",
-    "descEng": "MILITANT PRO hoodie for cold streets and people who hold discipline without extra words. Dense form, direct silhouette, and calm pressure in every detail.",
-    "image": "images/photo_2026-06-20_13-02-59 (2).jpg",
-    "imageAlt": "images/photo_2026-06-20_13-02-58.jpg",
-    "gallery": [
-      "images/photo_2026-06-20_13-02-59 (2).jpg",
-      "images/photo_2026-06-20_13-02-58.jpg"
-    ],
-    "priceUahLabel": "1750₴",
-    "priceUsdLabel": "40€",
-    "priceUah": 1750,
-    "priceUsd": 40,
-    "sizes": [
-      "L",
-      "XL",
-      "2XL",
-      "3XL"
-    ],
-    "sizeId": "size-h23",
-    "cartName": "MILITANT PRO HOODIE",
-    "cartSizeId": "size-h23",
-    "seoKeywords": "MILITANT PRO, MILITANT PRO HOODIE, худі, hardcore division, streetwear, hoodie, ukraine brand",
-    "catalogOrder": 46
-  },
-  {
     "id": 66,
     "slug": "turb8sk1n-httb-gen3-t-shirt",
     "category": "футболка",
