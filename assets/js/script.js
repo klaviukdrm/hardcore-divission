@@ -256,11 +256,13 @@ let cart = [];
     }
 
     function isTurboShareProduct(product) {
+        if (product && product.brand === 'turboskin') return true;
         const slug = normalizeFinanceText(product?.slug);
         return turboShareProductSlugs.has(slug);
     }
 
     function isDesignerShareProduct(product) {
+        if (product && (product.brand === 'designer' || product.brand === 'handofdust')) return true;
         const slug = normalizeFinanceText(product?.slug);
         return designerShareProductSlugs.has(slug);
     }
