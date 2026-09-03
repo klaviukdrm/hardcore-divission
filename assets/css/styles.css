@@ -474,9 +474,10 @@
         }
         .price { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; color: #fff; }
         .price-transparent {
-            opacity: 0;
-            pointer-events: none;
-            user-select: none;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            user-select: none !important;
         }
 
         select {
