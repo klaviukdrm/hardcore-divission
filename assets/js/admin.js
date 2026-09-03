@@ -600,7 +600,7 @@
                         <button type="button" class="admin-stock-toggle-btn ${isSoldOut ? 'is-out' : 'is-in'}" data-id="${prod.id}" data-soldout="${isSoldOut}">
                             ${isSoldOut ? '🔴 Розпродано' : '🟢 В наявності'}
                         </button>
-                        <button type="button" class="admin-delete-prod-btn" data-id="${prod.id}" data-title="${escapeHtml(prod.title)}">🗑 Видалити</button>
+                        <button type="button" class="admin-delete-prod-btn" data-id="${prod.id}" data-slug="${escapeHtml(prod.slug)}" data-title="${escapeHtml(prod.title)}">🗑 Видалити</button>
                     </div>
                 </article>
             `;
@@ -740,6 +740,7 @@
         adminProductsContainer.querySelectorAll('.admin-delete-prod-btn').forEach((btn) => {
             btn.addEventListener('click', async () => {
                 const id = btn.getAttribute('data-id');
+                const slug = btn.getAttribute('data-slug');
                 const title = btn.getAttribute('data-title');
                 if (!confirm(`Ви дійсно хочете видалити товар "${title}"? Він зникне з каталогу сайту.`)) return;
 
@@ -748,7 +749,7 @@
                     btn.textContent = 'Видалення...';
                     await api('/api/products', {
                         method: 'DELETE',
-                        body: JSON.stringify({ id })
+                        body: JSON.stringify({ id, slug })
                     });
                     showMessage(`Товар "${title}" успішно видалено.`);
                     loadProductsList();
