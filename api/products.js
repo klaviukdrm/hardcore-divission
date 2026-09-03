@@ -136,6 +136,12 @@ export default async function handler(req, res) {
                 });
                 if (upsertRes.ok) {
                     insertedTotal += Array.isArray(upsertRes.data) ? upsertRes.data.length : chunk.length;
+                } else {
+                    console.error('Supabase batch upsert error:', upsertRes.data);
+                    const errorMsg = typeof upsertRes.data === 'object' && upsertRes.data?.message 
+                        ? upsertRes.data.message 
+                        : (typeof upsertRes.data === 'string' ? upsertRes.data : 'Помилка збереження в базу');
+                    return json(res, 500, { error: `Помилка Supabase: ${errorMsg}. Переконайтеся, що ви виконали SQL-код створення таблиці в Supabase SQL Editor!` });
                 }
             }
 
