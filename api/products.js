@@ -306,14 +306,25 @@ export default async function handler(req, res) {
             return json(res, 400, { error: 'Вкажіть id або slug товару для видалення' });
         }
 
-        const query = id ? { id: `eq.${id}` } : { slug: `eq.${slug}` };
-        const result = await supabaseRequest('products', {
+        let query = slug ? { slug: `eq.${slug}` } : { id: `eq.${id}` };
+        let result = await supabaseRequest('products', {
             method: 'DELETE',
-            query
+            query,
+            prefer: 'return=representation'
         });
 
+        // Fallback to id if slug did not match
+        if (result.ok && Array.isArray(result.data) && result.data.length === 0 && id) {
+            result = await supabaseRequest('products', {
+                method: 'DELETE',
+                query: { id: `eq.${id}` },
+                prefer: 'return=representation'
+            });
+        }
+
         if (!result.ok) {
-            return json(res, 500, { error: 'Не вдалося видалити товар' });
+            console.error('Delete product error:', result.data);
+            return json(res, 500, { error: 'Не вдалося видалити товар із бази' });
         }
 
         return json(res, 200, { success: true });
