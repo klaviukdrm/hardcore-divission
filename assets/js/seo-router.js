@@ -999,7 +999,7 @@
 
     async function loadRemoteProducts() {
         try {
-            const response = await fetch("/api/products/get");
+            const response = await fetch("/api/products");
             if (!response.ok) return;
             const data = await response.json();
             const remoteProducts = Array.isArray(data.products) ? data.products : [];
