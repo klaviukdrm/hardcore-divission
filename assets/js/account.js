@@ -238,7 +238,7 @@ async function api(url, options = {}) {
     }
 
     if (!response.ok) {
-        throw new Error(payload.error || 'Request failed');
+        throw new Error(payload.error || payload.message || (typeof payload.details === 'string' ? payload.details : '') || `Помилка запиту (${response.status})`);
     }
 
     return payload;
