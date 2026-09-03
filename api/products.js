@@ -26,7 +26,7 @@ export default async function handler(req, res) {
     try {
         requireSupabaseConfig();
     } catch (e) {
-        return json(res, 200, { success: true, products: [] });
+        return json(res, 500, { error: 'Supabase не налаштовано на сервері (перевірте SUPABASE_URL та SUPABASE_SERVICE_ROLE_KEY у Vercel)' });
     }
 
     const adminSession = getAdminSession(req);
@@ -43,7 +43,8 @@ export default async function handler(req, res) {
         });
 
         if (!result.ok) {
-            return json(res, 200, { success: true, products: [] });
+            console.error('Supabase products fetch error:', result.data);
+            return json(res, 500, { error: 'Помилка завантаження товарів із бази: ' + (result.data?.message || JSON.stringify(result.data)) });
         }
 
         const rows = Array.isArray(result.data) ? result.data : [];
@@ -89,7 +90,7 @@ export default async function handler(req, res) {
 
     // Admin authorization required for POST, PATCH, PUT, DELETE
     if (!isAdmin) {
-        return json(res, 401, { error: 'Потрібна авторизація адміністратора' });
+        return json(res, 401, { error: 'Потрібна авторизація адміністратора (увійдіть заново через пароль)' });
     }
 
     // POST: Create product or bulk sync
@@ -101,47 +102,65 @@ export default async function handler(req, res) {
 
         // Handle Bulk Sync / Import
         if (body.action === 'sync_all' && Array.isArray(body.products)) {
-            const items = body.products.map((item) => ({
-                slug: String(item.slug || slugify(item.title)),
-                title: String(item.title || ''),
-                category: String(item.category || 'футболка').toLowerCase(),
-                price_uah: Number(item.priceUah || item.price_uah) || 0,
-                price_usd: Number(item.priceUsd || item.price_usd) || 0,
-                desc_ua: String(item.descUa || item.desc_ua || ''),
-                desc_eng: String(item.descEng || item.desc_eng || ''),
-                image: String(item.image || ''),
-                image_alt: String(item.imageAlt || item.image_alt || item.image || ''),
-                gallery: Array.isArray(item.gallery) && item.gallery.length ? item.gallery : [item.image].filter(Boolean),
-                is_new: Boolean(item.isNew || item.is_new),
-                is_preorder: Boolean(item.isPreorder || item.is_preorder),
-                sold_out: Boolean(item.soldOut || item.sold_out),
-                catalog_order: Number(item.catalogOrder || item.catalog_order) || 500,
-                brand: String(item.brand || 'hd').toLowerCase(),
-                color_variants: Array.isArray(item.colorVariants) ? item.colorVariants : (item.color_variants || [])
-            })).filter((item) => item.title && item.slug);
+            const seenSlugs = new Set();
+            const uniqueItems = [];
 
-            if (!items.length) {
+            for (const item of body.products) {
+                const slug = String(item.slug || slugify(item.title)).trim();
+                const title = String(item.title || '').trim();
+                if (!title || !slug || seenSlugs.has(slug)) continue;
+                seenSlugs.add(slug);
+
+                uniqueItems.push({
+                    slug,
+                    title,
+                    category: String(item.category || 'футболка').toLowerCase(),
+                    price_uah: Number(item.priceUah || item.price_uah) || 0,
+                    price_usd: Number(item.priceUsd || item.price_usd) || 0,
+                    desc_ua: String(item.descUa || item.desc_ua || ''),
+                    desc_eng: String(item.descEng || item.desc_eng || ''),
+                    image: String(item.image || ''),
+                    image_alt: String(item.imageAlt || item.image_alt || item.image || ''),
+                    gallery: Array.isArray(item.gallery) && item.gallery.length ? item.gallery : [item.image].filter(Boolean),
+                    is_new: Boolean(item.isNew || item.is_new),
+                    is_preorder: Boolean(item.isPreorder || item.is_preorder),
+                    sold_out: Boolean(item.soldOut || item.sold_out),
+                    catalog_order: Number(item.catalogOrder || item.catalog_order) || 500,
+                    brand: String(item.brand || 'hd').toLowerCase(),
+                    color_variants: Array.isArray(item.colorVariants) ? item.colorVariants : (item.color_variants || [])
+                });
+            }
+
+            if (!uniqueItems.length) {
                 return json(res, 400, { error: 'Список товарів для імпорту порожній' });
             }
 
             let insertedTotal = 0;
-            const chunkSize = 20;
-            for (let i = 0; i < items.length; i += chunkSize) {
-                const chunk = items.slice(i, i + chunkSize);
+            const chunkSize = 15;
+            for (let i = 0; i < uniqueItems.length; i += chunkSize) {
+                const chunk = uniqueItems.slice(i, i + chunkSize);
                 const upsertRes = await supabaseRequest('products', {
                     method: 'POST',
                     query: { on_conflict: 'slug' },
                     body: chunk,
                     prefer: 'resolution=merge-duplicates,return=representation'
                 });
+
                 if (upsertRes.ok) {
                     insertedTotal += Array.isArray(upsertRes.data) ? upsertRes.data.length : chunk.length;
                 } else {
-                    console.error('Supabase batch upsert error:', upsertRes.data);
-                    const errorMsg = typeof upsertRes.data === 'object' && upsertRes.data?.message 
-                        ? upsertRes.data.message 
-                        : (typeof upsertRes.data === 'string' ? upsertRes.data : 'Помилка збереження в базу');
-                    return json(res, 500, { error: `Помилка Supabase: ${errorMsg}. Переконайтеся, що ви виконали SQL-код створення таблиці в Supabase SQL Editor!` });
+                    // Fallback to one-by-one insert if batch hit any single row issue
+                    for (const singleItem of chunk) {
+                        const singleRes = await supabaseRequest('products', {
+                            method: 'POST',
+                            query: { on_conflict: 'slug' },
+                            body: singleItem,
+                            prefer: 'resolution=merge-duplicates,return=representation'
+                        });
+                        if (singleRes.ok) {
+                            insertedTotal += 1;
+                        }
+                    }
                 }
             }
 
@@ -302,4 +321,3 @@ export default async function handler(req, res) {
 
     return methodNotAllowed(res, ['GET', 'POST', 'PATCH', 'PUT', 'DELETE']);
 }
-
