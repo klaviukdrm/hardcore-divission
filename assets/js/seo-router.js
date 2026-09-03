@@ -116,11 +116,13 @@
     ]);
 
     function isTurboskinProduct(product) {
+        if (product && product.brand === 'turboskin') return true;
         const slug = String(product && product.slug ? product.slug : "").trim().toLowerCase();
         return turboskinProductSlugs.has(slug);
     }
 
     function isDesignerProduct(product) {
+        if (product && (product.brand === 'designer' || product.brand === 'handofdust')) return true;
         const slug = String(product && product.slug ? product.slug : "").trim().toLowerCase();
         return designerProductSlugs.has(slug);
     }
@@ -404,7 +406,7 @@
             return `<button class="buy-btn" data-ua="Написати" data-eng="Write" onclick="window.location.href='${escapeAttr(product.contactUrl)}'">${escapeHtml(label)}</button>`;
         }
 
-        const sizeId = product.sizeId || product.cartSizeId;
+        const sizeId = product.sizeId || product.cartSizeId || (product.noSize || isContactOnlyProduct(product) ? "" : `size-db-${product.id || product.slug}`);
         if (!sizeId) return "";
         return `<button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="${escapeAttr(buildCatalogAddToCartOnClick(product, sizeId))}">В КОШИК</button>`;
     }
@@ -416,7 +418,7 @@
         const displayTitle = getDisplayProductTitle(product, lang);
         const descUa = product.descUa || product.descEng || "";
         const descEng = product.descEng || product.descUa || "";
-        const sizeId = product.noSize || isContactOnlyProduct(product) ? "" : (product.sizeId || product.cartSizeId);
+        const sizeId = product.noSize || isContactOnlyProduct(product) ? "" : (product.sizeId || product.cartSizeId || `size-db-${product.id || product.slug}`);
 
         return `
     <div class="product-card" data-category="${escapeAttr(product.category || "")}" data-product-slug="${escapeAttr(product.slug || "")}">
@@ -995,13 +997,70 @@
         setupProductSeo(product);
     }
 
+    async function loadRemoteProducts() {
+        try {
+            const response = await fetch("/api/products/get");
+            if (!response.ok) return;
+            const data = await response.json();
+            const remoteProducts = Array.isArray(data.products) ? data.products : [];
+            if (!remoteProducts.length) return;
+
+            let updatedOrAdded = false;
+            const remoteMap = new Map();
+            remoteProducts.forEach((rp) => {
+                if (rp && rp.slug) remoteMap.set(rp.slug, rp);
+            });
+
+            // 1. Update existing products with DB values (custom catalogOrder, soldOut, prices, etc.)
+            products.forEach((p, idx) => {
+                if (p && p.slug && remoteMap.has(p.slug)) {
+                    const rp = remoteMap.get(p.slug);
+                    Object.assign(p, rp);
+                    if (Array.isArray(window.PRODUCTS_DATA) && window.PRODUCTS_DATA[idx]) {
+                        Object.assign(window.PRODUCTS_DATA[idx], rp);
+                    }
+                    remoteMap.delete(p.slug);
+                    updatedOrAdded = true;
+                }
+            });
+
+            // 2. Add new products created via admin
+            remoteMap.forEach((rp) => {
+                products.push(rp);
+                if (Array.isArray(window.PRODUCTS_DATA)) {
+                    window.PRODUCTS_DATA.push(rp);
+                }
+                updatedOrAdded = true;
+            });
+
+            if (updatedOrAdded) {
+                if (page === "catalog") {
+                    enhanceCatalogCards();
+                    setupCatalogSeo();
+                } else if (page === "product") {
+                    const currentSlug = new URLSearchParams(window.location.search).get("product");
+                    const found = products.find((p) => p.slug === currentSlug);
+                    if (found) {
+                        activeProduct = found;
+                        renderProduct(found);
+                        setupProductSeo(found);
+                    }
+                }
+            }
+        } catch (e) {
+            // Silently fall back to static products
+        }
+    }
+
     function init() {
         if (page === "catalog") {
             initCatalogPage();
+            loadRemoteProducts();
             return;
         }
         if (page === "product") {
             initProductPage();
+            loadRemoteProducts();
         }
     }
 
