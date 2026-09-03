@@ -475,7 +475,7 @@
                     };
                 });
 
-                const res = await api('/api/admin/products', {
+                const res = await api('/api/products', {
                     method: 'POST',
                     body: JSON.stringify({
                         action: 'sync_all',
@@ -507,7 +507,7 @@
         adminProductsContainer.innerHTML = '<div class="admin-loading-text">Завантаження списку товарів...</div>';
 
         try {
-            const res = await api('/api/admin/products', { method: 'GET' });
+            const res = await api('/api/products', { method: 'GET' });
             allLoadedProducts = Array.isArray(res.products) ? res.products : [];
 
             // Sort by catalog_order ascending
@@ -623,7 +623,7 @@
 
                 try {
                     select.disabled = true;
-                    await api('/api/admin/products', {
+                    await api('/api/products', {
                         method: 'PATCH',
                         body: JSON.stringify({ id, brand: nextBrand })
                     });
@@ -646,7 +646,7 @@
 
                 try {
                     btn.disabled = true;
-                    await api('/api/admin/products', {
+                    await api('/api/products', {
                         method: 'PATCH',
                         body: JSON.stringify({ id, catalog_order: nextOrder })
                     });
@@ -674,7 +674,7 @@
 
                 try {
                     btn.disabled = true;
-                    await api('/api/admin/products', {
+                    await api('/api/products', {
                         method: 'PATCH',
                         body: JSON.stringify({ id: currentItem.id, catalog_order: newCurrentOrder })
                     });
@@ -701,7 +701,7 @@
 
                 try {
                     btn.disabled = true;
-                    await api('/api/admin/products', {
+                    await api('/api/products', {
                         method: 'PATCH',
                         body: JSON.stringify({ id: currentItem.id, catalog_order: newCurrentOrder })
                     });
@@ -723,7 +723,7 @@
 
                 try {
                     btn.disabled = true;
-                    await api('/api/admin/products', {
+                    await api('/api/products', {
                         method: 'PATCH',
                         body: JSON.stringify({ id, sold_out: nextSoldOut })
                     });
@@ -746,7 +746,7 @@
                 try {
                     btn.disabled = true;
                     btn.textContent = 'Видалення...';
-                    await api('/api/admin/products', {
+                    await api('/api/products', {
                         method: 'DELETE',
                         body: JSON.stringify({ id })
                     });
@@ -858,7 +858,7 @@
                 const altImage = primaryGallery[1] || mainImage;
 
                 // 2. Save product to Supabase DB
-                await api('/api/admin/products', {
+                await api('/api/products', {
                     method: 'POST',
                     body: JSON.stringify({
                         title,
@@ -908,7 +908,7 @@
     async function init() {
         renderColorVariantsUI();
         try {
-            const check = await api('/api/admin/products', { method: 'GET' });
+            const check = await api('/api/products', { method: 'GET' });
             if (check.success) {
                 showDashboard();
                 return;
