@@ -65,25 +65,71 @@ async function insertOrderItemsWithFallback(orderId, items) {
 }
 
 async function loadOrders(queryBase) {
-    const selectWithTracking = 'id,user_id,total_price,status,tracking_number,created_at,order_items(id,product_id,title,price,quantity,size),users(phone)';
-    const withTracking = await supabaseRequest('orders', {
+    // 1. Try relational select with order_items and users
+    let res = await supabaseRequest('orders', {
         query: {
             ...queryBase,
-            select: selectWithTracking
+            select: 'id,user_id,total_price,status,tracking_number,created_at,order_items(id,product_id,title,price,quantity,size),users(phone)'
         }
     });
 
-    if (withTracking.ok || !JSON.stringify(withTracking.data || '').toLowerCase().includes('tracking_number')) {
-        return withTracking;
+    if (res.ok && Array.isArray(res.data)) {
+        return res;
     }
 
-    const fallbackSelect = 'id,user_id,total_price,status,created_at,order_items(id,product_id,title,price,quantity,size),users(phone)';
-    return supabaseRequest('orders', {
+    // 2. Try relational select with order_items only
+    res = await supabaseRequest('orders', {
         query: {
             ...queryBase,
-            select: fallbackSelect
+            select: 'id,user_id,total_price,status,tracking_number,created_at,order_items(id,product_id,title,price,quantity,size)'
         }
     });
+
+    if (res.ok && Array.isArray(res.data)) {
+        return res;
+    }
+
+    // 3. Fallback: Select orders directly without embedded relations
+    res = await supabaseRequest('orders', {
+        query: {
+            ...queryBase,
+            select: 'id,user_id,total_price,status,tracking_number,created_at'
+        }
+    });
+
+    if (!res.ok) {
+        // 4. Fallback without tracking_number column if tracking_number does not exist
+        res = await supabaseRequest('orders', {
+            query: {
+                ...queryBase,
+                select: 'id,user_id,total_price,status,created_at'
+            }
+        });
+    }
+
+    if (res.ok && Array.isArray(res.data) && res.data.length > 0) {
+        // Fetch order items separately for all fetched orders
+        const orderIds = res.data.map((o) => o.id).filter(Boolean);
+        if (orderIds.length > 0) {
+            const itemsRes = await supabaseRequest('order_items', {
+                query: {
+                    order_id: `in.(${orderIds.join(',')})`
+                }
+            });
+            if (itemsRes.ok && Array.isArray(itemsRes.data)) {
+                const itemsByOrder = {};
+                itemsRes.data.forEach((item) => {
+                    if (!itemsByOrder[item.order_id]) itemsByOrder[item.order_id] = [];
+                    itemsByOrder[item.order_id].push(item);
+                });
+                res.data.forEach((order) => {
+                    order.order_items = itemsByOrder[order.id] || [];
+                });
+            }
+        }
+    }
+
+    return res;
 }
 
 export default async function handler(req, res) {
