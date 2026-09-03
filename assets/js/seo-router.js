@@ -1005,46 +1005,50 @@
             const remoteProducts = Array.isArray(data.products) ? data.products : [];
             if (!remoteProducts.length) return;
 
-            let updatedOrAdded = false;
-            const remoteMap = new Map();
-            remoteProducts.forEach((rp) => {
-                if (rp && rp.slug) remoteMap.set(rp.slug, rp);
-            });
+            // Sort remote products by catalogOrder
+            remoteProducts.sort((a, b) => (Number(a.catalogOrder || a.catalog_order) || 500) - (Number(b.catalogOrder || b.catalog_order) || 500));
 
-            // 1. Update existing products with DB values (custom catalogOrder, soldOut, prices, etc.)
-            products.forEach((p, idx) => {
-                if (p && p.slug && remoteMap.has(p.slug)) {
-                    const rp = remoteMap.get(p.slug);
-                    Object.assign(p, rp);
-                    if (Array.isArray(window.PRODUCTS_DATA) && window.PRODUCTS_DATA[idx]) {
-                        Object.assign(window.PRODUCTS_DATA[idx], rp);
+            const activeSlugs = new Set(remoteProducts.map((p) => p.slug).filter(Boolean));
+
+            // 1. Remove deleted cards from the catalog DOM
+            const grid = document.querySelector(".shop-grid");
+            if (grid) {
+                // Ensure initial cards have their slug attributes resolved
+                enhanceCatalogCards();
+
+                const existingCards = Array.from(grid.querySelectorAll(".product-card"));
+                existingCards.forEach((card) => {
+                    const slug = card.getAttribute("data-product-slug");
+                    if (slug && !activeSlugs.has(slug)) {
+                        card.remove(); // Removes deleted product card completely
                     }
-                    remoteMap.delete(p.slug);
-                    updatedOrAdded = true;
-                }
-            });
+                });
+            }
 
-            // 2. Add new products created via admin
-            remoteMap.forEach((rp) => {
-                products.push(rp);
-                if (Array.isArray(window.PRODUCTS_DATA)) {
-                    window.PRODUCTS_DATA.push(rp);
-                }
-                updatedOrAdded = true;
-            });
+            // 2. Synchronize main products array with Supabase DB
+            products.length = 0;
+            remoteProducts.forEach((rp) => products.push(rp));
+            if (Array.isArray(window.PRODUCTS_DATA)) {
+                window.PRODUCTS_DATA.length = 0;
+                remoteProducts.forEach((rp) => window.PRODUCTS_DATA.push(rp));
+            }
 
-            if (updatedOrAdded) {
-                if (page === "catalog") {
-                    enhanceCatalogCards();
-                    setupCatalogSeo();
-                } else if (page === "product") {
-                    const currentSlug = new URLSearchParams(window.location.search).get("product");
-                    const found = products.find((p) => p.slug === currentSlug);
-                    if (found) {
-                        activeProduct = found;
-                        renderProduct(found);
-                        setupProductSeo(found);
-                    }
+            // 3. Re-render / enhance catalog
+            if (page === "catalog") {
+                enhanceCatalogCards();
+                setupCatalogSeo();
+            } else if (page === "product") {
+                const currentSlug = new URLSearchParams(window.location.search).get("product");
+                const found = products.find((p) => p.slug === currentSlug);
+                if (found) {
+                    activeProduct = found;
+                    renderProduct(found);
+                    setupProductSeo(found);
+                } else if (currentSlug && !activeSlugs.has(currentSlug)) {
+                    const titleEl = document.getElementById("productTitle");
+                    if (titleEl) titleEl.textContent = "Товар не знайдено або знято з продажу";
+                    const buyBtn = document.getElementById("productBuyBtn");
+                    if (buyBtn) buyBtn.style.display = "none";
                 }
             }
         } catch (e) {
