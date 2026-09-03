@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="/">
-    <title>Admin | Hardcore Division</title>
+    <title>Admin Dashboard | Hardcore Division</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
@@ -17,37 +17,174 @@
     <link rel="preload" href="/fonts/Ancient Medium.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-<header>
+<body class="admin-page-body">
+
+<header class="admin-header">
     <div class="logo-container">
         <h1 class="logo"><a href="/pages/index.html" style="text-decoration:none; color:inherit;">HARDCORE DIVISION</a></h1>
+        <span class="admin-badge">ADMIN CONTROL</span>
     </div>
 </header>
 
-<main class="container account-shell">
-    <section class="panel-card">
-        <h2 class="panel-title">Admin Panel</h2>
-        <p class="panel-subtitle">Керування замовленнями через захищений серверний API</p>
+<main class="container admin-container">
+    <div id="adminMessage" class="panel-message" aria-live="polite" style="display:none;"></div>
 
-        <div id="adminMessage" class="panel-message" aria-live="polite"></div>
-
-        <form id="adminLoginForm" class="panel-form admin-login" novalidate>
-            <h3>Вхід адміністратора</h3>
-            <label class="field-label" for="adminPassword">Пароль адмінки</label>
-            <input id="adminPassword" type="password" required>
-            <button class="buy-btn" type="submit">Увійти</button>
-        </form>
-
-        <div id="adminArea" class="account-area" hidden>
-            <div class="account-row">
-                <h3 class="orders-title" style="margin:0;">Всі замовлення</h3>
-                <button id="adminLogoutBtn" class="buy-btn account-logout" type="button">Вийти</button>
+    <!-- 1. LOGIN FORM -->
+    <section id="adminLoginSection" class="panel-card admin-login-card">
+        <h2 class="panel-title">ВХІД В АДМІН-ПАНЕЛЬ</h2>
+        <p class="panel-subtitle">Введіть пароль адміністратора для доступу до керування товарами</p>
+        
+        <form id="adminLoginForm" class="panel-form" novalidate>
+            <div class="admin-field-group">
+                <label class="field-label" for="adminPassword">ПАРОЛЬ АДМІНА</label>
+                <input id="adminPassword" type="password" placeholder="Введіть ADMIN_PASS" required autocomplete="current-password">
             </div>
-            <div id="adminOrdersList" class="orders-list"></div>
-        </div>
+            <button class="buy-btn admin-btn-main" type="submit" id="adminLoginSubmitBtn">УВІЙТИ</button>
+        </form>
     </section>
+
+    <!-- 2. DASHBOARD AREA -->
+    <div id="adminDashboard" style="display:none;">
+        <div class="admin-top-bar">
+            <div class="admin-user-status">
+                <span class="status-dot"></span>
+                <span>Ви авторизовані як <strong>Адміністратор</strong></span>
+            </div>
+            <button id="adminLogoutBtn" class="admin-btn-logout" type="button">ВИЙТИ З ПАНЕЛІ</button>
+        </div>
+
+        <!-- ADD PRODUCT SECTION -->
+        <section class="panel-card admin-product-card">
+            <h2 class="panel-title" style="color:var(--blood);">+ ДОДАТИ НОВИЙ ТОВАР</h2>
+            <p class="panel-subtitle">Заповніть інформацію про товар та завантажте до 4-х фотографій</p>
+
+            <form id="createProductForm" class="admin-product-form" novalidate>
+                <div class="admin-form-grid">
+                    <!-- Title -->
+                    <div class="admin-field-group full-width">
+                        <label class="field-label" for="prodTitle">НАЗВА ТОВАРУ *</label>
+                        <input id="prodTitle" type="text" placeholder="Наприклад: HARDCORE ZIP HOODIE" required>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="admin-field-group">
+                        <label class="field-label" for="prodCategory">КАТЕГОРІЯ *</label>
+                        <select id="prodCategory" required>
+                            <option value="футболка">Футболка (T-Shirt)</option>
+                            <option value="худі">Худі (Hoodie)</option>
+                            <option value="світшоти">Світшот (Sweatshirt)</option>
+                            <option value="лонгсліви">Лонгслів (Longsleeve)</option>
+                            <option value="кепки">Кепка (Cap)</option>
+                            <option value="патчи">Патч (Patch)</option>
+                            <option value="аксесуари">Аксесуари (Accessories)</option>
+                        </select>
+                    </div>
+
+                    <!-- Brand / Shares Type -->
+                    <div class="admin-field-group">
+                        <label class="field-label" for="prodBrand">БРЕНД / РОЗПОДІЛ ЧАСТОК *</label>
+                        <select id="prodBrand" required>
+                            <option value="hd">🩸 Hardcore Division (ХД)</option>
+                            <option value="turboskin">⚡ Turboskin (Турбо)</option>
+                            <option value="designer">🎨 Дизайнер handofdust (Дизайнер)</option>
+                        </select>
+                    </div>
+
+                    <!-- Price UAH -->
+                    <div class="admin-field-group">
+                        <label class="field-label" for="prodPriceUah">ЦІНА В ГРИВНЯХ (₴) *</label>
+                        <input id="prodPriceUah" type="number" min="0" step="10" placeholder="950" required>
+                    </div>
+
+                    <!-- Price USD / EUR -->
+                    <div class="admin-field-group">
+                        <label class="field-label" for="prodPriceUsd">ЦІНА В ЄВРО (€)</label>
+                        <input id="prodPriceUsd" type="number" min="0" step="1" placeholder="20">
+                    </div>
+
+                    <!-- Catalog Order -->
+                    <div class="admin-field-group">
+                        <label class="field-label" for="prodOrder">ПОРЯДОК У КАТАЛОЗІ (СОРТУВАННЯ)</label>
+                        <input id="prodOrder" type="number" placeholder="500" value="500">
+                    </div>
+
+                    <!-- Flags Checkboxes -->
+                    <div class="admin-field-group full-width admin-checkbox-row">
+                        <label class="admin-checkbox-label">
+                            <input type="checkbox" id="prodIsNew">
+                            <span>Новинка (NEW)</span>
+                        </label>
+                        <label class="admin-checkbox-label">
+                            <input type="checkbox" id="prodIsPreorder">
+                            <span>Передзамовлення (Pre-order)</span>
+                        </label>
+                        <label class="admin-checkbox-label">
+                            <input type="checkbox" id="prodSoldOut">
+                            <span>Розпродано (Sold Out)</span>
+                        </label>
+                    </div>
+
+                    <!-- Description UA -->
+                    <div class="admin-field-group full-width">
+                        <label class="field-label" for="prodDescUa">ОПИС УКРАЇНСЬКОЮ (UA)</label>
+                        <textarea id="prodDescUa" rows="3" placeholder="Опис товару для української версії сайту..."></textarea>
+                    </div>
+
+                    <!-- Description ENG -->
+                    <div class="admin-field-group full-width">
+                        <label class="field-label" for="prodDescEng">ОПИС АНГЛІЙСЬКОЮ (ENG)</label>
+                        <textarea id="prodDescEng" rows="3" placeholder="Product description for English version..."></textarea>
+                    </div>
+
+                    <!-- COLOR VARIANTS AND PHOTO SLOTS -->
+                    <div class="admin-field-group full-width">
+                        <div class="admin-colors-header">
+                            <div>
+                                <label class="field-label" style="font-size:0.95rem; color:#fff;">КОЛЬОРИ ТА ФОТОГРАФІЇ ТОВАРУ</label>
+                                <p class="admin-helper-text">Для кожного кольору можна завантажити до 4-х фотографій. Фото автоматично стискаються (наприклад, з 5 МБ до ~180 КБ) для миттєвого завантаження сайту.</p>
+                            </div>
+                            <button type="button" id="addColorVariantBtn" class="admin-btn-add-color">+ ДОДАТИ ЩЕ ОДИН КОЛІР (+4 ФОТО)</button>
+                        </div>
+                        
+                        <div id="colorVariantsContainer" class="admin-color-variants-list">
+                            <!-- Color variant cards will be rendered dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-submit-wrap">
+                    <button class="buy-btn admin-btn-submit" type="submit" id="submitProductBtn">ОПУБЛІКУВАТИ ТОВАР</button>
+                    <div id="uploadProgressText" class="admin-progress-text" style="display:none;">Завантаження...</div>
+                </div>
+            </form>
+        </section>
+
+        <!-- PRODUCT LIST SECTION -->
+        <section class="panel-card admin-products-list-card">
+            <div class="admin-list-header">
+                <div style="display:flex; flex-direction:column; gap:4px;">
+                    <h3 class="orders-title" style="margin:0;">ВСІ ТОВАРИ ТА КЕРУВАННЯ ПОРЯДКОМ</h3>
+                    <span style="font-size:0.8rem; color:#888;">Змінюйте порядок (вище/нижче) та статус наявності товарів для каталогу</span>
+                </div>
+                <div class="admin-header-actions">
+                    <button id="syncDefaultsBtn" class="admin-btn-sync" type="button" title="Завантажити всі 70 базових товарів із сайту в базу Supabase">📥 Імпортувати всі товари сайту в базу</button>
+                    <button id="refreshProductsBtn" class="admin-btn-refresh" type="button">🔄 Оновити</button>
+                </div>
+            </div>
+
+            <div class="admin-list-toolbar">
+                <input id="adminSearchInput" type="text" placeholder="🔍 Пошук за назвою або категорією..." class="admin-search-input">
+                <div id="adminProductsCount" class="admin-products-count">Всього: 0</div>
+            </div>
+
+            <div id="adminProductsContainer" class="admin-products-grid">
+                <div class="admin-loading-text">Завантаження товарів...</div>
+            </div>
+        </section>
+    </div>
 </main>
 
+<script src="/assets/js/products-data.js"></script>
 <script src="/assets/js/admin.js" defer></script>
 </body>
 </html>
