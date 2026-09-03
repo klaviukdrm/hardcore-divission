@@ -1,4 +1,9 @@
 (function () {
+    const initialStaticProducts = Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA.map((p) => ({ ...p })) : [];
+    const staticProductsMap = new Map();
+    initialStaticProducts.forEach((p) => {
+        if (p && p.slug) staticProductsMap.set(p.slug, p);
+    });
     const products = Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : [];
     const page = document.body && document.body.dataset ? document.body.dataset.page : "";
     const baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, "");
@@ -1044,12 +1049,20 @@
 
             window.__productsLoadedFromRemote = true;
 
-            // 1. Synchronize main products array with Supabase DB
+            // 1. Synchronize main products array with Supabase DB (preserving static notes and special properties)
+            const mergedProducts = remoteProducts.map((rp) => {
+                if (rp && rp.slug && staticProductsMap.has(rp.slug)) {
+                    const staticItem = staticProductsMap.get(rp.slug);
+                    return Object.assign({}, staticItem, rp);
+                }
+                return rp;
+            });
+
             products.length = 0;
-            remoteProducts.forEach((rp) => products.push(rp));
+            mergedProducts.forEach((mp) => products.push(mp));
             if (Array.isArray(window.PRODUCTS_DATA)) {
                 window.PRODUCTS_DATA.length = 0;
-                remoteProducts.forEach((rp) => window.PRODUCTS_DATA.push(rp));
+                mergedProducts.forEach((mp) => window.PRODUCTS_DATA.push(mp));
             }
 
             // 2. Re-render / enhance catalog (orphaned/deleted static cards will be automatically removed from DOM)
