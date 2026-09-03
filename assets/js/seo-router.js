@@ -90,7 +90,28 @@
     }
 
     function isContactOnlyProduct(product) {
-        return Boolean(product && product.contactUrl);
+        if (!product) return false;
+        if (product.contactUrl) return true;
+        const category = String(product.category || "").toLowerCase();
+        const slug = String(product.slug || "").toLowerCase();
+        const cartName = String(product.cartName || "").toLowerCase();
+        return category.includes("патч") || slug.includes("patch") || cartName.includes("patch") || cartName.includes("патч");
+    }
+
+    function getProductContactUrl(product) {
+        return (product && product.contactUrl) ? product.contactUrl : "https://t.me/hardcore1499";
+    }
+
+    function hasProductSizeGuide(product) {
+        if (!product) return false;
+        if (product.noSize) return false;
+        if (isContactOnlyProduct(product)) return false;
+        const category = String(product.category || "").toLowerCase();
+        const slug = String(product.slug || "").toLowerCase();
+        const cartName = String(product.cartName || "").toLowerCase();
+        if (category.includes("патч") || slug.includes("patch") || cartName.includes("patch")) return false;
+        if (category.includes("кепк") || slug.includes("cap") || cartName.includes("cap")) return false;
+        return true;
     }
 
     const turboskinProductSlugs = new Set([
@@ -140,7 +161,13 @@
     }
 
     function shouldHideProductPrice(product) {
-        return Boolean(product && product.transparentPrice);
+        if (!product) return false;
+        if (Boolean(product.transparentPrice)) return true;
+        const category = String(product.category || "").toLowerCase();
+        const slug = String(product.slug || "").toLowerCase();
+        const cartName = String(product.cartName || "").toLowerCase();
+        const priceUah = Number(product.priceUah || product.price_uah || 0);
+        return category.includes("кепк") || slug.includes("cap") || cartName.includes("cap") || priceUah <= 0;
     }
 
     function getPriceClass(product) {
@@ -403,7 +430,8 @@
         }
         if (isContactOnlyProduct(product)) {
             const label = getContactButtonLabel(lang);
-            return `<button class="buy-btn" data-ua="Написати" data-eng="Write" onclick="window.location.href='${escapeAttr(product.contactUrl)}'">${escapeHtml(label)}</button>`;
+            const contactUrl = getProductContactUrl(product);
+            return `<button class="buy-btn" data-ua="Написати" data-eng="Write" onclick="window.location.href='${escapeAttr(contactUrl)}'">${escapeHtml(label)}</button>`;
         }
 
         const sizeId = product.sizeId || product.cartSizeId || (product.noSize || isContactOnlyProduct(product) ? "" : `size-db-${product.id || product.slug}`);
@@ -484,47 +512,48 @@
                 if (!link) {
                     link = document.createElement("a");
                     link.className = "product-link";
+                    link.setAttribute("href", url);
+                    link.setAttribute("aria-label", `Open ${product.title}`);
                     imgContainer.parentNode.insertBefore(link, imgContainer);
                     link.appendChild(imgContainer);
+                } else {
+                    link.setAttribute("href", url);
                 }
-                link.href = url;
-                link.setAttribute("aria-label", `Open ${product.title}`);
             }
 
-            const primaryImg = card.querySelector(".product-img");
-            if (primaryImg) {
-                primaryImg.alt = `${product.title} ${inferTypeName(product)} front`;
-            }
-            const altImg = card.querySelector(".product-img-alt");
-            if (altImg) {
-                altImg.alt = `${product.title} ${inferTypeName(product)} second view`;
+            const titleEl = card.querySelector(".product-title");
+            if (titleEl) {
+                titleEl.textContent = getDisplayProductTitle(product, lang);
             }
 
-            const title = card.querySelector(".product-title");
-            if (title) {
-                let link = title.querySelector("a");
-                if (!link) {
-                    title.textContent = "";
-                    link = document.createElement("a");
-                    link.className = "product-title-link";
-                    title.appendChild(link);
+            const sizeSelect = card.querySelector("select");
+            if (sizeSelect && (product.noSize || isContactOnlyProduct(product))) {
+                if (isContactOnlyProduct(product)) {
+                    sizeSelect.remove();
+                } else {
+                    sizeSelect.innerHTML = `<option value="ONE SIZE">SIZE: ONE SIZE</option>`;
                 }
-                link.href = url;
-                link.textContent = getDisplayProductTitle(product, lang);
+            } else if (!sizeSelect && !product.noSize && !isContactOnlyProduct(product)) {
+                const targetSizeId = product.sizeId || product.cartSizeId || `size-db-${product.id || product.slug}`;
+                const selectHtml = buildDefaultSizeSelect(targetSizeId, product);
+                const infoContainer = card.querySelector(".product-info > div:last-child");
+                if (infoContainer && selectHtml) {
+                    infoContainer.insertAdjacentHTML("afterbegin", selectHtml);
+                }
             }
 
             const buyBtn = card.querySelector(".buy-btn");
-            const sizeSelect = card.querySelector("select");
-            if (buyBtn && product.soldOut) {
+            if (buyBtn && Boolean(product.soldOut)) {
                 const label = getUnavailableButtonLabel(lang);
-                buyBtn.removeAttribute("onclick");
-                buyBtn.setAttribute("disabled", "disabled");
+                buyBtn.setAttribute("disabled", "true");
                 buyBtn.setAttribute("aria-disabled", "true");
+                buyBtn.removeAttribute("onclick");
                 buyBtn.setAttribute("data-ua", "Немає в наявності");
                 buyBtn.setAttribute("data-eng", "OUT OF STOCK");
                 buyBtn.textContent = label;
             } else if (buyBtn && isContactOnlyProduct(product)) {
-                buyBtn.setAttribute("onclick", `window.location.href='${product.contactUrl}'`);
+                const contactUrl = getProductContactUrl(product);
+                buyBtn.setAttribute("onclick", `window.location.href='${escapeAttr(contactUrl)}'`);
                 buyBtn.setAttribute("data-ua", "Написати");
                 buyBtn.setAttribute("data-eng", "Write");
                 buyBtn.textContent = getContactButtonLabel(lang);
@@ -681,7 +710,8 @@
         const mainImg = initialGallery.length ? initialGallery[0] : product.image;
         const desc = lang === "ua" ? (product.descUa || product.descEng) : (product.descEng || product.descUa);
         const typeName = inferTypeName(product);
-        const isCap = typeName === "Cap";
+        const isCap = typeName === "Cap" || String(product.category || "").toLowerCase().includes("кепк") || String(product.slug || "").toLowerCase().includes("cap");
+        const isPatch = isContactOnlyProduct(product);
         const soldOut = Boolean(product && product.soldOut);
         const pageNote = lang === "ua" ? (product.pageNoteUa || "") : (product.pageNoteEng || "");
         const capLimitNote = isCap && !soldOut
@@ -694,13 +724,14 @@
                 ? `<p class="product-detail-note product-designer-note">${escapeHtml(getDesignerProductNote(lang))}</p>`
                 : "");
         const contactOnly = isContactOnlyProduct(product) && !soldOut;
-        const hasSize = !product.noSize && !contactOnly;
+        const hasSize = hasProductSizeGuide(product);
+        const contactUrl = getProductContactUrl(product);
         const addLabel = soldOut
             ? getUnavailableButtonLabel(lang)
-            : (contactOnly ? getContactButtonLabel(lang) : (lang === "ua" ? "\u0414\u041E\u0414\u0410\u0422\u0418 \u0412 \u041A\u041E\u0428\u0418\u041A" : "ADD TO CART"));
-        const backLabel = lang === "ua" ? "\u041D\u0430\u0437\u0430\u0434 \u0434\u043E \u043A\u0430\u0442\u0430\u043B\u043E\u0433\u0443" : "Back to catalog";
-        const sizeGuideLabel = lang === "ua" ? "\u0420\u043E\u0437\u043C\u0456\u0440\u043D\u0430 \u0441\u0456\u0442\u043A\u0430" : "Size guide";
-        const slugLabel = lang === "ua" ? "\u0410\u0440\u0442\u0438\u043A\u0443\u043B" : "SKU";
+            : (contactOnly ? getContactButtonLabel(lang) : (lang === "ua" ? "ДОДАТИ В КОШИК" : "ADD TO CART"));
+        const backLabel = lang === "ua" ? "Назад до каталогу" : "Back to catalog";
+        const sizeGuideLabel = lang === "ua" ? "Розмірна сітка" : "Size guide";
+        const slugLabel = lang === "ua" ? "Артикул" : "SKU";
         const seoKeywords = buildSeoLine(product);
         const productSeoCopy = buildProductSeoCopy(product);
         const preorderBadge = product.isPreorder || product.visualPreorder
@@ -717,24 +748,22 @@
                 ? product.sizes.map((size) => String(size || "").trim()).filter(Boolean)
                 : ["S", "M", "L", "XL", "2XL", "3XL"]
             ).map((size) => `<option value="${escapeAttr(size)}">SIZE: ${escapeHtml(size)}</option>`).join("");
-        const sizeSelectMarkup = product.noSize && (soldOut || contactOnly)
+        const sizeSelectMarkup = (!hasSize || isPatch)
             ? ""
-            : product.noSize
-            ? `<select id="product-size">
+            : (isCap
+                ? `<select id="product-size">
                             <option value="ONE SIZE">SIZE: ONE SIZE</option>
                         </select>`
-            : (hasSize
-                ? `<select id="product-size">
+                : `<select id="product-size">
                             ${sizeOptions}
-                        </select>`
-                : "");
-        const sizeGuideButton = !hasSize || isCap || product.noSize
+                        </select>`);
+        const sizeGuideButton = !hasSize
             ? ""
             : `<button class="buy-btn size-guide-btn" id="sizeGuideBtn">${sizeGuideLabel}</button>`;
         const actionButton = soldOut
             ? `<button class="buy-btn" id="contactProductBtn" data-ua="Немає в наявності" data-eng="OUT OF STOCK" disabled aria-disabled="true">${addLabel}</button>`
             : (contactOnly
-                ? `<button class="buy-btn" id="contactProductBtn" onclick="window.location.href='${product.contactUrl}'">${addLabel}</button>`
+                ? `<button class="buy-btn" id="contactProductBtn" onclick="window.location.href='${escapeAttr(contactUrl)}'">${addLabel}</button>`
                 : `<button class="buy-btn" id="addProductBtn">${addLabel}</button>`);
         const colorSelect = colorVariants.length
             ? `<select id="product-color">${buildColorOptions(colorVariants, lang)}</select>`
