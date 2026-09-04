@@ -96,24 +96,30 @@ export default async function handler(req, res) {
 
     // GET: Retrieve order history
     if (req.method === 'GET') {
+        const url = new URL(req.url, 'http://localhost');
+        const queryEmail = url.searchParams.get('email');
         const userSession = getUserSession(req);
         const adminSession = getAdminSession(req);
 
-        if (userSession?.sub) {
-            const userEmail = userSession.email || userSession.phone;
-            const filter = userEmail
-                ? `(user_id.eq.${userSession.sub},user_email.eq.${userEmail})`
-                : undefined;
+        const targetEmail = (userSession?.email || userSession?.phone || (queryEmail ? queryEmail.trim().toLowerCase() : null));
+        const targetUserId = userSession?.sub || null;
+
+        if (targetEmail || targetUserId) {
+            const orParts = [];
+            if (targetUserId) orParts.push(`user_id.eq.${targetUserId}`);
+            if (targetEmail) orParts.push(`user_email.eq.${targetEmail}`);
 
             const queryOpts = {
                 order: 'created_at.desc',
                 limit: 100
             };
 
-            if (filter) {
-                queryOpts.or = filter;
-            } else {
-                queryOpts.user_id = `eq.${userSession.sub}`;
+            if (orParts.length > 1) {
+                queryOpts.or = `(${orParts.join(',')})`;
+            } else if (targetUserId) {
+                queryOpts.user_id = `eq.${targetUserId}`;
+            } else if (targetEmail) {
+                queryOpts.user_email = `eq.${targetEmail}`;
             }
 
             const result = await loadOrders(queryOpts);
@@ -122,8 +128,8 @@ export default async function handler(req, res) {
                 success: true,
                 role: 'user',
                 user: {
-                    id: userSession.sub,
-                    email: userEmail || 'User'
+                    id: targetUserId,
+                    email: targetEmail || 'User'
                 },
                 orders: (result.ok && Array.isArray(result.data)) ? result.data : []
             });
@@ -164,8 +170,8 @@ export default async function handler(req, res) {
             return json(res, 400, { error: 'Некоректна сума замовлення' });
         }
 
-        const userEmail = userSession?.email || userSession?.phone || null;
-        const userId = userSession?.sub || null;
+        const userEmail = (userSession?.email || userSession?.phone || body.user_email || '').trim().toLowerCase() || null;
+        const userId = userSession?.sub || body.user_id || null;
 
         const orderBody = {
             total_price: totalPrice,
@@ -183,19 +189,33 @@ export default async function handler(req, res) {
         });
 
         if (!createOrder.ok || !Array.isArray(createOrder.data) || createOrder.data.length === 0) {
-            // Fallback without items column if items column does not exist yet
-            delete orderBody.items;
-            delete orderBody.user_email;
+            // Fallback: try inserting with user_email if schema differs
             const fallbackCreate = await supabaseRequest('orders', {
                 method: 'POST',
-                body: orderBody,
+                body: {
+                    user_email: userEmail,
+                    total_price: totalPrice,
+                    status: 'Пакування'
+                },
                 prefer: 'return=representation'
             });
 
             if (!fallbackCreate.ok || !Array.isArray(fallbackCreate.data) || fallbackCreate.data.length === 0) {
-                return json(res, 500, { error: 'Не вдалося створити замовлення' });
+                // Minimum insert
+                const minCreate = await supabaseRequest('orders', {
+                    method: 'POST',
+                    body: {
+                        total_price: totalPrice,
+                        status: 'Пакування'
+                    },
+                    prefer: 'return=representation'
+                });
+                if (minCreate.ok && Array.isArray(minCreate.data) && minCreate.data.length > 0) {
+                    createOrder.data = minCreate.data;
+                }
+            } else {
+                createOrder.data = fallbackCreate.data;
             }
-            createOrder.data = fallbackCreate.data;
         }
 
         const order = createOrder.data[0];
