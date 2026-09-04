@@ -2661,4 +2661,354 @@ body[data-page="catalog"] .size-btn {
     }
 }
 
+/* ==========================================================================
+   ACCOUNT MODAL STYLES
+   ========================================================================== */
+.account-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10005;
+    align-items: center;
+    justify-content: center;
+}
+
+.account-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(6px);
+}
+
+.account-modal-card {
+    position: relative;
+    width: 92%;
+    max-width: 500px;
+    background: #0d0d0d;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(136, 8, 8, 0.2);
+    border-radius: 8px;
+    padding: 28px 24px;
+    z-index: 2;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.account-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.account-modal-close:hover {
+    color: var(--blood);
+}
+
+.account-tabs {
+    display: flex;
+    border-bottom: 1px solid #222;
+    margin-bottom: 22px;
+}
+
+.account-tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 12px 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #777;
+    cursor: pointer;
+    text-transform: uppercase;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.account-tab-btn.active {
+    color: #fff;
+    border-bottom-color: var(--blood);
+}
+
+.account-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.account-input {
+    width: 100%;
+    background: #141414;
+    border: 1px solid #2c2c2c;
+    color: #fff;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.account-input:focus {
+    outline: none;
+    border-color: var(--blood);
+}
+
+.account-submit-btn {
+    width: 100%;
+    background: var(--blood);
+    color: #fff;
+    border: none;
+    padding: 13px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 6px;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.account-submit-btn:hover {
+    background: #a40a0a;
+    box-shadow: 0 0 14px rgba(136, 8, 8, 0.6);
+}
+
+.account-error-msg {
+    color: #ff4444;
+    font-size: 0.85rem;
+    margin-top: -4px;
+    min-height: 18px;
+}
+
+.account-profile-box {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.account-profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #222;
+}
+
+.account-user-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.account-user-badge svg {
+    flex-shrink: 0;
+    color: var(--blood);
+}
+
+.account-logout-btn {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #bbb;
+    padding: 7px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.account-logout-btn:hover {
+    border-color: var(--blood);
+    color: #fff;
+    background: var(--blood);
+}
+
+.account-orders-heading {
+    font-size: 1rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.account-orders-scroll {
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.account-order-card {
+    background: #131313;
+    border: 1px solid #222;
+    border-radius: 6px;
+    padding: 14px;
+    transition: border-color 0.2s;
+}
+
+.account-order-card:hover {
+    border-color: #333;
+}
+
+.account-order-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.account-order-head strong {
+    color: #eee;
+}
+
+.account-order-status-line {
+    margin-bottom: 8px;
+}
+
+.account-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.account-badge--packing {
+    background: rgba(255, 180, 0, 0.12);
+    color: #ffb400;
+    border: 1px solid rgba(255, 180, 0, 0.3);
+}
+
+.account-badge--shipping {
+    background: rgba(0, 180, 255, 0.12);
+    color: #00b4ff;
+    border: 1px solid rgba(0, 180, 255, 0.3);
+}
+
+.account-badge--done {
+    background: rgba(50, 205, 50, 0.12);
+    color: #32cd32;
+    border: 1px solid rgba(50, 205, 50, 0.3);
+}
+
+.account-order-items-list {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0;
+    border-top: 1px solid #1c1c1c;
+    border-bottom: 1px solid #1c1c1c;
+    padding: 6px 0;
+}
+
+.account-order-items-list li {
+    font-size: 0.85rem;
+    color: #bbb;
+    padding: 2px 0;
+}
+
+.account-order-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.88rem;
+    margin-top: 6px;
+}
+
+.account-order-ttn {
+    color: #00b4ff;
+    font-size: 0.8rem;
+}
+
+.account-order-sum {
+    font-weight: 700;
+    color: #fff;
+}
+
+.account-empty-state {
+    text-align: center;
+    padding: 30px 15px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   MIGRATION NOTICE BANNER (TOP 7 SECONDS)
+   ========================================================================== */
+.migration-notice-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10020;
+    background: linear-gradient(90deg, #150303, #2a0808, #150303);
+    border-bottom: 2px solid var(--blood);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.85), 0 0 16px rgba(136, 8, 8, 0.45);
+    color: #fff;
+    padding: 12px 42px 12px 18px;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.migration-notice-banner.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.migration-notice-close {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+    transition: color 0.2s;
+}
+
+.migration-notice-close:hover {
+    color: #fff;
+}
+
+
+
 
