@@ -92,36 +92,37 @@ export default async function handler(req, res) {
             return json(res, 409, { error: 'Користувач із такою поштою вже існує' });
         }
 
-        // Create new user
-        const newUserData = {
-            email,
-            phone: email, // Fallback for backwards compatibility with previous schema
-            full_name: email.split('@')[0],
-            password_hash: hashPassword(password)
-        };
-
-        const created = await supabaseRequest('users', {
+        // Try inserting standard email-based user
+        let created = await supabaseRequest('users', {
             method: 'POST',
-            body: newUserData,
+            body: {
+                email,
+                full_name: email.split('@')[0],
+                password_hash: hashPassword(password)
+            },
             prefer: 'return=representation'
         });
 
-        if (!created.ok || !Array.isArray(created.data) || created.data.length === 0) {
-            // Fallback: try inserting without extra columns if specific columns differ
-            const minimalInsert = await supabaseRequest('users', {
+        // If phone column requires NOT NULL with format constraint, provide a valid E.164 placeholder
+        if (!created.ok) {
+            const randomSuffix = Math.floor(100000000 + Math.random() * 900000000);
+            const validDummyPhone = `+380${randomSuffix}`;
+
+            created = await supabaseRequest('users', {
                 method: 'POST',
                 body: {
                     email,
+                    phone: validDummyPhone,
+                    full_name: email.split('@')[0],
                     password_hash: hashPassword(password)
                 },
                 prefer: 'return=representation'
             });
+        }
 
-            if (!minimalInsert.ok || !Array.isArray(minimalInsert.data) || minimalInsert.data.length === 0) {
-                const errMsg = (created.data && (created.data.message || created.data.error)) || 'Не вдалося створити акаунт';
-                return json(res, 500, { error: errMsg });
-            }
-            created.data = minimalInsert.data;
+        if (!created.ok || !Array.isArray(created.data) || created.data.length === 0) {
+            const errMsg = (created.data && (created.data.message || created.data.error)) || 'Не вдалося створити акаунт';
+            return json(res, 500, { error: errMsg });
         }
 
         const user = {
