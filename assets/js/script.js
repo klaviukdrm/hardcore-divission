@@ -2232,7 +2232,10 @@ let cart = [];
 
     async function saveOrderForAccountHistory(lang, totalPrice) {
         try {
+            const user = currentAccountUser || JSON.parse(localStorage.getItem('hd_user_auth') || 'null');
             const payload = {
+                user_email: user?.email || undefined,
+                user_id: user?.id || undefined,
                 total_price: totalPrice,
                 items: buildOrderItemsPayload(lang)
             };
@@ -2673,6 +2676,23 @@ function closeAccountModal() {
 async function checkAccountSessionAndRender() {
     const bodyEl = document.getElementById('accountModalBody');
     if (!bodyEl) return;
+
+    // 1. Instant check from localStorage
+    const savedUserRaw = localStorage.getItem('hd_user_auth');
+    if (savedUserRaw) {
+        try {
+            const savedUser = JSON.parse(savedUserRaw);
+            if (savedUser && (savedUser.email || savedUser.id)) {
+                currentAccountUser = savedUser;
+                syncAccountButtonState(true);
+                renderAccountProfileView(savedUser);
+                return;
+            }
+        } catch (e) {
+            // continue to server check
+        }
+    }
+
     bodyEl.innerHTML = '<div style="text-align:center; padding: 30px; color:#888;">Завантаження...</div>';
 
     try {
@@ -2686,6 +2706,7 @@ async function checkAccountSessionAndRender() {
             const data = await response.json();
             if (data && data.authenticated && data.role === 'user' && data.user) {
                 currentAccountUser = data.user;
+                localStorage.setItem('hd_user_auth', JSON.stringify(data.user));
                 syncAccountButtonState(true);
                 renderAccountProfileView(data.user);
                 return;
@@ -2696,6 +2717,7 @@ async function checkAccountSessionAndRender() {
     }
 
     currentAccountUser = null;
+    localStorage.removeItem('hd_user_auth');
     syncAccountButtonState(false);
     renderAccountAuthView(currentAccountTab);
 }
@@ -2770,6 +2792,7 @@ async function handleAccountLogin() {
         }
 
         currentAccountUser = data.user;
+        localStorage.setItem('hd_user_auth', JSON.stringify(data.user));
         syncAccountButtonState(true);
         renderAccountProfileView(data.user);
     } catch (err) {
@@ -2823,6 +2846,7 @@ async function handleAccountRegister() {
         }
 
         currentAccountUser = data.user;
+        localStorage.setItem('hd_user_auth', JSON.stringify(data.user));
         syncAccountButtonState(true);
         renderAccountProfileView(data.user);
     } catch (err) {
@@ -2845,6 +2869,7 @@ async function handleAccountLogout() {
     }
 
     currentAccountUser = null;
+    localStorage.removeItem('hd_user_auth');
     syncAccountButtonState(false);
     renderAccountAuthView('login');
 }
@@ -2882,8 +2907,12 @@ async function loadUserOrdersIntoModal() {
     const listEl = document.getElementById('accOrdersScroll');
     if (!listEl) return;
 
+    const user = currentAccountUser || JSON.parse(localStorage.getItem('hd_user_auth') || 'null');
+    const userEmail = (user && user.email) ? user.email.trim().toLowerCase() : '';
+    const emailParam = userEmail ? `?email=${encodeURIComponent(userEmail)}` : '';
+
     try {
-        const res = await fetch('/api/orders', {
+        const res = await fetch(`/api/orders${emailParam}`, {
             method: 'GET',
             credentials: 'include',
             cache: 'no-store'
@@ -2941,22 +2970,38 @@ async function syncAccountButtonState(forcedState) {
 
     let isUserAuthenticated = Boolean(forcedState);
     if (forcedState === undefined) {
-        try {
-            const response = await fetch('/api/auth/me', {
-                method: 'GET',
-                credentials: 'include',
-                cache: 'no-store'
-            });
-
-            if (response.ok) {
-                const payload = await response.json();
-                isUserAuthenticated = Boolean(payload && payload.authenticated && payload.role === 'user');
-                if (isUserAuthenticated && payload.user) {
-                    currentAccountUser = payload.user;
+        const savedUserRaw = localStorage.getItem('hd_user_auth');
+        if (savedUserRaw) {
+            try {
+                const savedUser = JSON.parse(savedUserRaw);
+                if (savedUser && (savedUser.email || savedUser.id)) {
+                    isUserAuthenticated = true;
+                    currentAccountUser = savedUser;
                 }
+            } catch (e) {
+                // continue
             }
-        } catch (e) {
-            isUserAuthenticated = false;
+        }
+
+        if (!isUserAuthenticated) {
+            try {
+                const response = await fetch('/api/auth/me', {
+                    method: 'GET',
+                    credentials: 'include',
+                    cache: 'no-store'
+                });
+
+                if (response.ok) {
+                    const payload = await response.json();
+                    isUserAuthenticated = Boolean(payload && payload.authenticated && payload.role === 'user');
+                    if (isUserAuthenticated && payload.user) {
+                        currentAccountUser = payload.user;
+                        localStorage.setItem('hd_user_auth', JSON.stringify(payload.user));
+                    }
+                }
+            } catch (e) {
+                isUserAuthenticated = false;
+            }
         }
     }
 
