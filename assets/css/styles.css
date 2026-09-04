@@ -2694,7 +2694,7 @@ body[data-page="catalog"] .size-btn {
     border: 1px solid #2a2a2a;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(136, 8, 8, 0.2);
     border-radius: 8px;
-    padding: 28px 24px;
+    padding: 32px 24px 24px;
     z-index: 2;
     max-height: 90vh;
     display: flex;
@@ -2704,7 +2704,7 @@ body[data-page="catalog"] .size-btn {
 
 .account-modal-close {
     position: absolute;
-    top: 12px;
+    top: 14px;
     right: 14px;
     width: 32px;
     height: 32px;
@@ -2715,10 +2715,10 @@ body[data-page="catalog"] .size-btn {
     border: 1px solid #333;
     border-radius: 50%;
     color: #aaa;
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1;
     cursor: pointer;
-    z-index: 10;
+    z-index: 20;
     transition: all 0.2s;
 }
 
@@ -2731,8 +2731,8 @@ body[data-page="catalog"] .size-btn {
 .account-tabs {
     display: flex;
     border-bottom: 1px solid #222;
-    margin-bottom: 22px;
-    padding-right: 42px;
+    margin-bottom: 20px;
+    padding-right: 44px;
 }
 
 .account-tab-btn {
@@ -2816,9 +2816,10 @@ body[data-page="catalog"] .size-btn {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 14px;
-    padding-right: 48px; /* Dedicated space for close button */
+    gap: 12px;
+    padding-bottom: 16px;
     border-bottom: 1px solid #222;
+    margin-top: 2px;
 }
 
 .account-user-badge {
@@ -2826,10 +2827,13 @@ body[data-page="catalog"] .size-btn {
     align-items: center;
     gap: 10px;
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    flex: 1;
 }
 
 .account-user-badge svg {
@@ -2838,12 +2842,13 @@ body[data-page="catalog"] .size-btn {
 }
 
 .account-logout-btn {
+    flex-shrink: 0;
     background: #1a1a1a;
     border: 1px solid #333;
     color: #bbb;
-    padding: 7px 14px;
+    padding: 8px 16px;
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     cursor: pointer;
@@ -2855,6 +2860,21 @@ body[data-page="catalog"] .size-btn {
     border-color: var(--blood);
     color: #fff;
     background: var(--blood);
+}
+
+@media (max-width: 480px) {
+    .account-profile-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    .account-user-badge {
+        padding-right: 36px;
+    }
+    .account-logout-btn {
+        width: 100%;
+        text-align: center;
+    }
 }
 
 .account-orders-heading {
