@@ -7,7 +7,7 @@ function normalizeItems(items) {
 
     return items
         .map((item) => {
-            const title = String(item?.title || '').trim();
+            const title = String(item?.title || item?.name || '').trim();
             const productId = item?.product_id != null ? String(item.product_id).trim() : null;
             const size = item?.size != null ? String(item.size).trim() : null;
             const quantity = Number(item?.quantity || 1);
@@ -28,77 +28,33 @@ function normalizeItems(items) {
         .filter(Boolean);
 }
 
-async function insertOrderItemsWithFallback(orderId, items) {
-    const itemRows = items.map((item) => ({
-        order_id: orderId,
-        product_id: item.product_id,
-        title: item.title,
-        price: item.price,
-        quantity: item.quantity,
-        size: item.size
-    }));
-
-    const bulkInsert = await supabaseRequest('order_items', {
-        method: 'POST',
-        body: itemRows,
-        prefer: 'return=representation'
-    });
-
-    if (bulkInsert.ok) {
-        const inserted = Array.isArray(bulkInsert.data) ? bulkInsert.data.length : itemRows.length;
-        return { ok: true, inserted };
-    }
-
-    let inserted = 0;
-    for (const row of itemRows) {
-        const singleInsert = await supabaseRequest('order_items', {
-            method: 'POST',
-            body: row,
-            prefer: 'return=representation'
-        });
-        if (singleInsert.ok) {
-            inserted += 1;
-        }
-    }
-
-    return { ok: inserted > 0, inserted };
-}
-
 async function loadOrders(queryBase) {
-    // 1. Try relational select with order_items and users
+    // 1. Try relational select with order_items
     let res = await supabaseRequest('orders', {
         query: {
             ...queryBase,
-            select: 'id,user_id,total_price,status,tracking_number,created_at,order_items(id,product_id,title,price,quantity,size),users(phone)'
+            select: 'id,user_id,user_email,total_price,status,tracking_number,items,created_at,order_items(id,product_id,title,price,quantity,size)'
         }
     });
 
     if (res.ok && Array.isArray(res.data)) {
+        res.data.forEach((order) => {
+            if ((!order.order_items || !order.order_items.length) && Array.isArray(order.items)) {
+                order.order_items = order.items;
+            }
+        });
         return res;
     }
 
-    // 2. Try relational select with order_items only
+    // 2. Select orders directly without relations
     res = await supabaseRequest('orders', {
         query: {
             ...queryBase,
-            select: 'id,user_id,total_price,status,tracking_number,created_at,order_items(id,product_id,title,price,quantity,size)'
-        }
-    });
-
-    if (res.ok && Array.isArray(res.data)) {
-        return res;
-    }
-
-    // 3. Fallback: Select orders directly without embedded relations
-    res = await supabaseRequest('orders', {
-        query: {
-            ...queryBase,
-            select: 'id,user_id,total_price,status,tracking_number,created_at'
+            select: 'id,user_id,user_email,total_price,status,tracking_number,items,created_at'
         }
     });
 
     if (!res.ok) {
-        // 4. Fallback without tracking_number column if tracking_number does not exist
         res = await supabaseRequest('orders', {
             query: {
                 ...queryBase,
@@ -108,7 +64,6 @@ async function loadOrders(queryBase) {
     }
 
     if (res.ok && Array.isArray(res.data) && res.data.length > 0) {
-        // Fetch order items separately for all fetched orders
         const orderIds = res.data.map((o) => o.id).filter(Boolean);
         if (orderIds.length > 0) {
             const itemsRes = await supabaseRequest('order_items', {
@@ -116,16 +71,16 @@ async function loadOrders(queryBase) {
                     order_id: `in.(${orderIds.join(',')})`
                 }
             });
+            const itemsByOrder = {};
             if (itemsRes.ok && Array.isArray(itemsRes.data)) {
-                const itemsByOrder = {};
                 itemsRes.data.forEach((item) => {
                     if (!itemsByOrder[item.order_id]) itemsByOrder[item.order_id] = [];
                     itemsByOrder[item.order_id].push(item);
                 });
-                res.data.forEach((order) => {
-                    order.order_items = itemsByOrder[order.id] || [];
-                });
             }
+            res.data.forEach((order) => {
+                order.order_items = itemsByOrder[order.id] || (Array.isArray(order.items) ? order.items : []);
+            });
         }
     }
 
@@ -136,13 +91,43 @@ export default async function handler(req, res) {
     try {
         requireSupabaseConfig();
     } catch (e) {
-        return json(res, 500, { error: 'Server is not configured' });
+        return json(res, 500, { error: 'База даних не налаштована' });
     }
 
     // GET: Retrieve order history
     if (req.method === 'GET') {
-        const adminSession = getAdminSession(req);
         const userSession = getUserSession(req);
+        const adminSession = getAdminSession(req);
+
+        if (userSession?.sub) {
+            const userEmail = userSession.email || userSession.phone;
+            const filter = userEmail
+                ? `(user_id.eq.${userSession.sub},user_email.eq.${userEmail})`
+                : undefined;
+
+            const queryOpts = {
+                order: 'created_at.desc',
+                limit: 100
+            };
+
+            if (filter) {
+                queryOpts.or = filter;
+            } else {
+                queryOpts.user_id = `eq.${userSession.sub}`;
+            }
+
+            const result = await loadOrders(queryOpts);
+
+            return json(res, 200, {
+                success: true,
+                role: 'user',
+                user: {
+                    id: userSession.sub,
+                    email: userEmail || 'User'
+                },
+                orders: (result.ok && Array.isArray(result.data)) ? result.data : []
+            });
+        }
 
         if (adminSession?.role === 'admin') {
             const result = await loadOrders({
@@ -150,91 +135,88 @@ export default async function handler(req, res) {
                 limit: 500
             });
 
-            if (!result.ok) {
-                return json(res, 500, { error: 'Failed to load orders' });
-            }
-
             return json(res, 200, {
                 success: true,
                 role: 'admin',
-                orders: Array.isArray(result.data) ? result.data : []
+                orders: (result.ok && Array.isArray(result.data)) ? result.data : []
             });
         }
 
-        if (!userSession?.sub) {
-            return json(res, 401, { error: 'Authentication required' });
-        }
-
-        const result = await loadOrders({
-            user_id: `eq.${userSession.sub}`,
-            order: 'created_at.desc',
-            limit: 200
-        });
-
-        if (!result.ok) {
-            return json(res, 500, { error: 'Failed to load orders' });
-        }
-
-        return json(res, 200, {
-            success: true,
-            role: 'user',
-            user: {
-                id: userSession.sub,
-                phone: userSession.phone
-            },
-            orders: Array.isArray(result.data) ? result.data : []
-        });
+        return json(res, 401, { error: 'Потрібна авторизація' });
     }
 
-    // POST: Create order
+    // POST: Create order (called during checkout)
     if (req.method === 'POST') {
         const userSession = getUserSession(req);
-        if (!userSession?.sub) {
-            return json(res, 401, { error: 'Authentication required' });
-        }
-
         const body = parseJsonBody(req);
         if (!body) {
-            return json(res, 400, { error: 'Invalid JSON body' });
+            return json(res, 400, { error: 'Некоректні дані' });
         }
 
         const items = normalizeItems(body.items);
         const totalPrice = Number(body.total_price);
 
         if (!items.length) {
-            return json(res, 400, { error: 'Order must include at least one item' });
+            return json(res, 400, { error: 'Замовлення має містити хоча б один товар' });
         }
 
         if (!Number.isFinite(totalPrice) || totalPrice <= 0) {
-            return json(res, 400, { error: 'Invalid total_price' });
+            return json(res, 400, { error: 'Некоректна сума замовлення' });
         }
+
+        const userEmail = userSession?.email || userSession?.phone || null;
+        const userId = userSession?.sub || null;
+
+        const orderBody = {
+            total_price: totalPrice,
+            status: 'Пакування',
+            items
+        };
+
+        if (userId) orderBody.user_id = userId;
+        if (userEmail) orderBody.user_email = userEmail;
 
         const createOrder = await supabaseRequest('orders', {
             method: 'POST',
-            body: {
-                user_id: userSession.sub,
-                total_price: totalPrice,
-                status: 'Пакування'
-            },
+            body: orderBody,
             prefer: 'return=representation'
         });
 
         if (!createOrder.ok || !Array.isArray(createOrder.data) || createOrder.data.length === 0) {
-            return json(res, 500, { error: 'Failed to create order' });
+            // Fallback without items column if items column does not exist yet
+            delete orderBody.items;
+            delete orderBody.user_email;
+            const fallbackCreate = await supabaseRequest('orders', {
+                method: 'POST',
+                body: orderBody,
+                prefer: 'return=representation'
+            });
+
+            if (!fallbackCreate.ok || !Array.isArray(fallbackCreate.data) || fallbackCreate.data.length === 0) {
+                return json(res, 500, { error: 'Не вдалося створити замовлення' });
+            }
+            createOrder.data = fallbackCreate.data;
         }
 
         const order = createOrder.data[0];
-        const itemsResult = await insertOrderItemsWithFallback(order.id, items);
-        if (!itemsResult.ok) {
-            return json(res, 201, {
-                success: true,
-                warning: 'Order was created, but items were not saved',
-                order: {
-                    id: order.id,
-                    total_price: order.total_price,
-                    status: order.status
-                }
+
+        // Also insert into order_items if table exists
+        try {
+            const itemRows = items.map((item) => ({
+                order_id: order.id,
+                product_id: item.product_id,
+                title: item.title,
+                price: item.price,
+                quantity: item.quantity,
+                size: item.size
+            }));
+
+            await supabaseRequest('order_items', {
+                method: 'POST',
+                body: itemRows
             });
+        } catch (e) {
+            // Graceful fallback
         }
 
         return json(res, 201, {
