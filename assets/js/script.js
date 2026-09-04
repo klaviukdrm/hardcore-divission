@@ -2634,11 +2634,47 @@ function updateContact() {
     link.target = "_blank";
 }
 
-async function syncAccountButtonState() {
-    const accountButtons = document.querySelectorAll('.account-icon-btn[data-account-link="true"]');
-    if (!accountButtons.length) return;
+/* ==========================================================================
+   ACCOUNT MODAL & EMAIL/PASSWORD AUTH
+   ========================================================================== */
+let currentAccountUser = null;
+let currentAccountTab = 'login';
 
-    let isUserAuthenticated = false;
+function ensureAccountModal() {
+    let modal = document.getElementById('accountModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'accountModal';
+        modal.className = 'modal account-modal';
+        modal.innerHTML = `
+            <div class="account-modal-backdrop" onclick="closeAccountModal()"></div>
+            <div class="account-modal-card">
+                <button class="account-modal-close" onclick="closeAccountModal()" aria-label="Close">&times;</button>
+                <div id="accountModalBody"></div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    return modal;
+}
+
+function openAccountModal(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const modal = ensureAccountModal();
+    modal.style.display = 'flex';
+    checkAccountSessionAndRender();
+}
+
+function closeAccountModal() {
+    const modal = document.getElementById('accountModal');
+    if (modal) modal.style.display = 'none';
+}
+
+async function checkAccountSessionAndRender() {
+    const bodyEl = document.getElementById('accountModalBody');
+    if (!bodyEl) return;
+    bodyEl.innerHTML = '<div style="text-align:center; padding: 30px; color:#888;">Завантаження...</div>';
+
     try {
         const response = await fetch('/api/auth/me', {
             method: 'GET',
@@ -2647,16 +2683,333 @@ async function syncAccountButtonState() {
         });
 
         if (response.ok) {
-            const payload = await response.json();
-            isUserAuthenticated = Boolean(payload && payload.authenticated && payload.role === 'user');
+            const data = await response.json();
+            if (data && data.authenticated && data.role === 'user' && data.user) {
+                currentAccountUser = data.user;
+                syncAccountButtonState(true);
+                renderAccountProfileView(data.user);
+                return;
+            }
         }
     } catch (e) {
-        isUserAuthenticated = false;
+        // Fallback to guest
+    }
+
+    currentAccountUser = null;
+    syncAccountButtonState(false);
+    renderAccountAuthView(currentAccountTab);
+}
+
+function renderAccountAuthView(tab = 'login') {
+    currentAccountTab = tab;
+    const bodyEl = document.getElementById('accountModalBody');
+    if (!bodyEl) return;
+
+    const isLogin = tab === 'login';
+    bodyEl.innerHTML = `
+        <div class="account-tabs">
+            <button class="account-tab-btn ${isLogin ? 'active' : ''}" onclick="switchAccountTab('login')">ВХІД</button>
+            <button class="account-tab-btn ${!isLogin ? 'active' : ''}" onclick="switchAccountTab('register')">РЕЄСТРАЦІЯ</button>
+        </div>
+
+        <div style="font-size: 0.8rem; color: #ccc; background: rgba(136, 8, 8, 0.18); border: 1px solid rgba(136, 8, 8, 0.4); padding: 9px 12px; border-radius: 4px; line-height: 1.4; margin-bottom: 16px;">
+            🔒 <b>Оновлення безпеки:</b> Задля безпеки даних користувачів відбулася міграція бази. Якщо ви мали акаунт раніше — будь ласка, пройдіть швидку повторну реєстрацію за Email.
+        </div>
+
+        ${isLogin ? `
+            <form class="account-form" onsubmit="event.preventDefault(); handleAccountLogin();">
+                <input type="email" id="accLoginEmail" class="account-input" placeholder="Електронна пошта (Email)" autocomplete="email" required>
+                <input type="password" id="accLoginPass" class="account-input" placeholder="Пароль" autocomplete="current-password" required>
+                <div id="accAuthError" class="account-error-msg"></div>
+                <button type="submit" id="accSubmitBtn" class="account-submit-btn">УВІЙТИ</button>
+            </form>
+        ` : `
+            <form class="account-form" onsubmit="event.preventDefault(); handleAccountRegister();">
+                <input type="email" id="accRegEmail" class="account-input" placeholder="Електронна пошта (Email)" autocomplete="email" required>
+                <input type="password" id="accRegPass" class="account-input" placeholder="Пароль (від 6 символів)" autocomplete="new-password" required>
+                <input type="password" id="accRegPassConfirm" class="account-input" placeholder="Повторіть пароль" autocomplete="new-password" required>
+                <div id="accAuthError" class="account-error-msg"></div>
+                <button type="submit" id="accSubmitBtn" class="account-submit-btn">ЗАРЕЄСТРУВАТИСЯ</button>
+            </form>
+        `}
+    `;
+}
+
+function switchAccountTab(tab) {
+    renderAccountAuthView(tab);
+}
+
+async function handleAccountLogin() {
+    const email = (document.getElementById('accLoginEmail')?.value || '').trim();
+    const password = document.getElementById('accLoginPass')?.value || '';
+    const errorEl = document.getElementById('accAuthError');
+    const submitBtn = document.getElementById('accSubmitBtn');
+
+    if (!email || !password) {
+        if (errorEl) errorEl.textContent = 'Введіть пошту та пароль';
+        return;
+    }
+
+    if (errorEl) errorEl.textContent = '';
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Вхід...';
+    }
+
+    try {
+        const res = await fetch('/api/auth?action=login', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.error || 'Помилка входу');
+        }
+
+        currentAccountUser = data.user;
+        syncAccountButtonState(true);
+        renderAccountProfileView(data.user);
+    } catch (err) {
+        if (errorEl) errorEl.textContent = err.message;
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'УВІЙТИ';
+        }
+    }
+}
+
+async function handleAccountRegister() {
+    const email = (document.getElementById('accRegEmail')?.value || '').trim();
+    const password = document.getElementById('accRegPass')?.value || '';
+    const passwordConfirm = document.getElementById('accRegPassConfirm')?.value || '';
+    const errorEl = document.getElementById('accAuthError');
+    const submitBtn = document.getElementById('accSubmitBtn');
+
+    if (!email || !password || !passwordConfirm) {
+        if (errorEl) errorEl.textContent = 'Заповніть усі поля';
+        return;
+    }
+
+    if (password.length < 6) {
+        if (errorEl) errorEl.textContent = 'Пароль має містити щонайменше 6 символів';
+        return;
+    }
+
+    if (password !== passwordConfirm) {
+        if (errorEl) errorEl.textContent = 'Паролі не співпадають';
+        return;
+    }
+
+    if (errorEl) errorEl.textContent = '';
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Реєстрація...';
+    }
+
+    try {
+        const res = await fetch('/api/auth?action=register', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.error || 'Помилка реєстрації');
+        }
+
+        currentAccountUser = data.user;
+        syncAccountButtonState(true);
+        renderAccountProfileView(data.user);
+    } catch (err) {
+        if (errorEl) errorEl.textContent = err.message;
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'ЗАРЕЄСТРУВАТИСЯ';
+        }
+    }
+}
+
+async function handleAccountLogout() {
+    try {
+        await fetch('/api/auth?action=logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+    } catch (e) {
+        // Continue
+    }
+
+    currentAccountUser = null;
+    syncAccountButtonState(false);
+    renderAccountAuthView('login');
+}
+
+async function renderAccountProfileView(user) {
+    const bodyEl = document.getElementById('accountModalBody');
+    if (!bodyEl) return;
+
+    bodyEl.innerHTML = `
+        <div class="account-profile-box">
+            <div class="account-profile-header">
+                <div class="account-user-badge">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <span>${user.email || 'Користувач'}</span>
+                </div>
+                <button class="account-logout-btn" onclick="handleAccountLogout()">ВИЙТИ</button>
+            </div>
+
+            <div class="account-orders-section">
+                <h3 class="account-orders-heading">МОЇ ЗАМОВЛЕННЯ</h3>
+                <div id="accOrdersScroll" class="account-orders-scroll" style="margin-top: 12px;">
+                    <div style="text-align: center; padding: 20px; color: #777;">Завантаження замовлень...</div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    loadUserOrdersIntoModal();
+}
+
+async function loadUserOrdersIntoModal() {
+    const listEl = document.getElementById('accOrdersScroll');
+    if (!listEl) return;
+
+    try {
+        const res = await fetch('/api/orders', {
+            method: 'GET',
+            credentials: 'include',
+            cache: 'no-store'
+        });
+
+        if (!res.ok) throw new Error('Failed to load orders');
+        const data = await res.json();
+        const orders = Array.isArray(data.orders) ? data.orders : [];
+
+        if (!orders.length) {
+            listEl.innerHTML = `<div class="account-empty-state">У вас ще немає замовлень.</div>`;
+            return;
+        }
+
+        listEl.innerHTML = orders.map((order) => {
+            const rawStatus = String(order.status || 'Пакування').trim();
+            let badgeClass = 'account-badge--packing';
+            if (rawStatus.includes('Відправ') || rawStatus.includes('Shipping')) badgeClass = 'account-badge--shipping';
+            else if (rawStatus.includes('Заверш') || rawStatus.includes('Completed')) badgeClass = 'account-badge--done';
+
+            const items = Array.isArray(order.order_items) ? order.order_items : (Array.isArray(order.items) ? order.items : []);
+            const itemsHtml = items.map((item) => {
+                const sizeText = item.size ? ` (${item.size})` : '';
+                return `<li>${item.quantity || 1} × ${item.title || item.name}${sizeText} — ${item.price}₴</li>`;
+            }).join('');
+
+            const dateStr = order.created_at ? new Date(order.created_at).toLocaleDateString('uk-UA') : '';
+
+            return `
+                <div class="account-order-card">
+                    <div class="account-order-head">
+                        <strong>№ ${order.id}</strong>
+                        <span>${dateStr}</span>
+                    </div>
+                    <div class="account-order-status-line">
+                        <span class="account-badge ${badgeClass}">${rawStatus}</span>
+                        ${order.tracking_number ? `<span class="account-order-ttn" style="margin-left: 8px;">ТТН: ${order.tracking_number}</span>` : ''}
+                    </div>
+                    ${itemsHtml ? `<ul class="account-order-items-list">${itemsHtml}</ul>` : ''}
+                    <div class="account-order-bottom">
+                        <span></span>
+                        <span class="account-order-sum">Сума: ${order.total_price}₴</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } catch (e) {
+        listEl.innerHTML = `<div class="account-empty-state">Не вдалося завантажити історію замовлень.</div>`;
+    }
+}
+
+async function syncAccountButtonState(forcedState) {
+    const accountButtons = document.querySelectorAll('.account-icon-btn, [data-account-link="true"]');
+    if (!accountButtons.length) return;
+
+    let isUserAuthenticated = Boolean(forcedState);
+    if (forcedState === undefined) {
+        try {
+            const response = await fetch('/api/auth/me', {
+                method: 'GET',
+                credentials: 'include',
+                cache: 'no-store'
+            });
+
+            if (response.ok) {
+                const payload = await response.json();
+                isUserAuthenticated = Boolean(payload && payload.authenticated && payload.role === 'user');
+                if (isUserAuthenticated && payload.user) {
+                    currentAccountUser = payload.user;
+                }
+            }
+        } catch (e) {
+            isUserAuthenticated = false;
+        }
     }
 
     accountButtons.forEach((button) => {
         button.classList.toggle('account-btn-auth', isUserAuthenticated);
+        // Intercept click to open modal
+        if (!button.dataset.modalBound) {
+            button.dataset.modalBound = 'true';
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                openAccountModal(e);
+            });
+        }
     });
+}
+
+function showMigrationNotice() {
+    if (sessionStorage.getItem('hd_migration_banner_dismissed')) return;
+
+    const banner = document.createElement('div');
+    banner.id = 'migrationNoticeBanner';
+    banner.className = 'migration-notice-banner';
+    const lang = localStorage.getItem('preferred_lang') || 'ua';
+    const textUa = '🔒 <b>Оновлення системи:</b> Задля безпеки даних користувачів відбулася міграція бази. Якщо ви мали акаунт раніше — будь ласка, пройдіть повторну реєстрацію за електронною поштою.';
+    const textEng = '🔒 <b>Security Update:</b> For user data security, a database migration has occurred. If you had an account previously, please re-register using your email.';
+
+    banner.innerHTML = `
+        <div>${lang === 'ua' ? textUa : textEng}</div>
+        <button class="migration-notice-close" onclick="dismissMigrationNotice()" aria-label="Close">&times;</button>
+    `;
+
+    document.body.appendChild(banner);
+
+    // Trigger slide down
+    setTimeout(() => {
+        banner.classList.add('show');
+    }, 100);
+
+    // Auto dismiss after 7 seconds
+    setTimeout(() => {
+        dismissMigrationNotice();
+    }, 7000);
+}
+
+function dismissMigrationNotice() {
+    sessionStorage.setItem('hd_migration_banner_dismissed', 'true');
+    const banner = document.getElementById('migrationNoticeBanner');
+    if (banner) {
+        banner.classList.remove('show');
+        setTimeout(() => {
+            if (banner && banner.parentNode) banner.parentNode.removeChild(banner);
+        }, 400);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -2664,6 +3017,7 @@ document.addEventListener('DOMContentLoaded', () => {
     syncAccountButtonState();
     initGalleryBackdropClose();
     handleMonoReturnFromUrl();
+    showMigrationNotice();
 });
 
 window.addEventListener('pageshow', () => {
