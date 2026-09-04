@@ -2638,8 +2638,120 @@ function updateContact() {
 }
 
 /* ==========================================================================
-   ACCOUNT MODAL & EMAIL/PASSWORD AUTH
+   ACCOUNT MODAL, AUTH & MULTILINGUAL SUPPORT (UA / ENG)
    ========================================================================== */
+const ACCOUNT_I18N = {
+    ua: {
+        migrationBanner: '🔒 <b>Оновлення системи:</b> Задля безпеки даних користувачів відбулася міграція бази. Якщо ви мали акаунт раніше — будь ласка, пройдіть повторну реєстрацію за електронною поштою.',
+        migrationModalNote: '🔒 <b>Оновлення безпеки:</b> Задля безпеки даних користувачів відбулася міграція бази. Якщо ви мали акаунт раніше — будь ласка, пройдіть швидку повторну реєстрацію за Email.',
+        tabLogin: 'ВХІД',
+        tabRegister: 'РЕЄСТРАЦІЯ',
+        emailPlaceholder: 'Електронна пошта (Email)',
+        passwordPlaceholder: 'Пароль',
+        passwordRegPlaceholder: 'Пароль (від 6 символів)',
+        passwordConfirmPlaceholder: 'Повторіть пароль',
+        btnLogin: 'УВІЙТИ',
+        btnLoginLoading: 'Вхід...',
+        btnRegister: 'ЗАРЕЄСТРУВАТИСЯ',
+        btnRegisterLoading: 'Реєстрація...',
+        btnLogout: 'ВИЙТИ',
+        defaultUser: 'Користувач',
+        ordersTitle: 'МОЇ ЗАМОВЛЕННЯ',
+        ordersLoading: 'Завантаження замовлень...',
+        ordersEmpty: 'У вас ще немає замовлень.',
+        ordersError: 'Не вдалося завантажити історію замовлень.',
+        orderPrefix: '№ ',
+        ttnPrefix: 'ТТН: ',
+        totalPrefix: 'Сума: ',
+        statusPacking: 'Пакування',
+        statusShipping: 'Відправлено',
+        statusCompleted: 'Завершено',
+        modalLoading: 'Завантаження...',
+        errEnterEmailPass: 'Введіть пошту та пароль',
+        errFillAllFields: 'Заповніть усі поля',
+        errPassMinLen: 'Пароль має містити щонайменше 6 символів',
+        errPassMismatch: 'Паролі не співпадають',
+        errLoginFailed: 'Помилка входу',
+        errRegFailed: 'Помилка реєстрації'
+    },
+    eng: {
+        migrationBanner: '🔒 <b>Security Update:</b> For user data security, a database migration has occurred. If you had an account previously, please re-register using your email.',
+        migrationModalNote: '🔒 <b>Security Update:</b> For user data security, a database migration has occurred. If you had an account previously, please complete a quick re-registration with your email.',
+        tabLogin: 'LOG IN',
+        tabRegister: 'REGISTER',
+        emailPlaceholder: 'Email address',
+        passwordPlaceholder: 'Password',
+        passwordRegPlaceholder: 'Password (min. 6 chars)',
+        passwordConfirmPlaceholder: 'Confirm password',
+        btnLogin: 'LOG IN',
+        btnLoginLoading: 'Logging in...',
+        btnRegister: 'REGISTER',
+        btnRegisterLoading: 'Registering...',
+        btnLogout: 'LOG OUT',
+        defaultUser: 'User',
+        ordersTitle: 'MY ORDERS',
+        ordersLoading: 'Loading orders...',
+        ordersEmpty: 'You have no orders yet.',
+        ordersError: 'Failed to load order history.',
+        orderPrefix: 'Order #',
+        ttnPrefix: 'Tracking: ',
+        totalPrefix: 'Total: ',
+        statusPacking: 'Packing',
+        statusShipping: 'Shipped',
+        statusCompleted: 'Completed',
+        modalLoading: 'Loading...',
+        errEnterEmailPass: 'Please enter email and password',
+        errFillAllFields: 'Please fill in all fields',
+        errPassMinLen: 'Password must be at least 6 characters',
+        errPassMismatch: 'Passwords do not match',
+        errLoginFailed: 'Login failed',
+        errRegFailed: 'Registration failed'
+    }
+};
+
+function getAccountLang() {
+    return localStorage.getItem('preferred_lang') === 'eng' ? 'eng' : 'ua';
+}
+
+function getAccountI18n(key) {
+    const lang = getAccountLang();
+    const dict = ACCOUNT_I18N[lang] || ACCOUNT_I18N.ua;
+    return dict[key] !== undefined ? dict[key] : (ACCOUNT_I18N.ua[key] || '');
+}
+
+function escapeAccountHtml(str) {
+    if (str == null) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function formatAccountOrderStatus(rawStatus, lang) {
+    const status = String(rawStatus || 'Пакування').trim();
+    const isEng = lang === 'eng';
+    let badgeClass = 'account-badge--packing';
+    let label = isEng ? 'Packing' : 'Пакування';
+
+    if (status.includes('Відправ') || status.toLowerCase().includes('ship')) {
+        badgeClass = 'account-badge--shipping';
+        label = isEng ? 'Shipped' : 'Відправлено';
+    } else if (status.includes('Заверш') || status.toLowerCase().includes('complet') || status.toLowerCase().includes('done')) {
+        badgeClass = 'account-badge--done';
+        label = isEng ? 'Completed' : 'Завершено';
+    } else if (isEng && status === 'Пакування') {
+        label = 'Packing';
+    } else if (!isEng && status.toLowerCase() === 'packing') {
+        label = 'Пакування';
+    } else {
+        label = status;
+    }
+
+    return { badgeClass, label };
+}
+
 let currentAccountUser = null;
 let currentAccountTab = 'login';
 
@@ -2693,7 +2805,7 @@ async function checkAccountSessionAndRender() {
         }
     }
 
-    bodyEl.innerHTML = '<div style="text-align:center; padding: 30px; color:#888;">Завантаження...</div>';
+    bodyEl.innerHTML = `<div style="text-align:center; padding: 30px; color:#888;">${getAccountI18n('modalLoading')}</div>`;
 
     try {
         const response = await fetch('/api/auth/me', {
@@ -2730,28 +2842,28 @@ function renderAccountAuthView(tab = 'login') {
     const isLogin = tab === 'login';
     bodyEl.innerHTML = `
         <div class="account-tabs">
-            <button class="account-tab-btn ${isLogin ? 'active' : ''}" onclick="switchAccountTab('login')">ВХІД</button>
-            <button class="account-tab-btn ${!isLogin ? 'active' : ''}" onclick="switchAccountTab('register')">РЕЄСТРАЦІЯ</button>
+            <button class="account-tab-btn ${isLogin ? 'active' : ''}" onclick="switchAccountTab('login')">${getAccountI18n('tabLogin')}</button>
+            <button class="account-tab-btn ${!isLogin ? 'active' : ''}" onclick="switchAccountTab('register')">${getAccountI18n('tabRegister')}</button>
         </div>
 
         <div style="font-size: 0.8rem; color: #ccc; background: rgba(136, 8, 8, 0.18); border: 1px solid rgba(136, 8, 8, 0.4); padding: 9px 12px; border-radius: 4px; line-height: 1.4; margin-bottom: 16px;">
-            🔒 <b>Оновлення безпеки:</b> Задля безпеки даних користувачів відбулася міграція бази. Якщо ви мали акаунт раніше — будь ласка, пройдіть швидку повторну реєстрацію за Email.
+            ${getAccountI18n('migrationModalNote')}
         </div>
 
         ${isLogin ? `
             <form class="account-form" onsubmit="event.preventDefault(); handleAccountLogin();">
-                <input type="email" id="accLoginEmail" class="account-input" placeholder="Електронна пошта (Email)" autocomplete="email" required>
-                <input type="password" id="accLoginPass" class="account-input" placeholder="Пароль" autocomplete="current-password" required>
+                <input type="email" id="accLoginEmail" class="account-input" placeholder="${getAccountI18n('emailPlaceholder')}" autocomplete="email" required>
+                <input type="password" id="accLoginPass" class="account-input" placeholder="${getAccountI18n('passwordPlaceholder')}" autocomplete="current-password" required>
                 <div id="accAuthError" class="account-error-msg"></div>
-                <button type="submit" id="accSubmitBtn" class="account-submit-btn">УВІЙТИ</button>
+                <button type="submit" id="accSubmitBtn" class="account-submit-btn">${getAccountI18n('btnLogin')}</button>
             </form>
         ` : `
             <form class="account-form" onsubmit="event.preventDefault(); handleAccountRegister();">
-                <input type="email" id="accRegEmail" class="account-input" placeholder="Електронна пошта (Email)" autocomplete="email" required>
-                <input type="password" id="accRegPass" class="account-input" placeholder="Пароль (від 6 символів)" autocomplete="new-password" required>
-                <input type="password" id="accRegPassConfirm" class="account-input" placeholder="Повторіть пароль" autocomplete="new-password" required>
+                <input type="email" id="accRegEmail" class="account-input" placeholder="${getAccountI18n('emailPlaceholder')}" autocomplete="email" required>
+                <input type="password" id="accRegPass" class="account-input" placeholder="${getAccountI18n('passwordRegPlaceholder')}" autocomplete="new-password" required>
+                <input type="password" id="accRegPassConfirm" class="account-input" placeholder="${getAccountI18n('passwordConfirmPlaceholder')}" autocomplete="new-password" required>
                 <div id="accAuthError" class="account-error-msg"></div>
-                <button type="submit" id="accSubmitBtn" class="account-submit-btn">ЗАРЕЄСТРУВАТИСЯ</button>
+                <button type="submit" id="accSubmitBtn" class="account-submit-btn">${getAccountI18n('btnRegister')}</button>
             </form>
         `}
     `;
@@ -2768,14 +2880,14 @@ async function handleAccountLogin() {
     const submitBtn = document.getElementById('accSubmitBtn');
 
     if (!email || !password) {
-        if (errorEl) errorEl.textContent = 'Введіть пошту та пароль';
+        if (errorEl) errorEl.textContent = getAccountI18n('errEnterEmailPass');
         return;
     }
 
     if (errorEl) errorEl.textContent = '';
     if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Вхід...';
+        submitBtn.textContent = getAccountI18n('btnLoginLoading');
     }
 
     try {
@@ -2788,7 +2900,7 @@ async function handleAccountLogin() {
 
         const data = await res.json();
         if (!res.ok) {
-            throw new Error(data.error || 'Помилка входу');
+            throw new Error(data.error || getAccountI18n('errLoginFailed'));
         }
 
         currentAccountUser = data.user;
@@ -2799,7 +2911,7 @@ async function handleAccountLogin() {
         if (errorEl) errorEl.textContent = err.message;
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = 'УВІЙТИ';
+            submitBtn.textContent = getAccountI18n('btnLogin');
         }
     }
 }
@@ -2812,24 +2924,24 @@ async function handleAccountRegister() {
     const submitBtn = document.getElementById('accSubmitBtn');
 
     if (!email || !password || !passwordConfirm) {
-        if (errorEl) errorEl.textContent = 'Заповніть усі поля';
+        if (errorEl) errorEl.textContent = getAccountI18n('errFillAllFields');
         return;
     }
 
     if (password.length < 6) {
-        if (errorEl) errorEl.textContent = 'Пароль має містити щонайменше 6 символів';
+        if (errorEl) errorEl.textContent = getAccountI18n('errPassMinLen');
         return;
     }
 
     if (password !== passwordConfirm) {
-        if (errorEl) errorEl.textContent = 'Паролі не співпадають';
+        if (errorEl) errorEl.textContent = getAccountI18n('errPassMismatch');
         return;
     }
 
     if (errorEl) errorEl.textContent = '';
     if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Реєстрація...';
+        submitBtn.textContent = getAccountI18n('btnRegisterLoading');
     }
 
     try {
@@ -2842,7 +2954,7 @@ async function handleAccountRegister() {
 
         const data = await res.json();
         if (!res.ok) {
-            throw new Error(data.error || 'Помилка реєстрації');
+            throw new Error(data.error || getAccountI18n('errRegFailed'));
         }
 
         currentAccountUser = data.user;
@@ -2853,7 +2965,7 @@ async function handleAccountRegister() {
         if (errorEl) errorEl.textContent = err.message;
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = 'ЗАРЕЄСТРУВАТИСЯ';
+            submitBtn.textContent = getAccountI18n('btnRegister');
         }
     }
 }
@@ -2878,6 +2990,9 @@ async function renderAccountProfileView(user) {
     const bodyEl = document.getElementById('accountModalBody');
     if (!bodyEl) return;
 
+    const userEmail = (user && user.email) ? user.email : getAccountI18n('defaultUser');
+    const safeEmail = escapeAccountHtml(userEmail);
+
     bodyEl.innerHTML = `
         <div class="account-profile-box">
             <div class="account-profile-header">
@@ -2886,15 +3001,15 @@ async function renderAccountProfileView(user) {
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                         <circle cx="12" cy="7" r="4"/>
                     </svg>
-                    <span>${user.email || 'Користувач'}</span>
+                    <span title="${safeEmail}">${safeEmail}</span>
                 </div>
-                <button class="account-logout-btn" onclick="handleAccountLogout()">ВИЙТИ</button>
+                <button class="account-logout-btn" onclick="handleAccountLogout()">${getAccountI18n('btnLogout')}</button>
             </div>
 
             <div class="account-orders-section">
-                <h3 class="account-orders-heading">МОЇ ЗАМОВЛЕННЯ</h3>
+                <h3 class="account-orders-heading">${getAccountI18n('ordersTitle')}</h3>
                 <div id="accOrdersScroll" class="account-orders-scroll" style="margin-top: 12px;">
-                    <div style="text-align: center; padding: 20px; color: #777;">Завантаження замовлень...</div>
+                    <div style="text-align: center; padding: 20px; color: #777;">${getAccountI18n('ordersLoading')}</div>
                 </div>
             </div>
         </div>
@@ -2907,6 +3022,7 @@ async function loadUserOrdersIntoModal() {
     const listEl = document.getElementById('accOrdersScroll');
     if (!listEl) return;
 
+    const lang = getAccountLang();
     const user = currentAccountUser || JSON.parse(localStorage.getItem('hd_user_auth') || 'null');
     const userEmail = (user && user.email) ? user.email.trim().toLowerCase() : '';
     const emailParam = userEmail ? `?email=${encodeURIComponent(userEmail)}` : '';
@@ -2923,44 +3039,51 @@ async function loadUserOrdersIntoModal() {
         const orders = Array.isArray(data.orders) ? data.orders : [];
 
         if (!orders.length) {
-            listEl.innerHTML = `<div class="account-empty-state">У вас ще немає замовлень.</div>`;
+            listEl.innerHTML = `<div class="account-empty-state">${getAccountI18n('ordersEmpty')}</div>`;
             return;
         }
 
+        const dateLocale = lang === 'eng' ? 'en-GB' : 'uk-UA';
+        const currencySymbol = lang === 'eng' ? '€' : '₴';
+        const orderPrefix = getAccountI18n('orderPrefix');
+        const ttnPrefix = getAccountI18n('ttnPrefix');
+        const totalPrefix = getAccountI18n('totalPrefix');
+
         listEl.innerHTML = orders.map((order) => {
-            const rawStatus = String(order.status || 'Пакування').trim();
-            let badgeClass = 'account-badge--packing';
-            if (rawStatus.includes('Відправ') || rawStatus.includes('Shipping')) badgeClass = 'account-badge--shipping';
-            else if (rawStatus.includes('Заверш') || rawStatus.includes('Completed')) badgeClass = 'account-badge--done';
+            const { badgeClass, label: statusLabel } = formatAccountOrderStatus(order.status, lang);
 
             const items = Array.isArray(order.order_items) ? order.order_items : (Array.isArray(order.items) ? order.items : []);
             const itemsHtml = items.map((item) => {
-                const sizeText = item.size ? ` (${item.size})` : '';
-                return `<li>${item.quantity || 1} × ${item.title || item.name}${sizeText} — ${item.price}₴</li>`;
+                const sizeText = item.size ? ` (${escapeAccountHtml(item.size)})` : '';
+                const itemTitle = escapeAccountHtml(item.title || item.name || '');
+                const itemPrice = item.price != null ? item.price : 0;
+                return `<li>${item.quantity || 1} × ${itemTitle}${sizeText} — ${itemPrice}${currencySymbol}</li>`;
             }).join('');
 
-            const dateStr = order.created_at ? new Date(order.created_at).toLocaleDateString('uk-UA') : '';
+            const dateStr = order.created_at ? new Date(order.created_at).toLocaleDateString(dateLocale) : '';
+            const safeOrderId = escapeAccountHtml(order.id);
+            const safeTracking = order.tracking_number ? escapeAccountHtml(order.tracking_number) : '';
 
             return `
                 <div class="account-order-card">
                     <div class="account-order-head">
-                        <strong>№ ${order.id}</strong>
+                        <strong>${orderPrefix}${safeOrderId}</strong>
                         <span>${dateStr}</span>
                     </div>
                     <div class="account-order-status-line">
-                        <span class="account-badge ${badgeClass}">${rawStatus}</span>
-                        ${order.tracking_number ? `<span class="account-order-ttn" style="margin-left: 8px;">ТТН: ${order.tracking_number}</span>` : ''}
+                        <span class="account-badge ${badgeClass}">${statusLabel}</span>
+                        ${safeTracking ? `<span class="account-order-ttn" style="margin-left: 8px;">${ttnPrefix}${safeTracking}</span>` : ''}
                     </div>
                     ${itemsHtml ? `<ul class="account-order-items-list">${itemsHtml}</ul>` : ''}
                     <div class="account-order-bottom">
                         <span></span>
-                        <span class="account-order-sum">Сума: ${order.total_price}₴</span>
+                        <span class="account-order-sum">${totalPrefix}${order.total_price}${currencySymbol}</span>
                     </div>
                 </div>
             `;
         }).join('');
     } catch (e) {
-        listEl.innerHTML = `<div class="account-empty-state">Не вдалося завантажити історію замовлень.</div>`;
+        listEl.innerHTML = `<div class="account-empty-state">${getAccountI18n('ordersError')}</div>`;
     }
 }
 
@@ -3021,19 +3144,18 @@ async function syncAccountButtonState(forcedState) {
 function showMigrationNotice() {
     if (sessionStorage.getItem('hd_migration_banner_dismissed')) return;
 
-    const banner = document.createElement('div');
-    banner.id = 'migrationNoticeBanner';
-    banner.className = 'migration-notice-banner';
-    const lang = localStorage.getItem('preferred_lang') || 'ua';
-    const textUa = '🔒 <b>Оновлення системи:</b> Задля безпеки даних користувачів відбулася міграція бази. Якщо ви мали акаунт раніше — будь ласка, пройдіть повторну реєстрацію за електронною поштою.';
-    const textEng = '🔒 <b>Security Update:</b> For user data security, a database migration has occurred. If you had an account previously, please re-register using your email.';
+    let banner = document.getElementById('migrationNoticeBanner');
+    if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'migrationNoticeBanner';
+        banner.className = 'migration-notice-banner';
+        document.body.appendChild(banner);
+    }
 
     banner.innerHTML = `
-        <div>${lang === 'ua' ? textUa : textEng}</div>
+        <div>${getAccountI18n('migrationBanner')}</div>
         <button class="migration-notice-close" onclick="dismissMigrationNotice()" aria-label="Close">&times;</button>
     `;
-
-    document.body.appendChild(banner);
 
     // Trigger slide down
     setTimeout(() => {
@@ -3056,6 +3178,25 @@ function dismissMigrationNotice() {
         }, 400);
     }
 }
+
+document.addEventListener('languageChanged', () => {
+    // 1. Update migration notice banner if present on page
+    const banner = document.getElementById('migrationNoticeBanner');
+    if (banner) {
+        const textDiv = banner.querySelector('div');
+        if (textDiv) textDiv.innerHTML = getAccountI18n('migrationBanner');
+    }
+
+    // 2. Re-render account modal if currently open
+    const modal = document.getElementById('accountModal');
+    if (modal && modal.style.display === 'flex') {
+        if (currentAccountUser) {
+            renderAccountProfileView(currentAccountUser);
+        } else {
+            renderAccountAuthView(currentAccountTab);
+        }
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     updateContact();
