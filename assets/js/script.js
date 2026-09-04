@@ -2132,11 +2132,8 @@ let cart = [];
 
         try {
             await saveOrderForAccountHistory(orderLang, total);
-        } catch (orderError) {
-            showToast(msgHistoryFail);
-            btn.innerText = payLabel;
-            btn.disabled = false;
-            return;
+        } catch (e) {
+            // Non-blocking: Do not prevent order submission if account history fails
         }
 
         let telegramSent = false;
@@ -2234,27 +2231,22 @@ let cart = [];
     }
 
     async function saveOrderForAccountHistory(lang, totalPrice) {
-        const payload = {
-            total_price: totalPrice,
-            items: buildOrderItemsPayload(lang)
-        };
+        try {
+            const payload = {
+                total_price: totalPrice,
+                items: buildOrderItemsPayload(lang)
+            };
 
-        const response = await fetch('/api/orders/create', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(payload)
-        });
-
-        if (response.status === 401) {
+            await fetch('/api/orders/create', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
+            return true;
+        } catch (e) {
             return false;
         }
-
-        if (!response.ok) {
-            throw new Error('Failed to save order in account history');
-        }
-
-        return true;
     }
 
     function openPrivacy() {
