@@ -3141,53 +3141,8 @@ async function syncAccountButtonState(forcedState) {
     });
 }
 
-function showMigrationNotice() {
-    if (sessionStorage.getItem('hd_migration_banner_dismissed')) return;
-
-    let banner = document.getElementById('migrationNoticeBanner');
-    if (!banner) {
-        banner = document.createElement('div');
-        banner.id = 'migrationNoticeBanner';
-        banner.className = 'migration-notice-banner';
-        document.body.appendChild(banner);
-    }
-
-    banner.innerHTML = `
-        <div>${getAccountI18n('migrationBanner')}</div>
-        <button class="migration-notice-close" onclick="dismissMigrationNotice()" aria-label="Close">&times;</button>
-    `;
-
-    // Trigger slide down
-    setTimeout(() => {
-        banner.classList.add('show');
-    }, 100);
-
-    // Auto dismiss after 7 seconds
-    setTimeout(() => {
-        dismissMigrationNotice();
-    }, 7000);
-}
-
-function dismissMigrationNotice() {
-    sessionStorage.setItem('hd_migration_banner_dismissed', 'true');
-    const banner = document.getElementById('migrationNoticeBanner');
-    if (banner) {
-        banner.classList.remove('show');
-        setTimeout(() => {
-            if (banner && banner.parentNode) banner.parentNode.removeChild(banner);
-        }, 400);
-    }
-}
-
 document.addEventListener('languageChanged', () => {
-    // 1. Update migration notice banner if present on page
-    const banner = document.getElementById('migrationNoticeBanner');
-    if (banner) {
-        const textDiv = banner.querySelector('div');
-        if (textDiv) textDiv.innerHTML = getAccountI18n('migrationBanner');
-    }
-
-    // 2. Re-render account modal if currently open
+    // Re-render account modal if currently open
     const modal = document.getElementById('accountModal');
     if (modal && modal.style.display === 'flex') {
         if (currentAccountUser) {
@@ -3203,7 +3158,6 @@ document.addEventListener('DOMContentLoaded', () => {
     syncAccountButtonState();
     initGalleryBackdropClose();
     handleMonoReturnFromUrl();
-    showMigrationNotice();
 });
 
 window.addEventListener('pageshow', () => {
