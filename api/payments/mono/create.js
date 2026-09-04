@@ -254,29 +254,29 @@ async function saveOrderForAuthenticatedUser(req, amount, items) {
         return null;
     }
 
-    requireSupabaseConfig();
+    try {
+        requireSupabaseConfig();
 
-    const createOrder = await supabaseRequest('orders', {
-        method: 'POST',
-        body: {
-            user_id: userSession.sub,
-            total_price: amount,
-            status: 'Пакування'
-        },
-        prefer: 'return=representation'
-    });
+        const createOrder = await supabaseRequest('orders', {
+            method: 'POST',
+            body: {
+                user_id: userSession.sub,
+                total_price: amount,
+                status: 'Пакування'
+            },
+            prefer: 'return=representation'
+        });
 
-    if (!createOrder.ok || !Array.isArray(createOrder.data) || createOrder.data.length === 0) {
-        throw new Error('Failed to save order for account history');
-    }
+        if (!createOrder.ok || !Array.isArray(createOrder.data) || createOrder.data.length === 0) {
+            return null;
+        }
 
-    const order = createOrder.data[0];
-    const itemsResult = await insertOrderItemsWithFallback(order.id, items);
-    if (!itemsResult.ok) {
+        const order = createOrder.data[0];
+        await insertOrderItemsWithFallback(order.id, items);
         return order.id;
+    } catch (e) {
+        return null;
     }
-
-    return order.id;
 }
 
 export default async function handler(req, res) {
