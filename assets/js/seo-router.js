@@ -77,21 +77,31 @@
     }
 
     function inferTypeName(product) {
-        const category = String(product && product.category ? product.category : "").toLowerCase();
-        const cartName = String(product && product.cartName ? product.cartName : "");
-        if (category.includes("патч") || /patch/i.test(cartName)) {
+        if (!product) return "T-Shirt";
+        const category = String(product.category || "").toLowerCase();
+        const cartName = String(product.cartName || "").toLowerCase();
+        const slug = String(product.slug || "").toLowerCase();
+        const title = String(product.title || "").toLowerCase();
+
+        if (category.includes("патч") || slug.includes("patch") || cartName.includes("patch") || title.includes("патч")) {
             return "Patch";
         }
-        if (category.includes("кепк") || /cap/i.test(cartName)) {
+        if (category.includes("кепк") || slug.includes("cap") || cartName.includes("cap") || title.includes("кепк")) {
             return "Cap";
         }
-        if (category === "лонгсліви" || /longsleeve|longlsleeve/i.test(cartName)) {
+        if (category.includes("лонгслів") || /longsleeve|longlsleeve/i.test(cartName) || slug.includes("longsleeve") || title.includes("лонгслів")) {
             return "Longsleeve";
         }
-        if (category === "світшоти" || /sweatshirt/i.test(cartName)) {
+        if (category.includes("світшот") || /sweatshirt/i.test(cartName) || slug.includes("sweatshirt") || title.includes("світшот")) {
             return "Sweatshirt";
         }
-        return /t-?shirt/i.test(cartName) ? "T-Shirt" : "Hoodie";
+        if (category.includes("худі") || category.includes("худи") || /hoodie/i.test(cartName) || slug.includes("hoodie") || title.includes("худі") || title.includes("hoodie")) {
+            return "Hoodie";
+        }
+        if (category.includes("футболк") || /t-?shirt|tee/i.test(cartName) || slug.includes("t-shirt") || title.includes("футболк") || title.includes("t-shirt")) {
+            return "T-Shirt";
+        }
+        return "T-Shirt";
     }
 
     function isContactOnlyProduct(product) {
@@ -202,11 +212,10 @@
 
     function getSizeGuideImage(product) {
         const type = inferTypeName(product);
+        if (type === "Hoodie") return "images/Screenshot_197.png";
+        if (type === "Sweatshirt" || type === "Longsleeve") return "images/ChatGPT Image.png";
         if (type === "T-Shirt") return "images/Screenshot_198.png";
-        if (type === "Cap") return "images/Screenshot_198.png";
-        if (type === "Longsleeve") return "images/ChatGPT Image.png";
-        if (type === "Sweatshirt") return "images/ChatGPT Image.png";
-        return "images/Screenshot_197.png";
+        return "images/Screenshot_198.png";
     }
 
     function getProductColorVariants(product) {
@@ -1044,20 +1053,49 @@
             const remoteProducts = Array.isArray(data.products) ? data.products : [];
             if (!remoteProducts.length) return;
 
-            // Sort remote products by catalogOrder
-            remoteProducts.sort((a, b) => (Number(a.catalogOrder || a.catalog_order) || 500) - (Number(b.catalogOrder || b.catalog_order) || 500));
-
             window.__productsLoadedFromRemote = true;
 
-            // 1. Synchronize main products array with Supabase DB (preserving static notes and special properties)
-            const mergedProducts = remoteProducts.map((rp) => {
-                if (rp && rp.slug && staticProductsMap.has(rp.slug)) {
-                    const staticItem = staticProductsMap.get(rp.slug);
-                    return Object.assign({}, staticItem, rp);
+            // Map of remote overrides by slug (only for catalog position / order and soldOut status)
+            const remoteBySlug = new Map();
+            const newAdminProducts = [];
+
+            remoteProducts.forEach((rp) => {
+                if (rp && rp.slug) {
+                    if (staticProductsMap.has(rp.slug)) {
+                        remoteBySlug.set(rp.slug, rp);
+                    } else {
+                        // Dynamically created product in admin that isn't in static products-data.js
+                        newAdminProducts.push(rp);
+                    }
                 }
-                return rp;
             });
 
+            // 1. Static products from products-data.js are the 100% source of truth:
+            // DO NOT overwrite their titles, descriptions, categories, images, galleries, color variants or prices!
+            // Only update their catalogOrder / position in the catalog (and soldOut if set in admin).
+            const mergedProducts = initialStaticProducts.map((staticItem) => {
+                const remoteOverride = remoteBySlug.get(staticItem.slug);
+                if (remoteOverride) {
+                    const order = Number(remoteOverride.catalogOrder || remoteOverride.catalog_order);
+                    const isSoldOut = remoteOverride.soldOut !== undefined ? Boolean(remoteOverride.soldOut) : (remoteOverride.sold_out !== undefined ? Boolean(remoteOverride.sold_out) : Boolean(staticItem.soldOut));
+                    return {
+                        ...staticItem,
+                        catalogOrder: Number.isFinite(order) ? order : staticItem.catalogOrder,
+                        soldOut: isSoldOut
+                    };
+                }
+                return { ...staticItem };
+            });
+
+            // 2. Append any newly created products from admin
+            newAdminProducts.forEach((newProd) => {
+                mergedProducts.push(newProd);
+            });
+
+            // 3. Sort by catalogOrder
+            mergedProducts.sort((a, b) => (Number(a.catalogOrder || a.catalog_order) || 500) - (Number(b.catalogOrder || b.catalog_order) || 500));
+
+            // 4. Update runtime arrays
             products.length = 0;
             mergedProducts.forEach((mp) => products.push(mp));
             if (Array.isArray(window.PRODUCTS_DATA)) {
@@ -1065,10 +1103,13 @@
                 mergedProducts.forEach((mp) => window.PRODUCTS_DATA.push(mp));
             }
 
-            // 2. Re-render / enhance catalog (orphaned/deleted static cards will be automatically removed from DOM)
+            // 5. Enhance catalog if on catalog page
             if (page === "catalog") {
                 enhanceCatalogCards();
                 setupCatalogSeo();
+                if (typeof window.applyCatalogFilters === "function") {
+                    window.applyCatalogFilters(false);
+                }
             } else if (page === "product") {
                 const currentSlug = new URLSearchParams(window.location.search).get("product");
                 const found = products.find((p) => p.slug === currentSlug);
@@ -1076,11 +1117,6 @@
                     activeProduct = found;
                     renderProduct(found);
                     setupProductSeo(found);
-                } else if (currentSlug && !activeSlugs.has(currentSlug)) {
-                    const titleEl = document.getElementById("productTitle");
-                    if (titleEl) titleEl.textContent = "Товар не знайдено або знято з продажу";
-                    const buyBtn = document.getElementById("productBuyBtn");
-                    if (buyBtn) buyBtn.style.display = "none";
                 }
             }
         } catch (e) {
