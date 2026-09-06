@@ -1045,94 +1045,13 @@
         setupProductSeo(product);
     }
 
-    async function loadRemoteProducts() {
-        try {
-            const response = await fetch("/api/products");
-            if (!response.ok) return;
-            const data = await response.json();
-            const remoteProducts = Array.isArray(data.products) ? data.products : [];
-            if (!remoteProducts.length) return;
-
-            window.__productsLoadedFromRemote = true;
-
-            // Map of remote overrides by slug (only for catalog position / order and soldOut status)
-            const remoteBySlug = new Map();
-            const newAdminProducts = [];
-
-            remoteProducts.forEach((rp) => {
-                if (rp && rp.slug) {
-                    if (staticProductsMap.has(rp.slug)) {
-                        remoteBySlug.set(rp.slug, rp);
-                    } else {
-                        // Dynamically created product in admin that isn't in static products-data.js
-                        newAdminProducts.push(rp);
-                    }
-                }
-            });
-
-            // 1. Static products from products-data.js are the 100% source of truth:
-            // DO NOT overwrite their titles, descriptions, categories, images, galleries, color variants or prices!
-            // Only update their catalogOrder / position in the catalog (and soldOut if set in admin).
-            const mergedProducts = initialStaticProducts.map((staticItem) => {
-                const remoteOverride = remoteBySlug.get(staticItem.slug);
-                if (remoteOverride) {
-                    const order = Number(remoteOverride.catalogOrder || remoteOverride.catalog_order);
-                    const isSoldOut = remoteOverride.soldOut !== undefined ? Boolean(remoteOverride.soldOut) : (remoteOverride.sold_out !== undefined ? Boolean(remoteOverride.sold_out) : Boolean(staticItem.soldOut));
-                    return {
-                        ...staticItem,
-                        catalogOrder: Number.isFinite(order) ? order : staticItem.catalogOrder,
-                        soldOut: isSoldOut
-                    };
-                }
-                return { ...staticItem };
-            });
-
-            // 2. Append any newly created products from admin
-            newAdminProducts.forEach((newProd) => {
-                mergedProducts.push(newProd);
-            });
-
-            // 3. Sort by catalogOrder
-            mergedProducts.sort((a, b) => (Number(a.catalogOrder || a.catalog_order) || 500) - (Number(b.catalogOrder || b.catalog_order) || 500));
-
-            // 4. Update runtime arrays
-            products.length = 0;
-            mergedProducts.forEach((mp) => products.push(mp));
-            if (Array.isArray(window.PRODUCTS_DATA)) {
-                window.PRODUCTS_DATA.length = 0;
-                mergedProducts.forEach((mp) => window.PRODUCTS_DATA.push(mp));
-            }
-
-            // 5. Enhance catalog if on catalog page
-            if (page === "catalog") {
-                enhanceCatalogCards();
-                setupCatalogSeo();
-                if (typeof window.applyCatalogFilters === "function") {
-                    window.applyCatalogFilters(false);
-                }
-            } else if (page === "product") {
-                const currentSlug = new URLSearchParams(window.location.search).get("product");
-                const found = products.find((p) => p.slug === currentSlug);
-                if (found) {
-                    activeProduct = found;
-                    renderProduct(found);
-                    setupProductSeo(found);
-                }
-            }
-        } catch (e) {
-            // Silently fall back to static products
-        }
-    }
-
     function init() {
         if (page === "catalog") {
             initCatalogPage();
-            loadRemoteProducts();
             return;
         }
         if (page === "product") {
             initProductPage();
-            loadRemoteProducts();
         }
     }
 
