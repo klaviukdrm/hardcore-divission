@@ -276,10 +276,19 @@ let cart = [];
         const isTurboOrDesigner = isTurboShareProduct(product) || isDesignerShareProduct(product);
         const hoodieSleeveThreshold = isTurboOrDesigner ? 1950 : 1850;
 
-        if (category === 'футболка' || /t-?shirt/.test(title)) return 450 + sizeSurcharge;
-        if (category === 'лонгсліви' || /longsleeve|longlsleeve/.test(title)) return (productPrice >= 1550 ? 900 : 800) + sizeSurcharge;
-        if (category === 'худі' || /hoodie/.test(title)) return (productPrice >= hoodieSleeveThreshold ? 1200 : 1100) + sizeSurcharge;
-        if (category === 'світшоти' || /sweatshirt/.test(title)) return (productPrice >= 1750 ? 1100 : 1000) + sizeSurcharge;
+        // Specific categories checked first (sweatshirts, hoodies, longsleeves before t-shirts)
+        if (category === 'світшоти' || category.includes('світшот') || /sweatshirt/.test(title)) {
+            return (productPrice >= 1750 ? 1100 : 1000) + sizeSurcharge;
+        }
+        if (category === 'худі' || category.includes('худі') || category.includes('худи') || /hoodie/.test(title)) {
+            return (productPrice >= hoodieSleeveThreshold ? 1200 : 1100) + sizeSurcharge;
+        }
+        if (category === 'лонгсліви' || category.includes('лонгслів') || /longsleeve|longlsleeve/.test(title)) {
+            return (productPrice >= 1550 ? 900 : 800) + sizeSurcharge;
+        }
+        if (category === 'футболка' || category.includes('футболк') || /\bt-?shirt\b|\btee\b|футболк/.test(title)) {
+            return 450 + sizeSurcharge;
+        }
 
         return 0;
     }
@@ -659,7 +668,9 @@ let cart = [];
     clearLegacyPromoStorage();
 
     function isTshirtItem(name) {
-        return /t-?shirt/i.test(String(name || ''));
+        const str = String(name || '').toLowerCase();
+        if (str.includes('sweatshirt') || str.includes('hoodie') || str.includes('longsleeve') || str.includes('світшот') || str.includes('худі')) return false;
+        return /\bt-?shirt\b|\btee\b|футболк/i.test(str);
     }
 
     function extractNumericPrice(priceText) {
