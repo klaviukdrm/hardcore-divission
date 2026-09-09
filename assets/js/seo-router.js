@@ -98,7 +98,7 @@
         if (category.includes("худі") || category.includes("худи") || /hoodie/i.test(cartName) || slug.includes("hoodie") || title.includes("худі") || title.includes("hoodie")) {
             return "Hoodie";
         }
-        if (category.includes("футболк") || /t-?shirt|tee/i.test(cartName) || slug.includes("t-shirt") || title.includes("футболк") || title.includes("t-shirt")) {
+        if (category.includes("футболк") || /\bt-?shirt\b|\btee\b/i.test(cartName) || slug.includes("t-shirt") || title.includes("футболк") || /\bt-?shirt\b|\btee\b/i.test(title)) {
             return "T-Shirt";
         }
         return "T-Shirt";
