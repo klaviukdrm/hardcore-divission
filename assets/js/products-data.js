@@ -1420,7 +1420,7 @@ window.PRODUCTS_DATA = [
     "id": 56,
     "slug": "hardcore-nation-hardcore-nation-longsleeve",
     "category": "лонгсліви",
-    "isNew": true,
+    "isNew": false,
     "renderInCatalog": true,
     "title": "HARDCORE NATION LONGLSLEEVE",
     "descUa": "Лонгслів HARDCORE NATION для тих, кого не зламали обставини. Щільний силует, холодний ритм і стан, загартований тиском та боротьбою.",
@@ -1445,7 +1445,7 @@ window.PRODUCTS_DATA = [
     "id": 57,
     "slug": "hardcore-nation-hardcore-nation-sweatshirt",
     "category": "світшоти",
-    "isNew": true,
+    "isNew": false,
     "renderInCatalog": true,
     "title": "HARDCORE NATION SWEATSHIRT",
     "descUa": "Світшот HARDCORE NATION для холодних вулиць і людей, які тримають свій напрям без пояснень. Чиста форма, важкий настрій і характер, загартований боротьбою.",
@@ -1765,5 +1765,34 @@ window.PRODUCTS_DATA = [
     "cartSizeId": "size-d2",
     "seoKeywords": "HANDOFDUST SUPPORT GEN2, HANDOFDUST SUPPORT GEN2 T-SHIRT, футболка, handofdust, designer, streetwear, ukraine brand",
     "catalogOrder": 999
+  },
+  {
+    "id": 71,
+    "slug": "batcore-division-batcore-division-hoodie",
+    "category": "худі",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "BATCORE DIVISION",
+    "descUa": "Лімітоване худі найвищої якості.",
+    "descEng": "Limited edition hoodie of the highest quality.",
+    "pageNoteUa": "Усього 25 штук.",
+    "pageNoteEng": "Only 25 pieces in total.",
+    "image": "images/photo_1_2026-09-13_00-54-36.jpg",
+    "imageAlt": "images/photo_2_2026-09-13_00-54-36.jpg",
+    "gallery": [
+      "images/photo_1_2026-09-13_00-54-36.jpg",
+      "images/photo_2_2026-09-13_00-54-36.jpg",
+      "images/photo_3_2026-09-13_00-54-36.jpg",
+      "images/photo_4_2026-09-13_00-54-36.jpg"
+    ],
+    "priceUahLabel": "2300₴",
+    "priceUsdLabel": "55€",
+    "priceUah": 2300,
+    "priceUsd": 55,
+    "sizeId": "size-h25",
+    "cartName": "BATCORE DIVISION HOODIE",
+    "cartSizeId": "size-h25",
+    "seoKeywords": "BATCORE DIVISION, BATCORE DIVISION HOODIE, худі, hardcore division, streetwear, hoodie, ukraine brand",
+    "catalogOrder": 47
   }
 ];
