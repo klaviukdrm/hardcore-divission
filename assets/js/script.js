@@ -281,6 +281,9 @@ let cart = [];
             return (productPrice >= 1750 ? 1100 : 1000) + sizeSurcharge;
         }
         if (category === 'худі' || category.includes('худі') || category.includes('худи') || /hoodie/.test(title)) {
+            if (/batcore/.test(title) || /batcore/.test(normalizeFinanceText(product?.slug)) || productPrice >= 2300) {
+                return 1300 + sizeSurcharge;
+            }
             return (productPrice >= hoodieSleeveThreshold ? 1200 : 1100) + sizeSurcharge;
         }
         if (category === 'лонгсліви' || category.includes('лонгслів') || /longsleeve|longlsleeve/.test(title)) {
