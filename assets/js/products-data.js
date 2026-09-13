@@ -1814,6 +1814,13 @@ window.PRODUCTS_DATA = [
     "priceUsdLabel": "50€",
     "priceUah": 2400,
     "priceUsd": 50,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "sizeId": "size-zh1",
     "cartName": "BATS AGAINST BASTARDS ZIP HOODIE",
     "cartSizeId": "size-zh1",
