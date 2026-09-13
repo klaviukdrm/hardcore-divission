@@ -281,6 +281,9 @@ let cart = [];
             return (productPrice >= 1750 ? 1100 : 1000) + sizeSurcharge;
         }
         if (category === 'худі' || category === 'зіп-худі' || category.includes('худі') || category.includes('худи') || category.includes('зіп') || category.includes('зип') || /hoodie|zip/i.test(title)) {
+            if (/zip|зіп|зип/.test(title) || /zip/.test(normalizeFinanceText(product?.slug)) || category.includes('зіп') || category.includes('зип') || productPrice >= 2400) {
+                return 1400 + sizeSurcharge;
+            }
             if (/batcore/.test(title) || /batcore/.test(normalizeFinanceText(product?.slug)) || productPrice >= 2300) {
                 return 1300 + sizeSurcharge;
             }
