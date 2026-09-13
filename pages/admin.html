@@ -72,11 +72,11 @@
                         <select id="prodCategory" required>
                             <option value="футболка">Футболка (T-Shirt)</option>
                             <option value="худі">Худі (Hoodie)</option>
+                            <option value="зіп-худі">Зіп-худі (Zip Hoodie)</option>
                             <option value="світшоти">Світшот (Sweatshirt)</option>
                             <option value="лонгсліви">Лонгслів (Longsleeve)</option>
                             <option value="кепки">Кепка (Cap)</option>
                             <option value="патчи">Патч (Patch)</option>
-                            <option value="аксесуари">Аксесуари (Accessories)</option>
                         </select>
                     </div>
 
@@ -163,11 +163,10 @@
         <section class="panel-card admin-products-list-card">
             <div class="admin-list-header">
                 <div style="display:flex; flex-direction:column; gap:4px;">
-                    <h3 class="orders-title" style="margin:0;">ВСІ ТОВАРИ ТА КЕРУВАННЯ ПОРЯДКОМ</h3>
-                    <span style="font-size:0.8rem; color:#888;">Змінюйте порядок (вище/нижче) та статус наявності товарів для каталогу</span>
+                    <h3 class="orders-title" style="margin:0;">КЕРУВАННЯ ТОВАРАМИ</h3>
+                    <span style="font-size:0.8rem; color:#888;">Редагування порядку, наявності, бренду та видалення товарів</span>
                 </div>
                 <div class="admin-header-actions">
-                    <button id="syncDefaultsBtn" class="admin-btn-sync" type="button" title="Завантажити всі 70 базових товарів із сайту в базу Supabase">📥 Імпортувати всі товари сайту в базу</button>
                     <button id="refreshProductsBtn" class="admin-btn-refresh" type="button">🔄 Оновити</button>
                 </div>
             </div>
