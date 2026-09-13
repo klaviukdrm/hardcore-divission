@@ -95,6 +95,9 @@
         if (category.includes("світшот") || /sweatshirt/i.test(cartName) || slug.includes("sweatshirt") || title.includes("світшот")) {
             return "Sweatshirt";
         }
+        if (category.includes("зіп") || category.includes("зип") || /zip-?hoodie|zip/i.test(cartName) || slug.includes("zip") || title.includes("зіп") || title.includes("зип") || /zip/i.test(title)) {
+            return "Zip-Hoodie";
+        }
         if (category.includes("худі") || category.includes("худи") || /hoodie/i.test(cartName) || slug.includes("hoodie") || title.includes("худі") || title.includes("hoodie")) {
             return "Hoodie";
         }
@@ -212,7 +215,7 @@
 
     function getSizeGuideImage(product) {
         const type = inferTypeName(product);
-        if (type === "Hoodie") return "images/Screenshot_197.png";
+        if (type === "Hoodie" || type === "Zip-Hoodie") return "images/Screenshot_197.png";
         if (type === "Sweatshirt" || type === "Longsleeve") return "images/ChatGPT Image.png";
         if (type === "T-Shirt") return "images/Screenshot_198.png";
         return "images/Screenshot_198.png";
@@ -311,10 +314,10 @@
         const type = inferTypeName(product);
         const typeUa = type === "T-Shirt"
             ? "футболка"
-            : (type === "Longsleeve" ? "лонгслів" : (type === "Sweatshirt" ? "світшот" : (type === "Cap" ? "кепка" : "худі")));
+            : (type === "Longsleeve" ? "лонгслів" : (type === "Sweatshirt" ? "світшот" : (type === "Cap" ? "кепка" : (type === "Zip-Hoodie" ? "зіп-худі" : "худі"))));
         const typeRu = type === "T-Shirt"
             ? "футболка"
-            : (type === "Longsleeve" ? "лонгслив" : (type === "Sweatshirt" ? "свитшот" : (type === "Cap" ? "кепка" : "худи")));
+            : (type === "Longsleeve" ? "лонгслив" : (type === "Sweatshirt" ? "свитшот" : (type === "Cap" ? "кепка" : (type === "Zip-Hoodie" ? "зип-худи" : "худи"))));
         const descUa = (product.descUa || product.descEng || product.title).trim();
         const descEng = (product.descEng || product.descUa || product.title).trim();
 
