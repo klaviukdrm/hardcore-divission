@@ -830,7 +830,8 @@ let cart = [];
         const btnT = document.getElementById('size-btn-t');
         const btnS = document.getElementById('size-btn-s');
         const btnH = document.getElementById('size-btn-h');
-        const buttons = [btnT, btnS, btnH].filter(Boolean);
+        const btnZH = document.getElementById('size-btn-zh');
+        const buttons = [btnT, btnS, btnH, btnZH].filter(Boolean);
 
         buttons.forEach((btn) => {
             btn.style.background = '#222';
@@ -851,6 +852,13 @@ let cart = [];
                 btnS.style.background = 'var(--blood)';
                 btnS.style.color = 'white';
                 btnS.style.border = 'none';
+            }
+        } else if (type === 'ziphoodie' || type === 'zip-hoodie') {
+            if (img) img.src = 'images/photo_2026-09-13_16-14-34 (2).jpg';
+            if (btnZH) {
+                btnZH.style.background = 'var(--blood)';
+                btnZH.style.color = 'white';
+                btnZH.style.border = 'none';
             }
         } else {
             if (img) img.src = 'images/Screenshot_197.png';
