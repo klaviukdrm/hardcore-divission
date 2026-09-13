@@ -215,7 +215,8 @@
 
     function getSizeGuideImage(product) {
         const type = inferTypeName(product);
-        if (type === "Hoodie" || type === "Zip-Hoodie") return "images/Screenshot_197.png";
+        if (type === "Zip-Hoodie") return "images/photo_2026-09-13_16-14-34 (2).jpg";
+        if (type === "Hoodie") return "images/Screenshot_197.png";
         if (type === "Sweatshirt" || type === "Longsleeve") return "images/ChatGPT Image.png";
         if (type === "T-Shirt") return "images/Screenshot_198.png";
         return "images/Screenshot_198.png";
@@ -431,9 +432,11 @@
                     <option value="ONE SIZE">SIZE: ONE SIZE</option>
                 </select>`;
         }
+        const isZipHoodie = inferTypeName(product) === "Zip-Hoodie" || String(product?.category || '').includes("зіп") || String(product?.category || '').includes("зип");
+        const defaultSizes = isZipHoodie ? ["S", "M", "L", "XL", "2XL"] : ["S", "M", "L", "XL", "2XL", "3XL"];
         const sizes = Array.isArray(product && product.sizes) && product.sizes.length
             ? product.sizes.map((size) => String(size || "").trim()).filter(Boolean)
-            : ["S", "M", "L", "XL", "2XL", "3XL"];
+            : defaultSizes;
         return `
                 <select id="${escapeAttr(sizeId)}">
                     ${sizes.map((size) => `<option value="${escapeAttr(size)}">SIZE: ${escapeHtml(size)}</option>`).join("")}
@@ -759,11 +762,13 @@
             : "";
 
         const thumbs = buildProductThumbs(product, initialGallery);
+        const isZipHoodieDetail = typeName === "Zip-Hoodie" || String(product?.category || '').includes("зіп") || String(product?.category || '').includes("зип");
+        const defaultDetailSizes = isZipHoodieDetail ? ["S", "M", "L", "XL", "2XL"] : ["S", "M", "L", "XL", "2XL", "3XL"];
         const sizeOptions = isCap
             ? `<option value="ONE SIZE">SIZE: ONE SIZE</option>`
             : (Array.isArray(product && product.sizes) && product.sizes.length
                 ? product.sizes.map((size) => String(size || "").trim()).filter(Boolean)
-                : ["S", "M", "L", "XL", "2XL", "3XL"]
+                : defaultDetailSizes
             ).map((size) => `<option value="${escapeAttr(size)}">SIZE: ${escapeHtml(size)}</option>`).join("");
         const sizeSelectMarkup = (!hasSize || isPatch)
             ? ""
