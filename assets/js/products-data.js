@@ -1786,13 +1786,38 @@ window.PRODUCTS_DATA = [
       "images/photo_4_2026-09-13_00-54-36.jpg"
     ],
     "priceUahLabel": "2300₴",
-    "priceUsdLabel": "55€",
+    "priceUsdLabel": "50€",
     "priceUah": 2300,
-    "priceUsd": 55,
+    "priceUsd": 50,
     "sizeId": "size-h25",
     "cartName": "BATCORE DIVISION HOODIE",
     "cartSizeId": "size-h25",
     "seoKeywords": "BATCORE DIVISION, BATCORE DIVISION HOODIE, худі, hardcore division, streetwear, hoodie, ukraine brand",
     "catalogOrder": 47
+  },
+  {
+    "id": 72,
+    "slug": "bats-against-bastards-bats-against-bastards-zip-hoodie",
+    "category": "зіп-худі",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "BATS AGAINST BASTARDS",
+    "descUa": "Темна естетика, масивний принт із кажаном на спині та відчуття нічного простору.",
+    "descEng": "Dark aesthetics, massive bat print on the back, and a sense of night space.",
+    "image": "images/photo_2026-09-13_13-36-31.jpg",
+    "imageAlt": "images/photo_2026-09-13_13-36-31 (2).jpg",
+    "gallery": [
+      "images/photo_2026-09-13_13-36-31.jpg",
+      "images/photo_2026-09-13_13-36-31 (2).jpg"
+    ],
+    "priceUahLabel": "2400₴",
+    "priceUsdLabel": "50€",
+    "priceUah": 2400,
+    "priceUsd": 50,
+    "sizeId": "size-zh1",
+    "cartName": "BATS AGAINST BASTARDS ZIP HOODIE",
+    "cartSizeId": "size-zh1",
+    "seoKeywords": "BATS AGAINST BASTARDS, BATS AGAINST BASTARDS ZIP HOODIE, Bets Again Bastard, зіп-худі, zip hoodie, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 48
   }
 ];
