@@ -48,18 +48,22 @@
     
     <h2 data-ua="РОЗМІРНА СІТКА" data-eng="SIZE GUIDE" style="color: var(--blood); text-align: center; margin-top: 20px;">РОЗМІРНА СІТКА</h2>
     
-    <div style="display: flex; justify-content: center; gap: 5px; padding: 0 15px; margin-top: 15px; margin-bottom: 15px;">
+    <div style="display: flex; justify-content: center; gap: 5px; padding: 0 15px; margin-top: 15px; margin-bottom: 15px; flex-wrap: wrap;">
         <button id="size-btn-t" class="size-type-btn" data-ua="ФУТБОЛКИ" data-eng="T-SHIRTS" onclick="setSizeType('tshirt')" 
-            style="flex: 1; background: #222; color: #888; border: 1px solid #333; padding: 10px; cursor: pointer;">
+            style="flex: 1; min-width: 65px; background: #222; color: #888; border: 1px solid #333; padding: 8px; cursor: pointer;">
             ФУТБОЛКИ
         </button>
         <button id="size-btn-s" class="size-type-btn" data-ua="СВІТШОТИ" data-eng="SWEATSHIRTS" onclick="setSizeType('sweatshirt')" 
-            style="flex: 1; background: #222; color: #888; border: 1px solid #333; padding: 10px; cursor: pointer;">
+            style="flex: 1; min-width: 65px; background: #222; color: #888; border: 1px solid #333; padding: 8px; cursor: pointer;">
             СВІТШОТИ
         </button>
         <button id="size-btn-h" class="size-type-btn" data-ua="ХУДІ" data-eng="HOODIES" onclick="setSizeType('hoodie')" 
-            style="flex: 1; background: var(--blood); color: white; border: none; padding: 10px; cursor: pointer;">
+            style="flex: 1; min-width: 65px; background: var(--blood); color: white; border: none; padding: 8px; cursor: pointer;">
             ХУДІ
+        </button>
+        <button id="size-btn-zh" class="size-type-btn" data-ua="ЗІП-ХУДІ" data-eng="ZIP HOODIES" onclick="setSizeType('ziphoodie')" 
+            style="flex: 1; min-width: 65px; background: #222; color: #888; border: 1px solid #333; padding: 8px; cursor: pointer;">
+            ЗІП-ХУДІ
         </button>
     </div>
 
