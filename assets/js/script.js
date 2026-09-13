@@ -280,7 +280,7 @@ let cart = [];
         if (category === 'світшоти' || category.includes('світшот') || /sweatshirt/.test(title)) {
             return (productPrice >= 1750 ? 1100 : 1000) + sizeSurcharge;
         }
-        if (category === 'худі' || category.includes('худі') || category.includes('худи') || /hoodie/.test(title)) {
+        if (category === 'худі' || category === 'зіп-худі' || category.includes('худі') || category.includes('худи') || category.includes('зіп') || category.includes('зип') || /hoodie|zip/i.test(title)) {
             if (/batcore/.test(title) || /batcore/.test(normalizeFinanceText(product?.slug)) || productPrice >= 2300) {
                 return 1300 + sizeSurcharge;
             }
@@ -672,7 +672,7 @@ let cart = [];
 
     function isTshirtItem(name) {
         const str = String(name || '').toLowerCase();
-        if (str.includes('sweatshirt') || str.includes('hoodie') || str.includes('longsleeve') || str.includes('світшот') || str.includes('худі')) return false;
+        if (str.includes('sweatshirt') || str.includes('hoodie') || str.includes('longsleeve') || str.includes('світшот') || str.includes('худі') || str.includes('зіп') || str.includes('зип') || str.includes('zip')) return false;
         return /\bt-?shirt\b|\btee\b|футболк/i.test(str);
     }
 
@@ -1430,6 +1430,7 @@ let cart = [];
         let paymentBlock = '';
         if (paymentRegion === 'ua') {
             const ibanText = lang === 'ua' ? '🪙 ФОП РАХУНОК (IBAN):' : '🪙 FOP ACCOUNT (IBAN):';
+            const cardText = lang === 'ua' ? '💳 КАРТКА ФОП:' : '💳 FOP CARD:';
             const edrpouText = lang === 'ua' ? '🔢 ЄДРПОУ:' : '🔢 EDRPOU:';
             const fopText = lang === 'ua' ? '👤 ФОП:' : '👤 FOP:';
             const fopName = lang === 'ua' ? 'Максимова Анна Олегівна' : 'Maksimova Anna Olegivna';
@@ -1439,6 +1440,11 @@ let cart = [];
                     <div style="margin-bottom:10px;">
                         <span style="color:#888;">${ibanText}</span><br>
                         <div class="copy-line"><b>UA623220010000026000380041193</b> <button class="mini-copy-btn" onclick="copyVal('UA623220010000026000380041193')">Copy</button></div>
+                    </div>
+
+                    <div style="margin-bottom:10px;">
+                        <span style="color:#888;">${cardText}</span><br>
+                        <div class="copy-line"><b>5408810042693969</b> <button class="mini-copy-btn" onclick="copyVal('5408810042693969')">Copy</button></div>
                     </div>
 
                     <div style="margin-bottom:10px;">
