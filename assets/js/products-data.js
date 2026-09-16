@@ -1836,8 +1836,8 @@ window.PRODUCTS_DATA = [
     "title": "PATRIOTS 1654 × HARDCORE DIVISION",
     "descUa": "Лімітована колаборація Patriots 1654 та Hardcore Division. На зображенні — перший бойовий дрон нашого побратима: жива історія боротьби та спільний характер двох команд.",
     "descEng": "Limited collaboration of Patriots 1654 and Hardcore Division. Featuring the first combat drone of our brother-in-arms: living history and shared character of two teams.",
-    "pageNoteUa": "Колекція доступна обмежений час і випущена лімітованим тиражем.\n100% коштів із покупок — на підтримку Patriots 1654.",
-    "pageNoteEng": "The collection is available for a limited time in a limited edition.\n100% of proceeds from purchases support Patriots 1654.",
+    "pageNoteUa": "100% коштів із покупок — на підтримку Patriots 1654.",
+    "pageNoteEng": "100% of proceeds from purchases support Patriots 1654.",
     "image": "images/photo_1_2026-09-16_10-22-45.jpg",
     "imageAlt": "images/photo_2_2026-09-16_10-22-45.jpg",
     "gallery": [
@@ -1863,8 +1863,8 @@ window.PRODUCTS_DATA = [
     "title": "PATRIOTS 1654 × HARDCORE DIVISION",
     "descUa": "Щільне лімітоване худі зі спільної колаборації Patriots 1654 та Hardcore Division. На зображенні — перший бойовий дрон побратима як символ незламності та пам'яті.",
     "descEng": "Heavy limited hoodie from the Patriots 1654 and Hardcore Division collaboration. Featuring a brother-in-arms' first combat drone as a symbol of resilience and memory.",
-    "pageNoteUa": "Колекція доступна обмежений час і випущена лімітованим тиражем.\n100% коштів із покупок — на підтримку Patriots 1654.",
-    "pageNoteEng": "The collection is available for a limited time in a limited edition.\n100% of proceeds from purchases support Patriots 1654.",
+    "pageNoteUa": "100% коштів із покупок — на підтримку Patriots 1654.",
+    "pageNoteEng": "100% of proceeds from purchases support Patriots 1654.",
     "image": "images/photo_3_2026-09-16_10-22-45.jpg",
     "imageAlt": "images/photo_4_2026-09-16_10-22-45.jpg",
     "gallery": [
