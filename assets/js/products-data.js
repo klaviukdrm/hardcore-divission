@@ -1826,5 +1826,59 @@ window.PRODUCTS_DATA = [
     "cartSizeId": "size-zh1",
     "seoKeywords": "BATS AGAINST BASTARDS, BATS AGAINST BASTARDS ZIP HOODIE, Bets Again Bastard, зіп-худі, zip hoodie, hardcore division, streetwear, ukraine brand",
     "catalogOrder": 48
+  },
+  {
+    "id": 73,
+    "slug": "patriots-1654-hardcore-division-t-shirt",
+    "category": "футболка",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "PATRIOTS 1654 × HARDCORE DIVISION",
+    "descUa": "Лімітована колаборація Patriots 1654 та Hardcore Division. На зображенні — перший бойовий дрон нашого побратима: жива історія боротьби та спільний характер двох команд.",
+    "descEng": "Limited collaboration of Patriots 1654 and Hardcore Division. Featuring the first combat drone of our brother-in-arms: living history and shared character of two teams.",
+    "pageNoteUa": "Колекція доступна обмежений час і випущена лімітованим тиражем.\n100% коштів із покупок — на підтримку Patriots 1654.",
+    "pageNoteEng": "The collection is available for a limited time in a limited edition.\n100% of proceeds from purchases support Patriots 1654.",
+    "image": "images/photo_1_2026-09-16_10-22-45.jpg",
+    "imageAlt": "images/photo_2_2026-09-16_10-22-45.jpg",
+    "gallery": [
+      "images/photo_1_2026-09-16_10-22-45.jpg",
+      "images/photo_2_2026-09-16_10-22-45.jpg"
+    ],
+    "priceUahLabel": "1000₴",
+    "priceUsdLabel": "25€",
+    "priceUah": 1000,
+    "priceUsd": 25,
+    "sizeId": "size-f34",
+    "cartName": "PATRIOTS 1654 × HARDCORE DIVISION T-SHIRT",
+    "cartSizeId": "size-f34",
+    "seoKeywords": "PATRIOTS 1654 × HARDCORE DIVISION, PATRIOTS 1654, футболка, patriots 1654 t-shirt, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 49
+  },
+  {
+    "id": 74,
+    "slug": "patriots-1654-hardcore-division-hoodie",
+    "category": "худі",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "PATRIOTS 1654 × HARDCORE DIVISION",
+    "descUa": "Щільне лімітоване худі зі спільної колаборації Patriots 1654 та Hardcore Division. На зображенні — перший бойовий дрон побратима як символ незламності та пам'яті.",
+    "descEng": "Heavy limited hoodie from the Patriots 1654 and Hardcore Division collaboration. Featuring a brother-in-arms' first combat drone as a symbol of resilience and memory.",
+    "pageNoteUa": "Колекція доступна обмежений час і випущена лімітованим тиражем.\n100% коштів із покупок — на підтримку Patriots 1654.",
+    "pageNoteEng": "The collection is available for a limited time in a limited edition.\n100% of proceeds from purchases support Patriots 1654.",
+    "image": "images/photo_3_2026-09-16_10-22-45.jpg",
+    "imageAlt": "images/photo_4_2026-09-16_10-22-45.jpg",
+    "gallery": [
+      "images/photo_3_2026-09-16_10-22-45.jpg",
+      "images/photo_4_2026-09-16_10-22-45.jpg"
+    ],
+    "priceUahLabel": "2000₴",
+    "priceUsdLabel": "45€",
+    "priceUah": 2000,
+    "priceUsd": 45,
+    "sizeId": "size-h26",
+    "cartName": "PATRIOTS 1654 × HARDCORE DIVISION HOODIE",
+    "cartSizeId": "size-h26",
+    "seoKeywords": "PATRIOTS 1654 × HARDCORE DIVISION, PATRIOTS 1654, худі, patriots 1654 hoodie, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 50
   }
 ];
