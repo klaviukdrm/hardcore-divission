@@ -28,6 +28,20 @@ function normalizeItems(items) {
         .filter(Boolean);
 }
 
+const EIGHT_DAYS_MS = 8 * 24 * 60 * 60 * 1000;
+
+function resolveOrderStatus(order) {
+    if (!order) return 'Пакування';
+    const createdAt = new Date(order.created_at || 0).getTime();
+    const ageMs = Date.now() - createdAt;
+    const status = String(order.status || '').trim().toLowerCase();
+
+    if (status.includes('заверш') || status.includes('виконано') || status.includes('completed') || (Number.isFinite(createdAt) && createdAt > 0 && ageMs >= EIGHT_DAYS_MS)) {
+        return 'Виконано';
+    }
+    return order.status || 'Пакування';
+}
+
 async function loadOrders(queryBase) {
     // 1. Try relational select with order_items
     let res = await supabaseRequest('orders', {
@@ -42,6 +56,7 @@ async function loadOrders(queryBase) {
             if ((!order.order_items || !order.order_items.length) && Array.isArray(order.items)) {
                 order.order_items = order.items;
             }
+            order.status = resolveOrderStatus(order);
         });
         return res;
     }
@@ -80,6 +95,11 @@ async function loadOrders(queryBase) {
             }
             res.data.forEach((order) => {
                 order.order_items = itemsByOrder[order.id] || (Array.isArray(order.items) ? order.items : []);
+                order.status = resolveOrderStatus(order);
+            });
+        } else {
+            res.data.forEach((order) => {
+                order.status = resolveOrderStatus(order);
             });
         }
     }
