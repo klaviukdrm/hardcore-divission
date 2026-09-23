@@ -57,6 +57,8 @@ const COUNTRY_BY_CODE = new Map(PHONE_COUNTRIES.map((item) => [item.code, item])
 const statusesUaToEng = {
     'Пакування': 'Packing',
     'Відправка (Нова Пошта, накладений платіж)': 'Shipping (Nova Poshta, COD)',
+    'Відправлено': 'Shipped',
+    'Виконано': 'Completed',
     'Завершено': 'Completed'
 };
 
@@ -80,7 +82,7 @@ const registerPhoneLocal = document.getElementById('registerPhoneLocal');
 let currentOrders = [];
 let hasActiveSessionUI = false;
 const LAST_USER_PHONE_KEY = 'hd_last_user_phone';
-const ORDER_HISTORY_INFO_TEXT = 'Замовлення оформлено, очікуйте відправку протягом 3-5 робочих днів.';
+const ORDER_HISTORY_INFO_TEXT = 'Пакування';
 const ORDER_HISTORY_DONE_AFTER_DAYS = 8;
 
 const ui = {
@@ -114,10 +116,10 @@ const ui = {
     }
 };
 
-ui.ua.orderPending = 'Замовлення оформлено, чекайте відправку протягом 3-5 робочих днів.';
-ui.ua.orderDone = 'Замовлення виконано.';
-ui.eng.orderPending = 'Order placed, please wait for shipment within 3-5 business days.';
-ui.eng.orderDone = 'Order completed.';
+ui.ua.orderPending = 'Пакування';
+ui.ua.orderDone = 'Виконано';
+ui.eng.orderPending = 'Packing';
+ui.eng.orderDone = 'Completed';
 
 function getLang() {
     const saved = localStorage.getItem('preferred_lang');
@@ -255,12 +257,20 @@ function getOrderHistoryStatus(order) {
     const createdAt = new Date(order?.created_at || 0);
     const createdMs = createdAt.getTime();
     const ageMs = Date.now() - createdMs;
-    const status = String(order?.status || '').trim().toLowerCase();
-    const isDone = status.includes('заверш') || status.includes('completed') || (Number.isFinite(createdMs) && ageMs >= ORDER_HISTORY_DONE_AFTER_DAYS * 24 * 60 * 60 * 1000);
+    const rawStatus = String(order?.status || '').trim();
+    const statusLower = rawStatus.toLowerCase();
 
-    return isDone
-        ? { className: 'order-status--done', text: t('orderDone') }
-        : { className: 'order-status--pending', text: t('orderPending') };
+    const isDone = statusLower.includes('заверш') || statusLower.includes('виконано') || statusLower.includes('completed') || (Number.isFinite(createdMs) && createdMs > 0 && ageMs >= ORDER_HISTORY_DONE_AFTER_DAYS * 24 * 60 * 60 * 1000);
+
+    if (isDone) {
+        return { className: 'order-status--done', text: t('orderDone') };
+    }
+
+    if (statusLower.includes('відправ') || statusLower.includes('shipp')) {
+        return { className: 'order-status--pending', text: getLang() === 'ua' ? 'Відправлено' : 'Shipped' };
+    }
+
+    return { className: 'order-status--pending', text: t('orderPending') };
 }
 
 function renderOrders(orders) {
@@ -276,8 +286,12 @@ function renderOrders(orders) {
         const historyStatus = getOrderHistoryStatus(order);
         const rows = items.map((item) => {
             const sizeText = item.size ? `, size ${item.size}` : '';
-            return `<li>${item.quantity} x ${item.title}${sizeText} - ${item.price}</li>`;
+            return `<li>${item.quantity} x ${item.title}${sizeText} - ${item.price}₴</li>`;
         }).join('');
+
+        const trackingHtml = order.tracking_number
+            ? `<div class="order-tracking" style="color:#aaa; font-size:0.85rem; margin-bottom:4px;">${t('tracking')}: <b style="color:#fff;">${order.tracking_number}</b></div>`
+            : '';
 
         return `
             <article class="order-card">
@@ -285,8 +299,9 @@ function renderOrders(orders) {
                     <strong>ID: ${order.id}</strong>
                     <span>${formatDate(order.created_at)}</span>
                 </div>
-                <div class="order-status ${historyStatus.className}">${historyStatus.text}</div>
-                <div class="order-total">${t('total')}: ${order.total_price}</div>
+                <div class="order-status ${historyStatus.className}">${t('status')}: ${historyStatus.text}</div>
+                ${trackingHtml}
+                <div class="order-total">${t('total')}: ${order.total_price}₴</div>
                 <ul class="order-items">${rows}</ul>
             </article>
         `;
