@@ -1804,11 +1804,13 @@ window.PRODUCTS_DATA = [
     "title": "BATS AGAINST BASTARDS",
     "descUa": "Темна естетика, масивний принт із кажаном на спині та відчуття нічного простору.",
     "descEng": "Dark aesthetics, massive bat print on the back, and a sense of night space.",
-    "image": "images/photo_2026-09-13_13-36-31.jpg",
-    "imageAlt": "images/photo_2026-09-13_13-36-31 (2).jpg",
+    "image": "images/photo_1_2026-10-04_21-34-47.jpg",
+    "imageAlt": "images/photo_2_2026-10-04_21-34-47.jpg",
     "gallery": [
-      "images/photo_2026-09-13_13-36-31.jpg",
-      "images/photo_2026-09-13_13-36-31 (2).jpg"
+      "images/photo_1_2026-10-04_21-34-47.jpg",
+      "images/photo_2_2026-10-04_21-34-47.jpg",
+      "images/photo_3_2026-10-04_21-34-47.jpg",
+      "images/photo_4_2026-10-04_21-34-47.jpg"
     ],
     "priceUahLabel": "2400₴",
     "priceUsdLabel": "50€",
