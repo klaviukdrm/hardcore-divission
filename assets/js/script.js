@@ -1409,8 +1409,9 @@ let cart = [];
         const promoPricing = getPromoPricing(itemSubtotal);
         const itemTotal = promoPricing.total;
         const normalizedWorldCountry = String(deliveryData?.data?.country || '').trim().toLowerCase();
+        const switzerlandCountries = new Set(['switzerland', 'швейцарія']);
         const specialWorldCountries = new Set(['slovakia', 'slovak republic', 'словаччина', 'germany', 'німеччина', 'poland', 'польща']);
-        const shippingBase = specialWorldCountries.has(normalizedWorldCountry) ? 20 : 30;
+        const shippingBase = switzerlandCountries.has(normalizedWorldCountry) ? 37 : (specialWorldCountries.has(normalizedWorldCountry) ? 20 : 30);
         const shippingStep = Math.floor(Math.max(0, cart.length - 1) / 3) * 5;
         const shippingTotal = isWorldPayment ? shippingBase + shippingStep : 0;
         const total = isWorldPayment ? itemTotal + shippingTotal : itemTotal;
@@ -1738,6 +1739,7 @@ let cart = [];
             { ua: 'Словаччина', eng: 'Slovakia' },
             { ua: 'Словенія', eng: 'Slovenia' },
             { ua: 'Іспанія', eng: 'Spain' },
+            { ua: 'Швейцарія', eng: 'Switzerland' },
             { ua: 'Швеція', eng: 'Sweden' },
             { ua: 'США', eng: 'United States' },
             { ua: 'Канада', eng: 'Canada' }
@@ -2131,8 +2133,9 @@ let cart = [];
             const postOfficeAddress = String(deliveryData?.data?.postOfficeAddress || '').trim();
             const residenceAddress = String(deliveryData?.data?.residenceAddress || deliveryData?.data?.address || '').trim();
             const normalizedWorldCountry = country.toLowerCase();
+            const switzerlandCountries = new Set(['switzerland', 'швейцарія']);
             const specialWorldCountries = new Set(['slovakia', 'slovak republic', 'словаччина', 'germany', 'німеччина', 'poland', 'польща']);
-            const shippingBase = specialWorldCountries.has(normalizedWorldCountry) ? 20 : 30;
+            const shippingBase = switzerlandCountries.has(normalizedWorldCountry) ? 37 : (specialWorldCountries.has(normalizedWorldCountry) ? 20 : 30);
             const shippingStep = Math.floor(Math.max(0, cart.length - 1) / 3) * 5;
             const shippingTotal = shippingBase + shippingStep;
             const goodsTotal = total;
