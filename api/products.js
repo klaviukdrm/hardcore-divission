@@ -51,7 +51,8 @@ export default async function handler(req, res) {
         const formatted = rows.map((row) => {
             const isPatch = row.category === 'патчи' || String(row.slug || '').includes('patch');
             const isCap = row.category === 'кепки' || String(row.slug || '').includes('cap');
-            const isArchived = Boolean(row.archived) || row.slug === 'batcore-division-batcore-division-hoodie';
+            const isPatriots = String(row.slug || '').includes('patriots-1654');
+            const isSoldOut = Boolean(row.sold_out) || row.slug === 'batcore-division-batcore-division-hoodie' || isPatriots;
 
             return {
                 id: row.id,
@@ -74,21 +75,20 @@ export default async function handler(req, res) {
                 gallery: Array.isArray(row.gallery) && row.gallery.length ? row.gallery : [row.image].filter(Boolean),
                 colorVariants: Array.isArray(row.color_variants) && row.color_variants.length ? row.color_variants : (row.colorVariants || []),
                 color_variants: Array.isArray(row.color_variants) && row.color_variants.length ? row.color_variants : (row.colorVariants || []),
-                isNew: Boolean(row.is_new),
-                is_new: Boolean(row.is_new),
+                isNew: Boolean(row.is_new) && !isSoldOut,
+                is_new: Boolean(row.is_new) && !isSoldOut,
                 isPreorder: Boolean(row.is_preorder),
                 is_preorder: Boolean(row.is_preorder),
-                soldOut: Boolean(row.sold_out),
-                sold_out: Boolean(row.sold_out),
+                soldOut: isSoldOut,
+                sold_out: isSoldOut,
                 catalogOrder: Number(row.catalog_order) || 500,
                 catalog_order: Number(row.catalog_order) || 500,
                 brand: row.brand || 'hd',
-                archived: isArchived,
-                renderInCatalog: !isArchived,
+                renderInCatalog: true,
                 cartName: row.title,
-                noSize: isPatch || isCap,
+                noSize: isPatch || isCap || isSoldOut,
                 contactUrl: isPatch ? 'https://t.me/hardcore1499' : undefined,
-                transparentPrice: isCap || Number(row.price_uah) <= 0,
+                transparentPrice: isCap || isSoldOut || Number(row.price_uah) <= 0,
                 pageNoteUa: isPatch ? 'Лімітована версія з 25 штук.' : (row.page_note_ua || (row.slug && row.slug.includes('batcore') ? 'Усього 25 штук.' : ((row.slug && row.slug.includes('patriots')) ? '100% коштів із покупок — на підтримку Patriots 1654.' : undefined))),
                 pageNoteEng: isPatch ? 'Limited edition of 25 pieces.' : (row.page_note_eng || (row.slug && row.slug.includes('batcore') ? 'Only 25 pieces in total.' : ((row.slug && row.slug.includes('patriots')) ? '100% of proceeds from purchases support Patriots 1654.' : undefined)))
             };
