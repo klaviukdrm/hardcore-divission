@@ -639,7 +639,10 @@ let cart = [];
     function syncCartPricesFromCatalog() {
         if (!Array.isArray(cart) || !cart.length) return;
 
-        cart = cart.map((item) => {
+        cart = cart.filter((item) => {
+            const product = findCatalogProductForCartItem(item);
+            return !(product && product.archived);
+        }).map((item) => {
             const product = findCatalogProductForCartItem(item);
             if (!product) return item;
 
