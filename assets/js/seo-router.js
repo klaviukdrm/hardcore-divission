@@ -490,7 +490,7 @@
     function createDynamicCatalogCards(grid, lang) {
         if (!grid) return;
         products
-            .filter((product) => product && product.renderInCatalog)
+            .filter((product) => product && product.renderInCatalog && !product.archived)
             .forEach((product) => {
                 const slug = String(product.slug || "");
                 const alreadyRendered = Array.from(grid.querySelectorAll(".product-card"))
@@ -515,6 +515,10 @@
                 if (window.__productsLoadedFromRemote) {
                     card.remove();
                 }
+                return;
+            }
+            if (product.archived || product.renderInCatalog === false) {
+                card.remove();
                 return;
             }
             cardItems.push({ card, product, index });
@@ -1043,7 +1047,7 @@
             return;
         }
         const slug = new URLSearchParams(window.location.search).get("product");
-        const product = products.find((item) => item.slug === slug);
+        const product = products.find((item) => item.slug === slug && !item.archived);
         if (!product) {
             showNotFound();
             return;
