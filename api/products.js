@@ -51,6 +51,7 @@ export default async function handler(req, res) {
         const formatted = rows.map((row) => {
             const isPatch = row.category === 'патчи' || String(row.slug || '').includes('patch');
             const isCap = row.category === 'кепки' || String(row.slug || '').includes('cap');
+            const isArchived = Boolean(row.archived) || row.slug === 'batcore-division-batcore-division-hoodie';
 
             return {
                 id: row.id,
@@ -82,7 +83,8 @@ export default async function handler(req, res) {
                 catalogOrder: Number(row.catalog_order) || 500,
                 catalog_order: Number(row.catalog_order) || 500,
                 brand: row.brand || 'hd',
-                renderInCatalog: true,
+                archived: isArchived,
+                renderInCatalog: !isArchived,
                 cartName: row.title,
                 noSize: isPatch || isCap,
                 contactUrl: isPatch ? 'https://t.me/hardcore1499' : undefined,
