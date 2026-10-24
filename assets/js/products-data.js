@@ -121,7 +121,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE STURM JUGEND T-SHIRT",
     "cartSizeId": "size-f18",
     "seoKeywords": "HARDCORE STURM JUGEND, HARDCORE STURM JUGEND T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 5
+    "catalogOrder": 25
   },
   {
     "id": 32,
@@ -191,7 +191,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE SWEATSHIRT",
     "cartSizeId": "size-sw2",
     "seoKeywords": "HARDCORE SWEATSHIRT, світшот, свитшот, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 8
+    "catalogOrder": 16
   },
   {
     "id": 30,
@@ -217,7 +217,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE LONGLSLEEVE",
     "cartSizeId": "size-sw1",
     "seoKeywords": "HARDCORE LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 3
+    "catalogOrder": 15
   },
   {
     "id": 29,
@@ -336,7 +336,7 @@ window.PRODUCTS_DATA = [
     "cartName": "BLOOD ON MY KNIFE HOODIE",
     "cartSizeId": "size-1",
     "seoKeywords": "BLOOD ON MY KNIFE, BLOOD ON MY KNIFE HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 19
+    "catalogOrder": 8
   },
   {
     "id": 2,
@@ -359,7 +359,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE ONLY BLOOD HOODIE",
     "cartSizeId": "size-2",
     "seoKeywords": "HARDCORE ONLY BLOOD, HARDCORE ONLY BLOOD HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 33
+    "catalogOrder": 13
   },
   {
     "id": 4,
@@ -384,7 +384,7 @@ window.PRODUCTS_DATA = [
     "cartName": "Hentai Hoodie",
     "cartSizeId": "size-4",
     "seoKeywords": "Hardcore Hentai, Hentai Hoodie, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 27
+    "catalogOrder": 12
   },
   {
     "id": 5,
@@ -409,7 +409,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE NATION HOODIE",
     "cartSizeId": "size-5",
     "seoKeywords": "HARDCORE NATION, HARDCORE NATION HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 7
+    "catalogOrder": 2
   },
   {
     "id": 6,
@@ -433,7 +433,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE HAMMER HOODIE",
     "cartSizeId": "size-6",
     "seoKeywords": "HARDCORE HAMMER, HARDCORE HAMMER HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 15
+    "catalogOrder": 6
   },
   {
     "id": 20,
@@ -458,7 +458,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE CITADEL HOODIE",
     "cartSizeId": "size-11",
     "seoKeywords": "HARDCORE CITADEL, HARDCORE CITADEL HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 29
+    "catalogOrder": 11
   },
   {
     "id": 21,
@@ -483,7 +483,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE SATANIC DIVISION HOODIE",
     "cartSizeId": "size-12",
     "seoKeywords": "HARDCORE SATANIC DIVISION, HARDCORE SATANIC DIVISION HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 17
+    "catalogOrder": 7
   },
   {
     "id": 22,
@@ -508,7 +508,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE SATANIC HOODIE",
     "cartSizeId": "size-13",
     "seoKeywords": "HARDCORE SATANIC, HARDCORE SATANIC HOODIE, худі, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 21
+    "catalogOrder": 10
   },
   {
     "id": 9,
@@ -763,7 +763,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE CITADEL T-SHIRT",
     "cartSizeId": "size-f12",
     "seoKeywords": "HARDCORE CITADEL, HARDCORE CITADEL T-SHIRT, футболка, hardcore division, streetwear, hoodie, t-shirt, ukraine brand",
-    "catalogOrder": 2
+    "catalogOrder": 14
   },
   {
     "id": 26,
@@ -1143,7 +1143,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE OR DIE T-SHIRT",
     "cartSizeId": "size-f25",
     "seoKeywords": "HARDCORE OR DIE, HARDCORE OR DIE T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 2
+    "catalogOrder": 9
   },
   {
     "id": 47,
@@ -1168,7 +1168,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HATECORE T-SHIRT",
     "cartSizeId": "size-f26",
     "seoKeywords": "HATECORE, HATECORE T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 3
+    "catalogOrder": 27
   },
   {
     "id": 48,
@@ -1193,7 +1193,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE DEATH T-SHIRT",
     "cartSizeId": "size-f27",
     "seoKeywords": "HARDCORE DEATH, HARDCORE DEATH T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 4
+    "catalogOrder": 30
   },
   {
     "id": 49,
@@ -1218,7 +1218,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE CREW T-SHIRT",
     "cartSizeId": "size-f28",
     "seoKeywords": "HARDCORE CREW, HARDCORE CREW T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 5
+    "catalogOrder": 31
   },
   {
     "id": 50,
@@ -1292,7 +1292,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HATE YOU ALL T-SHIRT",
     "cartSizeId": "size-f30",
     "seoKeywords": "HATE YOU ALL, HATE YOU ALL T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 7
+    "catalogOrder": 32
   },
   {
     "id": 52,
@@ -1339,7 +1339,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE DIVISION CREW T-SHIRT",
     "cartSizeId": "size-f31",
     "seoKeywords": "HARDCORE DIVISION CREW, HARDCORE DIVISION CREW T-SHIRT, футболка, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 8
+    "catalogOrder": 35
   },
   {
     "id": 53,
@@ -1364,7 +1364,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE OR DIE HOODIE",
     "cartSizeId": "size-h20",
     "seoKeywords": "HARDCORE OR DIE, HARDCORE OR DIE HOODIE, худі, hardcore division, streetwear, hoodie, ukraine brand",
-    "catalogOrder": 42
+    "catalogOrder": 3
   },
   {
     "id": 54,
@@ -1389,7 +1389,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HATE YOU ALL HOODIE",
     "cartSizeId": "size-h21",
     "seoKeywords": "HATE YOU ALL, HATE YOU ALL HOODIE, худі, hardcore division, streetwear, hoodie, ukraine brand",
-    "catalogOrder": 43
+    "catalogOrder": 4
   },
   {
     "id": 55,
@@ -1414,7 +1414,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE DIVISION CREW HOODIE",
     "cartSizeId": "size-h22",
     "seoKeywords": "HARDCORE DIVISION CREW, HARDCORE DIVISION CREW HOODIE, худі, hardcore division, streetwear, hoodie, ukraine brand",
-    "catalogOrder": 44
+    "catalogOrder": 5
   },
   {
     "id": 56,
@@ -1439,7 +1439,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE NATION LONGLSLEEVE",
     "cartSizeId": "size-sw3",
     "seoKeywords": "HARDCORE NATION, HARDCORE NATION LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 8
+    "catalogOrder": 17
   },
   {
     "id": 57,
@@ -1466,7 +1466,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE NATION SWEATSHIRT",
     "cartSizeId": "size-sw4",
     "seoKeywords": "HARDCORE NATION, HARDCORE NATION SWEATSHIRT, світшот, свитшот, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 6
+    "catalogOrder": 15
   },
   {
     "id": 58,
@@ -1491,7 +1491,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HATE YOU ALL SWEATSHIRT",
     "cartSizeId": "size-sw5",
     "seoKeywords": "HATE YOU ALL, HATE YOU ALL SWEATSHIRT, світшот, свитшот, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 9
+    "catalogOrder": 18
   },
   {
     "id": 59,
@@ -1516,7 +1516,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE OR DIE SWEATSHIRT",
     "cartSizeId": "size-sw6",
     "seoKeywords": "HARDCORE OR DIE, HARDCORE OR DIE SWEATSHIRT, світшот, свитшот, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 10
+    "catalogOrder": 19
   },
   {
     "id": 60,
@@ -1541,7 +1541,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE OR DIE LONGLSLEEVE",
     "cartSizeId": "size-sw7",
     "seoKeywords": "HARDCORE OR DIE, HARDCORE OR DIE LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 11
+    "catalogOrder": 20
   },
   {
     "id": 61,
@@ -1566,7 +1566,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE DEATH LONGLSLEEVE",
     "cartSizeId": "size-sw8",
     "seoKeywords": "HARDCORE DEATH, HARDCORE DEATH LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 12
+    "catalogOrder": 21
   },
   {
     "id": 62,
@@ -1591,7 +1591,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HARDCORE DEATH SWEATSHIRT",
     "cartSizeId": "size-sw9",
     "seoKeywords": "HARDCORE DEATH, HARDCORE DEATH SWEATSHIRT, світшот, свитшот, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 13
+    "catalogOrder": 22
   },
   {
     "id": 63,
@@ -1638,7 +1638,7 @@ window.PRODUCTS_DATA = [
     "cartName": "HATE YOU ALL LONGLSLEEVE",
     "cartSizeId": "size-sw10",
     "seoKeywords": "HATE YOU ALL, HATE YOU ALL LONGLSLEEVE, лонгслів, longsleeve, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 14
+    "catalogOrder": 23
   },
   {
     "id": 66,
@@ -1714,7 +1714,7 @@ window.PRODUCTS_DATA = [
     "priceUsd": 0,
     "cartName": "HARDCORE CAP",
     "seoKeywords": "HARDCORE CAP, кепка, cap, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 2
+    "catalogOrder": 1000
   },
   {
     "id": 69,
@@ -1771,8 +1771,10 @@ window.PRODUCTS_DATA = [
     "slug": "batcore-division-batcore-division-hoodie",
     "category": "худі",
     "isNew": false,
-    "archived": true,
-    "renderInCatalog": false,
+    "renderInCatalog": true,
+    "noSize": true,
+    "soldOut": true,
+    "transparentPrice": true,
     "title": "BATCORE DIVISION",
     "descUa": "Лімітоване худі найвищої якості. Відчувай темряву так, як її відчуває кажан.",
     "descEng": "Limited edition hoodie of the highest quality. Feel the darkness the way a bat feels it.",
@@ -1794,7 +1796,7 @@ window.PRODUCTS_DATA = [
     "cartName": "BATCORE DIVISION HOODIE",
     "cartSizeId": "size-h25",
     "seoKeywords": "BATCORE DIVISION, BATCORE DIVISION HOODIE, худі, hardcore division, streetwear, hoodie, ukraine brand",
-    "catalogOrder": 47
+    "catalogOrder": 1001
   },
   {
     "id": 72,
@@ -1834,8 +1836,11 @@ window.PRODUCTS_DATA = [
     "id": 73,
     "slug": "patriots-1654-hardcore-division-t-shirt",
     "category": "футболка",
-    "isNew": true,
+    "isNew": false,
     "renderInCatalog": true,
+    "noSize": true,
+    "soldOut": true,
+    "transparentPrice": true,
     "title": "PATRIOTS 1654 × HARDCORE DIVISION",
     "descUa": "Лімітована колаборація Patriots 1654 та Hardcore Division. На зображенні — перший бойовий дрон нашого побратима: жива історія боротьби та спільний характер двох команд.",
     "descEng": "Limited collaboration of Patriots 1654 and Hardcore Division. Featuring the first combat drone of our brother-in-arms: living history and shared character of two teams.",
@@ -1855,14 +1860,17 @@ window.PRODUCTS_DATA = [
     "cartName": "PATRIOTS 1654 × HARDCORE DIVISION T-SHIRT",
     "cartSizeId": "size-f34",
     "seoKeywords": "PATRIOTS 1654 × HARDCORE DIVISION, PATRIOTS 1654, футболка, patriots 1654 t-shirt, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 49
+    "catalogOrder": 1002
   },
   {
     "id": 74,
     "slug": "patriots-1654-hardcore-division-hoodie",
     "category": "худі",
-    "isNew": true,
+    "isNew": false,
     "renderInCatalog": true,
+    "noSize": true,
+    "soldOut": true,
+    "transparentPrice": true,
     "title": "PATRIOTS 1654 × HARDCORE DIVISION",
     "descUa": "Щільне лімітоване худі зі спільної колаборації Patriots 1654 та Hardcore Division. На зображенні — перший бойовий дрон побратима як символ незламності та пам'яті.",
     "descEng": "Heavy limited hoodie from the Patriots 1654 and Hardcore Division collaboration. Featuring a brother-in-arms' first combat drone as a symbol of resilience and memory.",
@@ -1882,6 +1890,6 @@ window.PRODUCTS_DATA = [
     "cartName": "PATRIOTS 1654 × HARDCORE DIVISION HOODIE",
     "cartSizeId": "size-h26",
     "seoKeywords": "PATRIOTS 1654 × HARDCORE DIVISION, PATRIOTS 1654, худі, patriots 1654 hoodie, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 50
+    "catalogOrder": 1003
   }
 ];
