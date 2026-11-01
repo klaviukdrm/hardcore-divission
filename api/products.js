@@ -51,8 +51,7 @@ export default async function handler(req, res) {
         const formatted = rows.map((row) => {
             const isPatch = row.category === 'патчи' || String(row.slug || '').includes('patch');
             const isCap = row.category === 'кепки' || String(row.slug || '').includes('cap');
-            const isPatriots = String(row.slug || '').includes('patriots-1654');
-            const isSoldOut = Boolean(row.sold_out) || row.slug === 'batcore-division-batcore-division-hoodie' || isPatriots;
+            const isSoldOut = Boolean(row.sold_out) || row.slug === 'batcore-division-batcore-division-hoodie';
 
             return {
                 id: row.id,
