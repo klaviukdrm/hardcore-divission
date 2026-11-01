@@ -823,28 +823,6 @@ let cart = [];
         }
     }
 
-    function isHoodieSizeGuideImage(src) {
-        const normalized = String(src || '').toLowerCase();
-        return normalized.includes('screenshot_197.png');
-    }
-
-    function updateGallerySizeNote() {
-        const noteEl = document.getElementById('gallerySizeNote');
-        if (!noteEl) return;
-        const currentSrc = currentGalleryImages[currentImgIndex] || '';
-        const isHoodieChart = isHoodieSizeGuideImage(currentSrc);
-        if (!isHoodieChart) {
-            noteEl.hidden = true;
-            noteEl.classList.remove('is-zoomed-hidden');
-            return;
-        }
-        const lang = localStorage.getItem('preferred_lang') || 'ua';
-        const text = noteEl.getAttribute('data-' + lang) || 'Допустиме коливання від значень +/- 5%';
-        noteEl.textContent = text;
-        noteEl.hidden = false;
-        noteEl.classList.toggle('is-zoomed-hidden', Boolean(galleryZoomed && galleryZoomScale > galleryZoomMin));
-    }
-
     function toggleSizePanel() {
         const panel = document.getElementById('sizePanel');
         const isActive = panel.classList.toggle('active');
@@ -852,7 +830,6 @@ let cart = [];
     }
     function setSizeType(type) {
         const img = document.getElementById('mainSizeImg');
-        const sideNote = document.getElementById('sidePanelSizeNote');
         const btnT = document.getElementById('size-btn-t');
         const btnS = document.getElementById('size-btn-s');
         const btnH = document.getElementById('size-btn-h');
@@ -866,8 +843,7 @@ let cart = [];
         });
 
         if (type === 'tshirt') {
-            if (img) img.src = 'images/Screenshot_198.png';
-            if (sideNote) sideNote.hidden = true;
+            if (img) img.src = 'images/photo_3_2026-11-01_02-18-04.jpg';
             if (btnT) {
                 btnT.style.background = 'var(--blood)';
                 btnT.style.color = 'white';
@@ -875,23 +851,27 @@ let cart = [];
             }
         } else if (type === 'sweatshirt') {
             if (img) img.src = 'images/ChatGPT Image.png';
-            if (sideNote) sideNote.hidden = true;
             if (btnS) {
                 btnS.style.background = 'var(--blood)';
                 btnS.style.color = 'white';
                 btnS.style.border = 'none';
             }
         } else if (type === 'ziphoodie' || type === 'zip-hoodie') {
-            if (img) img.src = 'images/photo_2026-09-13_16-14-34 (2).jpg';
-            if (sideNote) sideNote.hidden = true;
+            if (img) img.src = 'images/photo_4_2026-11-01_02-18-05.jpg';
             if (btnZH) {
                 btnZH.style.background = 'var(--blood)';
                 btnZH.style.color = 'white';
                 btnZH.style.border = 'none';
             }
+        } else if (type === 'premium-hoodie' || type === 'premiumhoodie') {
+            if (img) img.src = 'images/photo_2_2026-11-01_02-18-04.jpg';
+            if (btnH) {
+                btnH.style.background = 'var(--blood)';
+                btnH.style.color = 'white';
+                btnH.style.border = 'none';
+            }
         } else {
-            if (img) img.src = 'images/Screenshot_197.png';
-            if (sideNote) sideNote.hidden = false;
+            if (img) img.src = 'images/photo_1_2026-11-01_02-18-04.jpg';
             if (btnH) {
                 btnH.style.background = 'var(--blood)';
                 btnH.style.color = 'white';
@@ -931,7 +911,6 @@ let cart = [];
             galleryDragActive = false;
             galleryZoomScale = galleryZoomMin;
             updateGalleryNavVisibility();
-            updateGallerySizeNote();
             return;
         }
 
@@ -954,7 +933,6 @@ let cart = [];
             galleryImgEl.style.cursor = 'zoom-out';
         }
         updateGalleryNavVisibility();
-        updateGallerySizeNote();
     }
 
     function toggleGalleryZoom() {
@@ -1085,7 +1063,6 @@ let cart = [];
         galleryPanX = 0;
         galleryPanY = 0;
         applyGalleryZoomState();
-        updateGallerySizeNote();
     }
     function closeCartModal() {
         const modal = document.getElementById('cartModal');
