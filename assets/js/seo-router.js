@@ -213,13 +213,24 @@
         return escapeHtml(value);
     }
 
+    function isPremiumHoodieProduct(product) {
+        if (!product) return false;
+        if (product.premiumHoodie || product.sizeGuideType === "premium-hoodie") return true;
+        const slug = String(product.slug || "").toLowerCase();
+        return slug.includes("batcore-division");
+    }
+
     function getSizeGuideImage(product) {
         const type = inferTypeName(product);
-        if (type === "Zip-Hoodie") return "images/photo_2026-09-13_16-14-34 (2).jpg";
-        if (type === "Hoodie") return "images/Screenshot_197.png";
+        if (type === "Zip-Hoodie") return "images/photo_4_2026-11-01_02-18-05.jpg";
+        if (type === "Hoodie") {
+            return isPremiumHoodieProduct(product)
+                ? "images/photo_2_2026-11-01_02-18-04.jpg"
+                : "images/photo_1_2026-11-01_02-18-04.jpg";
+        }
         if (type === "Sweatshirt" || type === "Longsleeve") return "images/ChatGPT Image.png";
-        if (type === "T-Shirt") return "images/Screenshot_198.png";
-        return "images/Screenshot_198.png";
+        if (type === "T-Shirt") return "images/photo_3_2026-11-01_02-18-04.jpg";
+        return "images/photo_3_2026-11-01_02-18-04.jpg";
     }
 
     function getProductColorVariants(product) {
