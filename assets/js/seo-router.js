@@ -217,7 +217,7 @@
         if (!product) return false;
         if (product.premiumHoodie || product.sizeGuideType === "premium-hoodie") return true;
         const slug = String(product.slug || "").toLowerCase();
-        return slug.includes("batcore-division");
+        return slug.includes("batcore-division") || slug.includes("snakecore");
     }
 
     function getSizeGuideImage(product) {
