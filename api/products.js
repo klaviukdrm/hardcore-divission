@@ -88,8 +88,8 @@ export default async function handler(req, res) {
                 noSize: isPatch || isCap || isSoldOut,
                 contactUrl: isPatch ? 'https://t.me/hardcore1499' : undefined,
                 transparentPrice: isCap || isSoldOut || Number(row.price_uah) <= 0,
-                pageNoteUa: isPatch ? 'Лімітована версія з 25 штук.' : (row.page_note_ua || (row.slug && row.slug.includes('batcore') ? 'Усього 25 штук.' : ((row.slug && row.slug.includes('patriots')) ? '100% коштів із покупок — на підтримку Patriots 1654.' : undefined))),
-                pageNoteEng: isPatch ? 'Limited edition of 25 pieces.' : (row.page_note_eng || (row.slug && row.slug.includes('batcore') ? 'Only 25 pieces in total.' : ((row.slug && row.slug.includes('patriots')) ? '100% of proceeds from purchases support Patriots 1654.' : undefined)))
+                pageNoteUa: isPatch ? 'Лімітована версія з 25 штук.' : (row.page_note_ua || (row.slug && row.slug.includes('batcore') ? 'Усього 25 штук.' : (row.slug && row.slug.includes('snakecore') ? 'Лімітована колекція з 10 штук.' : ((row.slug && row.slug.includes('patriots')) ? '100% коштів із покупок — на підтримку Patriots 1654.' : undefined)))),
+                pageNoteEng: isPatch ? 'Limited edition of 25 pieces.' : (row.page_note_eng || (row.slug && row.slug.includes('batcore') ? 'Only 25 pieces in total.' : (row.slug && row.slug.includes('snakecore') ? 'Limited collection of 10 pieces.' : ((row.slug && row.slug.includes('patriots')) ? '100% of proceeds from purchases support Patriots 1654.' : undefined))))
             };
         });
 
