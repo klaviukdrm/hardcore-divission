@@ -1858,7 +1858,7 @@ window.PRODUCTS_DATA = [
     "cartName": "PATRIOTS 1654 × HARDCORE DIVISION T-SHIRT",
     "cartSizeId": "size-f34",
     "seoKeywords": "PATRIOTS 1654 × HARDCORE DIVISION, PATRIOTS 1654, футболка, patriots 1654 t-shirt, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 1002
+    "catalogOrder": 899
   },
   {
     "id": 74,
@@ -1885,7 +1885,7 @@ window.PRODUCTS_DATA = [
     "cartName": "PATRIOTS 1654 × HARDCORE DIVISION HOODIE",
     "cartSizeId": "size-h26",
     "seoKeywords": "PATRIOTS 1654 × HARDCORE DIVISION, PATRIOTS 1654, худі, patriots 1654 hoodie, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 1003
+    "catalogOrder": 898
   },
   {
     "id": 75,
@@ -1893,7 +1893,7 @@ window.PRODUCTS_DATA = [
     "category": "худі",
     "isNew": true,
     "renderInCatalog": true,
-    "title": "TERROR MACHINE RED",
+    "title": "TERROR MACHINE [2 КОЛОРА]",
     "descUa": "Механізм холодної люті, який не знає зупинки. Коли замість сумнівів працює тільки чистий натиск і рух напролом.",
     "descEng": "A mechanism of cold rage that knows no stop. When instead of doubt there is only pure pressure and relentless drive forward.",
     "image": "images/photo_1_2026-11-02_23-40-53.jpg",
@@ -1901,16 +1901,16 @@ window.PRODUCTS_DATA = [
     "gallery": [
       "images/photo_1_2026-11-02_23-40-53.jpg",
       "images/photo_2_2026-11-02_23-40-53.jpg",
-      "images/photo_3_2026-11-02_23-40-53.jpg"
+      "images/photo_3_2026-11-02_23-40-53.jpg", "images/photo_13_2026-11-02_23-40-53.jpg", "images/photo_14_2026-11-02_23-40-53.jpg", "images/photo_15_2026-11-02_23-40-53.jpg"
     ],
     "priceUahLabel": "1750₴",
     "priceUsdLabel": "40€",
     "priceUah": 1750,
     "priceUsd": 40,
     "sizeId": "size-h27",
-    "cartName": "TERROR MACHINE RED HOODIE",
+    "colorVariants": [ { "value": "red", "labelUa": "ЧЕРВОНИЙ", "labelEng": "RED", "gallery": [ "images/photo_1_2026-11-02_23-40-53.jpg", "images/photo_2_2026-11-02_23-40-53.jpg", "images/photo_3_2026-11-02_23-40-53.jpg" ] }, { "value": "yellow", "labelUa": "ЖОВТИЙ", "labelEng": "YELLOW", "gallery": [ "images/photo_13_2026-11-02_23-40-53.jpg", "images/photo_14_2026-11-02_23-40-53.jpg", "images/photo_15_2026-11-02_23-40-53.jpg" ] } ], "cartName": "TERROR MACHINE HOODIE",
     "cartSizeId": "size-h27",
-    "seoKeywords": "TERROR MACHINE RED, HOODIE TERROR MACHINE RED, TERROR MACHINE RED HOODIE, худі, hardcore division, streetwear, hoodie, ukraine brand",
+    "seoKeywords": "TERROR MACHINE, TERROR MACHINE RED, TERROR MACHINE YELLOW, HOODIE TERROR MACHINE, TERROR MACHINE HOODIE, худі, hardcore division, streetwear, hoodie, ukraine brand",
     "catalogOrder": 1
   },
   {
@@ -1993,7 +1993,7 @@ window.PRODUCTS_DATA = [
   },
   {
     "id": 79,
-    "slug": "terror-machine-yellow-hoodie",
+    "slug": "terror-machine-yellow-hoodie", "archived": true, "renderInCatalog": false,
     "category": "худі",
     "isNew": true,
     "renderInCatalog": true,
