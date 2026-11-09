@@ -1419,9 +1419,9 @@ let cart = [];
         const promoPricing = getPromoPricing(itemSubtotal);
         const itemTotal = promoPricing.total;
         const normalizedWorldCountry = String(deliveryData?.data?.country || '').trim().toLowerCase();
-        const switzerlandCountries = new Set(['switzerland', 'швейцарія']);
+        const switzerlandCountries = new Set(['switzerland', 'швейцарія']); const ukCountries = new Set(['united kingdom', 'great britain', 'великобританія', 'велика британія']);
         const specialWorldCountries = new Set(['slovakia', 'slovak republic', 'словаччина', 'germany', 'німеччина', 'poland', 'польща']);
-        const shippingBase = switzerlandCountries.has(normalizedWorldCountry) ? 37 : (specialWorldCountries.has(normalizedWorldCountry) ? 20 : 30);
+        const shippingBase = switzerlandCountries.has(normalizedWorldCountry) ? 37 : (ukCountries.has(normalizedWorldCountry) ? 30 : (specialWorldCountries.has(normalizedWorldCountry) ? 20 : 30));
         const shippingStep = Math.floor(Math.max(0, cart.length - 1) / 3) * 5;
         const shippingTotal = isWorldPayment ? shippingBase + shippingStep : 0;
         const total = isWorldPayment ? itemTotal + shippingTotal : itemTotal;
@@ -1724,7 +1724,7 @@ let cart = [];
 
         const worldCountries = [
             { ua: 'Австрія', eng: 'Austria' },
-            { ua: 'Бельгія', eng: 'Belgium' },
+            { ua: 'Бельгія', eng: 'Belgium' }, { ua: 'Великобританія', eng: 'United Kingdom' },
             { ua: 'Болгарія', eng: 'Bulgaria' },
             { ua: 'Хорватія', eng: 'Croatia' },
             { ua: 'Кіпр', eng: 'Cyprus' },
@@ -2143,9 +2143,9 @@ let cart = [];
             const postOfficeAddress = String(deliveryData?.data?.postOfficeAddress || '').trim();
             const residenceAddress = String(deliveryData?.data?.residenceAddress || deliveryData?.data?.address || '').trim();
             const normalizedWorldCountry = country.toLowerCase();
-            const switzerlandCountries = new Set(['switzerland', 'швейцарія']);
+            const switzerlandCountries = new Set(['switzerland', 'швейцарія']); const ukCountries = new Set(['united kingdom', 'great britain', 'великобританія', 'велика британія']);
             const specialWorldCountries = new Set(['slovakia', 'slovak republic', 'словаччина', 'germany', 'німеччина', 'poland', 'польща']);
-            const shippingBase = switzerlandCountries.has(normalizedWorldCountry) ? 37 : (specialWorldCountries.has(normalizedWorldCountry) ? 20 : 30);
+            const shippingBase = switzerlandCountries.has(normalizedWorldCountry) ? 37 : (ukCountries.has(normalizedWorldCountry) ? 30 : (specialWorldCountries.has(normalizedWorldCountry) ? 20 : 30));
             const shippingStep = Math.floor(Math.max(0, cart.length - 1) / 3) * 5;
             const shippingTotal = shippingBase + shippingStep;
             const goodsTotal = total;
