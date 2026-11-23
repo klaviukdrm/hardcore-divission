@@ -469,7 +469,7 @@
                         is_new: Boolean(item.isNew),
                         is_preorder: Boolean(item.isPreorder),
                         sold_out: Boolean(item.soldOut),
-                        catalog_order: Number(item.catalogOrder) || 500,
+                        catalog_order: Number.isFinite(Number(item.catalogOrder)) ? Number(item.catalogOrder) : 500,
                         brand,
                         colorVariants: Array.isArray(item.colorVariants) ? item.colorVariants : []
                     };
