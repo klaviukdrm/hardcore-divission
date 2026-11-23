@@ -80,16 +80,16 @@ export default async function handler(req, res) {
                 is_preorder: Boolean(row.is_preorder),
                 soldOut: isSoldOut,
                 sold_out: isSoldOut,
-                catalogOrder: Number(row.catalog_order) || 500,
-                catalog_order: Number(row.catalog_order) || 500,
+                catalogOrder: Number.isFinite(Number(row.catalog_order)) ? Number(row.catalog_order) : 500,
+                catalog_order: Number.isFinite(Number(row.catalog_order)) ? Number(row.catalog_order) : 500,
                 brand: row.brand || 'hd',
                 renderInCatalog: true,
                 cartName: row.title,
                 noSize: isPatch || isCap || isSoldOut,
                 contactUrl: isPatch ? 'https://t.me/hardcore1499' : undefined,
-                transparentPrice: isCap || isSoldOut || Number(row.price_uah) <= 0,
-                pageNoteUa: isPatch ? 'Лімітована версія з 25 штук.' : (row.page_note_ua || (row.slug && row.slug.includes('batcore') ? 'Усього 25 штук.' : (row.slug && row.slug.includes('snakecore') ? 'Лімітована колекція з 10 штук.' : ((row.slug && row.slug.includes('patriots')) ? '100% коштів із покупок — на підтримку Patriots 1654.' : undefined)))),
-                pageNoteEng: isPatch ? 'Limited edition of 25 pieces.' : (row.page_note_eng || (row.slug && row.slug.includes('batcore') ? 'Only 25 pieces in total.' : (row.slug && row.slug.includes('snakecore') ? 'Limited collection of 10 pieces.' : ((row.slug && row.slug.includes('patriots')) ? '100% of proceeds from purchases support Patriots 1654.' : undefined))))
+                transparentPrice: isSoldOut || Number(row.price_uah) <= 0,
+                pageNoteUa: isPatch ? 'Лімітована версія з 25 штук.' : (isCap ? 'За наявності УБД ціна — 1500₴. Для підтвердження та замовлення напишіть у бот підтримки.' : (row.page_note_ua || (row.slug && row.slug.includes('batcore') ? 'Усього 25 штук.' : (row.slug && row.slug.includes('snakecore') ? 'Лімітована колекція з 10 штук.' : ((row.slug && row.slug.includes('patriots')) ? '100% коштів із покупок — на підтримку Patriots 1654.' : undefined))))),
+                pageNoteEng: isPatch ? 'Limited edition of 25 pieces.' : (isCap ? 'With a combatant certificate (UBD), the price is 1500₴. Contact our support bot to verify and order.' : (row.page_note_eng || (row.slug && row.slug.includes('batcore') ? 'Only 25 pieces in total.' : (row.slug && row.slug.includes('snakecore') ? 'Limited collection of 10 pieces.' : ((row.slug && row.slug.includes('patriots')) ? '100% of proceeds from purchases support Patriots 1654.' : undefined)))))
             };
         });
 
@@ -136,7 +136,7 @@ export default async function handler(req, res) {
                     is_new: Boolean(item.isNew || item.is_new),
                     is_preorder: Boolean(item.isPreorder || item.is_preorder),
                     sold_out: Boolean(item.soldOut || item.sold_out),
-                    catalog_order: Number(item.catalogOrder || item.catalog_order) || 500,
+                    catalog_order: Number.isFinite(Number(item.catalogOrder ?? item.catalog_order)) ? Number(item.catalogOrder ?? item.catalog_order) : 500,
                     brand: String(item.brand || 'hd').toLowerCase(),
                     color_variants: Array.isArray(item.colorVariants) ? item.colorVariants : (item.color_variants || [])
                 });
