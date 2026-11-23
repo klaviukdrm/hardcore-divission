@@ -1,5 +1,59 @@
 window.PRODUCTS_DATA = [
   {
+    "id": 82,
+    "slug": "hardcore-cap-hardcore-cap",
+    "category": "кепки",
+    "isNew": true,
+    "renderInCatalog": true,
+    "title": "HARDCORE CAP [2 КОЛОРА]",
+    "descUa": "Зроблена з якісних водонепроникних матеріалів, які тримають удар будь-якої погоди. Лаконічна форма, щільна посадка і жорсткий характер на кожен день.",
+    "descEng": "Built from high-quality waterproof materials that hold up in any weather. A clean shape, solid fit, and hard character for everyday wear.",
+    "pageNoteUa": "За наявності УБД ціна — 1500₴. Для підтвердження та замовлення напишіть у бот підтримки.",
+    "pageNoteEng": "With a combatant certificate (UBD), the price is 1500₴. Contact our support bot to verify and order.",
+    "image": "images/photo_1_2026-11-23_17-32-32.jpg",
+    "imageAlt": "images/photo_2_2026-11-23_17-32-32.jpg",
+    "gallery": [
+      "images/photo_1_2026-11-23_17-32-32.jpg",
+      "images/photo_2_2026-11-23_17-32-32.jpg",
+      "images/photo_3_2026-11-23_17-32-32.jpg",
+      "images/photo_4_2026-11-23_17-32-32.jpg",
+      "images/photo_1_2026-11-23_17-32-37.jpg"
+    ],
+    "colorVariants": [
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "gallery": [
+          "images/photo_1_2026-11-23_17-32-32.jpg",
+          "images/photo_2_2026-11-23_17-32-32.jpg",
+          "images/photo_3_2026-11-23_17-32-32.jpg",
+          "images/photo_4_2026-11-23_17-32-32.jpg"
+        ]
+      },
+      {
+        "value": "white",
+        "labelUa": "БІЛИЙ",
+        "labelEng": "WHITE",
+        "gallery": [
+          "images/photo_1_2026-11-23_17-32-37.jpg"
+        ]
+      }
+    ],
+    "priceUahLabel": "2000₴",
+    "priceUsdLabel": "45€",
+    "priceUah": 2000,
+    "priceUsd": 45,
+    "sizes": [
+      "ONE SIZE"
+    ],
+    "sizeId": "size-cap1",
+    "cartName": "HARDCORE CAP",
+    "cartSizeId": "size-cap1",
+    "seoKeywords": "HARDCORE CAP, кепка, cap, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 0
+  },
+  {
     "id": 35,
     "slug": "patchi-hardocre-division-2-pvc-patches",
     "category": "патчи",
@@ -1689,32 +1743,6 @@ window.PRODUCTS_DATA = [
     "cartSizeId": "size-h24",
     "seoKeywords": "ТУРБ8СК1N.HTTB.GEN3, TURB8SK1N HTTB GEN3 HOODIE, худі, turboskin, hardcore division, streetwear, ukraine brand",
     "catalogOrder": 913
-  },
-  {
-    "id": 68,
-    "slug": "hardcore-cap",
-    "category": "кепки",
-    "isNew": false,
-    "renderInCatalog": true,
-    "noSize": true,
-    "soldOut": true,
-    "transparentPrice": true,
-    "title": "HARDCORE CAP",
-    "descUa": "Кепка HARDCORE CAP з прямим характером Hardcore Division. Лаконічна форма, щільна посадка і холодний акцент для повсякденного комплекту.",
-    "descEng": "HARDCORE CAP with direct Hardcore Division character. A clean shape, solid fit, and cold accent for an everyday set.",
-    "image": "images/photo_3_2026-08-26_12-58-00.jpg",
-    "imageAlt": "images/photo_4_2026-08-26_12-58-00.jpg",
-    "gallery": [
-      "images/photo_3_2026-08-26_12-58-00.jpg",
-      "images/photo_4_2026-08-26_12-58-00.jpg"
-    ],
-    "priceUahLabel": "0₴",
-    "priceUsdLabel": "0€",
-    "priceUah": 0,
-    "priceUsd": 0,
-    "cartName": "HARDCORE CAP",
-    "seoKeywords": "HARDCORE CAP, кепка, cap, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 1000
   },
   {
     "id": 69,
