@@ -181,11 +181,8 @@
     function shouldHideProductPrice(product) {
         if (!product) return false;
         if (Boolean(product.transparentPrice)) return true;
-        const category = String(product.category || "").toLowerCase();
-        const slug = String(product.slug || "").toLowerCase();
-        const cartName = String(product.cartName || "").toLowerCase();
         const priceUah = Number(product.priceUah || product.price_uah || 0);
-        return category.includes("кепк") || slug.includes("cap") || cartName.includes("cap") || priceUah <= 0;
+        return priceUah <= 0;
     }
 
     function getPriceClass(product) {
@@ -264,7 +261,7 @@
         const baseCartName = String(product && product.cartName ? product.cartName : product && product.title ? product.title : "").trim();
         const colorLabel = String(variant && (variant.labelEng || variant.value) ? (variant.labelEng || variant.value) : "").trim().toUpperCase();
         if (!baseCartName || !colorLabel) return baseCartName;
-        const strippedBase = baseCartName.replace(/\s+(black|white|red|green)$/i, "").trim();
+        const strippedBase = baseCartName.replace(/\s+(black|white|red|green|yellow)$/i, "").trim();
         return `${strippedBase} ${colorLabel}`.trim();
     }
 
@@ -465,7 +462,7 @@
             return `<button class="buy-btn" data-ua="Написати" data-eng="Write" onclick="window.location.href='${escapeAttr(contactUrl)}'">${escapeHtml(label)}</button>`;
         }
 
-        const sizeId = product.sizeId || product.cartSizeId || (product.noSize || isContactOnlyProduct(product) ? "" : `size-db-${product.id || product.slug}`);
+        const sizeId = product.sizeId || product.cartSizeId || (isContactOnlyProduct(product) ? "" : `size-db-${product.id || product.slug}`);
         if (!sizeId) return "";
         return `<button class="buy-btn" data-ua="В КОШИК" data-eng="ADD TO CART" onclick="${escapeAttr(buildCatalogAddToCartOnClick(product, sizeId))}">В КОШИК</button>`;
     }
@@ -477,7 +474,7 @@
         const displayTitle = getDisplayProductTitle(product, lang);
         const descUa = product.descUa || product.descEng || "";
         const descEng = product.descEng || product.descUa || "";
-        const sizeId = product.noSize || isContactOnlyProduct(product) ? "" : (product.sizeId || product.cartSizeId || `size-db-${product.id || product.slug}`);
+        const sizeId = isContactOnlyProduct(product) ? "" : (product.sizeId || product.cartSizeId || `size-db-${product.id || product.slug}`);
 
         return `
     <div class="product-card" data-category="${escapeAttr(product.category || "")}" data-product-slug="${escapeAttr(product.slug || "")}">
@@ -749,10 +746,7 @@
         const isPatch = isContactOnlyProduct(product);
         const soldOut = Boolean(product && product.soldOut);
         const pageNote = lang === "ua" ? (product.pageNoteUa || "") : (product.pageNoteEng || "");
-        const capLimitNote = isCap && !soldOut
-            ? (lang === "ua" ? "Виробництво стартує після бронювання 30 кепок. Мінімальний запуск можливий від 15 броней. Передзамовлення доступне обмежений час. Час виробництва — 4 тижні." : "Production starts after 30 caps are reserved. Minimum launch is possible from 15 reservations. Pre-order is available for a limited time. Production time — 4 weeks.")
-            : "";
-        const productDescBlock = capLimitNote ? `${desc}<br>${capLimitNote}` : desc;
+        const productDescBlock = desc;
         const turboskinNote = isTurboskinProduct(product)
             ? `<p class="product-detail-note product-turboskin-note">${escapeHtml(getTurboskinProductNote(lang))}</p>`
             : (isDesignerProduct(product)
@@ -785,7 +779,7 @@
                 ? product.sizes.map((size) => String(size || "").trim()).filter(Boolean)
                 : defaultDetailSizes
             ).map((size) => `<option value="${escapeAttr(size)}">SIZE: ${escapeHtml(size)}</option>`).join("");
-        const sizeSelectMarkup = (!hasSize || isPatch)
+        const sizeSelectMarkup = ((!hasSize && !isCap) || isPatch)
             ? ""
             : (isCap
                 ? `<select id="product-size">
