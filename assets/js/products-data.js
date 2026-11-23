@@ -10,33 +10,34 @@ window.PRODUCTS_DATA = [
     "descEng": "Built from high-quality waterproof materials that hold up in any weather. Limited drop: only 3 black and 3 white pieces.",
     "pageNoteUa": "За наявності УБД ціна — 1500₴. Для підтвердження та замовлення напишіть <a href=\"https://t.me/hardcore1499\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: var(--blood); text-decoration: underline;\">СЮДИ</a>.",
     "pageNoteEng": "With a combatant certificate (UBD), the price is 1500₴. To verify and order, write <a href=\"https://t.me/hardcore1499\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: var(--blood); text-decoration: underline;\">HERE</a>.",
-    "image": "images/photo_1_2026-11-23_17-32-32.jpg",
-    "imageAlt": "images/photo_2_2026-11-23_17-32-32.jpg",
+    "image": "images/photo_1_2026-11-23_17-32-37.jpg",
+    "imageAlt": "images/photo_1_2026-11-23_17-32-32.jpg",
     "gallery": [
+      "images/photo_1_2026-11-23_17-32-37.jpg",
       "images/photo_1_2026-11-23_17-32-32.jpg",
       "images/photo_2_2026-11-23_17-32-32.jpg",
       "images/photo_3_2026-11-23_17-32-32.jpg",
-      "images/photo_4_2026-11-23_17-32-32.jpg",
-      "images/photo_1_2026-11-23_17-32-37.jpg"
+      "images/photo_4_2026-11-23_17-32-32.jpg"
     ],
     "colorVariants": [
-      {
-        "value": "black",
-        "labelUa": "ЧОРНИЙ",
-        "labelEng": "BLACK",
-        "gallery": [
-          "images/photo_1_2026-11-23_17-32-32.jpg",
-          "images/photo_2_2026-11-23_17-32-32.jpg",
-          "images/photo_3_2026-11-23_17-32-32.jpg",
-          "images/photo_4_2026-11-23_17-32-32.jpg"
-        ]
-      },
       {
         "value": "white",
         "labelUa": "БІЛИЙ",
         "labelEng": "WHITE",
         "gallery": [
           "images/photo_1_2026-11-23_17-32-37.jpg"
+        ]
+      },
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "soldOut": true,
+        "gallery": [
+          "images/photo_1_2026-11-23_17-32-32.jpg",
+          "images/photo_2_2026-11-23_17-32-32.jpg",
+          "images/photo_3_2026-11-23_17-32-32.jpg",
+          "images/photo_4_2026-11-23_17-32-32.jpg"
         ]
       }
     ],
