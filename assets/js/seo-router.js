@@ -865,8 +865,26 @@
         `;
 
         const btn = document.getElementById("addProductBtn");
+        const applyColorVariantAvailability = (variant) => {
+            if (!btn || contactOnly) return;
+            const isVariantSoldOut = Boolean((product && product.soldOut) || (variant && variant.soldOut));
+            const currentLang = getLang();
+            if (isVariantSoldOut) {
+                btn.disabled = true;
+                btn.setAttribute("aria-disabled", "true");
+                btn.textContent = getUnavailableButtonLabel(currentLang);
+            } else {
+                btn.disabled = false;
+                btn.removeAttribute("aria-disabled");
+                btn.textContent = currentLang === "ua" ? "ДОДАТИ В КОШИК" : "ADD TO CART";
+            }
+        };
+
         if (btn && !contactOnly) {
             btn.addEventListener("click", function () {
+                if (Boolean((product && product.soldOut) || (currentColorVariant && currentColorVariant.soldOut))) {
+                    return;
+                }
                 const selectedCartName = currentColorVariant
                     ? buildColorVariantCartName(product, currentColorVariant)
                     : product.cartName;
@@ -954,9 +972,11 @@
                 });
                 currentColorVariant = selectedVariant || currentColorVariant;
                 renderGallerySet(getColorVariantGallery(selectedVariant), 0);
+                applyColorVariantAvailability(currentColorVariant);
             });
         }
 
+        applyColorVariantAvailability(currentColorVariant);
         bindThumbClicks();
     }
 
