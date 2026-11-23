@@ -441,7 +441,8 @@
                 </select>`;
         }
         const isZipHoodie = inferTypeName(product) === "Zip-Hoodie" || String(product?.category || '').includes("зіп") || String(product?.category || '').includes("зип");
-        const defaultSizes = isZipHoodie ? ["S", "M", "L", "XL", "2XL"] : ["S", "M", "L", "XL", "2XL", "3XL"];
+        const isCap = inferTypeName(product) === "Cap" || String(product?.category || '').toLowerCase().includes("кепк") || String(product?.slug || '').toLowerCase().includes("cap");
+        const defaultSizes = isCap ? ["S-M", "L-XL"] : (isZipHoodie ? ["S", "M", "L", "XL", "2XL"] : ["S", "M", "L", "XL", "2XL", "3XL"]);
         const sizes = Array.isArray(product && product.sizes) && product.sizes.length
             ? product.sizes.map((size) => String(size || "").trim()).filter(Boolean)
             : defaultSizes;
@@ -772,22 +773,16 @@
 
         const thumbs = buildProductThumbs(product, initialGallery);
         const isZipHoodieDetail = typeName === "Zip-Hoodie" || String(product?.category || '').includes("зіп") || String(product?.category || '').includes("зип");
-        const defaultDetailSizes = isZipHoodieDetail ? ["S", "M", "L", "XL", "2XL"] : ["S", "M", "L", "XL", "2XL", "3XL"];
-        const sizeOptions = isCap
-            ? `<option value="ONE SIZE">SIZE: ONE SIZE</option>`
-            : (Array.isArray(product && product.sizes) && product.sizes.length
+        const defaultDetailSizes = isCap ? ["S-M", "L-XL"] : (isZipHoodieDetail ? ["S", "M", "L", "XL", "2XL"] : ["S", "M", "L", "XL", "2XL", "3XL"]);
+        const sizeOptions = (Array.isArray(product && product.sizes) && product.sizes.length
                 ? product.sizes.map((size) => String(size || "").trim()).filter(Boolean)
                 : defaultDetailSizes
             ).map((size) => `<option value="${escapeAttr(size)}">SIZE: ${escapeHtml(size)}</option>`).join("");
         const sizeSelectMarkup = ((!hasSize && !isCap) || isPatch)
             ? ""
-            : (isCap
-                ? `<select id="product-size">
-                            <option value="ONE SIZE">SIZE: ONE SIZE</option>
-                        </select>`
-                : `<select id="product-size">
+            : `<select id="product-size">
                             ${sizeOptions}
-                        </select>`);
+                        </select>`;
         const sizeGuideButton = !hasSize
             ? ""
             : `<button class="buy-btn size-guide-btn" id="sizeGuideBtn">${sizeGuideLabel}</button>`;
@@ -847,7 +842,7 @@
                     <p class="product-detail-meta"><strong>${slugLabel}:</strong> ${product.slug}</p>
                     <p class="product-detail-desc">${productDescBlock}</p>
                     ${turboskinNote}
-                    ${pageNote ? `<p class="product-detail-note">${escapeHtml(pageNote)}</p>` : ""}
+                    ${pageNote ? `<p class="product-detail-note">${pageNote}</p>` : ""}
                     <div class="${getPriceClass(product)}" id="productPrice" data-uah="${product.priceUah}\u20B4" data-usd="${product.priceUsd}\u20AC">${formatPriceLabel(product, lang)}</div>
                     <div class="product-detail-actions">
                         ${sizeSelectMarkup}
