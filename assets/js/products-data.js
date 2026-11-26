@@ -1,61 +1,5 @@
 window.PRODUCTS_DATA = [
   {
-    "id": 82,
-    "slug": "hardcore-cap-hardcore-cap",
-    "category": "кепки",
-    "isNew": true,
-    "renderInCatalog": true,
-    "title": "HARDCORE CAP [2 КОЛОРА]",
-    "descUa": "Зроблена з якісних водонепроникних матеріалів, які тримають удар будь-якої погоди. Лімітований дроп: усього 3 чорні та 3 білі штуки.",
-    "descEng": "Built from high-quality waterproof materials that hold up in any weather. Limited drop: only 3 black and 3 white pieces.",
-    "pageNoteUa": "За наявності УБД ціна — 1500₴. Для підтвердження та замовлення напишіть <a href=\"https://t.me/hardcore1499\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: var(--blood); text-decoration: underline;\">СЮДИ</a>.",
-    "pageNoteEng": "With a combatant certificate (UBD), the price is 1500₴. To verify and order, write <a href=\"https://t.me/hardcore1499\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: var(--blood); text-decoration: underline;\">HERE</a>.",
-    "image": "images/photo_1_2026-11-23_17-32-37.jpg",
-    "imageAlt": "images/photo_1_2026-11-23_17-32-32.jpg",
-    "gallery": [
-      "images/photo_1_2026-11-23_17-32-37.jpg",
-      "images/photo_1_2026-11-23_17-32-32.jpg",
-      "images/photo_2_2026-11-23_17-32-32.jpg",
-      "images/photo_3_2026-11-23_17-32-32.jpg",
-      "images/photo_4_2026-11-23_17-32-32.jpg"
-    ],
-    "colorVariants": [
-      {
-        "value": "white",
-        "labelUa": "БІЛИЙ",
-        "labelEng": "WHITE",
-        "gallery": [
-          "images/photo_1_2026-11-23_17-32-37.jpg"
-        ]
-      },
-      {
-        "value": "black",
-        "labelUa": "ЧОРНИЙ",
-        "labelEng": "BLACK",
-        "soldOut": true,
-        "gallery": [
-          "images/photo_1_2026-11-23_17-32-32.jpg",
-          "images/photo_2_2026-11-23_17-32-32.jpg",
-          "images/photo_3_2026-11-23_17-32-32.jpg",
-          "images/photo_4_2026-11-23_17-32-32.jpg"
-        ]
-      }
-    ],
-    "priceUahLabel": "2000₴",
-    "priceUsdLabel": "45€",
-    "priceUah": 2000,
-    "priceUsd": 45,
-    "sizes": [
-      "S-M",
-      "L-XL"
-    ],
-    "sizeId": "size-cap1",
-    "cartName": "HARDCORE CAP",
-    "cartSizeId": "size-cap1",
-    "seoKeywords": "HARDCORE CAP, кепка, cap, hardcore division, streetwear, ukraine brand",
-    "catalogOrder": 0
-  },
-  {
     "id": 35,
     "slug": "patchi-hardocre-division-2-pvc-patches",
     "category": "патчи",
@@ -2102,5 +2046,63 @@ window.PRODUCTS_DATA = [
     "cartSizeId": "size-h33",
     "seoKeywords": "NO RETREAT. NO WEAKNESS, HOODIE NO RETREAT NO WEAKNESS, NO RETREAT NO WEAKNESS HOODIE, худі, hardcore division, streetwear, hoodie, ukraine brand",
     "catalogOrder": 7
+  },
+  {
+    "id": 82,
+    "slug": "hardcore-cap-hardcore-cap",
+    "category": "кепки",
+    "isNew": false,
+    "renderInCatalog": true,
+    "soldOut": true,
+    "title": "HARDCORE CAP [2 КОЛОРА]",
+    "descUa": "Зроблена з якісних водонепроникних матеріалів, які тримають удар будь-якої погоди. Лімітований дроп: усього 3 чорні та 3 білі штуки.",
+    "descEng": "Built from high-quality waterproof materials that hold up in any weather. Limited drop: only 3 black and 3 white pieces.",
+    "pageNoteUa": "За наявності УБД ціна — 1500₴. Для підтвердження та замовлення напишіть <a href=\"https://t.me/hardcore1499\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: var(--blood); text-decoration: underline;\">СЮДИ</a>.",
+    "pageNoteEng": "With a combatant certificate (UBD), the price is 1500₴. To verify and order, write <a href=\"https://t.me/hardcore1499\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: var(--blood); text-decoration: underline;\">HERE</a>.",
+    "image": "images/photo_1_2026-11-23_17-32-37.jpg",
+    "imageAlt": "images/photo_1_2026-11-23_17-32-32.jpg",
+    "gallery": [
+      "images/photo_1_2026-11-23_17-32-37.jpg",
+      "images/photo_1_2026-11-23_17-32-32.jpg",
+      "images/photo_2_2026-11-23_17-32-32.jpg",
+      "images/photo_3_2026-11-23_17-32-32.jpg",
+      "images/photo_4_2026-11-23_17-32-32.jpg"
+    ],
+    "colorVariants": [
+      {
+        "value": "white",
+        "labelUa": "БІЛИЙ",
+        "labelEng": "WHITE",
+        "soldOut": true,
+        "gallery": [
+          "images/photo_1_2026-11-23_17-32-37.jpg"
+        ]
+      },
+      {
+        "value": "black",
+        "labelUa": "ЧОРНИЙ",
+        "labelEng": "BLACK",
+        "soldOut": true,
+        "gallery": [
+          "images/photo_1_2026-11-23_17-32-32.jpg",
+          "images/photo_2_2026-11-23_17-32-32.jpg",
+          "images/photo_3_2026-11-23_17-32-32.jpg",
+          "images/photo_4_2026-11-23_17-32-32.jpg"
+        ]
+      }
+    ],
+    "priceUahLabel": "2000₴",
+    "priceUsdLabel": "45€",
+    "priceUah": 2000,
+    "priceUsd": 45,
+    "sizes": [
+      "S-M",
+      "L-XL"
+    ],
+    "sizeId": "size-cap1",
+    "cartName": "HARDCORE CAP",
+    "cartSizeId": "size-cap1",
+    "seoKeywords": "HARDCORE CAP, кепка, cap, hardcore division, streetwear, ukraine brand",
+    "catalogOrder": 1002
   }
 ];
